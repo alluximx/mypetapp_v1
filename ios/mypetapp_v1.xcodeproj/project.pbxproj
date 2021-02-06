@@ -19,6 +19,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* mypetapp_v1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* mypetapp_v1Tests.m */; };
 		975A25D1012283B324927909 /* libPods-mypetapp_v1-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5CF50F8A8F3873179852AA3 /* libPods-mypetapp_v1-tvOS.a */; };
+		EC87FE2325CF176D0065490B /* assets in Resources */ = {isa = PBXBuildFile; fileRef = EC87FE2225CF176D0065490B /* assets */; };
 		F295451B0BAE72F57177BF32 /* libPods-mypetapp_v1-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5018A436B7535B2F3C365F06 /* libPods-mypetapp_v1-tvOSTests.a */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,7 @@
 		A568396E0A14137096BE0319 /* Pods-mypetapp_v1-mypetapp_v1Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mypetapp_v1-mypetapp_v1Tests.release.xcconfig"; path = "Target Support Files/Pods-mypetapp_v1-mypetapp_v1Tests/Pods-mypetapp_v1-mypetapp_v1Tests.release.xcconfig"; sourceTree = "<group>"; };
 		C5CF50F8A8F3873179852AA3 /* libPods-mypetapp_v1-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-mypetapp_v1-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C84AE6C0B6494671056CE116 /* Pods-mypetapp_v1-mypetapp_v1Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mypetapp_v1-mypetapp_v1Tests.debug.xcconfig"; path = "Target Support Files/Pods-mypetapp_v1-mypetapp_v1Tests/Pods-mypetapp_v1-mypetapp_v1Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		EC87FE2225CF176D0065490B /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../src/assets; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -159,6 +161,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				EC87FE2225CF176D0065490B /* assets */,
 				13B07FAE1A68108700A75B9A /* mypetapp_v1 */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* mypetapp_v1Tests */,
@@ -194,7 +197,6 @@
 				4E3D0B0A26221A9F05734607 /* Pods-mypetapp_v1-tvOSTests.debug.xcconfig */,
 				149C94A9029D56D2C730ED55 /* Pods-mypetapp_v1-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -338,6 +340,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC87FE2325CF176D0065490B /* assets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
