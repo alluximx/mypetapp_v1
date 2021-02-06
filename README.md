@@ -14,6 +14,10 @@ Then, you need to install the Podfile:
 
 `pod install`
 
+Now set the correct environment for CI:
+
+`npm run env dev`
+
 # Running with React Native CLI
 
 ### Running android simulator

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'src/navigation/node_modules/react';
 import { SafeAreaView } from 'react-native';
 import { Button, Divider, Layout, TopNavigation } from '@ui-kitten/components';
 
