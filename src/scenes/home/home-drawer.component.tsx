@@ -53,7 +53,7 @@ export const HomeDrawer = ({ navigation }): DrawerElement => {
         <Text
           style={styles.profileName}
           category='h6'>
-          Kitten Tricks
+          MyPetApp
         </Text>
       </View>
     </Layout>
