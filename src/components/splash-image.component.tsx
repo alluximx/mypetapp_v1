@@ -7,9 +7,7 @@ export interface LoadingAnimationProps extends ImageProps {
 
 export const SplashImage = (props: LoadingAnimationProps): React.ReactElement | undefined => {
 
-  if (!props.loading) {
- 
-  }
+  if (!props.loading) {}
 
   return null;
 };
