@@ -49,10 +49,10 @@ const HomeTabsNavigator = (): React.ReactElement => (
     screenOptions={TabBarVisibleOnRootScreenOptions}
     initialRouteName={initialTabRoute}
     tabBar={(props) => <HomeBottomNavigation {...props} />}>
-    <BottomTab.Screen name="MyApp" component={MyAppNavigator} />
-    <BottomTab.Screen name="Layouts" component={LayoutsNavigator} />
-    <BottomTab.Screen name="Components" component={ComponentsNavigator} />
-    <BottomTab.Screen name="Themes" component={ThemesNavigator} />
+    <BottomTab.Screen name='MyApp' component={MyAppNavigator} />
+    <BottomTab.Screen name='Layouts' component={LayoutsNavigator} />
+    <BottomTab.Screen name='Components' component={ComponentsNavigator} />
+    <BottomTab.Screen name='Themes' component={ThemesNavigator} />
   </BottomTab.Navigator>
 );
 
@@ -60,7 +60,7 @@ export const HomeNavigator = (): React.ReactElement => (
   <Drawer.Navigator
     screenOptions={{gestureEnabled: false}}
     drawerContent={(props) => <HomeDrawer {...props} />}>
-    <Drawer.Screen name="Home" component={HomeTabsNavigator} />
-    <Drawer.Screen name="Libraries" component={LibrariesScreen} />
+    <Drawer.Screen name='Home' component={HomeTabsNavigator} />
+    <Drawer.Screen name='Libraries' component={LibrariesScreen} />
   </Drawer.Navigator>
 );
