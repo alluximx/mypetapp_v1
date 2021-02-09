@@ -235,8 +235,6 @@ PODS:
   - React-jsinspector (0.62.2)
   - react-native-appearance (0.3.4):
     - React
-  - react-native-safari-view (1.0.0):
-    - React
   - react-native-safe-area-context (3.1.9):
     - React-Core
   - React-RCTActionSheet (0.62.2):
@@ -308,7 +306,7 @@ PODS:
     - React-Core
   - RNScreens (2.17.1):
     - React-Core
-  - RNSVG (12.1.0):
+  - RNSVG (9.13.3):
     - React
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -337,7 +335,6 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-appearance (from `../node_modules/react-native-appearance`)
-  - react-native-safari-view (from `../node_modules/react-native-safari-view/react-native-safari-view.podspec`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -404,8 +401,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-appearance:
     :path: "../node_modules/react-native-appearance"
-  react-native-safari-view:
-    :podspec: "../node_modules/react-native-safari-view/react-native-safari-view.podspec"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   React-RCTActionSheet:
@@ -443,11 +438,6 @@ EXTERNAL SOURCES:
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
-CHECKOUT OPTIONS:
-  react-native-safari-view:
-    :commit: fc343b037ed5b91c85cfae5d9adac32839a9b04b
-    :git: https://github.com/naoufal/react-native-safari-view.git
-
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -475,7 +465,6 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 1540d1c01bb493ae3124ed83351b1b6a155db7da
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-appearance: fc2014516054585d531e07aa0b40ab0de1d2be85
-  react-native-safari-view: 955d7160d159241b8e9395d12d10ea0ef863dcdd
   react-native-safe-area-context: 86612d2c9a9e94e288319262d10b5f93f0b395f5
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
@@ -492,10 +481,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
-  RNSVG: ce9d996113475209013317e48b05c21ee988d42e
+  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: a68806484dc4aae5a5afb39fd675b83a936aaa7f
+PODFILE CHECKSUM: d2216bdda384c2db0822052c83acc4176e6f4c26
 
 COCOAPODS: 1.8.3

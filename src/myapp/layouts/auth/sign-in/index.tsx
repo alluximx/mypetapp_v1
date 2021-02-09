@@ -19,7 +19,7 @@ export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
 
   const onSignUpButtonPress = (): void => {
-    navigation && navigation.navigate('SignUp2');
+    navigation && navigation.navigate('SignUp');
   };
 
   const onForgotPasswordButtonPress = (): void => {
@@ -34,22 +34,22 @@ export default ({navigation}): React.ReactElement => {
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text category="h1" status="control">
-          Hello
+          MyPetApp
         </Text>
         <Text style={styles.signInLabel} category="s1" status="control">
-          Sign in to your account
+          Inicia sesión en tu cuenta
         </Text>
       </View>
       <Layout style={styles.formContainer} level="1">
         <Input
-          placeholder="Email"
+          placeholder="Correo"
           icon={PersonIcon}
           value={email}
           onChangeText={setEmail}
         />
         <Input
           style={styles.passwordInput}
-          placeholder="Password"
+          placeholder="Contraseña"
           icon={passwordVisible ? EyeIcon : EyeOffIcon}
           value={password}
           secureTextEntry={!passwordVisible}
@@ -62,19 +62,20 @@ export default ({navigation}): React.ReactElement => {
             appearance="ghost"
             status="basic"
             onPress={onForgotPasswordButtonPress}>
-            Forgot your password?
+            ¿Olvidaste tu contraseña?
           </Button>
         </View>
       </Layout>
+
       <Button style={styles.signInButton} size="giant">
-        SIGN IN
+        INICIA SESIÓN
       </Button>
       <Button
         style={styles.signUpButton}
         appearance="ghost"
         status="basic"
         onPress={onSignUpButtonPress}>
-        Don't have an account? Create
+        ¿Aún no tienes una cuenta? Regístrate
       </Button>
     </KeyboardAvoidingView>
   );
