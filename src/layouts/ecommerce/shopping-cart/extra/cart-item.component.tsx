@@ -1,8 +1,8 @@
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
-import { Button, ListItem, ListItemProps, Text } from '@ui-kitten/components';
-import { CloseIcon, MinusIcon, PlusIcon } from './icons';
-import { Product } from './data';
+import {Image, StyleSheet, View} from 'react-native';
+import {Button, ListItem, ListItemProps, Text} from '@ui-kitten/components';
+import {CloseIcon, MinusIcon, PlusIcon} from './icons';
+import {Product} from './data';
 
 export type CartItemProps = ListItemProps & {
   index: number;
@@ -12,8 +12,14 @@ export type CartItemProps = ListItemProps & {
 };
 
 export const CartItem = (props: CartItemProps): React.ReactElement => {
-
-  const { style, product, index, onProductChange, onRemove, ...listItemProps } = props;
+  const {
+    style,
+    product,
+    index,
+    onProductChange,
+    onRemove,
+    ...listItemProps
+  } = props;
 
   const decrementButtonEnabled = (): boolean => {
     return product.amount > 1;
@@ -50,42 +56,28 @@ export const CartItem = (props: CartItemProps): React.ReactElement => {
   };
 
   return (
-    <ListItem
-      {...listItemProps}
-      style={[styles.container, style]}>
-      <Image
-        style={styles.image}
-        source={product.image}
-      />
+    <ListItem {...listItemProps} style={[styles.container, style]}>
+      <Image style={styles.image} source={product.image} />
       <View style={styles.detailsContainer}>
-        <Text
-          category='s1'>
-          {product.title}
-        </Text>
-        <Text
-          appearance='hint'
-          category='p2'>
+        <Text category="s1">{product.title}</Text>
+        <Text appearance="hint" category="p2">
           {product.subtitle}
         </Text>
-        <Text category='s2'>
-          {product.formattedPrice}
-        </Text>
+        <Text category="s2">{product.formattedPrice}</Text>
         <View style={styles.amountContainer}>
           <Button
             style={[styles.iconButton, styles.amountButton]}
-            size='tiny'
+            size="tiny"
             icon={MinusIcon}
             onPress={onMinusButtonPress}
             disabled={!decrementButtonEnabled()}
           />
-          <Text
-            style={styles.amount}
-            category='s2'>
+          <Text style={styles.amount} category="s2">
             {`${product.amount}`}
           </Text>
           <Button
             style={[styles.iconButton, styles.amountButton]}
-            size='tiny'
+            size="tiny"
             icon={PlusIcon}
             onPress={onPlusButtonPress}
           />
@@ -93,8 +85,8 @@ export const CartItem = (props: CartItemProps): React.ReactElement => {
       </View>
       <Button
         style={[styles.iconButton, styles.removeButton]}
-        appearance='ghost'
-        status='basic'
+        appearance="ghost"
+        status="basic"
         icon={CloseIcon}
         onPress={onRemoveButtonPress}
       />

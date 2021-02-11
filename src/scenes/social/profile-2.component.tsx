@@ -1,29 +1,24 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Divider, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
-import { SafeAreaLayout } from '../../components/safe-area-layout.component';
-import { ArrowIosBackIcon } from '../../components/icons';
+import {StyleSheet} from 'react-native';
+import {
+  Divider,
+  TopNavigation,
+  TopNavigationAction,
+} from '@ui-kitten/components';
+import {SafeAreaLayout} from '../../components/safe-area-layout.component';
+import {ArrowIosBackIcon} from '../../components/icons';
 import ContentView from '../../layouts/social/profile-2';
 
-export const Profile2Screen = ({ navigation }): React.ReactElement => {
-
+export const Profile2Screen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
-    <TopNavigationAction
-      icon={ArrowIosBackIcon}
-      onPress={navigation.goBack}
-    />
+    <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
   );
 
   return (
-    <SafeAreaLayout
-      style={styles.container}
-      insets='top'>
-      <TopNavigation
-        title='Profile'
-        leftControl={renderBackAction()}
-      />
-      <Divider/>
-      <ContentView navigation={navigation}/>
+    <SafeAreaLayout style={styles.container} insets="top">
+      <TopNavigation title="Profile" leftControl={renderBackAction()} />
+      <Divider />
+      <ContentView navigation={navigation} />
     </SafeAreaLayout>
   );
 };

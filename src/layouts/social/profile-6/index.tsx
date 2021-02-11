@@ -1,5 +1,10 @@
 import React from 'react';
-import { ImageBackground, ListRenderItemInfo, ScrollView, View } from 'react-native';
+import {
+  ImageBackground,
+  ListRenderItemInfo,
+  ScrollView,
+  View,
+} from 'react-native';
 import {
   Avatar,
   Button,
@@ -9,33 +14,20 @@ import {
   Text,
   useStyleSheet,
 } from '@ui-kitten/components';
-import { ProfileSocial } from './extra/profile-social.component';
-import { CategoryList } from './extra/category-list.component';
-import { MessageCircleIcon, PersonAddIcon, PinIcon } from './extra/icons';
-import { Post, Profile } from './extra/data';
+import {ProfileSocial} from './extra/profile-social.component';
+import {CategoryList} from './extra/category-list.component';
+import {MessageCircleIcon, PersonAddIcon, PinIcon} from './extra/icons';
+import {Post, Profile} from './extra/data';
 
 const profile: Profile = Profile.helenKuper();
 
-const plantPosts: Post[] = [
-  Post.plant1(),
-  Post.plant2(),
-  Post.plant3(),
-];
+const plantPosts: Post[] = [Post.plant1(), Post.plant2(), Post.plant3()];
 
-const travelPosts: Post[] = [
-  Post.travel1(),
-  Post.travel2(),
-  Post.travel3(),
-];
+const travelPosts: Post[] = [Post.travel1(), Post.travel2(), Post.travel3()];
 
-const stylePosts: Post[] = [
-  Post.style1(),
-  Post.style2(),
-  Post.style3(),
-];
+const stylePosts: Post[] = [Post.style1(), Post.style2(), Post.style3()];
 
-export default ({ navigation }): React.ReactElement => {
-
+export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
 
   const onFollowButtonPress = (): void => {
@@ -46,36 +38,31 @@ export default ({ navigation }): React.ReactElement => {
     navigation && navigation.navigate('Chat1');
   };
 
-  const renderPostItem = (info: ListRenderItemInfo<Post>): React.ReactElement => (
-    <ImageBackground
-      style={styles.postItem}
-      source={info.item.photo}
-    />
+  const renderPostItem = (
+    info: ListRenderItemInfo<Post>,
+  ): React.ReactElement => (
+    <ImageBackground style={styles.postItem} source={info.item.photo} />
   );
 
   return (
     <ScrollView style={styles.contentContainer}>
-      <Layout
-        style={styles.header}
-        level='1'>
+      <Layout style={styles.header} level="1">
         <View style={styles.profileContainer}>
           <View style={styles.profileDetailsContainer}>
-            <Text category='h4'>
-              {profile.fullName}
-            </Text>
+            <Text category="h4">{profile.fullName}</Text>
             <View style={styles.profileLocationContainer}>
-              <PinIcon/>
+              <PinIcon />
               <Text
                 style={styles.profileLocation}
-                appearance='hint'
-                category='s1'>
+                appearance="hint"
+                category="s1">
                 {profile.location}
               </Text>
             </View>
           </View>
           <Avatar
             style={styles.profileAvatar}
-            size='large'
+            size="large"
             source={profile.photo}
           />
         </View>
@@ -87,44 +74,35 @@ export default ({ navigation }): React.ReactElement => {
             FOLLOW
           </Button>
           <Button
-            appearance='outline'
+            appearance="outline"
             style={styles.profileButton}
             icon={MessageCircleIcon}
             onPress={onMessageButtonPress}>
             MESSAGE
           </Button>
         </View>
-        <Divider style={styles.profileSocialsDivider}/>
+        <Divider style={styles.profileSocialsDivider} />
         <View style={styles.profileSocialsContainer}>
-          <ProfileSocial
-            hint='Followers'
-            value={`${profile.followers}`}
-          />
-          <ProfileSocial
-            hint='Following'
-            value={`${profile.following}`}
-          />
-          <ProfileSocial
-            hint='Posts'
-            value={`${profile.posts}`}
-          />
+          <ProfileSocial hint="Followers" value={`${profile.followers}`} />
+          <ProfileSocial hint="Following" value={`${profile.following}`} />
+          <ProfileSocial hint="Posts" value={`${profile.posts}`} />
         </View>
       </Layout>
       <CategoryList
         contentContainerStyle={styles.postsList}
-        hint='Plants'
+        hint="Plants"
         data={[...plantPosts, ...plantPosts]}
         renderItem={renderPostItem}
       />
       <CategoryList
         contentContainerStyle={styles.postsList}
-        hint='Travel'
+        hint="Travel"
         data={[...travelPosts, ...travelPosts]}
         renderItem={renderPostItem}
       />
       <CategoryList
         contentContainerStyle={styles.postsList}
-        hint='Style'
+        hint="Style"
         data={[...stylePosts, ...stylePosts]}
         renderItem={renderPostItem}
       />

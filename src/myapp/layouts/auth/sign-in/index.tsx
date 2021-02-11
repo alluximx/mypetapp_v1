@@ -22,6 +22,10 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.navigate('SignUp');
   };
 
+  const onLoginButtonPress = (): void => {
+    navigation && navigation.navigate('Home');
+  };
+
   const onForgotPasswordButtonPress = (): void => {
     navigation && navigation.navigate('ForgotPassword');
   };
@@ -67,7 +71,10 @@ export default ({navigation}): React.ReactElement => {
         </View>
       </Layout>
 
-      <Button style={styles.signInButton} size="giant">
+      <Button
+        onPress={onLoginButtonPress}
+        style={styles.signInButton}
+        size="giant">
         INICIA SESIÓN
       </Button>
       <Button

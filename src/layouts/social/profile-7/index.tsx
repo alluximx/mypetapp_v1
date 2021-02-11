@@ -1,16 +1,31 @@
 import React from 'react';
-import { ImageBackground, ListRenderItemInfo, ScrollView, View, YellowBox } from 'react-native';
-import { Avatar, Button, List, StyleService, Text, useStyleSheet } from '@ui-kitten/components';
-import { ImageOverlay } from './extra/image-overlay.component';
-import { ProfileSocial } from './extra/profile-social.component';
-import { MessageCircleIcon, PersonAddIcon, PinIcon } from './extra/icons';
-import { Post, Profile } from './extra/data';
+import {
+  ImageBackground,
+  ListRenderItemInfo,
+  ScrollView,
+  View,
+  YellowBox,
+} from 'react-native';
+import {
+  Avatar,
+  Button,
+  List,
+  StyleService,
+  Text,
+  useStyleSheet,
+} from '@ui-kitten/components';
+import {ImageOverlay} from './extra/image-overlay.component';
+import {ProfileSocial} from './extra/profile-social.component';
+import {MessageCircleIcon, PersonAddIcon, PinIcon} from './extra/icons';
+import {Post, Profile} from './extra/data';
 
 /*
  * Will warn because container view is ScrollView that contains 3 List components inside.
  * Better workaround depends on the user needs.
  */
-YellowBox.ignoreWarnings(['VirtualizedLists should never be nested inside plain ScrollViews']);
+YellowBox.ignoreWarnings([
+  'VirtualizedLists should never be nested inside plain ScrollViews',
+]);
 
 const profile: Profile = Profile.helenKuper();
 
@@ -35,8 +50,7 @@ const posts: Post[] = [
   Post.plant1(),
 ];
 
-export default ({ navigation }): React.ReactElement => {
-
+export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
 
   const onFollowButtonPress = (): void => {
@@ -47,22 +61,21 @@ export default ({ navigation }): React.ReactElement => {
     navigation && navigation.navigate('Chat1');
   };
 
-  const renderFriendItem = (info: ListRenderItemInfo<Profile>): React.ReactElement => (
+  const renderFriendItem = (
+    info: ListRenderItemInfo<Profile>,
+  ): React.ReactElement => (
     <View style={styles.friendItem}>
-      <Avatar source={info.item.photo}/>
-      <Text
-        style={styles.friendName}
-        category='c2'>
+      <Avatar source={info.item.photo} />
+      <Text style={styles.friendName} category="c2">
         {info.item.firstName}
       </Text>
     </View>
   );
 
-  const renderPostItem = (info: ListRenderItemInfo<Post>): React.ReactElement => (
-    <ImageBackground
-      style={styles.postItem}
-      source={info.item.photo}
-    />
+  const renderPostItem = (
+    info: ListRenderItemInfo<Post>,
+  ): React.ReactElement => (
+    <ImageBackground style={styles.postItem} source={info.item.photo} />
   );
 
   return (
@@ -70,21 +83,13 @@ export default ({ navigation }): React.ReactElement => {
       <ImageOverlay
         style={styles.header}
         source={require('./assets/image-background.jpg')}>
-        <Avatar
-          style={styles.profileAvatar}
-          source={profile.photo}
-        />
-        <Text
-          style={styles.profileName}
-          category='h5'
-          status='control'>
+        <Avatar style={styles.profileAvatar} source={profile.photo} />
+        <Text style={styles.profileName} category="h5" status="control">
           {profile.fullName}
         </Text>
         <View style={styles.locationContainer}>
-          <PinIcon/>
-          <Text
-            style={styles.location}
-            status='control'>
+          <PinIcon />
+          <Text style={styles.location} status="control">
             {profile.location}
           </Text>
         </View>
@@ -97,7 +102,7 @@ export default ({ navigation }): React.ReactElement => {
           </Button>
           <Button
             style={styles.profileButton}
-            status='control'
+            status="control"
             icon={MessageCircleIcon}
             onPress={onMessageButtonPress}>
             MESSAGE
@@ -106,34 +111,28 @@ export default ({ navigation }): React.ReactElement => {
         <View style={styles.socialsContainer}>
           <ProfileSocial
             style={styles.profileSocial}
-            hint='Followers'
+            hint="Followers"
             value={`${profile.followers}`}
           />
           <ProfileSocial
             style={styles.profileSocial}
-            hint='Following'
+            hint="Following"
             value={`${profile.following}`}
           />
           <ProfileSocial
             style={styles.profileSocial}
-            hint='Posts'
+            hint="Posts"
             value={`${profile.posts}`}
           />
         </View>
       </ImageOverlay>
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
+      <Text style={styles.sectionLabel} category="s1">
         About
       </Text>
-      <Text
-        style={styles.profileDescription}
-        appearance='hint'>
+      <Text style={styles.profileDescription} appearance="hint">
         {profile.description}
       </Text>
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
+      <Text style={styles.sectionLabel} category="s1">
         Friends
       </Text>
       <List
@@ -142,16 +141,10 @@ export default ({ navigation }): React.ReactElement => {
         data={friends}
         renderItem={renderFriendItem}
       />
-      <Text
-        style={styles.sectionLabel}
-        category='s1'>
+      <Text style={styles.sectionLabel} category="s1">
         Shots
       </Text>
-      <List
-        data={posts}
-        numColumns={3}
-        renderItem={renderPostItem}
-      />
+      <List data={posts} numColumns={3} renderItem={renderPostItem} />
     </ScrollView>
   );
 };
@@ -221,4 +214,3 @@ const themedStyle = StyleService.create({
     aspectRatio: 1.0,
   },
 });
-
