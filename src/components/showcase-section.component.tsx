@@ -1,20 +1,26 @@
 import React from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
-import { Text, TextElement, TextProps } from '@ui-kitten/components';
-import { ShowcaseItem, ShowcaseItemProps } from './showcase-item.component';
-import { ComponentShowcaseItem, ComponentShowcaseSection } from '../model/showcase.model';
+import {StyleSheet, View, ViewProps} from 'react-native';
+import {Text, TextElement, TextProps} from '@ui-kitten/components';
+import {ShowcaseItem, ShowcaseItemProps} from './showcase-item.component';
+import {
+  ComponentShowcaseItem,
+  ComponentShowcaseSection,
+} from '../model/showcase.model';
 
 export interface ShowcaseSectionProps extends ViewProps {
   section: ComponentShowcaseSection;
   renderItem: (props: any) => React.ReactElement;
 }
 
-export const ShowcaseSection = (props: ShowcaseSectionProps): React.ReactElement => {
+export const ShowcaseSection = (
+  props: ShowcaseSectionProps,
+): React.ReactElement => {
+  const {style, section, renderItem} = props;
 
-  const { style, section, renderItem } = props;
-
-  const renderShowcaseItem = (item: ComponentShowcaseItem,
-                              index: number): React.ReactElement<ShowcaseItemProps> => (
+  const renderShowcaseItem = (
+    item: ComponentShowcaseItem,
+    index: number,
+  ): React.ReactElement<ShowcaseItemProps> => (
     <ShowcaseItem
       key={index}
       style={styles.item}
@@ -24,12 +30,11 @@ export const ShowcaseSection = (props: ShowcaseSectionProps): React.ReactElement
   );
 
   const renderTitleElement = (): TextElement => (
-    <Text style={styles.titleLabel}>
-      {section.title}
-    </Text>
+    <Text style={styles.titleLabel}>{section.title}</Text>
   );
 
-  const titleElement: React.ReactElement<TextProps> = section.title && renderTitleElement();
+  const titleElement: React.ReactElement<TextProps> =
+    section.title && renderTitleElement();
 
   return (
     <View style={[styles.container, style]}>

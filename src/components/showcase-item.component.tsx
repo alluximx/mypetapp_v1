@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
-import { Text, TextElement } from '@ui-kitten/components';
-import { ComponentShowcaseItem } from '../model/showcase.model';
+import {StyleSheet, View, ViewProps} from 'react-native';
+import {Text, TextElement} from '@ui-kitten/components';
+import {ComponentShowcaseItem} from '../model/showcase.model';
 
 export interface ShowcaseItemProps extends ViewProps {
   item: ComponentShowcaseItem;
@@ -9,8 +9,7 @@ export interface ShowcaseItemProps extends ViewProps {
 }
 
 export const ShowcaseItem = (props: ShowcaseItemProps): React.ReactElement => {
-
-  const { style, item, renderItem } = props;
+  const {style, item, renderItem} = props;
 
   const renderElement = (): React.ReactElement => {
     const element: React.ReactElement = renderItem(item.props);
@@ -21,13 +20,10 @@ export const ShowcaseItem = (props: ShowcaseItemProps): React.ReactElement => {
   };
 
   const renderTitleElement = (): TextElement => (
-    <Text
-      appearance='hint'
-      style={styles.titleLabel}>
+    <Text appearance="hint" style={styles.titleLabel}>
       {item.title}
     </Text>
   );
-
 
   const titleElement: TextElement = item.title && renderTitleElement();
   const showcaseElement: React.ReactElement = renderElement();

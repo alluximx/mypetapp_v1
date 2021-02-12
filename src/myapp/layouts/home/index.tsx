@@ -8,7 +8,6 @@ import {
 import {
   Avatar,
   Button,
-  Divider,
   Card,
   Layout,
   StyleService,
@@ -19,6 +18,7 @@ import {ProfileSocial} from './extra/profile-social.component';
 import {CategoryList} from './extra/category-list.component';
 import {MessageCircleIcon, PersonAddIcon, PinIcon} from './extra/icons';
 import {Post, Profile} from './extra/data';
+import {DrawerShowcase} from '../../scenes/components/drawer/drawer-showcase.component';
 
 const profile: Profile = Profile.helenKuper();
 
@@ -41,9 +41,9 @@ export default ({navigation}): React.ReactElement => {
 
   const Footer = (props) => (
     <View {...props} style={[props.style, styles.footerContainer]}>
-      <Button style={styles.footerControl} size="small">
+      <Text style={styles.profileLocation} category="s1">
         {props.item.category}
-      </Button>
+      </Text>
     </View>
   );
 
@@ -86,32 +86,35 @@ export default ({navigation}): React.ReactElement => {
             Molly
           </Button>
           <Button
-            appearance="outline"
             style={styles.profileButton}
             icon={MessageCircleIcon}
             onPress={onMessageButtonPress}>
             Argos
           </Button>
+          <Button
+            appearance="outline"
+            style={styles.profileButton}
+            icon={MessageCircleIcon}
+            onPress={onMessageButtonPress}>
+            +
+          </Button>
         </View>
-        <Divider style={styles.profileSocialsDivider} />
-        {/* <View style={styles.profileSocialsContainer}>
-          <ProfileSocial hint="Followers" value={`${profile.followers}`} />
-          <ProfileSocial hint="Following" value={`${profile.following}`} />
-          <ProfileSocial hint="Posts" value={`${profile.posts}`} />
-        </View> */}
       </Layout>
       <CategoryList
         contentContainerStyle={styles.postsList}
         hint="¿Que necesitan tus mascotas hoy?"
+        hintLink="MisPedidos"
         data={[...plantPosts, ...plantPosts]}
         renderItem={renderPostItem}
       />
-      <CategoryList
-        contentContainerStyle={styles.postsList}
-        hint="Style"
-        data={[...stylePosts, ...stylePosts]}
-        renderItem={renderPostItem}
-      />
+      <Card style={styles.banner}>
+        <Text style={styles.profileLocation} category="s1">
+          ¡Haz un nuevo amigo!
+        </Text>
+        <Text style={styles.profileLocation} category="s2">
+          Adopta una mascota hoy
+        </Text>
+      </Card>
     </ScrollView>
   );
 };
@@ -119,7 +122,9 @@ export default ({navigation}): React.ReactElement => {
 const themedStyle = StyleService.create({
   contentContainer: {
     flex: 1,
-    backgroundColor: 'background-basic-color-2',
+  },
+  card: {
+    borderWidth: 0,
   },
   header: {
     padding: 16,
@@ -148,6 +153,7 @@ const themedStyle = StyleService.create({
   profileButton: {
     flex: 1,
     marginHorizontal: 4,
+    borderRadius: 30,
   },
   profileSocialsDivider: {
     marginHorizontal: -16,
@@ -161,14 +167,20 @@ const themedStyle = StyleService.create({
   postsList: {
     paddingHorizontal: 8,
   },
+  banner: {
+    margin: 20,
+    padding: 20,
+  },
   postItem: {
     width: 144,
     height: 144,
     borderRadius: 4,
+    borderWidth: 0,
     marginHorizontal: 8,
     overflow: 'hidden',
   },
   footerContainer: {
+    borderWidth: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

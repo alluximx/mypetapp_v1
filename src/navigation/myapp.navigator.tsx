@@ -9,11 +9,11 @@ import {HomeScreen} from '../myapp/scenes/home/home.component';
 const Stack = createStackNavigator();
 
 export const MyAppNavigator = (): React.ReactElement => (
-  <Stack.Navigator headerMode='none'>
-    <Stack.Screen name='MyApp' component={MyAppScreen} />
-    <Stack.Screen name='Home' component={HomeScreen} />
-    <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
-    <Stack.Screen name='SignUp' component={SignUpScreen} />
-    <Stack.Screen name='SignIn' component={SignInScreen} />
+  <Stack.Navigator headerMode="none">
+    <Stack.Screen name="MyApp" component={MyAppScreen} />
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+    <Stack.Screen name="SignUp" component={SignUpScreen} />
+    <Stack.Screen name="SignIn" component={SignInScreen} />
   </Stack.Navigator>
 );
