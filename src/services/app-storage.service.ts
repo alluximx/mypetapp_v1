@@ -1,11 +1,12 @@
-import { AsyncStorage, YellowBox } from 'react-native';
-import { Mapping, Theme } from './theme.service';
+import {YellowBox} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {Mapping, Theme} from './theme.service';
 
 const MAPPING_KEY: string = 'mapping';
 const THEME_KEY: string = 'theme';
 
 export class AppStorage {
-
   static getMapping = (fallback?: Mapping): Promise<Mapping> => {
     return AsyncStorage.getItem(MAPPING_KEY).then((mapping: Mapping) => {
       return mapping || fallback;

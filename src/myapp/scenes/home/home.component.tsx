@@ -9,7 +9,7 @@ import {
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
 import ContentView from '../../layouts/home/index';
-import {DrawerShowcase} from '../../scenes/components/drawer/drawer-showcase.component';
+import {DrawerShowcase} from '../components/drawer/drawer-showcase.component';
 
 export const HomeScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
@@ -19,7 +19,6 @@ export const HomeScreen = ({navigation}): React.ReactElement => {
   const renderRightActions = (): React.ReactElement => (
     <React.Fragment>
       <DrawerShowcase onPress={navigation.toggleDrawer} />
-
     </React.Fragment>
   );
   return (
