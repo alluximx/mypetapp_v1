@@ -35,8 +35,12 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.goBack();
   };
 
-  const onMessageButtonPress = (): void => {
-    navigation && navigation.navigate('Chat1');
+  const onAddPetButtonPress = (pet) => {
+    navigation &&
+      navigation.navigate('AddPet', {
+        pet: pet,
+        otherParam: 'anything you want here',
+      });
   };
 
   const Footer = (props) => (
@@ -56,6 +60,23 @@ export default ({navigation}): React.ReactElement => {
       </Card>
     </View>
   );
+
+  const renderButtons = () => {
+    const pets = [{name: 'Argos'}];
+    const views = [];
+    pets.map((pet) => {
+      views.push(
+        <Button
+          style={styles.profileButton}
+          icon={MessageCircleIcon}
+          onPress={(pet) => onAddPetButtonPress(pet)}>
+          {pet.name}
+        </Button>,
+      );
+    });
+
+    return views;
+  };
 
   return (
     <ScrollView style={styles.contentContainer}>
@@ -79,23 +100,13 @@ export default ({navigation}): React.ReactElement => {
           />
         </View>
         <View style={styles.profileButtonsContainer}>
-          <Button
-            style={styles.profileButton}
-            icon={PersonAddIcon}
-            onPress={onFollowButtonPress}>
-            Molly
-          </Button>
-          <Button
-            style={styles.profileButton}
-            icon={MessageCircleIcon}
-            onPress={onMessageButtonPress}>
-            Argos
-          </Button>
+          {renderButtons()}
+
           <Button
             appearance="outline"
             style={styles.profileButton}
             icon={MessageCircleIcon}
-            onPress={onMessageButtonPress}>
+            onPress={onAddPetButtonPress}>
             +
           </Button>
         </View>

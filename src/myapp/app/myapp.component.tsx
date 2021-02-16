@@ -6,10 +6,6 @@ import {ArrowIosBackIcon} from '../../components/icons';
 import {SignInScreen} from '../auth/sign-in.component';
 
 export const MyAppScreen = ({navigation}): React.ReactElement => {
-  const renderBackAction = (): React.ReactElement => (
-    <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
-  );
-
   return (
     <SafeAreaLayout style={styles.container} insets="top">
       <SignInScreen navigation={navigation} />

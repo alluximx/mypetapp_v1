@@ -1,15 +1,15 @@
 import React, {useEffect, useMemo, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
-import {MyAppScreen} from '../myapp/app/myapp.component';
 import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
 import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
 import {SignInScreen} from '../myapp/auth/sign-in.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {reducer, initialState} from '../../src/reducer';
 import AuthService from '../myapp/services/auth-service';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import {QueryClient} from 'react-query';
 import {AuthContext} from '../myapp/context/AuthContext';
+import {AddPetScreen} from '../myapp/scenes/pets/add-pet.component';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -80,11 +80,11 @@ export const MyAppNavigator = (): React.ReactElement => {
   return (
     <AuthContext.Provider value={authContext}>
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="MyApp" component={MyAppScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="AddPet" component={AddPetScreen} />
       </Stack.Navigator>
     </AuthContext.Provider>
   );

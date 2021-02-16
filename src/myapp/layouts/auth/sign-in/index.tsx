@@ -17,8 +17,6 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 export default ({navigation, error}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
-  const [emailError, setEmailError] = React.useState<boolean>(false);
-  const [passwordError, setPasswordError] = React.useState<boolean>(false);
   const [alert, setAlert] = React.useState<boolean>(false);
 
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
@@ -41,6 +39,8 @@ export default ({navigation, error}): React.ReactElement => {
   }, [error]);
 
   const login = async () => {
+    navigation && navigation.navigate('Home');
+
     const authenticateParams = {
       email: email,
       password: password,
