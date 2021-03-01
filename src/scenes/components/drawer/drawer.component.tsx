@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { DrawerElement, DrawerProps } from '@ui-kitten/components';
-import { DrawerShowcase } from './drawer-showcase.component';
-import { drawerShowcase } from './type';
-import { ShowcaseContainer } from '../../../components/showcase-container.component';
+import {StyleSheet} from 'react-native';
+import {DrawerElement, DrawerProps} from '@ui-kitten/components';
+import {DrawerShowcase} from './drawer-showcase.component';
+import {drawerShowcase} from './type';
+import {ShowcaseContainer} from '../../../components/showcase-container.component';
 
-export const DrawerScreen = ({ navigation }): React.ReactElement => {
-
+export const DrawerScreen = ({navigation}): React.ReactElement => {
   const renderItem = (props: DrawerProps): DrawerElement => (
     <DrawerShowcase
       {...props}
@@ -29,4 +28,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-

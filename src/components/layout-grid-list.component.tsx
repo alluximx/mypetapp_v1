@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Dimensions,
-  Image,
-  ListRenderItemInfo,
-  StyleSheet,
-} from 'react-native';
+import {Dimensions, Image, ListRenderItemInfo, StyleSheet} from 'react-native';
 import {
   Card,
   CardElement,
@@ -14,7 +9,7 @@ import {
   Layout,
   Text,
 } from '@ui-kitten/components';
-import { LayoutItem } from '../model/layout-item.model';
+import {LayoutItem} from '../model/layout-item.model';
 
 export interface LayoutGridListProps extends Omit<ListProps, 'renderItem'> {
   data: LayoutItem[];
@@ -24,13 +19,13 @@ export interface LayoutGridListProps extends Omit<ListProps, 'renderItem'> {
 export type LayoutGridListElement = React.ReactElement<LayoutGridListProps>;
 
 export const LayoutGridList = (props: LayoutGridListProps): ListElement => {
-  const { contentContainerStyle, onItemPress, ...listProps } = props;
+  const {contentContainerStyle, onItemPress, ...listProps} = props;
 
   const renderItem = (info: ListRenderItemInfo<LayoutItem>): CardElement => {
     const renderItemHeader = (evaProps): React.ReactElement => (
       <Layout {...evaProps}>
-        <Text category='h6'>{info.item.title}</Text>
-        <Text category='s1'>{info.item.description}</Text>
+        <Text category="h6">{info.item.title}</Text>
+        <Text category="s1">{info.item.description}</Text>
       </Layout>
     );
 

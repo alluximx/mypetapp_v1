@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListRenderItemInfo, StyleSheet } from 'react-native';
+import {ListRenderItemInfo, StyleSheet} from 'react-native';
 import {
   Divider,
   List,
@@ -8,21 +8,32 @@ import {
   TopNavigation,
   TopNavigationAction,
 } from '@ui-kitten/components';
-import { ThemeCard } from './theme-card.component';
-import { SafeAreaLayout } from '../../components/safe-area-layout.component';
-import { MappingContextValue, ThemeContextValue, Theming } from '../../services/theme.service';
-import { ThemesService } from './themes.service';
-import { ThemeItem } from './type';
-import { appThemes } from '../../app/app-theming';
-import { MenuIcon } from '../../components/icons';
-import { RestartAppModal } from './restart-app-modal.component';
+import {ThemeCard} from './theme-card.component';
+import {SafeAreaLayout} from '../../components/safe-area-layout.component';
+import {
+  MappingContextValue,
+  ThemeContextValue,
+  Theming,
+} from '../../services/theme.service';
+import {ThemesService} from './themes.service';
+import {ThemeItem} from './type';
+import {appThemes} from '../../app/app-theming';
+import {MenuIcon} from '../../components/icons';
+import {RestartAppModal} from './restart-app-modal.component';
 
-export const ThemesScreen = ({ navigation }): React.ReactElement => {
-
-  const mappingContext: MappingContextValue = React.useContext(Theming.MappingContext);
-  const themeContext: ThemeContextValue = React.useContext(Theming.ThemeContext);
-  const [evaToggleChecked, setEvaToggleChecked] = React.useState<boolean>(mappingContext.isEva());
-  const [restartModalVisible, setRestartModalVisible] = React.useState<boolean>(false);
+export const ThemesScreen = ({navigation}): React.ReactElement => {
+  const mappingContext: MappingContextValue = React.useContext(
+    Theming.MappingContext,
+  );
+  const themeContext: ThemeContextValue = React.useContext(
+    Theming.ThemeContext,
+  );
+  const [evaToggleChecked, setEvaToggleChecked] = React.useState<boolean>(
+    mappingContext.isEva(),
+  );
+  const [restartModalVisible, setRestartModalVisible] = React.useState<boolean>(
+    false,
+  );
 
   const themes: ThemeItem[] = ThemesService.createThemeListItems(
     appThemes,
@@ -40,7 +51,10 @@ export const ThemesScreen = ({ navigation }): React.ReactElement => {
   };
 
   const isActiveTheme = (theme: ThemeItem): boolean => {
-    return mappingContext.currentMapping === theme.mapping && themeContext.currentTheme === theme.name;
+    return (
+      mappingContext.currentMapping === theme.mapping &&
+      themeContext.currentTheme === theme.name
+    );
   };
 
   const shouldDisableItem = (theme: ThemeItem): boolean => {
@@ -56,13 +70,12 @@ export const ThemesScreen = ({ navigation }): React.ReactElement => {
   };
 
   const renderDrawerAction = (): React.ReactElement => (
-    <TopNavigationAction
-      icon={MenuIcon}
-      onPress={navigation.toggleDrawer}
-    />
+    <TopNavigationAction icon={MenuIcon} onPress={navigation.toggleDrawer} />
   );
 
-  const renderItem = (info: ListRenderItemInfo<ThemeItem>): React.ReactElement => (
+  const renderItem = (
+    info: ListRenderItemInfo<ThemeItem>,
+  ): React.ReactElement => (
     <ThemeProvider theme={info.item.theme}>
       <ThemeCard
         style={styles.item}
@@ -77,21 +90,16 @@ export const ThemesScreen = ({ navigation }): React.ReactElement => {
   const renderFooter = (): React.ReactElement => (
     <Toggle
       style={styles.evaToggle}
-      text='Eva Design System'
+      text="Eva Design System"
       checked={evaToggleChecked}
       onChange={onEvaToggleCheckedChange}
     />
   );
 
   return (
-    <SafeAreaLayout
-      style={styles.safeArea}
-      insets='top'>
-      <TopNavigation
-        title='MyPetApp'
-        leftControl={renderDrawerAction()}
-      />
-      <Divider/>
+    <SafeAreaLayout style={styles.safeArea} insets="top">
+      <TopNavigation title="MyPetApp" leftControl={renderDrawerAction()} />
+      <Divider />
       <List
         contentContainerStyle={styles.container}
         data={themes}

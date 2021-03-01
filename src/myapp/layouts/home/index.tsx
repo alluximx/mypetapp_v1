@@ -8,16 +8,14 @@ import {
 import {
   Avatar,
   Button,
-  Divider,
   Card,
   Layout,
   StyleService,
   Text,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {ProfileSocial} from './extra/profile-social.component';
 import {CategoryList} from './extra/category-list.component';
-import {MessageCircleIcon, PersonAddIcon, PinIcon} from './extra/icons';
+import {MessageCircleIcon} from './extra/icons';
 import {Post, Profile} from './extra/data';
 
 const profile: Profile = Profile.helenKuper();
@@ -31,19 +29,19 @@ const stylePosts: Post[] = [Post.style1(), Post.style2(), Post.style3()];
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
 
-  const onFollowButtonPress = (): void => {
-    navigation && navigation.goBack();
-  };
-
-  const onMessageButtonPress = (): void => {
-    navigation && navigation.navigate('Chat1');
+  const onAddPetButtonPress = (pet) => {
+    navigation &&
+      navigation.navigate('AddPet', {
+        pet: pet,
+        otherParam: 'anything you want here',
+      });
   };
 
   const Footer = (props) => (
     <View {...props} style={[props.style, styles.footerContainer]}>
-      <Button style={styles.footerControl} size="small">
+      <Text style={styles.profileLocation} category="s1">
         {props.item.category}
-      </Button>
+      </Text>
     </View>
   );
 
@@ -56,6 +54,23 @@ export default ({navigation}): React.ReactElement => {
       </Card>
     </View>
   );
+
+  const renderButtons = () => {
+    const pets = [{name: 'Argos'}];
+    const views = [];
+    pets.map((pet) => {
+      views.push(
+        <Button
+          style={styles.profileButton}
+          icon={MessageCircleIcon}
+          onPress={(pet) => onAddPetButtonPress(pet)}>
+          {pet.name}
+        </Button>,
+      );
+    });
+
+    return views;
+  };
 
   return (
     <ScrollView style={styles.contentContainer}>
@@ -79,39 +94,33 @@ export default ({navigation}): React.ReactElement => {
           />
         </View>
         <View style={styles.profileButtonsContainer}>
-          <Button
-            style={styles.profileButton}
-            icon={PersonAddIcon}
-            onPress={onFollowButtonPress}>
-            Molly
-          </Button>
+          {renderButtons()}
+
           <Button
             appearance="outline"
             style={styles.profileButton}
             icon={MessageCircleIcon}
-            onPress={onMessageButtonPress}>
-            Argos
+            onPress={onAddPetButtonPress}>
+            +
           </Button>
         </View>
-        <Divider style={styles.profileSocialsDivider} />
-        {/* <View style={styles.profileSocialsContainer}>
-          <ProfileSocial hint="Followers" value={`${profile.followers}`} />
-          <ProfileSocial hint="Following" value={`${profile.following}`} />
-          <ProfileSocial hint="Posts" value={`${profile.posts}`} />
-        </View> */}
       </Layout>
       <CategoryList
         contentContainerStyle={styles.postsList}
         hint="¿Que necesitan tus mascotas hoy?"
+        hintLink="MisPedidos"
+        navigation={navigation}
         data={[...plantPosts, ...plantPosts]}
         renderItem={renderPostItem}
       />
-      <CategoryList
-        contentContainerStyle={styles.postsList}
-        hint="Style"
-        data={[...stylePosts, ...stylePosts]}
-        renderItem={renderPostItem}
-      />
+      <Card style={styles.banner}>
+        <Text style={styles.profileLocation} category="s1">
+          ¡Haz un nuevo amigo!
+        </Text>
+        <Text style={styles.profileLocation} category="s2">
+          Adopta una mascota hoy
+        </Text>
+      </Card>
     </ScrollView>
   );
 };
@@ -119,7 +128,9 @@ export default ({navigation}): React.ReactElement => {
 const themedStyle = StyleService.create({
   contentContainer: {
     flex: 1,
-    backgroundColor: 'background-basic-color-2',
+  },
+  card: {
+    borderWidth: 0,
   },
   header: {
     padding: 16,
@@ -148,6 +159,7 @@ const themedStyle = StyleService.create({
   profileButton: {
     flex: 1,
     marginHorizontal: 4,
+    borderRadius: 30,
   },
   profileSocialsDivider: {
     marginHorizontal: -16,
@@ -161,14 +173,20 @@ const themedStyle = StyleService.create({
   postsList: {
     paddingHorizontal: 8,
   },
+  banner: {
+    margin: 20,
+    padding: 20,
+  },
   postItem: {
     width: 144,
     height: 144,
     borderRadius: 4,
+    borderWidth: 0,
     marginHorizontal: 8,
     overflow: 'hidden',
   },
   footerContainer: {
+    borderWidth: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },

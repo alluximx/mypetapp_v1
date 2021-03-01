@@ -1,19 +1,34 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {List, ListElement, ListProps, Text} from '@ui-kitten/components';
+import {
+  Layout,
+  List,
+  ListElement,
+  ListProps,
+  Text,
+} from '@ui-kitten/components';
 
 export interface CategoryListProps extends ListProps {
   hint: string;
 }
 
 export const CategoryList = (props: CategoryListProps): ListElement => {
-  const {hint, ...listProps} = props;
+  const {hint, hintLink, navigation, ...listProps} = props;
+
+  const onItemPress = (index: number): void => {
+    navigation && navigation.navigate('Orders');
+  };
 
   return (
     <React.Fragment>
-      <Text style={styles.hint} category="s1">
-        {hint}
-      </Text>
+      <Layout style={styles.container}>
+        <Text style={styles.hint} category="s2">
+          {hint}
+        </Text>
+        <Text style={styles.hintLink} category="s2" onPress={onItemPress}>
+          {hintLink}
+        </Text>
+      </Layout>
       <List
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -25,6 +40,20 @@ export const CategoryList = (props: CategoryListProps): ListElement => {
 
 const styles = StyleSheet.create({
   hint: {
+    flex: 3,
     margin: 16,
+  },
+  hintLink: {
+    flex: 1,
+    margin: 16,
+    textDecorationLine: 'underline',
+  },
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  layout: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

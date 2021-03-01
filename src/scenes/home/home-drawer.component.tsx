@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {
   Avatar,
   Divider,
@@ -12,29 +12,34 @@ import {
   MenuItemType,
   Text,
 } from '@ui-kitten/components';
-import { BookIcon, GithubIcon } from '../../components/icons';
-import { SafeAreaLayout } from '../../components/safe-area-layout.component';
-import { WebBrowserService } from '../../services/web-browser.service';
-import { AppInfoService } from '../../services/app-info.service';
+import {BookIcon, GithubIcon} from '../../components/icons';
+import {SafeAreaLayout} from '../../components/safe-area-layout.component';
+import {WebBrowserService} from '../../services/web-browser.service';
+import {AppInfoService} from '../../services/app-info.service';
 
 const DATA: MenuItemType[] = [
-  { title: 'Libraries', icon: GithubIcon },
-  { title: 'Documentation', icon: BookIcon },
+  {title: 'Libraries', icon: GithubIcon},
+  {title: 'Documentation', icon: BookIcon},
 ];
 
 const version: string = AppInfoService.getVersion();
 
-export const HomeDrawer = ({ navigation }): DrawerElement => {
+export const HomeDrawer = ({navigation}): DrawerElement => {
+  const onHomeButtonPress = (): void => {
+    navigation && navigation.navigate('Home');
+  };
 
   const onItemSelect = (index: number): void => {
     switch (index) {
       case 0: {
         navigation.toggleDrawer();
-        navigation.navigate('Libraries');
+        navigation.navigate('Home');
         return;
       }
       case 1: {
-        WebBrowserService.openBrowserAsync('https://akveo.github.io/react-native-ui-kitten');
+        WebBrowserService.openBrowserAsync(
+          'https://akveo.github.io/react-native-ui-kitten',
+        );
         navigation.toggleDrawer();
         return;
       }
@@ -42,17 +47,16 @@ export const HomeDrawer = ({ navigation }): DrawerElement => {
   };
 
   const renderHeader = (): DrawerHeaderElement => (
-    <Layout
-      style={styles.header}
-      level='2'>
+    <Layout style={styles.header} level="2">
       <View style={styles.profileContainer}>
-        <Avatar
-          size='giant'
+        {/* <Avatar
+          size="giant"
           source={require('../../assets/images/image-app-icon.png')}
-        />
+        /> */}
         <Text
+          onPress={onHomeButtonPress}
           style={styles.profileName}
-          category='h6'>
+          category="h6">
           MyPetApp
         </Text>
       </View>
@@ -61,7 +65,7 @@ export const HomeDrawer = ({ navigation }): DrawerElement => {
 
   const renderFooter = (): DrawerHeaderFooterElement => (
     <React.Fragment>
-      <Divider/>
+      <Divider />
       {/* <DrawerHeaderFooter
         disabled={true}
         description={`Version ${AppInfoService.getVersion()}`}
@@ -70,9 +74,7 @@ export const HomeDrawer = ({ navigation }): DrawerElement => {
   );
 
   return (
-    <SafeAreaLayout
-      style={styles.safeArea}
-      insets='top'>
+    <SafeAreaLayout style={styles.safeArea} insets="top">
       <Drawer
         header={renderHeader}
         footer={renderFooter}

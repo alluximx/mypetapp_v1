@@ -1,17 +1,13 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { TopNavigationElement, TopNavigationProps } from '@ui-kitten/components';
-import { TopNavigationShowcase } from './top-navigation-showcase.component';
-import { topNavigationSettings, topNavigationShowcase } from './type';
-import { ShowcaseContainer } from '../../../components/showcase-container.component';
+import {StyleSheet} from 'react-native';
+import {TopNavigationElement, TopNavigationProps} from '@ui-kitten/components';
+import {TopNavigationShowcase} from './top-navigation-showcase.component';
+import {topNavigationSettings, topNavigationShowcase} from './type';
+import {ShowcaseContainer} from '../../../components/showcase-container.component';
 
-export const TopNavigationScreen = ({ navigation }): React.ReactElement => {
-
+export const TopNavigationScreen = ({navigation}): React.ReactElement => {
   const renderItem = (props: TopNavigationProps): TopNavigationElement => (
-    <TopNavigationShowcase
-      {...props}
-      style={[styles.component, props.style]}
-    />
+    <TopNavigationShowcase {...props} style={[styles.component, props.style]} />
   );
 
   return (
@@ -29,4 +25,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-

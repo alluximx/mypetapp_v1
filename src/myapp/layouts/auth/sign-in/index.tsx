@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
 import {
   Button,
@@ -10,21 +10,63 @@ import {
 } from '@ui-kitten/components';
 import {EyeIcon, EyeOffIcon, PersonIcon} from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
+import {ErrorMessage} from '../../../components/error-message';
+import {AuthContext} from '../../../context/AuthContext';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
-export default ({navigation}): React.ReactElement => {
+export default ({navigation, error}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
+  const [alert, setAlert] = React.useState<boolean>(false);
+
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const styles = useStyleSheet(themedStyles);
+  const passwordRef = useRef<Input>(null);
+  const {signIn} = useContext(AuthContext);
+
+  const showAlert = () => {
+    setAlert(true);
+  };
+
+  const hideAlert = () => {
+    setAlert(false);
+  };
+
+  useEffect(() => {
+    setErrorMessage(error);
+  }, [error]);
+
+  const login = async () => {
+    navigation && navigation.navigate('Home');
+
+    const authenticateParams = {
+      email: email,
+      password: password,
+    };
+
+    setEmailError(authenticateParams.email === '');
+
+    setPasswordError(authenticateParams.password === '');
+
+    if (authenticateParams.email !== '' || authenticateParams.password !== '') {
+      let response = await signIn(authenticateParams);
+      if (!response) {
+        showAlert();
+      }
+      return response;
+    }
+    return false;
+  };
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.navigate('SignUp');
   };
 
-  const onLoginButtonPress = (): void => {
-    navigation && navigation.navigate('Home');
-  };
+  // const onLoginButtonPress = (): void => {
+  //   navigation && navigation.navigate('Home');
+  // };
 
   const onForgotPasswordButtonPress = (): void => {
     navigation && navigation.navigate('ForgotPassword');
@@ -49,7 +91,10 @@ export default ({navigation}): React.ReactElement => {
           placeholder="Correo"
           icon={PersonIcon}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(nextValue) => {
+            setEmailError(false);
+            setEmail(nextValue);
+          }}
         />
         <Input
           style={styles.passwordInput}
@@ -57,9 +102,15 @@ export default ({navigation}): React.ReactElement => {
           icon={passwordVisible ? EyeIcon : EyeOffIcon}
           value={password}
           secureTextEntry={!passwordVisible}
-          onChangeText={setPassword}
+          onChangeText={(nextValue) => {
+            setPasswordError(false);
+            setPassword(nextValue);
+          }}
+          onSubmitEditing={login}
           onIconPress={onPasswordIconPress}
+          ref={passwordRef}
         />
+        {errorMessage && <ErrorMessage message={errorMessage} />}
         <View style={styles.forgotPasswordContainer}>
           <Button
             style={styles.forgotPasswordButton}
@@ -71,10 +122,7 @@ export default ({navigation}): React.ReactElement => {
         </View>
       </Layout>
 
-      <Button
-        onPress={onLoginButtonPress}
-        style={styles.signInButton}
-        size="giant">
+      <Button onPress={login} style={styles.signInButton} size="giant">
         INICIA SESIÓN
       </Button>
       <Button
@@ -84,6 +132,20 @@ export default ({navigation}): React.ReactElement => {
         onPress={onSignUpButtonPress}>
         ¿Aún no tienes una cuenta? Regístrate
       </Button>
+      <AwesomeAlert
+        show={alert}
+        showProgress={false}
+        label="Iniciar Sesión"
+        message="Contraseña o usuario incorrecto, revisa que hayas ingresado tus datos correctamente."
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showConfirmButton={true}
+        confirmText="Aceptar"
+        confirmButtonColor="#DD6B55"
+        onConfirmPressed={() => {
+          hideAlert();
+        }}
+      />
     </KeyboardAvoidingView>
   );
 };
