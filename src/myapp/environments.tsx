@@ -23,5 +23,5 @@ const _Environments = {
   },
 };
 
-let env = new Environments();
+const env = new Environments();
 export default env.getEnvironment();

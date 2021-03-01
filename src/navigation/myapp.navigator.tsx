@@ -42,7 +42,7 @@ export const MyAppNavigator = (): React.ReactElement => {
           dispatch({type: 'SIGN_IN', token: response.data.token});
           return true;
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return false;
         }
       },
@@ -52,7 +52,7 @@ export const MyAppNavigator = (): React.ReactElement => {
           await AsyncStorage.setItem('auth_token', response.data.token);
           return true;
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       },
       // To switch from Register screens to User screens
@@ -70,7 +70,7 @@ export const MyAppNavigator = (): React.ReactElement => {
           const response = await AuthService.PostSignup(data);
           return {status: true, data: response.data};
         } catch (error) {
-          console.log('Err', error.response.data);
+          // console.log('Err', error.response.data);
           return {status: false, data: error.response.data};
         }
       },
