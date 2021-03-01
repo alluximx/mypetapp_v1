@@ -1,35 +1,30 @@
 import React from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
-import { Avatar, ListItem, ListItemProps, Text } from '@ui-kitten/components';
-import { DoneAllIcon } from './icons';
-import { Message } from './data';
+import {StyleSheet, View, ViewStyle} from 'react-native';
+import {Avatar, ListItem, ListItemProps, Text} from '@ui-kitten/components';
+import {DoneAllIcon} from './icons';
+import {Message} from './data';
 
 export type MessageItemProps = ListItemProps & {
   message: Message;
 };
 
 export const MessageItem = (props: MessageItemProps): React.ReactElement => {
+  const {message, ...listItemProps} = props;
 
-  const { message, ...listItemProps } = props;
-
-  const renderMessageDate = (style: ViewStyle, index: number): React.ReactElement => (
+  const renderMessageDate = (
+    style: ViewStyle,
+    index: number,
+  ): React.ReactElement => (
     <View style={styles.dateContainer}>
-      {message.isRead && <DoneAllIcon/>}
-      <Text
-        style={styles.dateText}
-        appearance='hint'
-        category='c1'>
+      {message.isRead && <DoneAllIcon />}
+      <Text style={styles.dateText} appearance="hint" category="c1">
         {message.date}
       </Text>
     </View>
   );
 
-
   const renderProfileAvatar = (): React.ReactElement => (
-    <Avatar
-      style={styles.avatar}
-      source={message.profile.photo}
-    />
+    <Avatar style={styles.avatar} source={message.profile.photo} />
   );
 
   return (

@@ -13,7 +13,11 @@ export interface CategoryListProps extends ListProps {
 }
 
 export const CategoryList = (props: CategoryListProps): ListElement => {
-  const {hint, hintLink, ...listProps} = props;
+  const {hint, hintLink, navigation, ...listProps} = props;
+
+  const onItemPress = (index: number): void => {
+    navigation && navigation.navigate('Orders');
+  };
 
   return (
     <React.Fragment>
@@ -21,7 +25,7 @@ export const CategoryList = (props: CategoryListProps): ListElement => {
         <Text style={styles.hint} category="s2">
           {hint}
         </Text>
-        <Text style={styles.hintLink} category="s2">
+        <Text style={styles.hintLink} category="s2" onPress={onItemPress}>
           {hintLink}
         </Text>
       </Layout>

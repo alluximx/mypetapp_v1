@@ -57,6 +57,42 @@ export default ({navigation}): React.ReactElement => {
           onChangeText={setUserName}
         />
       </Layout>
+      <Layout style={styles.formContainer} level="1">
+        <Input
+          autoCapitalize="none"
+          placeholder="Raza"
+          icon={PersonIcon}
+          value={userName}
+          onChangeText={setUserName}
+        />
+      </Layout>
+      <Layout style={styles.formContainer} level="1">
+        <Input
+          autoCapitalize="none"
+          placeholder="Sexo"
+          icon={PersonIcon}
+          value={userName}
+          onChangeText={setUserName}
+        />
+      </Layout>
+      <Layout style={styles.formContainer} level="1">
+        <Input
+          autoCapitalize="none"
+          placeholder="Edad"
+          icon={PersonIcon}
+          value={userName}
+          onChangeText={setUserName}
+        />
+      </Layout>
+      <Layout style={styles.formContainer} level="1">
+        <Input
+          autoCapitalize="none"
+          placeholder="Fecha de Nacimiento"
+          icon={PersonIcon}
+          value={userName}
+          onChangeText={setUserName}
+        />
+      </Layout>
       <Button
         style={styles.signUpButton}
         size="giant"

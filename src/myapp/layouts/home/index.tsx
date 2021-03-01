@@ -14,11 +14,9 @@ import {
   Text,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {ProfileSocial} from './extra/profile-social.component';
 import {CategoryList} from './extra/category-list.component';
-import {MessageCircleIcon, PersonAddIcon, PinIcon} from './extra/icons';
+import {MessageCircleIcon} from './extra/icons';
 import {Post, Profile} from './extra/data';
-import {DrawerShowcase} from '../../scenes/components/drawer/drawer-showcase.component';
 
 const profile: Profile = Profile.helenKuper();
 
@@ -30,10 +28,6 @@ const stylePosts: Post[] = [Post.style1(), Post.style2(), Post.style3()];
 
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
-
-  const onFollowButtonPress = (): void => {
-    navigation && navigation.goBack();
-  };
 
   const onAddPetButtonPress = (pet) => {
     navigation &&
@@ -115,6 +109,7 @@ export default ({navigation}): React.ReactElement => {
         contentContainerStyle={styles.postsList}
         hint="¿Que necesitan tus mascotas hoy?"
         hintLink="MisPedidos"
+        navigation={navigation}
         data={[...plantPosts, ...plantPosts]}
         renderItem={renderPostItem}
       />

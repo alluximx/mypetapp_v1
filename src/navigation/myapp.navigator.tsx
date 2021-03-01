@@ -10,6 +10,7 @@ import AuthService from '../myapp/services/auth-service';
 import {QueryClient} from 'react-query';
 import {AuthContext} from '../myapp/context/AuthContext';
 import {AddPetScreen} from '../myapp/scenes/pets/add-pet.component';
+import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -85,6 +86,7 @@ export const MyAppNavigator = (): React.ReactElement => {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
+        <Stack.Screen name="Orders" component={OrdersScreen} />
       </Stack.Navigator>
     </AuthContext.Provider>
   );
