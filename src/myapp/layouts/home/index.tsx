@@ -16,11 +16,15 @@ import {
 } from '@ui-kitten/components';
 import {CategoryList} from './extra/category-list.component';
 import {MessageCircleIcon} from './extra/icons';
-import {Post, Profile} from './extra/data';
+import {Service, Profile} from './extra/data';
 
 const profile: Profile = Profile.helenKuper();
 
-const services: Services[] = [Service.service1(), Service.service2(), Service.service3()];
+const services: Service[] = [
+  Service.service1(),
+  Service.service2(),
+  Service.service3(),
+];
 
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);

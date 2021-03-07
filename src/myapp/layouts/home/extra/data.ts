@@ -8,7 +8,7 @@ export class Profile {
     readonly location: string,
     readonly followers: number,
     readonly following: number,
-    readonly posts: number,
+    readonly services: number,
   ) {}
 
   get fullName(): string {
@@ -32,15 +32,21 @@ export class Service {
   constructor(readonly photo: ImageSourcePropType, readonly category: string) {}
 
   static service1(): Service {
-    return new Service(require('../../home/assets/image-pet-1.jpg'), 'Molly');
+    return new Service(require('../../home/assets/image-pet-1.jpg'), 'Comida');
   }
 
   static service2(): Service {
-    return new Service(require('../../home/assets/image-pet-2.jpg'), 'Jaine');
+    return new Service(
+      require('../../home/assets/image-pet-2.jpg'),
+      'Juguetes',
+    );
   }
 
   static service3(): Service {
-    return new Service(require('../../home/assets/image-pet-3.jpg'), 'Jaime');
+    return new Service(
+      require('../../home/assets/image-pet-3.jpg'),
+      'Accessorios',
+    );
   }
 
   static travel1(): Service {

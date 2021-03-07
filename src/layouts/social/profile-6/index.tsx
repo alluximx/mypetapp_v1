@@ -27,9 +27,17 @@ const services: Service[] = [
   Service.service3(),
 ];
 
-const travelPosts: Service[] = [Service.travel1(), Service.travel2(), Service.travel3()];
+const travelPosts: Service[] = [
+  Service.travel1(),
+  Service.travel2(),
+  Service.travel3(),
+];
 
-const stylePosts: Service[] = [Service.style1(), Service.style2(), Service.style3()];
+const stylePosts: Service[] = [
+  Service.style1(),
+  Service.style2(),
+  Service.style3(),
+];
 
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
