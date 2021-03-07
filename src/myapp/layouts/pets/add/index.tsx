@@ -2,22 +2,16 @@ import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
 import {
   Button,
-  CheckBox,
   Input,
   Layout,
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {ProfileAvatar} from '../auth/sign-up/extra/profile-avatar.component';
-import {EyeOffIcon, PlusIcon} from '../auth/sign-up/extra/icons';
-import {EyeIcon, PersonIcon} from '../auth/sign-in/extra/icons';
-import {EmailIcon} from '../auth/forgot-password/extra/icons';
+import {ProfileAvatar} from '../../auth/sign-up/extra/profile-avatar.component';
+import {PlusIcon} from '../../auth/sign-up/extra/icons';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
-  const [email, setEmail] = React.useState<string>();
-  const [password, setPassword] = React.useState<string>();
-  const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
 
   const styles = useStyleSheet(themedStyles);
@@ -45,14 +39,13 @@ export default ({navigation}): React.ReactElement => {
           style={styles.profileAvatar}
           resizeMode="center"
           editButton={renderEditAvatarButton}
-          source={require('../home/assets/image-pet-1.jpg')}
+          source={require('../../home/assets/image-pet-1.jpg')}
         />
       </View>
       <Layout style={styles.formContainer} level="1">
         <Input
           autoCapitalize="none"
           placeholder="Nombre"
-          icon={PersonIcon}
           value={userName}
           onChangeText={setUserName}
         />
@@ -61,7 +54,6 @@ export default ({navigation}): React.ReactElement => {
         <Input
           autoCapitalize="none"
           placeholder="Raza"
-          icon={PersonIcon}
           value={userName}
           onChangeText={setUserName}
         />
@@ -70,7 +62,6 @@ export default ({navigation}): React.ReactElement => {
         <Input
           autoCapitalize="none"
           placeholder="Sexo"
-          icon={PersonIcon}
           value={userName}
           onChangeText={setUserName}
         />
@@ -79,7 +70,6 @@ export default ({navigation}): React.ReactElement => {
         <Input
           autoCapitalize="none"
           placeholder="Edad"
-          icon={PersonIcon}
           value={userName}
           onChangeText={setUserName}
         />
@@ -88,17 +78,18 @@ export default ({navigation}): React.ReactElement => {
         <Input
           autoCapitalize="none"
           placeholder="Fecha de Nacimiento"
-          icon={PersonIcon}
           value={userName}
           onChangeText={setUserName}
         />
       </Layout>
-      <Button
-        style={styles.signUpButton}
-        size="giant"
-        onPress={onAddButtonPress}>
-        AGREGAR
-      </Button>
+      <Layout style={styles.formContainer} level="1">
+        <Button
+          style={styles.signUpButton}
+          size="medium"
+          onPress={onAddButtonPress}>
+          AGREGAR
+        </Button>
+      </Layout>
       <Button
         style={styles.signInButton}
         appearance="ghost"

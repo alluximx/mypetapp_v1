@@ -21,7 +21,7 @@ export const ComponentsScreen = ({navigation}): React.ReactElement => {
 
   return (
     <SafeAreaLayout style={styles.safeArea} insets="top">
-      <TopNavigation title="MyPetApp" leftControl={renderDrawerAction()} />
+      <TopNavigation title="Dogit" leftControl={renderDrawerAction()} />
       <Divider />
       <MenuGridList data={data} onItemPress={onItemPress} />
     </SafeAreaLayout>

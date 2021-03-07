@@ -1,51 +1,49 @@
 import React from 'react';
-import { ImageBackground, ListRenderItemInfo, StyleSheet, View } from 'react-native';
-import { Avatar, Button, Card, Layout, List, Text } from '@ui-kitten/components';
-import { ProfileSocial } from './extra/profile-social.component';
-import { HeartIcon } from './extra/icons';
-import { Post, Profile } from './extra/data';
+import {
+  ImageBackground,
+  ListRenderItemInfo,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {Avatar, Button, Card, Layout, List, Text} from '@ui-kitten/components';
+import {ProfileSocial} from './extra/profile-social.component';
+import {HeartIcon} from './extra/icons';
+import {Service, Profile} from './extra/data';
 
 const profile: Profile = Profile.jenniferGreen();
 
-const posts: Post[] = [
-  Post.byJenniferGreen(),
-  Post.byAlexaTenorio(),
+const services: Service[] = [
+  Service.byJenniferGreen(),
+  Service.byAlexaTenorio(),
 ];
 
-export default ({ navigation }): React.ReactElement => {
-
+export default ({navigation}): React.ReactElement => {
   const onFollowButtonPress = (): void => {
     navigation && navigation.goBack();
   };
 
-  const renderItemHeader = (info: ListRenderItemInfo<Post>): React.ReactElement => (
-    <ImageBackground
-      style={styles.postHeader}
-      source={info.item.image}
-    />
+  const renderItemHeader = (
+    info: ListRenderItemInfo<Service>,
+  ): React.ReactElement => (
+    <ImageBackground style={styles.postHeader} source={info.item.image} />
   );
 
-  const renderItem = (info: ListRenderItemInfo<Post>): React.ReactElement => (
-    <Card
-      style={styles.post}
-      header={() => renderItemHeader(info)}>
+  const renderItem = (
+    info: ListRenderItemInfo<Service>,
+  ): React.ReactElement => (
+    <Card style={styles.post} header={() => renderItemHeader(info)}>
       <View style={styles.postBody}>
-        <Avatar source={info.item.author.photo}/>
+        <Avatar source={info.item.author.photo} />
         <View style={styles.postAuthorContainer}>
-          <Text
-            category='s2'>
-            {info.item.author.fullName}
-          </Text>
-          <Text
-            appearance='hint'
-            category='c1'>
+          <Text category="s2">{info.item.author.fullName}</Text>
+          <Text appearance="hint" category="c1">
             {info.item.date}
           </Text>
         </View>
         <Button
           style={styles.iconButton}
-          appearance='ghost'
-          status='danger'
+          appearance="ghost"
+          status="danger"
           icon={HeartIcon}>
           {`${info.item.likes.length}`}
         </Button>
@@ -54,43 +52,35 @@ export default ({ navigation }): React.ReactElement => {
   );
 
   const renderHeader = (): React.ReactElement => (
-    <Layout
-      style={styles.header}
-      level='1'>
+    <Layout style={styles.header} level="1">
       <Avatar
         style={styles.profileAvatar}
-        size='large'
+        size="large"
         source={profile.photo}
       />
       <View style={styles.profileDetailsContainer}>
-        <Text category='h4'>
-          {profile.fullName}
-        </Text>
-        <Text
-          appearance='hint'
-          category='s1'>
+        <Text category="h4">{profile.fullName}</Text>
+        <Text appearance="hint" category="s1">
           {profile.location}
         </Text>
         <View style={styles.profileSocialsContainer}>
           <ProfileSocial
             style={styles.profileSocialContainer}
-            hint='Followers'
+            hint="Followers"
             value={`${profile.followers}`}
           />
           <ProfileSocial
             style={styles.profileSocialContainer}
-            hint='Following'
+            hint="Following"
             value={`${profile.following}`}
           />
           <ProfileSocial
             style={styles.profileSocialContainer}
-            hint='Posts'
+            hint="Posts"
             value={`${profile.posts}`}
           />
         </View>
-        <Button
-          style={styles.followButton}
-          onPress={onFollowButtonPress}>
+        <Button style={styles.followButton} onPress={onFollowButtonPress}>
           FOLLOW
         </Button>
       </View>
@@ -101,7 +91,7 @@ export default ({ navigation }): React.ReactElement => {
     <List
       style={styles.list}
       contentContainerStyle={styles.listContent}
-      data={posts}
+      data={services}
       renderItem={renderItem}
       ListHeaderComponent={renderHeader}
     />
@@ -160,4 +150,3 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
 });
-

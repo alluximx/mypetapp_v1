@@ -20,11 +20,7 @@ import {Post, Profile} from './extra/data';
 
 const profile: Profile = Profile.helenKuper();
 
-const plantPosts: Post[] = [Post.plant1(), Post.plant2(), Post.plant3()];
-
-const travelPosts: Post[] = [Post.travel1(), Post.travel2(), Post.travel3()];
-
-const stylePosts: Post[] = [Post.style1(), Post.style2(), Post.style3()];
+const services: Services[] = [Service.service1(), Service.service2(), Service.service3()];
 
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
@@ -33,7 +29,14 @@ export default ({navigation}): React.ReactElement => {
     navigation &&
       navigation.navigate('AddPet', {
         pet: pet,
-        otherParam: 'anything you want here',
+      });
+  };
+
+  const onDetailPetButtonPress = (pet) => {
+    navigation &&
+      navigation.navigate('DetailPet', {
+        pet: pet,
+        id: pet.id,
       });
   };
 
@@ -63,7 +66,7 @@ export default ({navigation}): React.ReactElement => {
         <Button
           style={styles.profileButton}
           icon={MessageCircleIcon}
-          onPress={(pet) => onAddPetButtonPress(pet)}>
+          onPress={(pet) => onDetailPetButtonPress(pet)}>
           {pet.name}
         </Button>,
       );
@@ -110,7 +113,7 @@ export default ({navigation}): React.ReactElement => {
         hint="¿Que necesitan tus mascotas hoy?"
         hintLink="MisPedidos"
         navigation={navigation}
-        data={[...plantPosts, ...plantPosts]}
+        data={[...services, ...services]}
         renderItem={renderPostItem}
       />
       <Card style={styles.banner}>

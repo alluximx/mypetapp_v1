@@ -19,7 +19,7 @@ export class Profile {
     return new Profile(
       'Hola',
       'Karen',
-      require('../assets/image-profile.jpg'),
+      require('../../home/assets/image-profile.jpg'),
       '¿Cómo están tus mascotas hoy?',
       1500,
       86,
@@ -28,42 +28,42 @@ export class Profile {
   }
 }
 
-export class Post {
+export class Service {
   constructor(readonly photo: ImageSourcePropType, readonly category: string) {}
 
-  static plant1(): Post {
-    return new Post(require('../assets/image-pet-1.jpg'), 'Molly');
+  static service1(): Service {
+    return new Service(require('../../home/assets/image-pet-1.jpg'), 'Molly');
   }
 
-  static plant2(): Post {
-    return new Post(require('../assets/image-pet-2.jpg'), 'Jaine');
+  static service2(): Service {
+    return new Service(require('../../home/assets/image-pet-2.jpg'), 'Jaine');
   }
 
-  static plant3(): Post {
-    return new Post(require('../assets/../assets/image-pet-3.jpg'), 'Jaime');
+  static service3(): Service {
+    return new Service(require('../../home/assets/image-pet-3.jpg'), 'Jaime');
   }
 
-  static travel1(): Post {
-    return new Post(require('../assets/image-pet-4.jpg'), 'Darla');
+  static travel1(): Service {
+    return new Service(require('../../home/assets/image-pet-4.jpg'), 'Darla');
   }
 
-  static travel2(): Post {
-    return new Post(require('../assets/image-pet-5.jpg'), 'Lola');
+  static travel2(): Service {
+    return new Service(require('../../home/assets/image-pet-5.jpg'), 'Lola');
   }
 
-  static travel3(): Post {
-    return new Post(require('../assets/image-pet-6.jpg'), 'Kelly');
+  static travel3(): Service {
+    return new Service(require('../../home/assets/image-pet-6.jpg'), 'Kelly');
   }
 
-  static style1(): Post {
-    return new Post(require('../assets/image-pet-7.jpg'), 'Susa');
+  static style1(): Service {
+    return new Service(require('../../home/assets/image-pet-7.jpg'), 'Susa');
   }
 
-  static style2(): Post {
-    return new Post(require('../assets/image-pet-8.jpg'), 'Mia');
+  static style2(): Service {
+    return new Service(require('../../home/assets/image-pet-8.jpg'), 'Mia');
   }
 
-  static style3(): Post {
-    return new Post(require('../assets/image-pet-1.jpg'), 'Lia');
+  static style3(): Service {
+    return new Service(require('../../home/assets/image-pet-1.jpg'), 'Lia');
   }
 }

@@ -98,7 +98,7 @@ export const ThemesScreen = ({navigation}): React.ReactElement => {
 
   return (
     <SafeAreaLayout style={styles.safeArea} insets="top">
-      <TopNavigation title="MyPetApp" leftControl={renderDrawerAction()} />
+      <TopNavigation title="MyPetDogitApp" leftControl={renderDrawerAction()} />
       <Divider />
       <List
         contentContainerStyle={styles.container}

@@ -1,14 +1,12 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
-  Avatar,
-  Divider,
   Drawer,
   DrawerElement,
   DrawerHeaderElement,
-  DrawerHeaderFooter,
-  DrawerHeaderFooterElement,
+  DrawerItem,
   Layout,
+  Icon,
   MenuItemType,
   Text,
 } from '@ui-kitten/components';
@@ -57,30 +55,55 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
           onPress={onHomeButtonPress}
           style={styles.profileName}
           category="h6">
-          MyPetApp
+          Dogit
         </Text>
       </View>
     </Layout>
   );
 
-  const renderFooter = (): DrawerHeaderFooterElement => (
-    <React.Fragment>
-      <Divider />
-      {/* <DrawerHeaderFooter
-        disabled={true}
-        description={`Version ${AppInfoService.getVersion()}`}
-      /> */}
-    </React.Fragment>
+  const renderFooter = (): DrawerHeaderElement => (
+    <Layout style={styles.header} level="2">
+      <View style={styles.profileContainer}>
+        <Text style={styles.profileName} category="s2">
+          v{AppInfoService.getVersion()}.{AppInfoService.getBuildNumber()}
+        </Text>
+      </View>
+    </Layout>
   );
+
+  const LogoutIcon = (props) => <Icon {...props} name="power-outline" />;
+
+  const AccessIcon = (props) => (
+    <Icon {...props} name="arrow-circle-up-outline" />
+  );
+
+  const onAccessButtonPress = (): void => {
+    navigation && navigation.navigate('Access');
+  };
+
+  const onLogoutButtonPress = (): void => {
+    navigation && navigation.navigate('SignIn');
+  };
 
   return (
     <SafeAreaLayout style={styles.safeArea} insets="top">
-      <Drawer
-        header={renderHeader}
-        footer={renderFooter}
-        data={DATA}
-        onSelect={onItemSelect}
-      />
+      <Drawer header={renderHeader} footer={renderFooter}>
+        <DrawerItem
+          onPress={onHomeButtonPress}
+          accessoryLeft={AccessIcon}
+          title="Mis Mascotas"
+        />
+        <DrawerItem
+          onPress={onAccessButtonPress}
+          accessoryLeft={AccessIcon}
+          title="Mi Perfil"
+        />
+        <DrawerItem
+          onPress={onLogoutButtonPress}
+          accessoryLeft={LogoutIcon}
+          title="Cerrar Sesión"
+        />
+      </Drawer>
     </SafeAreaLayout>
   );
 };

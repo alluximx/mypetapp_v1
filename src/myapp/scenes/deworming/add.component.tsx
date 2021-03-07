@@ -8,25 +8,18 @@ import {
 } from '@ui-kitten/components';
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
-import ContentView from '../../layouts/orders/index';
-import {DrawerShowcase} from '../components/drawer/drawer-showcase.component';
+import ContentView from '../../layouts/pets/add/index';
 
-export const OrdersScreen = ({navigation}): React.ReactElement => {
+export const AddPetScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
     <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
   );
 
-  const renderRightActions = (): React.ReactElement => (
-    <React.Fragment>
-      <DrawerShowcase onPress={navigation.toggleDrawer} />
-    </React.Fragment>
-  );
   return (
     <SafeAreaLayout style={styles.container} insets="top">
       <TopNavigation
-        title="Mis Pedidos"
+        title="Nueva Desparacitación"
         accessoryLeft={renderBackAction}
-        accessoryRight={renderRightActions}
       />
       <Divider />
       <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>

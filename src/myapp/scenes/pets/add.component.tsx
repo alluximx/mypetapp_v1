@@ -8,7 +8,7 @@ import {
 } from '@ui-kitten/components';
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
-import ContentView from '../../layouts/pets/index';
+import ContentView from '../../layouts/pets/add/index';
 
 export const AddPetScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
@@ -17,7 +17,7 @@ export const AddPetScreen = ({navigation}): React.ReactElement => {
 
   return (
     <SafeAreaLayout style={styles.container} insets="top">
-      <TopNavigation title="Agregar Mascota" leftControl={renderBackAction()} />
+      <TopNavigation title="Nueva Mascota" accessoryLeft={renderBackAction} />
       <Divider />
       <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ContentView navigation={navigation} />

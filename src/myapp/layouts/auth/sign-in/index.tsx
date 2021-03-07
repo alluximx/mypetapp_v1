@@ -80,7 +80,7 @@ export default ({navigation, error}): React.ReactElement => {
     <KeyboardAvoidingView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text category="h1" status="control">
-          MyPetApp
+          Dogit
         </Text>
         <Text style={styles.signInLabel} category="s1" status="control">
           Inicia sesión en tu cuenta

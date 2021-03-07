@@ -17,7 +17,7 @@ import {
 import {ImageOverlay} from './extra/image-overlay.component';
 import {ProfileSocial} from './extra/profile-social.component';
 import {MessageCircleIcon, PersonAddIcon, PinIcon} from './extra/icons';
-import {Post, Profile} from './extra/data';
+import {Service, Profile} from './extra/data';
 
 /*
  * Will warn because container view is ScrollView that contains 3 List components inside.
@@ -38,16 +38,16 @@ const friends: Profile[] = [
   Profile.helenKuper(),
 ];
 
-const posts: Post[] = [
-  Post.plant1(),
-  Post.travel1(),
-  Post.style1(),
-  Post.style1(),
-  Post.plant1(),
-  Post.travel1(),
-  Post.travel1(),
-  Post.style1(),
-  Post.plant1(),
+const services: Service[] = [
+  Service.service1(),
+  Service.travel1(),
+  Service.style1(),
+  Service.style1(),
+  Service.service1(),
+  Service.travel1(),
+  Service.travel1(),
+  Service.style1(),
+  Service.service1(),
 ];
 
 export default ({navigation}): React.ReactElement => {
@@ -73,7 +73,7 @@ export default ({navigation}): React.ReactElement => {
   );
 
   const renderPostItem = (
-    info: ListRenderItemInfo<Post>,
+    info: ListRenderItemInfo<Service>,
   ): React.ReactElement => (
     <ImageBackground style={styles.postItem} source={info.item.photo} />
   );
@@ -144,7 +144,7 @@ export default ({navigation}): React.ReactElement => {
       <Text style={styles.sectionLabel} category="s1">
         Shots
       </Text>
-      <List data={posts} numColumns={3} renderItem={renderPostItem} />
+      <List data={services} numColumns={3} renderItem={renderPostItem} />
     </ScrollView>
   );
 };
