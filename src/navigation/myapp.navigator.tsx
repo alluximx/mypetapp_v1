@@ -12,6 +12,7 @@ import {AuthContext} from '../myapp/context/AuthContext';
 import {AddPetScreen} from '../myapp/scenes/pets/add.component';
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
+import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -88,6 +89,10 @@ export const MyAppNavigator = (): React.ReactElement => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
         <Stack.Screen name="DetailPet" component={DetailPetScreen} />
+        <Stack.Screen
+          name="ClinicalHistory"
+          component={ClinicalHistoryScreen}
+        />
         <Stack.Screen name="Orders" component={OrdersScreen} />
       </Stack.Navigator>
     </AuthContext.Provider>

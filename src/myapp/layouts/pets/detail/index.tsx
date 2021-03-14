@@ -1,17 +1,31 @@
 import React from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
+import {
+  ScrollView,
+  View,
+  ListRenderItemInfo,
+  ImageBackground,
+} from 'react-native';
 import {
   Button,
   Text,
   Layout,
+  Card,
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
 import {ProfileAvatar} from '../../auth/sign-up/extra/profile-avatar.component';
 import {PlusIcon} from '../../auth/sign-up/extra/icons';
+import {Service} from '../extra/data';
+import {CategoryList} from '../extra/category-list.component';
 
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
+
+  const services: Service[] = [
+    Service.travel1(),
+    Service.travel2(),
+    Service.travel3(),
+  ];
 
   const onEventPetButtonPress = (event) => {
     navigation &&
@@ -20,28 +34,37 @@ export default ({navigation}): React.ReactElement => {
       });
   };
 
+  const onClinicalHistoryButtonPress = (event) => {
+    navigation &&
+      navigation.navigate('ClinicalHistory', {
+        pet: event.pet,
+      });
+  };
+
   const renderEditAvatarButton = (): React.ReactElement => (
     <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
   );
 
-  const renderButtons = () => {
-    const events = [{name: 'vaccine'}, {name: 'deworm'}, {name: 'visit'}];
-    const views = [];
-    events.map((event) => {
-      views.push(
-        <Button
-          style={styles.profileButton}
-          onPress={(pet) => onEventPetButtonPress(pet)}>
-          {event.name}
-        </Button>,
-      );
-    });
+  const Footer = (props) => (
+    <View {...props} style={[props.style, styles.footerContainer]}>
+      <Text style={styles.profileLocation} category="s1">
+        {props.item.category}
+      </Text>
+    </View>
+  );
 
-    return views;
-  };
+  const renderPostItem = (
+    info: ListRenderItemInfo<Service>,
+  ): React.ReactElement => (
+    <View style={styles.profileLocationContainer}>
+      <Card style={styles.card} info={info} footer={() => Footer(info)}>
+        <ImageBackground style={styles.postItem} source={info.item.photo} />
+      </Card>
+    </View>
+  );
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
         <ProfileAvatar
           style={styles.profileAvatar}
@@ -61,11 +84,23 @@ export default ({navigation}): React.ReactElement => {
         <Text>22 de Septiembre</Text>
       </Layout>
       <Layout style={styles.formContainer} level="1">
-        <Text>Ver historial clínico</Text>
+        <Text
+          style={styles.clinicHistoryText}
+          onPress={onClinicalHistoryButtonPress}>
+          Ver historial clínico
+        </Text>
       </Layout>
-
-      <View style={styles.profileButtonsContainer}>{renderButtons()}</View>
-    </KeyboardAvoidingView>
+      <Layout style={styles.formContainer} level="1">
+        <CategoryList
+          contentContainerStyle={styles.postsList}
+          hint="Agregar"
+          hintLink=""
+          navigation={navigation}
+          data={[...services]}
+          renderItem={renderPostItem}
+        />
+      </Layout>
+    </ScrollView>
   );
 };
 
@@ -74,10 +109,28 @@ const themedStyles = StyleService.create({
     flex: 1,
     backgroundColor: 'background-basic-color-1',
   },
+  card: {
+    borderWidth: 0,
+  },
+  clinicHistoryText: {
+    textDecorationLine: 'underline',
+  },
+  postItem: {
+    width: 144,
+    height: 144,
+    borderRadius: 4,
+    borderWidth: 0,
+    marginHorizontal: 8,
+    overflow: 'hidden',
+  },
   headerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: 216,
+  },
+  profileLocationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   profileAvatar: {
     width: 116,
@@ -110,6 +163,9 @@ const themedStyles = StyleService.create({
   emailInput: {
     marginTop: 16,
   },
+  postsList: {
+    paddingHorizontal: 8,
+  },
   passwordInput: {
     marginTop: 16,
   },
@@ -125,5 +181,10 @@ const themedStyles = StyleService.create({
   signInButton: {
     marginVertical: 12,
     marginHorizontal: 16,
+  },
+  footerContainer: {
+    borderWidth: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });

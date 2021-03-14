@@ -44,15 +44,15 @@ export class Service {
   }
 
   static travel1(): Service {
-    return new Service(require('../../home/assets/image-pet-4.jpg'), 'Darla');
+    return new Service(require('../../home/assets/image-pet-4.jpg'), 'Vacuna');
   }
 
   static travel2(): Service {
-    return new Service(require('../../home/assets/image-pet-5.jpg'), 'Lola');
+    return new Service(require('../../home/assets/image-pet-5.jpg'), 'Desparacitación');
   }
 
   static travel3(): Service {
-    return new Service(require('../../home/assets/image-pet-6.jpg'), 'Kelly');
+    return new Service(require('../../home/assets/image-pet-6.jpg'), 'Visita');
   }
 
   static style1(): Service {

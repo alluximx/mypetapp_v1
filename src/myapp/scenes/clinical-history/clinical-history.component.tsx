@@ -10,7 +10,7 @@ import {ArrowIosBackIcon} from '../../components/icons';
 import ContentView from '../../layouts/clinical-history/index';
 import {DrawerShowcase} from '../components/drawer/drawer-showcase.component';
 
-export const ReservationsScreen = ({navigation}): React.ReactElement => {
+export const ClinicalHistoryScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
     <TopNavigationAction
       accessoryRight={renderRightActions}

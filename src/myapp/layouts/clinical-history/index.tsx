@@ -1,10 +1,12 @@
 import React from 'react';
-import {Dimensions, ScrollView, View} from 'react-native';
+import {Dimensions, ScrollView, View, Image} from 'react-native';
 import {
   Layout,
   StyleService,
   Text,
   useStyleSheet,
+  List,
+  ListItem,
   TabView,
   Tab,
 } from '@ui-kitten/components';
@@ -12,6 +14,27 @@ import {
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyle);
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const data = new Array(8).fill({
+    date: '12 de Febrero - 15 de Febrero',
+    status: 'Entregado',
+  });
+
+  const renderItem = ({item, index}) => (
+    <ListItem>
+      <Image
+        style={[styles.image, {tintColor: null}]}
+        source={require('../home/assets/image-pet-1.jpg')}
+      />
+      <View style={styles.detailsContainer}>
+        <Text category="s1">Entrega estimada:</Text>
+        <Text category="s1">{`${item.date} ${index + 1}`}</Text>
+        <Text appearance="hint" category="p2">
+          {`${item.status} ${index + 1}`}
+        </Text>
+      </View>
+    </ListItem>
+  );
 
   return (
     <ScrollView style={styles.contentContainer}>
@@ -21,16 +44,19 @@ export default ({navigation}): React.ReactElement => {
         <Tab title="Estatus Vacunas">
           <Layout style={styles.tabContainer}>
             <Text category="h5">Estatus Vacunas</Text>
+            <List data={data} renderItem={renderItem} />
           </Layout>
         </Tab>
         <Tab title="Desparacitaciones">
           <Layout style={styles.tabContainer}>
             <Text category="h5">Desparacitaciones</Text>
+            <List data={data} renderItem={renderItem} />
           </Layout>
         </Tab>
         <Tab title="Visitas">
           <Layout style={styles.tabContainer}>
             <Text category="h5">Visitas</Text>
+            <List data={data} renderItem={renderItem} />
           </Layout>
         </Tab>
       </TabView>
@@ -56,6 +82,14 @@ const themedStyle = StyleService.create({
   banner: {
     margin: 20,
     padding: 20,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 4,
+    borderWidth: 0,
+    marginHorizontal: 8,
+    overflow: 'hidden',
   },
   header: {
     padding: 16,
@@ -112,7 +146,6 @@ const themedStyle = StyleService.create({
     marginHorizontal: 2,
   },
   tabContainer: {
-    height: 64,
     alignItems: 'center',
     justifyContent: 'center',
   },
