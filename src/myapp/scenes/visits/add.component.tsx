@@ -10,14 +10,14 @@ import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
 import ContentView from '../../layouts/pets/add/index';
 
-export const AddPetScreen = ({navigation}): React.ReactElement => {
+export const AddVisitScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
     <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
   );
 
   return (
     <SafeAreaLayout style={styles.container} insets="top">
-      <TopNavigation title="Nueva Visita" leftControl={renderBackAction()} />
+      <TopNavigation title="Nueva Visita" accessoryLeft={renderBackAction} />
       <Divider />
       <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ContentView navigation={navigation} />

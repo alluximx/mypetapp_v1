@@ -44,15 +44,24 @@ export class Service {
   }
 
   static travel1(): Service {
-    return new Service(require('../../home/assets/image-pet-4.jpg'), 'Vacuna');
+    return new Service(
+      require('../../home/assets/image-pet-4.jpg'),
+      'AddVaccine',
+    );
   }
 
   static travel2(): Service {
-    return new Service(require('../../home/assets/image-pet-5.jpg'), 'Desparacitación');
+    return new Service(
+      require('../../home/assets/image-pet-5.jpg'),
+      'AddDeworming',
+    );
   }
 
   static travel3(): Service {
-    return new Service(require('../../home/assets/image-pet-6.jpg'), 'Visita');
+    return new Service(
+      require('../../home/assets/image-pet-6.jpg'),
+      'AddVisit',
+    );
   }
 
   static style1(): Service {

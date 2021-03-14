@@ -28,17 +28,11 @@ export default ({navigation}): React.ReactElement => {
   ];
 
   const onEventPetButtonPress = (event) => {
-    navigation &&
-      navigation.navigate(event.name, {
-        pet: event.pet,
-      });
+    navigation && navigation.navigate(event.item.category, {});
   };
 
   const onClinicalHistoryButtonPress = (event) => {
-    navigation &&
-      navigation.navigate('ClinicalHistory', {
-        pet: event.pet,
-      });
+    navigation && navigation.navigate('ClinicalHistory', {});
   };
 
   const renderEditAvatarButton = (): React.ReactElement => (
@@ -57,7 +51,11 @@ export default ({navigation}): React.ReactElement => {
     info: ListRenderItemInfo<Service>,
   ): React.ReactElement => (
     <View style={styles.profileLocationContainer}>
-      <Card style={styles.card} info={info} footer={() => Footer(info)}>
+      <Card
+        onPress={() => onEventPetButtonPress(info)}
+        style={styles.card}
+        info={info}
+        footer={() => Footer(info)}>
         <ImageBackground style={styles.postItem} source={info.item.photo} />
       </Card>
     </View>

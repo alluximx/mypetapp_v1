@@ -10,7 +10,7 @@ import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
 import ContentView from '../../layouts/pets/add/index';
 
-export const AddPetScreen = ({navigation}): React.ReactElement => {
+export const AddDewormingScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (
     <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
   );

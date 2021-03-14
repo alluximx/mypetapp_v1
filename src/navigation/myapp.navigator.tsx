@@ -13,6 +13,9 @@ import {AddPetScreen} from '../myapp/scenes/pets/add.component';
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
+import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
+import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
+import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -88,6 +91,9 @@ export const MyAppNavigator = (): React.ReactElement => {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
+        <Stack.Screen name="AddVaccine" component={AddVaccineScreen} />
+        <Stack.Screen name="AddVisit" component={AddVisitScreen} />
+        <Stack.Screen name="AddDeworming" component={AddDewormingScreen} />
         <Stack.Screen name="DetailPet" component={DetailPetScreen} />
         <Stack.Screen
           name="ClinicalHistory"
