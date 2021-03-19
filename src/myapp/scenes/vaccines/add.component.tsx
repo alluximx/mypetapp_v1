@@ -8,7 +8,7 @@ import {
 } from '@ui-kitten/components';
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
-import ContentView from '../../layouts/pets/add/index';
+import ContentView from '../../layouts/vaccines/index';
 
 export const AddVaccineScreen = ({navigation}): React.ReactElement => {
   const renderBackAction = (): React.ReactElement => (

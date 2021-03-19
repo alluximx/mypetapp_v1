@@ -1,5 +1,4 @@
 import React from 'react';
-import {KeyboardAvoidingView, View} from 'react-native';
 import {
   Button,
   Input,
@@ -7,63 +6,80 @@ import {
   StyleService,
   useStyleSheet,
 } from '@ui-kitten/components';
-import {ProfileAvatar} from '../../auth/sign-up/extra/profile-avatar.component';
-import {PlusIcon} from '../../auth/sign-up/extra/icons';
+
+import {
+  IndexPath,
+  Select,
+  SelectGroup,
+  SelectItem,
+  Text,
+  Datepicker,
+  CheckBox,
+  Toggle,
+} from '@ui-kitten/components';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
-  const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
+  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  const [date, setDate] = React.useState(new Date());
+  const [checked, setChecked] = React.useState(false);
 
+  const onCheckedChange = (isChecked) => {
+    setChecked(isChecked);
+  };
+
+  const useCheckboxState = (initialCheck = false) => {
+    const [checked, setChecked] = React.useState(initialCheck);
+    return {checked, onChange: setChecked};
+  };
+  const primaryCheckboxState = useCheckboxState();
+  const useDatepickerState = (initialDate = null) => {
+    const [date, setDate] = React.useState(initialDate);
+    return {date, onSelect: setDate};
+  };
   const styles = useStyleSheet(themedStyles);
+  const filter = (date) => date.getDay() !== 0 && date.getDay() !== 6;
+
+  const data = ['Antirrabica', 'Tetanos', 'Parvovirus'];
+  const displayValue = data[selectedIndex.row];
+  const filterPickerState = useDatepickerState();
+
+  const renderOption = (title) => <SelectItem title={title} />;
 
   const onAddButtonPress = (): void => {
     navigation && navigation.goBack();
   };
 
-  const onBackButtonPress = (): void => {
-    navigation && navigation.navigate('Home');
-  };
-
-  const onPasswordIconPress = (): void => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const renderEditAvatarButton = (): React.ReactElement => (
-    <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
-  );
-
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <ProfileAvatar
-          style={styles.profileAvatar}
-          resizeMode="center"
-          editButton={renderEditAvatarButton}
-          source={require('../../home/assets/image-pet-1.jpg')}
-        />
-      </View>
+    <ScrollView style={styles.container}>
       <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Nombre"
-          value={userName}
-          onChangeText={setUserName}
+        <Select
+          style={styles.select}
+          placeholder="Default"
+          value={displayValue}
+          selectedIndex={selectedIndex}
+          onSelect={(index) => setSelectedIndex(index)}>
+          {data.map(renderOption)}
+        </Select>
+      </Layout>
+
+      <Layout style={styles.formContainer} level="1">
+        <Datepicker
+          date={date}
+          onSelect={(nextDate) => setDate(nextDate)}
+          placeholder="Fecha aplicación"
+          filter={filter}
+          {...filterPickerState}
         />
       </Layout>
       <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Raza"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Sexo"
-          value={userName}
-          onChangeText={setUserName}
+        <Datepicker
+          date={date}
+          onSelect={(nextDate) => setDate(nextDate)}
+          placeholder="Próxima desparacitación"
+          filter={filter}
+          {...filterPickerState}
         />
       </Layout>
       <Layout style={styles.formContainer} level="1">
@@ -74,30 +90,33 @@ export default ({navigation}): React.ReactElement => {
           onChangeText={setUserName}
         />
       </Layout>
+
       <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Fecha de Nacimiento"
-          value={userName}
-          onChangeText={setUserName}
-        />
+        <Toggle checked={checked} onChange={onCheckedChange}>
+          {'Agregar recordatorio'}
+        </Toggle>
+        <Layout style={styles.formContainer} level="2">
+          <CheckBox
+            style={styles.checkbox}
+            status="primary"
+            {...primaryCheckboxState}>
+            1 dia antes
+          </CheckBox>
+          <CheckBox
+            style={styles.checkbox}
+            status="primary"
+            {...primaryCheckboxState}>
+            1 semana antes
+          </CheckBox>
+          <CheckBox
+            style={styles.checkbox}
+            status="primary"
+            {...primaryCheckboxState}>
+            2 semanas antes
+          </CheckBox>
+        </Layout>
       </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Button
-          style={styles.signUpButton}
-          size="medium"
-          onPress={onAddButtonPress}>
-          AGREGAR
-        </Button>
-      </Layout>
-      <Button
-        style={styles.signInButton}
-        appearance="ghost"
-        status="basic"
-        onPress={onBackButtonPress}>
-        ¿No necesitas agregar una mascota?
-      </Button>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -105,6 +124,13 @@ const themedStyles = StyleService.create({
   container: {
     flex: 1,
     backgroundColor: 'background-basic-color-1',
+  },
+  checkbox: {
+    margin: 2,
+  },
+  select: {
+    flex: 1,
+    margin: 2,
   },
   headerContainer: {
     justifyContent: 'center',

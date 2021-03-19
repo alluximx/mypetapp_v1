@@ -28,7 +28,7 @@ export default ({navigation}): React.ReactElement => {
   ];
 
   const onEventPetButtonPress = (event) => {
-    navigation && navigation.navigate(event.item.category, {});
+    navigation && navigation.navigate(event.item.screen, {});
   };
 
   const onClinicalHistoryButtonPress = (event) => {

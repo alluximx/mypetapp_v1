@@ -29,23 +29,40 @@ export class Profile {
 }
 
 export class Service {
-  constructor(readonly photo: ImageSourcePropType, readonly category: string) {}
+  constructor(
+    readonly photo: ImageSourcePropType,
+    readonly category: string,
+    readonly screen: string,
+  ) {}
 
   static service1(): Service {
-    return new Service(require('../../home/assets/image-pet-1.jpg'), 'Molly');
+    return new Service(
+      require('../../home/assets/image-pet-1.jpg'),
+      'Molly',
+      'Molly',
+    );
   }
 
   static service2(): Service {
-    return new Service(require('../../home/assets/image-pet-2.jpg'), 'Jaine');
+    return new Service(
+      require('../../home/assets/image-pet-2.jpg'),
+      'Jaine',
+      'Jaine',
+    );
   }
 
   static service3(): Service {
-    return new Service(require('../../home/assets/image-pet-3.jpg'), 'Jaime');
+    return new Service(
+      require('../../home/assets/image-pet-3.jpg'),
+      'Jaime',
+      'Jaime',
+    );
   }
 
   static travel1(): Service {
     return new Service(
       require('../../home/assets/image-pet-4.jpg'),
+      'Vacuna',
       'AddVaccine',
     );
   }
@@ -53,6 +70,7 @@ export class Service {
   static travel2(): Service {
     return new Service(
       require('../../home/assets/image-pet-5.jpg'),
+      'Desparacitación',
       'AddDeworming',
     );
   }
@@ -60,19 +78,32 @@ export class Service {
   static travel3(): Service {
     return new Service(
       require('../../home/assets/image-pet-6.jpg'),
+      'Visita',
       'AddVisit',
     );
   }
 
   static style1(): Service {
-    return new Service(require('../../home/assets/image-pet-7.jpg'), 'Susa');
+    return new Service(
+      require('../../home/assets/image-pet-7.jpg'),
+      'Susa',
+      'Susa',
+    );
   }
 
   static style2(): Service {
-    return new Service(require('../../home/assets/image-pet-8.jpg'), 'Mia');
+    return new Service(
+      require('../../home/assets/image-pet-8.jpg'),
+      'Mia',
+      'Mia',
+    );
   }
 
   static style3(): Service {
-    return new Service(require('../../home/assets/image-pet-1.jpg'), 'Lia');
+    return new Service(
+      require('../../home/assets/image-pet-1.jpg'),
+      'Lia',
+      'Lia',
+    );
   }
 }
