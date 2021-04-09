@@ -2,6 +2,7 @@ import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
 import {
   Button,
+  Datepicker,
   Input,
   Layout,
   StyleService,
@@ -12,9 +13,15 @@ import {PlusIcon} from '../../auth/sign-up/extra/icons';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
-  const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
-
+  const [date, setDate] = React.useState(new Date());
+  const useDatepickerState = (initialDate = null) => {
+    const [date, setDate] = React.useState(initialDate);
+    return {date, onSelect: setDate};
+  };
   const styles = useStyleSheet(themedStyles);
+  const filter = (date) => date.getDay() !== 0 && date.getDay() !== 6;
+
+  const filterPickerState = useDatepickerState();
 
   const onAddButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -24,64 +31,38 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.navigate('Home');
   };
 
-  const onPasswordIconPress = (): void => {
-    setPasswordVisible(!passwordVisible);
-  };
-
-  const renderEditAvatarButton = (): React.ReactElement => (
-    <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
-  );
-
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <ProfileAvatar
-          style={styles.profileAvatar}
-          resizeMode="center"
-          editButton={renderEditAvatarButton}
-          source={require('../../home/assets/image-pet-1.jpg')}
+      <Layout style={styles.formContainer} level="1">
+        <Datepicker
+          date={date}
+          onSelect={(nextDate) => setDate(nextDate)}
+          placeholder="Fecha de Visita"
+          filter={filter}
+          {...filterPickerState}
         />
-      </View>
+      </Layout>
       <Layout style={styles.formContainer} level="1">
         <Input
           autoCapitalize="none"
-          placeholder="Nombre"
+          placeholder="Motivo"
           value={userName}
           onChangeText={setUserName}
         />
       </Layout>
       <Layout style={styles.formContainer} level="1">
         <Input
+          multiline={true}
           autoCapitalize="none"
-          placeholder="Raza"
+          placeholder="Notas"
           value={userName}
+          maxLength={500}
           onChangeText={setUserName}
+          textStyle={{minHeight: 104}}
+          style={{float: 'left', minHeight: 300}}
         />
       </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Sexo"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Edad"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Fecha de Nacimiento"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
+
       <Layout style={styles.formContainer} level="1">
         <Button
           style={styles.signUpButton}
@@ -90,13 +71,7 @@ export default ({navigation}): React.ReactElement => {
           AGREGAR
         </Button>
       </Layout>
-      <Button
-        style={styles.signInButton}
-        appearance="ghost"
-        status="basic"
-        onPress={onBackButtonPress}>
-        ¿No necesitas agregar una mascota?
-      </Button>
+
     </KeyboardAvoidingView>
   );
 };
@@ -127,7 +102,7 @@ const themedStyles = StyleService.create({
   formContainer: {
     flex: 1,
     paddingTop: 32,
-    paddingHorizontal: 16,
+    width: 220,
   },
   emailInput: {
     marginTop: 16,

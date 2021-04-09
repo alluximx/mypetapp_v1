@@ -2,6 +2,7 @@ import React from 'react';
 import {KeyboardAvoidingView, View} from 'react-native';
 import {
   Button,
+  Datepicker,
   Input,
   Layout,
   StyleService,
@@ -13,8 +14,13 @@ import {PlusIcon} from '../../auth/sign-up/extra/icons';
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
-
+  const useDatepickerState = (initialDate = null) => {
+    const [date, setDate] = React.useState(initialDate);
+    return {date, onSelect: setDate};
+  };
   const styles = useStyleSheet(themedStyles);
+  const filter = (date) => date.getDay() !== 0 && date.getDay() !== 6;
+  const [date, setDate] = React.useState(new Date());
 
   const onAddButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -31,6 +37,8 @@ export default ({navigation}): React.ReactElement => {
   const renderEditAvatarButton = (): React.ReactElement => (
     <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
   );
+  const displayValue = data[selectedIndex.row];
+  const filterPickerState = useDatepickerState();
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -75,11 +83,12 @@ export default ({navigation}): React.ReactElement => {
         />
       </Layout>
       <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Fecha de Nacimiento"
-          value={userName}
-          onChangeText={setUserName}
+        <Datepicker
+          date={date}
+          onSelect={(nextDate) => setDate(nextDate)}
+          placeholder="Fecha de nacimiento"
+          filter={filter}
+          {...filterPickerState}
         />
       </Layout>
       <Layout style={styles.formContainer} level="1">

@@ -52,7 +52,7 @@ export default ({navigation}): React.ReactElement => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView>
       <Layout style={styles.formContainer} level="1">
         <Select
           style={styles.select}
@@ -121,10 +121,7 @@ export default ({navigation}): React.ReactElement => {
 };
 
 const themedStyles = StyleService.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'background-basic-color-1',
-  },
+  container: {},
   checkbox: {
     margin: 2,
   },
@@ -153,7 +150,6 @@ const themedStyles = StyleService.create({
   formContainer: {
     flex: 1,
     paddingTop: 32,
-    paddingHorizontal: 16,
   },
   emailInput: {
     marginTop: 16,
