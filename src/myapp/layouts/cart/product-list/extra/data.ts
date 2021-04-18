@@ -2,9 +2,8 @@ import {ImageSourcePropType} from 'react-native';
 
 export class Product {
   constructor(
-    readonly id: number,
     readonly title: string,
-    readonly subtitle: string,
+    readonly category: string,
     readonly image: ImageSourcePropType,
     readonly price: number,
     readonly amount: number,
@@ -20,21 +19,39 @@ export class Product {
 
   static pinkChair(): Product {
     return new Product(
-      0,
-      'Pink Chair',
-      'Furniture',
+      'Pelota',
+      'Accesorio',
       require('../assets/image-product-1.png'),
       130,
       1,
     );
   }
 
+  static whiteChair(): Product {
+    return new Product(
+      'Plato',
+      'Accesorio',
+      require('../assets/image-product-2.jpg'),
+      150,
+      1,
+    );
+  }
+
+  static woodChair(): Product {
+    return new Product(
+      'Correa',
+      'Accesorio',
+      require('../assets/image-product-1.png'),
+      125,
+      1,
+    );
+  }
+
   static blackLamp(): Product {
     return new Product(
-      1,
-      'Black Lamp',
-      'Lighting',
-      require('../assets/image-product-1.png'),
+      'Proplan Ultra',
+      'Alimento',
+      require('../assets/image-product-3.jpg'),
       80,
       1,
     );

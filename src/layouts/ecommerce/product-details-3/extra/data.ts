@@ -1,16 +1,16 @@
-import { ImageSourcePropType } from 'react-native';
+import {ImageSourcePropType} from 'react-native';
 
 export class Product {
-
-  constructor(readonly title: string,
-              readonly subtitle: string,
-              readonly description: string,
-              readonly price: string,
-              readonly image: ImageSourcePropType,
-              readonly size: string,
-              readonly colors: ProductColor[],
-              readonly comments: Comment[]) {
-  }
+  constructor(
+    readonly title: string,
+    readonly subtitle: string,
+    readonly description: string,
+    readonly price: string,
+    readonly image: ImageSourcePropType,
+    readonly size: string,
+    readonly colors: ProductColor[],
+    readonly comments: Comment[],
+  ) {}
 
   static pinkChair(): Product {
     return new Product(
@@ -20,23 +20,14 @@ export class Product {
       '150$',
       require('../assets/image-product.png'),
       'H:80cm W:50cm D:40cm',
-      [
-        ProductColor.gray(),
-        ProductColor.pink(),
-        ProductColor.orange(),
-      ],
-      [
-        Comment.byHubertFranck(),
-      ],
+      [ProductColor.gray(), ProductColor.pink(), ProductColor.orange()],
+      [Comment.byHubertFranck()],
     );
   }
 }
 
 export class ProductColor {
-
-  constructor(readonly value: string,
-              readonly description: string) {
-  }
+  constructor(readonly value: string, readonly description: string) {}
 
   static gray(): ProductColor {
     return new ProductColor('#3366FF', 'blue');
@@ -52,11 +43,11 @@ export class ProductColor {
 }
 
 export class Profile {
-
-  constructor(readonly firstName: string,
-              readonly lastName: string,
-              readonly photo: ImageSourcePropType) {
-  }
+  constructor(
+    readonly firstName: string,
+    readonly lastName: string,
+    readonly photo: ImageSourcePropType,
+  ) {}
 
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
@@ -80,44 +71,33 @@ export class Profile {
 }
 
 export class Like {
-
-  constructor(readonly author: Profile) {
-
-  }
+  constructor(readonly author: Profile) {}
 
   static byMarkVolter(): Like {
-    return new Like(
-      Profile.markVolter(),
-    );
+    return new Like(Profile.markVolter());
   }
 
   static byHubertFranck(): Like {
-    return new Like(
-      Profile.hubertFranck(),
-    );
+    return new Like(Profile.hubertFranck());
   }
 }
 
 export class Comment {
-
-  constructor(readonly text: string,
-              readonly date: string,
-              readonly author: Profile,
-              readonly comments: Comment[],
-              readonly likes: Like[]) {
-  }
+  constructor(
+    readonly text: string,
+    readonly date: string,
+    readonly author: Profile,
+    readonly comments: Comment[],
+    readonly likes: Like[],
+  ) {}
 
   static byHubertFranck(): Comment {
     return new Comment(
       'The chair has a good quality!',
       'Today 11:10 am',
       Profile.hubertFranck(),
-      [
-        Comment.byMarkVolter(),
-      ],
-      [
-        Like.byMarkVolter(),
-      ],
+      [Comment.byMarkVolter()],
+      [Like.byMarkVolter()],
     );
   }
 

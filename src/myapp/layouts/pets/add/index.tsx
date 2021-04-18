@@ -7,6 +7,7 @@ import {
   Layout,
   StyleService,
   useStyleSheet,
+  IndexPath,
 } from '@ui-kitten/components';
 import {ProfileAvatar} from '../../auth/sign-up/extra/profile-avatar.component';
 import {PlusIcon} from '../../auth/sign-up/extra/icons';
@@ -21,6 +22,7 @@ export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
   const filter = (date) => date.getDay() !== 0 && date.getDay() !== 6;
   const [date, setDate] = React.useState(new Date());
+  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
   const onAddButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -37,6 +39,8 @@ export default ({navigation}): React.ReactElement => {
   const renderEditAvatarButton = (): React.ReactElement => (
     <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
   );
+  const data = ['Antirrabica', 'Tetanos', 'Parvovirus'];
+
   const displayValue = data[selectedIndex.row];
   const filterPickerState = useDatepickerState();
 

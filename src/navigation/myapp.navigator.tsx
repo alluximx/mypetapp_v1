@@ -16,6 +16,9 @@ import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-h
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
+import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
+import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
+import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 
 const Stack = createStackNavigator();
 const queryClient = new QueryClient();
@@ -100,6 +103,9 @@ export const MyAppNavigator = (): React.ReactElement => {
           component={ClinicalHistoryScreen}
         />
         <Stack.Screen name="Orders" component={OrdersScreen} />
+        <Stack.Screen name="ProductList" component={ProductListScreen} />
+        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
+        <Stack.Screen name="Cart" component={CartScreen} />
       </Stack.Navigator>
     </AuthContext.Provider>
   );

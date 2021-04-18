@@ -35,7 +35,7 @@ export const ProductListScreen = ({navigation, route}): React.ReactElement => {
   );
 
   const onItemPress = (index: number): void => {
-    navigation && navigation.navigate('ProductDetails3');
+    navigation && navigation.navigate('ProductDetail');
   };
 
   const onItemCartPress = (index: number): void => {

@@ -19,24 +19,10 @@ export class Product {
   }
 
   static pinkChair(): Product {
-    return new Product(
-      0,
-      'Pink Chair',
-      'Furniture',
-      require('../assets/image-product-1.png'),
-      130,
-      1,
-    );
+    return new Product(0, 'Pink Chair', 'Furniture', require(''), 130, 1);
   }
 
   static blackLamp(): Product {
-    return new Product(
-      1,
-      'Black Lamp',
-      'Lighting',
-      require('../assets/image-product-1.png'),
-      80,
-      1,
-    );
+    return new Product(1, 'Black Lamp', 'Lighting', require(''), 80, 1);
   }
 }

@@ -44,6 +44,13 @@ export default ({navigation}): React.ReactElement => {
       });
   };
 
+  const onServiceButtonPress = (service) => {
+    navigation &&
+      navigation.navigate('ProductList', {
+        service: service,
+      });
+  };
+
   const Footer = (props) => (
     <View {...props} style={[props.style, styles.footerContainer]}>
       <Text style={styles.profileLocation} category="s1">
@@ -52,11 +59,15 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  const renderPostItem = (
+  const renderServiceItem = (
     info: ListRenderItemInfo<Post>,
   ): React.ReactElement => (
     <View style={styles.profileLocationContainer}>
-      <Card style={styles.card} info={info} footer={() => Footer(info)}>
+      <Card
+        onPress={(info) => onServiceButtonPress(info)}
+        style={styles.card}
+        info={info}
+        footer={() => Footer(info)}>
         <ImageBackground style={styles.postItem} source={info.item.photo} />
       </Card>
     </View>
@@ -118,7 +129,7 @@ export default ({navigation}): React.ReactElement => {
         hintLink="MisPedidos"
         navigation={navigation}
         data={[...services, ...services]}
-        renderItem={renderPostItem}
+        renderItem={renderServiceItem}
       />
       <Card style={styles.banner}>
         <Text style={styles.profileLocation} category="s1">
