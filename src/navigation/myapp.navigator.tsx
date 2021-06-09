@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
 import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
+import {StartScreen} from '../myapp/scenes/start/start.component';
 import {SignInScreen} from '../myapp/auth/sign-in.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {reducer, initialState} from '../../src/reducer';
@@ -89,6 +90,7 @@ export const MyAppNavigator = (): React.ReactElement => {
   return (
     <AuthContext.Provider value={authContext}>
       <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
