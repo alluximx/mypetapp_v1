@@ -11,14 +11,14 @@ import {SplashImage} from '../components/splash-image.component';
 import {AppNavigator} from '../navigation/app.navigator';
 import {AppStorage} from '../services/app-storage.service';
 import {Mapping, Theme, Theming} from '../services/theme.service';
+// Custom Mapping to establish custom fonts.
+import {default as myMapping} from 'mapping.json';
 
 const loadingTasks: Task[] = [
   // Should be used it when running Expo.
   // In Bare RN Project this is configured by react-native.config.js
   () =>
     LoadFontsTask({
-      'opensans-regular': require('../assets/fonts/OpenSans-Regular.ttf'),
-      'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
       'montserrat-medium': require('../assets/fonts/Montserrat-Medium.ttf'),
       'montserrat-bold': require('../assets/fonts/Montserrat-Bold.ttf'),
     }),
@@ -54,7 +54,10 @@ const App = ({mapping, theme}): React.ReactElement => {
     <React.Fragment>
       <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
       <AppearanceProvider>
-        <ApplicationProvider {...currentMapping} theme={currentTheme}>
+        <ApplicationProvider
+          {...currentMapping}
+          theme={currentTheme}
+          customMapping={myMapping}>
           <Theming.MappingContext.Provider value={mappingContext}>
             <Theming.ThemeContext.Provider value={themeContext}>
               <SafeAreaProvider>
