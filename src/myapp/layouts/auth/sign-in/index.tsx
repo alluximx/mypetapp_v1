@@ -12,7 +12,8 @@ import {EyeIcon, EyeOffIcon, PersonIcon} from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 import {ErrorMessage} from '../../../components/error-message';
 import {AuthContext} from '../../../context/AuthContext';
-import AwesomeAlert from 'react-native-awesome-alerts';
+// import AwesomeAlert from 'react-native-awesome-alerts';
+import AnchorText from '../../../components/anchor-text';
 
 export default ({navigation, error}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
@@ -24,7 +25,7 @@ export default ({navigation, error}): React.ReactElement => {
 
   const styles = useStyleSheet(themedStyles);
   const passwordRef = useRef<Input>(null);
-  const {signIn} = useContext(AuthContext);
+  // const {signIn} = useContext(AuthContext);
 
   const showAlert = () => {
     setAlert(true);
@@ -46,17 +47,17 @@ export default ({navigation, error}): React.ReactElement => {
       password: password,
     };
 
-    setEmailError(authenticateParams.email === '');
+    // setEmailError(authenticateParams.email === '');
 
-    setPasswordError(authenticateParams.password === '');
+    // setPasswordError(authenticateParams.password === '');
 
-    if (authenticateParams.email !== '' || authenticateParams.password !== '') {
-      let response = await signIn(authenticateParams);
-      if (!response) {
-        showAlert();
-      }
-      return response;
-    }
+    // if (authenticateParams.email !== '' || authenticateParams.password !== '') {
+    //   let response = await signIn(authenticateParams);
+    //   if (!response) {
+    //     showAlert();
+    //   }
+    //   return response;
+    // }
     return false;
   };
 
@@ -78,61 +79,44 @@ export default ({navigation, error}): React.ReactElement => {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text category="h1" status="control">
-          Dogit
-        </Text>
-        <Text style={styles.signInLabel} category="s1" status="control">
-          Inicia sesión en tu cuenta
-        </Text>
-      </View>
       <Layout style={styles.formContainer} level="1">
         <Input
           placeholder="Correo"
-          icon={PersonIcon}
+          // icon={PersonIcon}
           value={email}
           onChangeText={(nextValue) => {
-            setEmailError(false);
+            // setEmailError(false);
             setEmail(nextValue);
           }}
         />
         <Input
           style={styles.passwordInput}
           placeholder="Contraseña"
-          icon={passwordVisible ? EyeIcon : EyeOffIcon}
+          // icon={passwordVisible ? EyeIcon : EyeOffIcon}
           value={password}
           secureTextEntry={!passwordVisible}
           onChangeText={(nextValue) => {
-            setPasswordError(false);
+            // setPasswordError(false);
             setPassword(nextValue);
           }}
           onSubmitEditing={login}
-          onIconPress={onPasswordIconPress}
+          // onIconPress={onPasswordIconPress}
           ref={passwordRef}
         />
         {errorMessage && <ErrorMessage message={errorMessage} />}
-        <View style={styles.forgotPasswordContainer}>
-          <Button
-            style={styles.forgotPasswordButton}
-            appearance="ghost"
-            status="basic"
-            onPress={onForgotPasswordButtonPress}>
-            ¿Olvidaste tu contraseña?
-          </Button>
+        <Button style={styles.signInButton} appearance="primary" status="basic">
+          Inicia Sesión
+        </Button>
+        <AnchorText style={styles.signInLink}>
+          ¿Olvidaste tu contraseña?
+        </AnchorText>
+        <View style={styles.signInTextContainer}>
+          <Text style={styles.signInText}>¿Aún no tienes cuenta?</Text>
+          <AnchorText style={styles.signInLink}>Regístrate</AnchorText>
         </View>
       </Layout>
 
-      <Button onPress={login} style={styles.signInButton} size="giant">
-        INICIA SESIÓN
-      </Button>
-      <Button
-        style={styles.signUpButton}
-        appearance="ghost"
-        status="basic"
-        onPress={onSignUpButtonPress}>
-        ¿Aún no tienes una cuenta? Regístrate
-      </Button>
-      <AwesomeAlert
+      {/* <AwesomeAlert
         show={alert}
         showProgress={false}
         label="Iniciar Sesión"
@@ -145,7 +129,7 @@ export default ({navigation, error}): React.ReactElement => {
         onConfirmPressed={() => {
           hideAlert();
         }}
-      />
+      /> */}
     </KeyboardAvoidingView>
   );
 };
@@ -171,10 +155,6 @@ const themedStyles = StyleService.create({
   signInButton: {
     marginHorizontal: 16,
   },
-  signUpButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
-  },
   forgotPasswordContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
@@ -184,5 +164,23 @@ const themedStyles = StyleService.create({
   },
   forgotPasswordButton: {
     paddingHorizontal: 0,
+  },
+  // Mis adiciones
+  signInTextContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  signInText: {
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  signInLink: {
+    paddingLeft: 5,
+    textAlign: 'center',
+  },
+  signUpButton: {
+    marginBottom: 20,
+    borderRadius: 10,
   },
 });

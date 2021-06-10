@@ -2,8 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {
   Button,
-  CheckBox,
   Input,
+  Text,
   Layout,
   StyleService,
   useStyleSheet,
@@ -17,12 +17,14 @@ import {
   PlusIcon,
 } from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
+// My Components
+import DefaultLayout from '../../../components/default-layout';
+import CloseButton from '../../../components/buttons/close-button';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
-  const [termsAccepted, setTermsAccepted] = React.useState<boolean>(false);
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
 
   const styles = useStyleSheet(themedStyles);
@@ -39,98 +41,83 @@ export default ({navigation}): React.ReactElement => {
     setPasswordVisible(!passwordVisible);
   };
 
-  const renderEditAvatarButton = (): React.ReactElement => (
-    <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
-  );
+  // const renderEditAvatarButton = (): React.ReactElement => (
+  //   // <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
+  // );
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <ProfileAvatar
-          style={styles.profileAvatar}
-          resizeMode="center"
-          source={require('./assets/image-person.png')}
-          editButton={renderEditAvatarButton}
-        />
-      </View>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Nombre de Usuario"
-          icon={PersonIcon}
-          value={userName}
-          onChangeText={setUserName}
-        />
-        <Input
-          style={styles.emailInput}
-          autoCapitalize="none"
-          placeholder="Correo"
-          icon={EmailIcon}
-          value={email}
-          onChangeText={setEmail}
-        />
-        <Input
-          style={styles.passwordInput}
-          autoCapitalize="none"
-          secureTextEntry={!passwordVisible}
-          placeholder="Contraseña"
-          icon={passwordVisible ? EyeIcon : EyeOffIcon}
-          value={password}
-          onChangeText={setPassword}
-          onIconPress={onPasswordIconPress}
-        />
-        <CheckBox
-          style={styles.termsCheckBox}
-          textStyle={styles.termsCheckBoxText}
-          text="I read and agree to Terms & Conditions"
-          checked={termsAccepted}
-          onChange={(checked: boolean) => setTermsAccepted(checked)}
-        />
-      </Layout>
-      <Button
-        style={styles.signUpButton}
-        size="giant"
-        onPress={onSignUpButtonPress}>
-        REGÍSTRARME
-      </Button>
-      <Button
-        style={styles.signInButton}
-        appearance="ghost"
-        status="basic"
-        onPress={onSignInButtonPress}>
-        ¿Ya tienes una cuenta? Inicia Sesión
-      </Button>
-    </KeyboardAvoidingView>
+    <DefaultLayout>
+      <KeyboardAvoidingView>
+        <View style={styles.container}>
+          <View>
+            <CloseButton navigation={navigation} />
+            <View>
+              <Text category="h2">Regístrate ahora</Text>
+              <Text category="s1">
+                Regístrate para tener acceso a todas las funciones y poder darle
+                el mejor cuidado a tu mascota.
+              </Text>
+            </View>
+            <View style={styles.formContainer}>
+              <Input
+                autoCapitalize="none"
+                placeholder="Nombre"
+                value={userName}
+                onChangeText={setUserName}
+              />
+              <Input
+                style={styles.emailInput}
+                autoCapitalize="none"
+                placeholder="Correo"
+                // icon={EmailIcon}
+                value={email}
+                onChangeText={setEmail}
+              />
+              <Input
+                style={styles.passwordInput}
+                autoCapitalize="none"
+                secureTextEntry={!passwordVisible}
+                placeholder="Contraseña"
+                // icon={passwordVisible ? EyeIcon : EyeOffIcon}
+                value={password}
+                onChangeText={setPassword}
+                // onIconPress={onPasswordIconPress}
+              />
+            </View>
+
+            <Button
+              style={styles.signUpButton}
+              size="giant"
+              onPress={onSignUpButtonPress}>
+              REGÍSTRARME
+            </Button>
+            <Button
+              style={styles.signInButton}
+              appearance="ghost"
+              status="basic"
+              onPress={onSignInButtonPress}>
+              ¿Ya tienes una cuenta? Inicia Sesión
+            </Button>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </DefaultLayout>
   );
 };
 
 const themedStyles = StyleService.create({
   container: {
-    backgroundColor: 'background-basic-color-1',
+    display: 'flex',
+    flex: 1,
+    justifyContent: 'space-between',
   },
   headerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: 216,
-    backgroundColor: 'color-primary-default',
-  },
-  profileAvatar: {
-    width: 116,
-    height: 116,
-    borderRadius: 58,
-    alignSelf: 'center',
-    backgroundColor: 'background-basic-color-1',
-    tintColor: 'color-primary-default',
-  },
-  editAvatarButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
   },
   formContainer: {
-    flex: 1,
     paddingTop: 32,
-    paddingHorizontal: 16,
   },
   emailInput: {
     marginTop: 16,

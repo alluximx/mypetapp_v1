@@ -1,6 +1,6 @@
 {
   "strict": {
-    "text-font-family": "roboto-regular"
+    "text-font-family": "Montserrat-Medium"
   },
   "components": {
     "StatusBar": {

@@ -17,8 +17,8 @@ const loadingTasks: Task[] = [
   // In Bare RN Project this is configured by react-native.config.js
   () =>
     LoadFontsTask({
-      'opensans-regular': require('../assets/fonts/OpenSans-Regular.ttf'),
-      'roboto-regular': require('../assets/fonts/Roboto-Regular.ttf'),
+      'montserrat-medium': require('../assets/fonts/Montserrat-Medium.ttf'),
+      'montserrat-bold': require('../assets/fonts/Montserrat-Bold.ttf'),
     }),
   () =>
     AppStorage.getMapping(defaultConfig.mapping).then((result) => [

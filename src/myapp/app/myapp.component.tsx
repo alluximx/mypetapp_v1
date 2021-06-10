@@ -3,12 +3,12 @@ import {StyleSheet} from 'react-native';
 import {TopNavigation, TopNavigationAction} from '@ui-kitten/components';
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
 import {ArrowIosBackIcon} from '../../components/icons';
-import {SignInScreen} from '../auth/sign-in.component';
+import {StartScreen} from '../scenes/start/start.component';
 
 export const MyAppScreen = ({navigation}): React.ReactElement => {
   return (
     <SafeAreaLayout style={styles.container} insets="top">
-      <SignInScreen navigation={navigation} />
+      <StartScreen navigation={navigation} />
     </SafeAreaLayout>
   );
 };
