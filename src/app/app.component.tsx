@@ -11,8 +11,6 @@ import {SplashImage} from '../components/splash-image.component';
 import {AppNavigator} from '../navigation/app.navigator';
 import {AppStorage} from '../services/app-storage.service';
 import {Mapping, Theme, Theming} from '../services/theme.service';
-// Custom Mapping to establish custom fonts.
-import {default as myMapping} from 'mapping.json';
 
 const loadingTasks: Task[] = [
   // Should be used it when running Expo.
@@ -54,10 +52,7 @@ const App = ({mapping, theme}): React.ReactElement => {
     <React.Fragment>
       <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
       <AppearanceProvider>
-        <ApplicationProvider
-          {...currentMapping}
-          theme={currentTheme}
-          customMapping={myMapping}>
+        <ApplicationProvider {...currentMapping} theme={currentTheme}>
           <Theming.MappingContext.Provider value={mappingContext}>
             <Theming.ThemeContext.Provider value={themeContext}>
               <SafeAreaProvider>

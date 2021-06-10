@@ -7,6 +7,7 @@ export default StyleSheet.create({
     padding: globalVars.outsidePadding,
     backgroundColor: globalColors.backgroundDefault,
   },
+  // ANCHOR TEXT
   anchorText: {
     color: globalColors.greenSecondary,
     fontSize: 16,
@@ -15,6 +16,7 @@ export default StyleSheet.create({
   button: {
     borderRadius: 10,
   },
+  // CUSTOM BUTTON
   defaultButton: {
     backgroundColor: globalColors.white,
     paddingVertical: 13,
@@ -28,5 +30,11 @@ export default StyleSheet.create({
     padding: globalVars.outsidePadding,
     backgroundColor: globalColors.backgroundDefault,
     flex: 1,
+  },
+  // CLOSE BUTTON
+  closeButton: {
+    width: 45,
+    height: 45,
+    marginLeft: -5,
   },
 });

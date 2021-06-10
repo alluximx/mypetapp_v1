@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Text} from '@ui-kitten/components';
-import style from '../styles/style';
+import style from '../../styles/style';
 
 const CustomButton = (props): React.ReactElement => {
   return props.type === 'primary' ? (

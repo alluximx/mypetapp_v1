@@ -1,10 +1,9 @@
 import React from 'react';
-// ThirdParty Components
 import {View, Image, StyleSheet} from 'react-native';
 import {Text} from '@ui-kitten/components';
 // My components
 import AnchorText from '../../components/anchor-text';
-import CustomButton from '../../components/custom-button';
+import CustomButton from '../../components/buttons/custom-button';
 import DefaultLayout from '../../components/default-layout';
 // Global styles.
 import globalColors from '../../styles/colors';
