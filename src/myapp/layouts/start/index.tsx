@@ -1,16 +1,15 @@
 import React from 'react';
 // ThirdParty Components
-import {View, Image} from 'react-native';
-import {Button, StyleService, Text, useStyleSheet} from '@ui-kitten/components';
+import {View, Image, StyleSheet} from 'react-native';
+import {Text} from '@ui-kitten/components';
 // My components
 import AnchorText from '../../components/anchor-text';
+import CustomButton from '../../components/custom-button';
+import DefaultLayout from '../../components/default-layout';
 // Global styles.
 import globalColors from '../../styles/colors';
-import globalVars from '../../styles/vars';
 
 export default ({navigation}): React.ReactElement => {
-  const styles = useStyleSheet(themedStyles);
-
   const onStartButtonPress = (): void => {
     navigation && navigation.navigate('SignUp');
   };
@@ -24,59 +23,79 @@ export default ({navigation}): React.ReactElement => {
   };
 
   return (
-    <View style={styles.container}>
-      <Image source={require('./assets/logo-white.png')}></Image>
-      <Image
-        style={styles.dogImage}
-        source={require('./assets/dog-image.png')}></Image>
-      <Text style={styles.h1} category="h1">
-        Todos los servicios para el cuidado de tu mascota en un solo lugar.
-      </Text>
-      <Button
-        appearance="ghost"
-        style={styles.signUpButton}
-        onPress={onStartButtonPress}>
-        ¡Empieza Ahora!
-      </Button>
-      <Text style={styles.signInText}>
-        Si ya tienes cuenta
-        <AnchorText style={styles.signInLink} onPress={onSignInTextPress}>
-          Inicia Sesión
-        </AnchorText>
-      </Text>
-      <AnchorText onPress={onSignInAsInvitedTextPress}>
+    <DefaultLayout style={styles.container}>
+      <View>
+        <Image
+          style={styles.logo}
+          source={require('./assets/logo-white.png')}></Image>
+        <Image
+          style={styles.dogImage}
+          source={require('./assets/dog-image.png')}></Image>
+        <Text style={styles.h1} category="h1">
+          Todos los servicios para el cuidado de tu mascota en un solo lugar.
+        </Text>
+        <CustomButton
+          type="primary"
+          style={styles.signUpButton}
+          onPress={onStartButtonPress}>
+          ¡Empieza Ahora!
+        </CustomButton>
+        <View style={styles.signInTextContainer}>
+          <Text style={styles.signInText}>Si ya tienes cuenta</Text>
+          <AnchorText style={styles.signInLink} onPress={onSignInTextPress}>
+            Inicia Sesión
+          </AnchorText>
+        </View>
+      </View>
+      <AnchorText
+        style={styles.signInAsInvited}
+        onPress={onSignInAsInvitedTextPress}>
         Ingresar como invitado
       </AnchorText>
-    </View>
+    </DefaultLayout>
   );
 };
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
     backgroundColor: globalColors.greenPrimary,
-    padding: globalVars.outsidePadding,
-    flex: 1,
+    justifyContent: 'space-around',
+  },
+  logo: {
+    marginTop: '10%',
+    resizeMode: 'contain',
+    width: '30%',
   },
   dogImage: {
-    justifyContent: 'center',
+    alignSelf: 'center',
+    resizeMode: 'contain',
     height: '50%',
+    marginVertical: 5,
   },
   h1: {
     color: globalColors.white,
     fontSize: 24,
-    marginBottom: 24,
     lineHeight: 34,
+    marginBottom: 24,
+    fontFamily: 'Montserrat-Bold',
   },
   signUpButton: {
-    backgroundColor: globalColors.white,
-    fontSize: 17,
     marginBottom: 24,
   },
+  signInTextContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   signInText: {
-    marginBottom: 34,
     textAlign: 'center',
+    color: globalColors.white,
   },
   signInLink: {
-    paddingLeft: 10,
+    paddingLeft: 5,
+  },
+  signInAsInvited: {
+    textAlign: 'center',
+    marginBottom: 20,
   },
 });

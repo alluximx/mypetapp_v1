@@ -11,6 +11,7 @@ const CustomButton = (props): React.ReactElement => {
       {() => <Text style={style.defaultButtonText}>{props.children}</Text>}
     </Button>
   ) : (
+    // Not finished yet...
     <Button
       appearance="control"
       style={[style.button, style.defaultButton, props.style]}
