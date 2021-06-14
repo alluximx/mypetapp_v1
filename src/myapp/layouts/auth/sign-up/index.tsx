@@ -1,49 +1,34 @@
 import React from 'react';
-import {View} from 'react-native';
-import {
-  Button,
-  Input,
-  Text,
-  Layout,
-  StyleService,
-  useStyleSheet,
-} from '@ui-kitten/components';
-import {ProfileAvatar} from './extra/profile-avatar.component';
-import {
-  EmailIcon,
-  EyeIcon,
-  EyeOffIcon,
-  PersonIcon,
-  PlusIcon,
-} from './extra/icons';
+import {View, StyleSheet} from 'react-native';
+import {Button, Input} from '@ui-kitten/components';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
-import DefaultLayout from '../../../components/default-layout';
+import AnchorText from '../../../components/texts/anchor-text';
 import CloseButton from '../../../components/buttons/close-button';
+import CustomButton from '../../../components/buttons/custom-button';
+import DefaultLayout from '../../../components/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
+import UserInput from '../../../components/inputs/user-input';
+// Global Styles
+import globalColors from '../../../styles/colors';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
-  const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
-
-  const styles = useStyleSheet(themedStyles);
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.goBack();
   };
 
-  const onSignInButtonPress = (): void => {
+  const onSignInTextPress = (): void => {
     navigation && navigation.navigate('SignIn');
   };
 
-  const onPasswordIconPress = (): void => {
-    setPasswordVisible(!passwordVisible);
+  const onTermsTextPress = (): void => {
+    navigation && navigation.navigate('Terms');
   };
-
-  // const renderEditAvatarButton = (): React.ReactElement => (
-  //   // <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
-  // );
 
   return (
     <DefaultLayout>
@@ -52,52 +37,40 @@ export default ({navigation}): React.ReactElement => {
           <View>
             <CloseButton navigation={navigation} />
             <View>
-              <Text category="h2">Regístrate ahora</Text>
-              <Text category="s1">
+              <TitleHeader>Regístrate ahora</TitleHeader>
+              <DefaultText>
                 Regístrate para tener acceso a todas las funciones y poder darle
                 el mejor cuidado a tu mascota.
-              </Text>
+              </DefaultText>
             </View>
             <View style={styles.formContainer}>
-              <Input
-                autoCapitalize="none"
-                placeholder="Nombre"
-                value={userName}
-                onChangeText={setUserName}
-              />
-              <Input
-                style={styles.emailInput}
-                autoCapitalize="none"
-                placeholder="Correo"
-                // icon={EmailIcon}
-                value={email}
-                onChangeText={setEmail}
-              />
-              <Input
-                style={styles.passwordInput}
-                autoCapitalize="none"
-                secureTextEntry={!passwordVisible}
-                placeholder="Contraseña"
-                // icon={passwordVisible ? EyeIcon : EyeOffIcon}
-                value={password}
-                onChangeText={setPassword}
-                // onIconPress={onPasswordIconPress}
-              />
+              <UserInput placeholder="Nombre" />
+              <UserInput placeholder="Correo" />
+              <UserInput placeholder="Contraseña" isPassword={true} />
             </View>
-
-            <Button
+            <CustomButton
               style={styles.signUpButton}
-              size="giant"
-              onPress={onSignUpButtonPress}>
-              REGÍSTRARME
-            </Button>
-            <Button
-              style={styles.signInButton}
-              appearance="ghost"
-              status="basic"
-              onPress={onSignInButtonPress}>
-              ¿Ya tienes una cuenta? Inicia Sesión
-            </Button>
+              appearance="control"
+              onPress={onSignUpButtonPress}
+              isDisabled={true}>
+              Registrarme
+            </CustomButton>
+            <View style={styles.mixedTextContainer}>
+              <DefaultText style={styles.defaultText}>
+                Si ya tienes cuenta
+              </DefaultText>
+              <AnchorText style={styles.link} onPress={onSignInTextPress}>
+                Inicia Sesión
+              </AnchorText>
+            </View>
+          </View>
+          <View style={styles.mixedTextContainer}>
+            <DefaultText style={styles.defaultText}>
+              Al registrarte confirmas que leíste y aceptas los
+            </DefaultText>
+            <AnchorText style={styles.link} onPress={onTermsTextPress}>
+              Términos y Condiciones
+            </AnchorText>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -105,37 +78,28 @@ export default ({navigation}): React.ReactElement => {
   );
 };
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
-    display: 'flex',
     flex: 1,
     justifyContent: 'space-between',
   },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
-  },
   formContainer: {
-    paddingTop: 32,
-  },
-  emailInput: {
-    marginTop: 16,
-  },
-  passwordInput: {
-    marginTop: 16,
-  },
-  termsCheckBox: {
-    marginTop: 24,
-  },
-  termsCheckBoxText: {
-    color: 'text-hint-color',
+    paddingTop: 24,
   },
   signUpButton: {
-    marginHorizontal: 16,
+    marginTop: 56,
   },
-  signInButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
+  mixedTextContainer: {
+    marginVertical: 32,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+  },
+  defaultText: {
+    textAlign: 'center',
+  },
+  link: {
+    paddingLeft: 5,
   },
 });

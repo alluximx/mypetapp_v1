@@ -4,21 +4,21 @@ import {Icon} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 
-const CloseButton = (props): React.ReactElement => {
+const BackButton = (props): React.ReactElement => {
   return (
     <Icon
-      style={[styles.closeButton, props.style]}
+      style={[styles.backButton, props.style]}
       height={35}
       onPress={props.navigation.goBack}
       width={35}
       fill={globalColors.greenSecondary}
-      name="close-outline"
+      name="arrow-back-outline"
     />
   );
 };
 
 const styles = StyleSheet.create({
-  closeButton: {
+  backButton: {
     width: 40,
     height: 40,
     marginLeft: -5,
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CloseButton;
+export default BackButton;

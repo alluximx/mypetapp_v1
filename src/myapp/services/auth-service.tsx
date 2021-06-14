@@ -19,8 +19,8 @@ class AuthService {
 
   me = async () => {
     try {
-      let token = await AsyncStorage.getItem('auth_token');
-      let request = await axios.get(API_URL + 'users/me/', {
+      const token = await AsyncStorage.getItem('auth_token');
+      const request = await axios.get(API_URL + 'users/me/', {
         headers: {Authorization: 'Token ' + token},
       });
       return request;

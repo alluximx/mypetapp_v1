@@ -1,19 +1,18 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {View} from 'react-native';
-import {
-  Button,
-  Input,
-  Layout,
-  StyleService,
-  Text,
-  useStyleSheet,
-} from '@ui-kitten/components';
-import {EyeIcon, EyeOffIcon, PersonIcon} from './extra/icons';
+import {Input, StyleService, useStyleSheet} from '@ui-kitten/components';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 import {ErrorMessage} from '../../../components/error-message';
 import {AuthContext} from '../../../context/AuthContext';
 // import AwesomeAlert from 'react-native-awesome-alerts';
-import AnchorText from '../../../components/anchor-text';
+// My Components
+import AnchorText from '../../../components/texts/anchor-text';
+import CloseButton from '../../../components/buttons/close-button';
+import CustomButton from '../../../components/buttons/custom-button';
+import DefaultLayout from '../../../components/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
+import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation, error}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
@@ -61,15 +60,15 @@ export default ({navigation, error}): React.ReactElement => {
     return false;
   };
 
-  const onSignUpButtonPress = (): void => {
+  const onSignUpTextPress = (): void => {
     navigation && navigation.navigate('SignUp');
   };
 
-  // const onLoginButtonPress = (): void => {
-  //   navigation && navigation.navigate('Home');
-  // };
+  const onSignInButtonPress = (): void => {
+    navigation && navigation.navigate('Home');
+  };
 
-  const onForgotPasswordButtonPress = (): void => {
+  const onForgotPasswordTextPress = (): void => {
     navigation && navigation.navigate('ForgotPassword');
   };
 
@@ -78,45 +77,37 @@ export default ({navigation, error}): React.ReactElement => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          placeholder="Correo"
-          // icon={PersonIcon}
-          value={email}
-          onChangeText={(nextValue) => {
-            // setEmailError(false);
-            setEmail(nextValue);
-          }}
-        />
-        <Input
-          style={styles.passwordInput}
-          placeholder="Contraseña"
-          // icon={passwordVisible ? EyeIcon : EyeOffIcon}
-          value={password}
-          secureTextEntry={!passwordVisible}
-          onChangeText={(nextValue) => {
-            // setPasswordError(false);
-            setPassword(nextValue);
-          }}
-          onSubmitEditing={login}
-          // onIconPress={onPasswordIconPress}
-          ref={passwordRef}
-        />
-        {errorMessage && <ErrorMessage message={errorMessage} />}
-        <Button style={styles.signInButton} appearance="primary" status="basic">
-          Inicia Sesión
-        </Button>
-        <AnchorText style={styles.signInLink}>
-          ¿Olvidaste tu contraseña?
-        </AnchorText>
-        <View style={styles.signInTextContainer}>
-          <Text style={styles.signInText}>¿Aún no tienes cuenta?</Text>
-          <AnchorText style={styles.signInLink}>Regístrate</AnchorText>
+    <DefaultLayout>
+      <KeyboardAvoidingView>
+        <View>
+          <CloseButton navigation={navigation} />
+          <TitleHeader>Inicia Sesión</TitleHeader>
+          <View style={styles.form}>
+            <UserInput placeholder="Correo" />
+            <UserInput placeholder="Contraseña" isPassword={true} />
+            {errorMessage && <ErrorMessage message={errorMessage} />}
+            <CustomButton
+              style={styles.signInButton}
+              appearance="control"
+              onPress={onSignInButtonPress}
+              isDisabled={true}>
+              Iniciar Sesión
+            </CustomButton>
+          </View>
+          <AnchorText
+            style={styles.forgotPasswordLink}
+            onPress={onForgotPasswordTextPress}>
+            ¿Olvidaste tu contraseña?
+          </AnchorText>
+          <View style={styles.signUpTextContainer}>
+            <DefaultText>¿Aún no tienes cuenta?</DefaultText>
+            <AnchorText style={styles.signUpLink} onPress={onSignUpTextPress}>
+              Regístrate
+            </AnchorText>
+          </View>
         </View>
-      </Layout>
 
-      {/* <AwesomeAlert
+        {/* <AwesomeAlert
         show={alert}
         showProgress={false}
         label="Iniciar Sesión"
@@ -130,57 +121,26 @@ export default ({navigation, error}): React.ReactElement => {
           hideAlert();
         }}
       /> */}
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </DefaultLayout>
   );
 };
 
 const themedStyles = StyleService.create({
-  container: {
-    backgroundColor: 'background-basic-color-1',
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
-    backgroundColor: 'color-primary-default',
-  },
-  formContainer: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 16,
-  },
-  signInLabel: {
+  form: {
     marginTop: 16,
   },
   signInButton: {
-    marginHorizontal: 16,
+    marginTop: 40,
   },
-  forgotPasswordContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+  forgotPasswordLink: {
+    marginTop: 32,
+    textAlign: 'center',
   },
-  passwordInput: {
-    marginTop: 16,
-  },
-  forgotPasswordButton: {
-    paddingHorizontal: 0,
-  },
-  // Mis adiciones
-  signInTextContainer: {
-    display: 'flex',
+  signUpTextContainer: {
+    marginTop: 40,
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  signInText: {
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  signInLink: {
-    paddingLeft: 5,
-    textAlign: 'center',
-  },
-  signUpButton: {
-    marginBottom: 20,
-    borderRadius: 10,
-  },
+  signUpLink: {marginLeft: 5},
 });

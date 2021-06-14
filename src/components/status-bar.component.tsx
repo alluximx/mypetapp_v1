@@ -4,19 +4,16 @@ import {
   StatusBarProps as RNStatusBarProps,
   ViewProps,
 } from 'react-native';
-import { styled, StyledComponentProps } from '@ui-kitten/components';
+import {styled, StyledComponentProps} from '@ui-kitten/components';
 
 export type StatusBarProps = RNStatusBarProps & StyledComponentProps;
 
 @styled('StatusBar')
 class StatusBarComponent extends React.Component<StatusBarProps> {
   public render(): React.ReactElement<ViewProps> {
-    const { eva, ...statusBarProps } = this.props;
+    const {eva, ...statusBarProps} = this.props;
 
-    return <RNStatusBar
-      {...eva?.style}
-      {...statusBarProps}
-    />;
+    return <RNStatusBar backgroundColor="rgba(0,0,0,0)" translucent={true} />;
   }
 }
 
