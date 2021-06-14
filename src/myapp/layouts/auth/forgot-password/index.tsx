@@ -20,7 +20,7 @@ export default ({navigation}): React.ReactElement => {
       <KeyboardAvoidingView>
         <BackButton navigation={navigation} />
         <View>
-          <TitleHeader>Recuperar Contraseña</TitleHeader>
+          <TitleHeader>Restablecer Contraseña</TitleHeader>
           <DefaultText style={styles.subtitle}>
             Ingresa el correo registrado en Dogit y te enviaremos instrucciones
             para recuperar tu contraseña.
