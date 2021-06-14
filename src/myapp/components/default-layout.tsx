@@ -7,7 +7,9 @@ import globalVars from '../styles/vars';
 
 const DefaultLayout = (props): React.ReactElement => {
   return (
-    <Layout style={[style.defaultLayout, props.style]}>{props.children}</Layout>
+    <Layout style={[style.defaultLayout, props.style]} level="1">
+      {props.children}
+    </Layout>
   );
 };
 

@@ -12,11 +12,11 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 
 const UserInput = (props): React.ReactElement => {
-  const [value, setValue] = useState('');
-  const [isFocused, setIsFocused] = useState(false);
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const focusAnim = useRef(new Animated.Value(0)).current;
-  const inputPadding = !isFocused && value === '' ? 0 : 16;
+  const [value, setValue] = useState<string>('');
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
+  const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
+  const inputPadding: number = !isFocused && value === '' ? 0 : 16;
 
   const renderIcon = (props) => (
     <TouchableWithoutFeedback

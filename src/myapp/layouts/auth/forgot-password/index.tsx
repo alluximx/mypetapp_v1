@@ -1,69 +1,47 @@
 import React from 'react';
 import {View} from 'react-native';
 import {StyleService, Button, Input, Text, Layout} from '@ui-kitten/components';
-import {EmailIcon} from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
+// My Components
+import BackButton from '../../../components/buttons/back-button';
+import CustomButton from '../../../components/buttons/custom-button';
+import DefaultLayout from '../../../components/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
+import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation}): React.ReactElement => {
-  const [email, setEmail] = React.useState<string>();
-
   const onResetPasswordButtonPress = (): void => {
     navigation && navigation.goBack();
   };
 
   return (
-    <KeyboardAvoidingView>
-      <Layout style={styles.formContainer} level="1">
-        <Text style={styles.forgotPasswordLabel} category="h4" status="control">
-          ¿Olvidaste tu contraseña?
-        </Text>
-        <Text style={styles.forgotPasswordLabel} status="control">
-          Porfavor ingresa tu correo electrónico
-        </Text>
-        <View style={styles.formContainer}>
-          <Input
-            style={styles.emailInput}
-            status="control"
-            placeholder="Email"
-            icon={EmailIcon}
-            value={email}
-            onChangeText={setEmail}
-          />
+    <DefaultLayout>
+      <KeyboardAvoidingView>
+        <BackButton navigation={navigation} />
+        <View>
+          <TitleHeader>Recuperar Contraseña</TitleHeader>
+          <DefaultText style={styles.subtitle}>
+            Ingresa el correo registrado en Dogit y te enviaremos instrucciones
+            para recuperar tu contraseña.
+          </DefaultText>
+          <UserInput placeholder="Correo" />
         </View>
-        <Button size="giant" onPress={onResetPasswordButtonPress}>
-          CAMBIAR CONTRASEÑA
-        </Button>
-      </Layout>
-    </KeyboardAvoidingView>
+        <CustomButton
+          style={styles.button}
+          onPress={onResetPasswordButtonPress}>
+          Enviar
+        </CustomButton>
+      </KeyboardAvoidingView>
+    </DefaultLayout>
   );
 };
 
 const styles = StyleService.create({
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
-    backgroundColor: 'color-primary-default',
+  subtitle: {
+    marginBottom: 24,
   },
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 24,
-  },
-  formContainer: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 16,
-  },
-  forgotPasswordLabel: {
-    zIndex: 1,
-    alignSelf: 'center',
-    marginTop: 24,
-    color: 'text-hint-color',
-  },
-  enterEmailLabel: {
-    zIndex: 1,
-    alignSelf: 'center',
-    marginTop: 64,
+  button: {
+    marginTop: 40,
   },
 });

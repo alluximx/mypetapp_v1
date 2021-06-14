@@ -3,12 +3,12 @@ import {View, StyleSheet} from 'react-native';
 import {Button, Input} from '@ui-kitten/components';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
-import DefaultLayout from '../../../components/default-layout';
+import AnchorText from '../../../components/texts/anchor-text';
 import CloseButton from '../../../components/buttons/close-button';
 import CustomButton from '../../../components/buttons/custom-button';
-import TitleHeader from '../../../components/texts/title-header';
+import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import AnchorText from '../../../components/texts/anchor-text';
+import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
 // Global Styles
 import globalColors from '../../../styles/colors';
@@ -17,7 +17,6 @@ export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
-  const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -29,10 +28,6 @@ export default ({navigation}): React.ReactElement => {
 
   const onTermsTextPress = (): void => {
     navigation && navigation.navigate('Terms');
-  };
-
-  const onPasswordIconPress = (): void => {
-    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -56,7 +51,8 @@ export default ({navigation}): React.ReactElement => {
             <CustomButton
               style={styles.signUpButton}
               appearance="control"
-              onPress={onSignUpButtonPress}>
+              onPress={onSignUpButtonPress}
+              isDisabled={true}>
               Registrarme
             </CustomButton>
             <View style={styles.mixedTextContainer}>
