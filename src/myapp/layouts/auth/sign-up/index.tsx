@@ -1,33 +1,22 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {
   Button,
   Input,
-  Text,
   Layout,
-  StyleService,
-  useStyleSheet,
 } from '@ui-kitten/components';
-import {ProfileAvatar} from './extra/profile-avatar.component';
-import {
-  EmailIcon,
-  EyeIcon,
-  EyeOffIcon,
-  PersonIcon,
-  PlusIcon,
-} from './extra/icons';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import DefaultLayout from '../../../components/default-layout';
 import CloseButton from '../../../components/buttons/close-button';
+import TitleHeader from '../../../components/texts/title-header';
+import DefaultText from '../../../components/texts/default-text';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
   const [email, setEmail] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
   const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
-
-  const styles = useStyleSheet(themedStyles);
 
   const onSignUpButtonPress = (): void => {
     navigation && navigation.goBack();
@@ -52,11 +41,11 @@ export default ({navigation}): React.ReactElement => {
           <View>
             <CloseButton navigation={navigation} />
             <View>
-              <Text category="h2">Regístrate ahora</Text>
-              <Text category="s1">
+              <TitleHeader>Regístrate ahora</TitleHeader>
+              <DefaultText>
                 Regístrate para tener acceso a todas las funciones y poder darle
                 el mejor cuidado a tu mascota.
-              </Text>
+              </DefaultText>
             </View>
             <View style={styles.formContainer}>
               <Input
@@ -91,13 +80,22 @@ export default ({navigation}): React.ReactElement => {
               onPress={onSignUpButtonPress}>
               REGÍSTRARME
             </Button>
-            <Button
-              style={styles.signInButton}
-              appearance="ghost"
-              status="basic"
-              onPress={onSignInButtonPress}>
-              ¿Ya tienes una cuenta? Inicia Sesión
-            </Button>
+            <View style={styles.mixedTextContainer}>
+              <DefaultText style={styles.defaultText}>
+                Si ya tienes cuenta
+              </DefaultText>
+              <AnchorText style={styles.link} onPress={onSignInTextPress}>
+                Inicia Sesión
+              </AnchorText>
+            </View>
+          </View>
+          <View style={styles.mixedTextContainer}>
+            <DefaultText style={styles.defaultText}>
+              Al registrarte confirmas que leíste y aceptas los
+            </DefaultText>
+            <AnchorText style={styles.link} onPress={onTermsTextPress}>
+              Términos y Condiciones
+            </AnchorText>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -117,7 +115,7 @@ const themedStyles = StyleService.create({
     minHeight: 216,
   },
   formContainer: {
-    paddingTop: 32,
+    paddingTop: 24,
   },
   emailInput: {
     marginTop: 16,
@@ -128,11 +126,15 @@ const themedStyles = StyleService.create({
   termsCheckBox: {
     marginTop: 24,
   },
-  termsCheckBoxText: {
-    color: 'text-hint-color',
+  mixedTextContainer: {
+    marginVertical: 32,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
   },
-  signUpButton: {
-    marginHorizontal: 16,
+  defaultText: {
+    textAlign: 'center',
   },
   signInButton: {
     marginVertical: 12,
