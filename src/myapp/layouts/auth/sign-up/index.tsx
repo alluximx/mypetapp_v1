@@ -1,16 +1,17 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {
-  Button,
-  Input,
-  Layout,
-} from '@ui-kitten/components';
+import {Button, Input} from '@ui-kitten/components';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import DefaultLayout from '../../../components/default-layout';
 import CloseButton from '../../../components/buttons/close-button';
+import CustomButton from '../../../components/buttons/custom-button';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
+import AnchorText from '../../../components/texts/anchor-text';
+import UserInput from '../../../components/inputs/user-input';
+// Global Styles
+import globalColors from '../../../styles/colors';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
@@ -22,17 +23,17 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.goBack();
   };
 
-  const onSignInButtonPress = (): void => {
+  const onSignInTextPress = (): void => {
     navigation && navigation.navigate('SignIn');
+  };
+
+  const onTermsTextPress = (): void => {
+    navigation && navigation.navigate('Terms');
   };
 
   const onPasswordIconPress = (): void => {
     setPasswordVisible(!passwordVisible);
   };
-
-  // const renderEditAvatarButton = (): React.ReactElement => (
-  //   // <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
-  // );
 
   return (
     <DefaultLayout>
@@ -48,38 +49,16 @@ export default ({navigation}): React.ReactElement => {
               </DefaultText>
             </View>
             <View style={styles.formContainer}>
-              <Input
-                autoCapitalize="none"
-                placeholder="Nombre"
-                value={userName}
-                onChangeText={setUserName}
-              />
-              <Input
-                style={styles.emailInput}
-                autoCapitalize="none"
-                placeholder="Correo"
-                // icon={EmailIcon}
-                value={email}
-                onChangeText={setEmail}
-              />
-              <Input
-                style={styles.passwordInput}
-                autoCapitalize="none"
-                secureTextEntry={!passwordVisible}
-                placeholder="Contraseña"
-                // icon={passwordVisible ? EyeIcon : EyeOffIcon}
-                value={password}
-                onChangeText={setPassword}
-                // onIconPress={onPasswordIconPress}
-              />
+              <UserInput placeholder="Nombre" />
+              <UserInput placeholder="Correo" />
+              <UserInput placeholder="Contraseña" isPassword={true} />
             </View>
-
-            <Button
+            <CustomButton
               style={styles.signUpButton}
-              size="giant"
+              appearance="control"
               onPress={onSignUpButtonPress}>
-              REGÍSTRARME
-            </Button>
+              Registrarme
+            </CustomButton>
             <View style={styles.mixedTextContainer}>
               <DefaultText style={styles.defaultText}>
                 Si ya tienes cuenta
@@ -103,28 +82,16 @@ export default ({navigation}): React.ReactElement => {
   );
 };
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
-    display: 'flex',
     flex: 1,
     justifyContent: 'space-between',
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
   },
   formContainer: {
     paddingTop: 24,
   },
-  emailInput: {
-    marginTop: 16,
-  },
-  passwordInput: {
-    marginTop: 16,
-  },
-  termsCheckBox: {
-    marginTop: 24,
+  signUpButton: {
+    marginTop: 56,
   },
   mixedTextContainer: {
     marginVertical: 32,
@@ -136,8 +103,7 @@ const themedStyles = StyleService.create({
   defaultText: {
     textAlign: 'center',
   },
-  signInButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
+  link: {
+    paddingLeft: 5,
   },
 });
