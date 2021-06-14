@@ -13,7 +13,7 @@ import {KeyboardAvoidingView} from './extra/3rd-party';
 import {ErrorMessage} from '../../../components/error-message';
 import {AuthContext} from '../../../context/AuthContext';
 // import AwesomeAlert from 'react-native-awesome-alerts';
-import AnchorText from '../../../components/anchor-text';
+import AnchorText from '../../../components/texts/anchor-text';
 
 export default ({navigation, error}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
