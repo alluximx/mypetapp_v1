@@ -1,10 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {View} from 'react-native';
-import {Input, StyleService, useStyleSheet} from '@ui-kitten/components';
+import {StyleSheet, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 import {ErrorMessage} from '../../../components/error-message';
 import {AuthContext} from '../../../context/AuthContext';
-// import AwesomeAlert from 'react-native-awesome-alerts';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CloseButton from '../../../components/buttons/close-button';
@@ -15,15 +13,20 @@ import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation, error}): React.ReactElement => {
-  const [email, setEmail] = React.useState<string>();
-  const [password, setPassword] = React.useState<string>();
-  const [alert, setAlert] = React.useState<boolean>(false);
+  const [errors, setErrors] = useState({
+    emailError: false,
+    passwordError: false,
+  });
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  });
 
-  const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
+  const [alert, setAlert] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 
-  const styles = useStyleSheet(themedStyles);
-  const passwordRef = useRef<Input>(null);
+  // const emailRef = useRef<any>(null);
+  // const passwordRef = useRef<Input>(null);
   // const {signIn} = useContext(AuthContext);
 
   const showAlert = () => {
@@ -42,23 +45,29 @@ export default ({navigation, error}): React.ReactElement => {
     navigation && navigation.navigate('Home');
 
     const authenticateParams = {
-      email: email,
-      password: password,
+      email: data.email,
+      password: data.password,
     };
 
-    // setEmailError(authenticateParams.email === '');
+    setErrors({
+      emailError: authenticateParams.email === '',
+      passwordError: authenticateParams.password === '',
+    });
 
-    // setPasswordError(authenticateParams.password === '');
-
-    // if (authenticateParams.email !== '' || authenticateParams.password !== '') {
-    //   let response = await signIn(authenticateParams);
-    //   if (!response) {
-    //     showAlert();
-    //   }
-    //   return response;
-    // }
+    if (!errors.emailError && !errors.passwordError) {
+      // let response = await signIn(authenticateParams);
+      // if (!response) {
+      //   showAlert();
+      // }
+      // return response;
+      console.log('success');
+    }
     return false;
   };
+
+  /**************
+   * Navigation *
+   **************/
 
   const onSignUpTextPress = (): void => {
     navigation && navigation.navigate('SignUp');
@@ -70,10 +79,6 @@ export default ({navigation, error}): React.ReactElement => {
 
   const onForgotPasswordTextPress = (): void => {
     navigation && navigation.navigate('ForgotPassword');
-  };
-
-  const onPasswordIconPress = (): void => {
-    setPasswordVisible(!passwordVisible);
   };
 
   return (
@@ -106,27 +111,12 @@ export default ({navigation, error}): React.ReactElement => {
             </AnchorText>
           </View>
         </View>
-
-        {/* <AwesomeAlert
-        show={alert}
-        showProgress={false}
-        label="Iniciar Sesión"
-        message="Contraseña o usuario incorrecto, revisa que hayas ingresado tus datos correctamente."
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showConfirmButton={true}
-        confirmText="Aceptar"
-        confirmButtonColor="#DD6B55"
-        onConfirmPressed={() => {
-          hideAlert();
-        }}
-      /> */}
       </KeyboardAvoidingView>
     </DefaultLayout>
   );
 };
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   form: {
     marginTop: 16,
   },

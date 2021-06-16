@@ -17,6 +17,9 @@ const UserInput = (props): React.ReactElement => {
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
   const inputPadding: number = !isFocused && value === '' ? 0 : 16;
+  const inputOutline: string = isFocused
+    ? globalColors.greenSecondary
+    : globalColors.lightGreen;
 
   const renderIcon = (props) => (
     <TouchableWithoutFeedback
@@ -40,6 +43,7 @@ const UserInput = (props): React.ReactElement => {
       <Animated.Text
         style={[
           styles.inputLabel,
+          // Label animations
           {
             top: focusAnim.interpolate({
               inputRange: [0, 1],
@@ -58,7 +62,12 @@ const UserInput = (props): React.ReactElement => {
         {props.placeholder}
       </Animated.Text>
       <Input
-        style={styles.inputValue}
+        style={[
+          styles.inputValue,
+          {
+            borderColor: inputOutline,
+          },
+        ]}
         textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
         value={value}
         onChangeText={setValue}
@@ -83,6 +92,7 @@ const styles = StyleSheet.create({
     left: 16,
     color: globalColors.darkGray,
     fontSize: 14,
+    fontFamily: globalVars.fontRegular,
   },
   inputValue: {
     backgroundColor: 'transparent',

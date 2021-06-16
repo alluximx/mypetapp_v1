@@ -1,6 +1,5 @@
 import React from 'react';
-import {View} from 'react-native';
-import {StyleService, Button, Input, Text, Layout} from '@ui-kitten/components';
+import {View, StyleSheet} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import BackButton from '../../../components/buttons/back-button';
@@ -12,7 +11,7 @@ import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation}): React.ReactElement => {
   const onResetPasswordButtonPress = (): void => {
-    navigation && navigation.goBack();
+    navigation && navigation.navigate('RecoveryKey');
   };
 
   return (
@@ -37,7 +36,7 @@ export default ({navigation}): React.ReactElement => {
   );
 };
 
-const styles = StyleService.create({
+const styles = StyleSheet.create({
   subtitle: {
     marginBottom: 24,
   },

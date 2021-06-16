@@ -1,11 +1,13 @@
 import React, {useEffect, useMemo, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
+// AUTH SCREENS
+import {SignInScreen} from '../myapp/auth/sign-in.component';
 import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
 import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
+import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
 import {StartScreen} from '../myapp/scenes/start/start.component';
 import {TermsScreen} from '../myapp/scenes/terms/terms.component';
-import {SignInScreen} from '../myapp/auth/sign-in.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {reducer, initialState} from '../../src/reducer';
 import AuthService from '../myapp/services/auth-service';
@@ -96,6 +98,7 @@ export const MyAppNavigator = (): React.ReactElement => {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        <Stack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
         <Stack.Screen name="AddVaccine" component={AddVaccineScreen} />
