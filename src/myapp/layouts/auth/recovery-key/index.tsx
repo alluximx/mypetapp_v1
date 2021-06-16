@@ -1,5 +1,11 @@
 import React, {useRef, useState} from 'react';
-import {Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
@@ -17,6 +23,7 @@ export default ({navigation}): React.ReactElement => {
   const NUMBER_OF_DIGITS = 5;
 
   const [code, setCode] = useState<string>('');
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const onResendCodeTextPress = (): void => {
     console.log('code resent');
@@ -27,11 +34,13 @@ export default ({navigation}): React.ReactElement => {
     const emptyInputChar: string = ' ';
     const digit: string = code[idx] || emptyInputChar;
 
-    return (
-      <View key={idx}>
-        <Text>{digit}</Text>
-      </View>
-    );
+    const isCurrentDigit = idx === code.length;
+    const isLastDigit = idx === NUMBER_OF_DIGITS - 1;
+    const isCodeFull = code.length === NUMBER_OF_DIGITS;
+
+    const isFocused = isCurrentDigit || (isLastDigit && isCodeFull);
+
+    return <RecoveryCodeInput value={digit} key={idx} isFocused={isFocused} />;
   };
 
   const ref = useRef<TextInput>(null);
@@ -39,33 +48,8 @@ export default ({navigation}): React.ReactElement => {
     ref?.current?.focus();
   };
 
-  // const jumpToNextInput = (input) => {
-  //   console.log();
-  //   if (input.current.dataKey < NUMBER_OF_DIGITS) {
-  //     console.log('menor');
-  //   } else {
-  //     console.log('mayor');
-  //   }
-  // };
-  // const keyRecoveryInputs = [];
-
-  // for (let i = 0; i < NUMBER_OF_DIGITS; i++) {
-  //   keyRecoveryInputs.push(
-  //     <RecoveryCodeInput key={i} dataKey={i} nextInput={jumpToNextInput} />,
-  //   );
-  // }
-
   return (
     <DefaultLayout>
-      <TextInput
-        value={code}
-        onChangeText={setCode}
-        keyboardType="number-pad"
-        returnKeyType="done"
-        textContentType="oneTimeCode"
-        maxLength={NUMBER_OF_DIGITS}
-        style={styles.hiddenCodeInput}
-      />
       <KeyboardAvoidingView>
         <BackButton navigation={navigation} />
         <View>
@@ -76,10 +60,11 @@ export default ({navigation}): React.ReactElement => {
           <DefaultText style={styles.subtitle}>
             Ingresa el código de 5 dígitos que enviamos a tu correo.
           </DefaultText>
-          {/* <View style={styles.inputContainer}>{keyRecoveryInputs}</View> */}
-          {/* <Pressable style={styles.inputContainer} onPress={handleOnPress}>
-            {codeDigitsArray.map(toDigitInput)}
-          </Pressable> */}
+          <TouchableWithoutFeedback onPress={handleOnPress}>
+            <View style={styles.inputContainer}>
+              {codeDigitsArray.map<React.ReactElement>(toDigitInput)}
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View style={globalStyles.mixedTextContainer}>
           <DefaultText>¿No recibiste el código?</DefaultText>
@@ -89,6 +74,17 @@ export default ({navigation}): React.ReactElement => {
             Reenviar
           </AnchorText>
         </View>
+        <TextInput
+          ref={ref}
+          value={code}
+          onChangeText={setCode}
+          keyboardType="number-pad"
+          textContentType="oneTimeCode"
+          maxLength={NUMBER_OF_DIGITS}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          style={styles.hiddenCodeInput}
+        />
       </KeyboardAvoidingView>
     </DefaultLayout>
   );

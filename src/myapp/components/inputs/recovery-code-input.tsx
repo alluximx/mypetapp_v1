@@ -7,15 +7,19 @@ import globalVars from '../../styles/vars';
 
 const RecoveryCodeInput = (props): React.ReactElement => {
   const inputRef = useRef();
-  const [value, setValue] = useState<string>('');
+  // const [value, setValue] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const inputOutline: string = isFocused
     ? globalColors.greenSecondary
     : globalColors.lightGreen;
 
   return (
-    <View style={styles.inputContainer}>
-      <Input
+    <View
+      style={[
+        {...styles.inputContainer},
+        props.isFocused && {...styles.inputContainerFocused},
+      ]}>
+      {/* <Input
         ref={inputRef}
         style={[
           styles.inputValue,
@@ -25,14 +29,15 @@ const RecoveryCodeInput = (props): React.ReactElement => {
         ]}
         textStyle={styles.inputValueText}
         keyboardType="numeric"
-        value={value}
-        onChangeText={(val) => {
-          setValue(val);
-          props.nextInput(inputRef);
-        }}
+        value={props.value}
+        // onChangeText={(val) => {
+        //   // setValue(val);
+        //   // props.nextInput(inputRef);
+        // }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-      />
+      /> */}
+      <Text style={styles.inputValueText}>{props.value}</Text>
     </View>
   );
 };
@@ -44,11 +49,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 50,
     marginHorizontal: 4,
+    justifyContent: 'center',
+    paddingTop: 16,
   },
-  inputValue: {
-    backgroundColor: 'transparent',
-    height: 56,
-    borderRadius: 10,
+  inputContainerFocused: {
+    borderColor: globalColors.greenPrimary,
+    borderWidth: 1,
   },
   inputValueText: {
     height: 46,
