@@ -78,7 +78,8 @@ export default ({navigation, error}): React.ReactElement => {
   };
 
   const onForgotPasswordTextPress = (): void => {
-    navigation && navigation.navigate('ForgotPassword');
+    navigation &&
+      navigation.navigate('ForgotPassword', {isSettingPassword: false});
   };
 
   return (

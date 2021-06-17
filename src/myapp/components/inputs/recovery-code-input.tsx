@@ -6,37 +6,12 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 
 const RecoveryCodeInput = (props): React.ReactElement => {
-  const inputRef = useRef();
-  // const [value, setValue] = useState<string>('');
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-  const inputOutline: string = isFocused
-    ? globalColors.greenSecondary
-    : globalColors.lightGreen;
-
   return (
     <View
       style={[
         {...styles.inputContainer},
         props.isFocused && {...styles.inputContainerFocused},
       ]}>
-      {/* <Input
-        ref={inputRef}
-        style={[
-          styles.inputValue,
-          {
-            borderColor: inputOutline,
-          },
-        ]}
-        textStyle={styles.inputValueText}
-        keyboardType="numeric"
-        value={props.value}
-        // onChangeText={(val) => {
-        //   // setValue(val);
-        //   // props.nextInput(inputRef);
-        // }}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-      /> */}
       <Text style={styles.inputValueText}>{props.value}</Text>
     </View>
   );

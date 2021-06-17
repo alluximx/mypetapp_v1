@@ -1,6 +1,8 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
+
 // My Components
 import BackButton from '../../../components/buttons/back-button';
 import CustomButton from '../../../components/buttons/custom-button';
@@ -10,8 +12,17 @@ import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation}): React.ReactElement => {
+  const route = useRoute<
+    RouteProp<{params: {isSettingPassword: boolean}}, 'params'>
+  >();
+  const isSettingPassword: boolean = route.params.isSettingPassword;
+
   const onResetPasswordButtonPress = (): void => {
-    navigation && navigation.navigate('RecoveryKey');
+    if (isSettingPassword) {
+      navigation && navigation.navigate('SignIn');
+    } else {
+      navigation && navigation.navigate('RecoveryKey');
+    }
   };
 
   return (
@@ -19,17 +30,25 @@ export default ({navigation}): React.ReactElement => {
       <KeyboardAvoidingView>
         <BackButton navigation={navigation} />
         <View>
-          <TitleHeader>Restablecer Contraseña</TitleHeader>
-          <DefaultText style={styles.subtitle}>
-            Ingresa el correo registrado en Dogit y te enviaremos instrucciones
-            para recuperar tu contraseña.
-          </DefaultText>
-          <UserInput placeholder="Correo" />
+          <TitleHeader style={isSettingPassword && styles.setPasswordSpace}>
+            Restablecer Contraseña
+          </TitleHeader>
+          {isSettingPassword ? (
+            <UserInput placeholder="Contraseña" isPassword={true} />
+          ) : (
+            <>
+              <DefaultText style={styles.subtitle}>
+                Ingresa el correo registrado en Dogit y te enviaremos
+                instrucciones para recuperar tu contraseña.
+              </DefaultText>
+              <UserInput placeholder="Correo" />
+            </>
+          )}
         </View>
         <CustomButton
           style={styles.button}
           onPress={onResetPasswordButtonPress}>
-          Enviar
+          {isSettingPassword ? 'Restablecer Contraseña' : 'Enviar'}
         </CustomButton>
       </KeyboardAvoidingView>
     </DefaultLayout>
@@ -42,5 +61,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 40,
+  },
+  setPasswordSpace: {
+    marginBottom: 24,
   },
 });

@@ -29,6 +29,13 @@ export default ({navigation}): React.ReactElement => {
     console.log('code resent');
   };
 
+  const onSubmitCode = (): void => {
+    console.log('finished writing code');
+    if (code.length === NUMBER_OF_DIGITS) {
+      navigation.navigate('ForgotPassword', {isSettingPassword: true});
+    }
+  };
+
   const codeDigitsArray = new Array<number>(NUMBER_OF_DIGITS).fill(0);
   const toDigitInput = (_value: number, idx: number): React.ReactElement => {
     const emptyInputChar: string = ' ';
@@ -38,9 +45,12 @@ export default ({navigation}): React.ReactElement => {
     const isLastDigit = idx === NUMBER_OF_DIGITS - 1;
     const isCodeFull = code.length === NUMBER_OF_DIGITS;
 
-    const isFocused = isCurrentDigit || (isLastDigit && isCodeFull);
+    const inputIsFocused =
+      (isCurrentDigit || (isLastDigit && isCodeFull)) && isFocused;
 
-    return <RecoveryCodeInput value={digit} key={idx} isFocused={isFocused} />;
+    return (
+      <RecoveryCodeInput value={digit} key={idx} isFocused={inputIsFocused} />
+    );
   };
 
   const ref = useRef<TextInput>(null);
@@ -84,6 +94,7 @@ export default ({navigation}): React.ReactElement => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           style={styles.hiddenCodeInput}
+          onSubmitEditing={onSubmitCode}
         />
       </KeyboardAvoidingView>
     </DefaultLayout>

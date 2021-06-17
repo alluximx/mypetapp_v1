@@ -6,6 +6,7 @@ import {SignInScreen} from '../myapp/auth/sign-in.component';
 import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
 import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
 import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
+// OTHER
 import {StartScreen} from '../myapp/scenes/start/start.component';
 import {TermsScreen} from '../myapp/scenes/terms/terms.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
@@ -93,11 +94,13 @@ export const MyAppNavigator = (): React.ReactElement => {
   return (
     <AuthContext.Provider value={authContext}>
       <Stack.Navigator headerMode="none">
+        {/* AUTH */}
         <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        {/* OTHER */}
         <Stack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
