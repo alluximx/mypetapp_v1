@@ -7,6 +7,7 @@ import globalVars from '../../styles/vars';
 
 const CustomButton = (props): React.ReactElement => {
   return props.type === 'primary' ? (
+    // Light Button
     <Button
       appearance="ghost"
       style={[styles.button, styles.lightButton, props.style]}
@@ -14,11 +15,15 @@ const CustomButton = (props): React.ReactElement => {
       {() => <Text style={styles.lightButtonText}>{props.children}</Text>}
     </Button>
   ) : (
-    // Not finished yet...
+    // Default Button...
     <Button
-      style={[styles.button, styles.defaultButton, props.style]}
+      style={[
+        styles.button,
+        props.isDisabled ? styles.defaultButtonDisabled : styles.defaultButton,
+        props.style,
+      ]}
       onPress={props.onPress}
-      disabled={props.isDisabled}>
+      disabled={!props.isDisabled}>
       {() => <Text style={styles.defaultButtonText}>{props.children}</Text>}
     </Button>
   );
@@ -46,6 +51,9 @@ const styles = StyleSheet.create({
     color: globalColors.white,
     fontFamily: globalVars.fontBold,
     fontSize: 17,
+  },
+  defaultButtonDisabled: {
+    backgroundColor: globalColors.greenSecondary,
   },
 });
 

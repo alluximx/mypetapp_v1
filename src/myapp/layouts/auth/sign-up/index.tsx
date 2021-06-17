@@ -1,6 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {Button, Input} from '@ui-kitten/components';
+import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
@@ -12,14 +11,39 @@ import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
 // Global Styles
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 
 export default ({navigation}): React.ReactElement => {
-  const [userName, setUserName] = React.useState<string>();
-  const [email, setEmail] = React.useState<string>();
-  const [password, setPassword] = React.useState<string>();
+  const [form, setForm] = React.useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const [errors, setErrors] = React.useState({
+    name: '',
+    email: '',
+    password: '',
+  });
+  const formCompleted =
+    form.name !== '' && form.email !== '' && form.password !== '';
+
+  const onChange = ({name, value}) => {
+    setForm({...form, [name]: value});
+  };
 
   const onSignUpButtonPress = (): void => {
-    navigation && navigation.goBack();
+    console.log(formCompleted);
+
+    // Move forward
+    if (formCompleted) {
+      navigation && navigation.goBack();
+    } else {
+      setErrors({
+        name: form.name === '' && 'El campo Nombre es requerido',
+        email: form.name === '' && 'El campo Correo es requerido',
+        password: form.name === '' && 'El campo Contraseña es requerido',
+      });
+    }
   };
 
   const onSignInTextPress = (): void => {
@@ -44,15 +68,38 @@ export default ({navigation}): React.ReactElement => {
               </DefaultText>
             </View>
             <View style={styles.formContainer}>
-              <UserInput placeholder="Nombre" />
-              <UserInput placeholder="Correo" />
-              <UserInput placeholder="Contraseña" isPassword={true} />
+              <UserInput
+                placeholder="Nombre"
+                value={form.name}
+                onChangeText={(value: string) => {
+                  onChange({name: 'name', value});
+                }}
+                error={errors.name}
+              />
+              <UserInput
+                placeholder="Correo"
+                value={form.email}
+                onChangeText={(value: string) => {
+                  onChange({name: 'email', value});
+                }}
+                error={errors.email}
+              />
+              <UserInput
+                placeholder="Contraseña"
+                isPassword={true}
+                value={form.password}
+                onChangeText={(value: string) => {
+                  onChange({name: 'password', value});
+                }}
+                error={errors.password}
+              />
+              {/* <Text style={styles.errorMessage}>{errors.name}</Text> */}
             </View>
             <CustomButton
               style={styles.signUpButton}
               appearance="control"
               onPress={onSignUpButtonPress}
-              isDisabled={true}>
+              isDisabled={formCompleted}>
               Registrarme
             </CustomButton>
             <View style={styles.mixedTextContainer}>
@@ -101,5 +148,9 @@ const styles = StyleSheet.create({
   },
   link: {
     paddingLeft: 5,
+  },
+  errorMessage: {
+    color: globalColors.red,
+    fontFamily: globalVars.fontRegular,
   },
 });

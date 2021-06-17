@@ -9,6 +9,8 @@ const globalColors = {
   lightGray: '#a7a7a7', // rgb(167, 167, 167)
   black: '#000',
 
+  red: '#dd3737', // rgb(221, 55, 55)
+
   backgroundDefault: '#e6f0e9',
 };
 

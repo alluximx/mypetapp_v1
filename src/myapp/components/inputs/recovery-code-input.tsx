@@ -1,6 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
-import {Input} from '@ui-kitten/components';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';

@@ -12,16 +12,15 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 
 const UserInput = (props): React.ReactElement => {
-  const [value, setValue] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
-  const inputPadding: number = !isFocused && value === '' ? 0 : 16;
+  const inputPadding: number = !isFocused && props.value === '' ? 0 : 16;
   const inputOutline: string = isFocused
     ? globalColors.greenSecondary
     : globalColors.lightGreen;
 
-  const renderIcon = (props) => (
+  const renderIcon = () => (
     <TouchableWithoutFeedback
       onPress={() => setSecureTextEntry(!secureTextEntry)}>
       <Text style={styles.toggleShowText}>
@@ -32,7 +31,7 @@ const UserInput = (props): React.ReactElement => {
 
   useEffect(() => {
     Animated.timing(focusAnim, {
-      toValue: isFocused || value !== '' ? 0 : 1,
+      toValue: isFocused || props.value !== '' ? 0 : 1,
       duration: 200,
       useNativeDriver: false,
     }).start();
@@ -69,8 +68,10 @@ const UserInput = (props): React.ReactElement => {
           },
         ]}
         textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
-        value={value}
-        onChangeText={setValue}
+        value={props.value}
+        onChangeText={(value) => {
+          props.onChangeText(value);
+        }}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         secureTextEntry={props.isPassword ? secureTextEntry : null}
