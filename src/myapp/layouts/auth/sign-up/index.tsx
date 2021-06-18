@@ -9,39 +9,69 @@ import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
+import CustomModal from '../../../components/modals/custom-modal';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
+// Context
+import {AuthContext} from '../../../context/AuthContext';
 
 export default ({navigation}): React.ReactElement => {
+  // Form fields...
   const [form, setForm] = React.useState({
-    name: '',
+    username: '',
     email: '',
-    password: '',
+    password1: '',
+    password2: '',
   });
   const [errors, setErrors] = React.useState({
-    name: '',
+    username: '',
     email: '',
-    password: '',
+    password1: '',
+    password2: '',
   });
   const formCompleted =
-    form.name !== '' && form.email !== '' && form.password !== '';
+    form.username !== '' && form.email !== '' && form.password1 !== '';
+  const hasErrors =
+    form.username !== '' &&
+    form.email !== '' &&
+    form.password1 !== '' &&
+    form.password2 !== '';
+
+  const [isModalVisible, setIsModalVisible] = React.useState(true);
+
+  // Context
+  const authContext = React.useContext(AuthContext);
+
+  /*****************
+   * Event Methods *
+   *****************/
 
   const onChange = ({name, value}) => {
     setForm({...form, [name]: value});
   };
 
-  const onSignUpButtonPress = (): void => {
-    console.log(formCompleted);
-
-    // Move forward
+  const onSignUpButtonPress = async (): Promise<void> => {
+    // Si el formulario está completo...
     if (formCompleted) {
-      navigation && navigation.goBack();
+      const response = await authContext.signUp(form);
+      if (response.status) {
+        setIsModalVisible(true);
+      } else {
+        setErrors({
+          username: '',
+          email: '',
+          password1: '',
+          password2: '',
+          ...response.data,
+        });
+      }
     } else {
       setErrors({
-        name: form.name === '' && 'El campo Nombre es requerido',
-        email: form.name === '' && 'El campo Correo es requerido',
-        password: form.name === '' && 'El campo Contraseña es requerido',
+        username: form.username === '' && 'El campo Nombre es requerido',
+        email: form.email === '' && 'El campo Correo es requerido',
+        password1: form.password1 === '' && 'El campo Contraseña es requerido',
+        password2: '',
       });
     }
   };
@@ -54,9 +84,23 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.navigate('Terms');
   };
 
+  const onModalAccept = (): void => {
+    setIsModalVisible(false);
+    navigation && navigation.navigate('SignIn');
+  };
+
   return (
     <DefaultLayout>
       <KeyboardAvoidingView>
+        <CustomModal
+          visible={isModalVisible}
+          title="Registro Exitoso"
+          text="Se ha enviado un correo de confirmación a la dirección que indicaste en tu registro."
+          onAccept={onModalAccept}
+          onCancel={null}
+          showCancel={false}
+          labelAccept="Entendido"
+        />
         <View style={styles.container}>
           <View>
             <CloseButton navigation={navigation} />
@@ -70,11 +114,11 @@ export default ({navigation}): React.ReactElement => {
             <View style={styles.formContainer}>
               <UserInput
                 placeholder="Nombre"
-                value={form.name}
+                value={form.username}
                 onChangeText={(value: string) => {
-                  onChange({name: 'name', value});
+                  onChange({name: 'username', value});
                 }}
-                error={errors.name}
+                error={errors.username}
               />
               <UserInput
                 placeholder="Correo"
@@ -87,16 +131,23 @@ export default ({navigation}): React.ReactElement => {
               <UserInput
                 placeholder="Contraseña"
                 isPassword={true}
-                value={form.password}
+                value={form.password1}
                 onChangeText={(value: string) => {
-                  onChange({name: 'password', value});
+                  setForm({...form, password1: value, password2: value});
                 }}
-                error={errors.password}
+                error={errors.password1}
               />
-              {/* <Text style={styles.errorMessage}>{errors.name}</Text> */}
+              {hasErrors &&
+                Object.entries(errors).map(([key, value]) => {
+                  return (
+                    value !== '' && (
+                      <Text style={styles.errorMessage}>{value}</Text>
+                    )
+                  );
+                })}
             </View>
             <CustomButton
-              style={styles.signUpButton}
+              style={hasErrors ? {marginTop: 10} : {marginTop: 56}}
               appearance="control"
               onPress={onSignUpButtonPress}
               isDisabled={formCompleted}>
@@ -125,6 +176,14 @@ export default ({navigation}): React.ReactElement => {
   );
 };
 
+const alertStyles = StyleSheet.create({
+  container: {
+    backgroundColor: globalColors.greenPrimary,
+    width: '100%',
+    margin: 0,
+    borderRadius: 15,
+  },
+});
 const styles = StyleSheet.create({
   container: {
     flex: 1,

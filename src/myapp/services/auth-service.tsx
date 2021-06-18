@@ -11,9 +11,13 @@ class AuthService {
   };
 
   PostSignup = async (data) => {
-    const request = await axios.post(API_URL + 'users/', data, {
-      headers: {'Content-Type': 'application/json'},
-    });
+    const request = await axios.post(
+      API_URL + 'dj-rest-auth/registration/',
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      },
+    );
     return request;
   };
 

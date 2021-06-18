@@ -66,6 +66,7 @@ const UserInput = (props): React.ReactElement => {
           {
             borderColor: inputOutline,
           },
+          props.error !== '' && styles.errorOutline,
         ]}
         textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
         value={props.value}
@@ -110,6 +111,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: globalVars.fontBold,
     marginRight: 10,
+  },
+  errorOutline: {
+    borderColor: 'red',
   },
 });
 

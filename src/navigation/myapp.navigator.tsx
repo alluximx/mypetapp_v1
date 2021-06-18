@@ -83,7 +83,7 @@ export const MyAppNavigator = (): React.ReactElement => {
           const response = await AuthService.PostSignup(data);
           return {status: true, data: response.data};
         } catch (error) {
-          // console.log('Err', error.response.data);
+          console.log('Err', error.response.data);
           return {status: false, data: error.response.data};
         }
       },

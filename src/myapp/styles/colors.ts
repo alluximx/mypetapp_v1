@@ -1,6 +1,6 @@
 const globalColors = {
-  greenPrimary: '#13b048',
-  greenSecondary: '#0a7029',
+  greenPrimary: '#13b048', // rgb(19, 176, 72)
+  greenSecondary: '#0a7029', // rgb(10, 112, 41)
   lightGreen: '#cfe2d5',
 
   white: '#fff',
