@@ -87,6 +87,24 @@ export const MyAppNavigator = (): React.ReactElement => {
           return {status: false, data: error.response.data};
         }
       },
+      passwordReset: async (data) => {
+        try {
+          const response = await AuthService.PostPasswordReset(data);
+          return {status: true, data: response.data};
+        } catch (error) {
+          console.log('Err', error);
+          return {status: false, data: error.response.data};
+        }
+      },
+      passwordChange: async (data) => {
+        try {
+          const response = await AuthService.PostChangePassword(data);
+          return {status: true, data: response.data};
+        } catch (error) {
+          console.log('Err', error);
+          return {status: false, data: error.response.data};
+        }
+      },
     }),
     [],
   );

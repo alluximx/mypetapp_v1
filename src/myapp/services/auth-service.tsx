@@ -21,6 +21,28 @@ class AuthService {
     return request;
   };
 
+  PostPasswordReset = async (data) => {
+    const request = await axios.post(
+      API_URL + 'dj-rest-auth/password/reset/',
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      },
+    );
+    return request;
+  };
+
+  PostChangePassword = async (data) => {
+    const request = await axios.post(
+      API_URL + 'dj-rest-auth/password/change/',
+      data,
+      {
+        headers: {'Content-Type': 'application/json'},
+      },
+    );
+    return request;
+  };
+
   me = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
