@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
@@ -16,32 +16,43 @@ import globalVars from '../../../styles/vars';
 // Context
 import {AuthContext} from '../../../context/AuthContext';
 
+interface SignUpFormFields {
+  username: string;
+  email: string;
+  password1: string;
+  password2: string;
+}
+
 export default ({navigation}): React.ReactElement => {
+  // Context
+  const authContext = useContext(AuthContext);
+  // Default values for form fields.
+  const defaultValues = {
+    username: '',
+    email: '',
+    password1: '',
+    password2: '',
+  };
+
   // Form fields...
-  const [form, setForm] = React.useState({
-    username: '',
-    email: '',
-    password1: '',
-    password2: '',
-  });
-  const [errors, setErrors] = React.useState({
-    username: '',
-    email: '',
-    password1: '',
-    password2: '',
-  });
+  const [form, setForm] = useState<SignUpFormFields>(defaultValues);
+  const [errors, setErrors] = useState<SignUpFormFields>(defaultValues);
+  // Modal and spinner.
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Has filled every field...
   const formCompleted =
     form.username !== '' && form.email !== '' && form.password1 !== '';
+  // Are there any errors...
   const hasErrors =
-    form.username !== '' &&
-    form.email !== '' &&
-    form.password1 !== '' &&
-    form.password2 !== '';
+    errors.username !== '' ||
+    errors.email !== '' ||
+    errors.password1 !== '' ||
+    errors.password2 !== '';
 
-  const [isModalVisible, setIsModalVisible] = React.useState(true);
-
-  // Context
-  const authContext = React.useContext(AuthContext);
+  // Conditional styles
+  const buttonMargin = hasErrors ? {marginTop: 10} : {marginTop: 56};
 
   /*****************
    * Event Methods *
@@ -52,17 +63,20 @@ export default ({navigation}): React.ReactElement => {
   };
 
   const onSignUpButtonPress = async (): Promise<void> => {
-    // Si el formulario está completo...
+    // Show spinner
+    setLoading(true);
+    // Clear errors
+    setErrors(defaultValues);
+
+    // If form is filled...
     if (formCompleted) {
       const response = await authContext.signUp(form);
+
       if (response.status) {
         setIsModalVisible(true);
       } else {
         setErrors({
-          username: '',
-          email: '',
-          password1: '',
-          password2: '',
+          ...defaultValues,
           ...response.data,
         });
       }
@@ -74,6 +88,9 @@ export default ({navigation}): React.ReactElement => {
         password2: '',
       });
     }
+
+    // Hide spinner
+    setLoading(false);
   };
 
   const onSignInTextPress = (): void => {
@@ -138,6 +155,7 @@ export default ({navigation}): React.ReactElement => {
                 error={errors.password1}
               />
               {hasErrors &&
+                // Map errors...
                 Object.entries(errors).map(([key, value]) => {
                   return (
                     value !== '' && (
@@ -147,10 +165,11 @@ export default ({navigation}): React.ReactElement => {
                 })}
             </View>
             <CustomButton
-              style={hasErrors ? {marginTop: 10} : {marginTop: 56}}
+              style={buttonMargin}
               appearance="control"
               onPress={onSignUpButtonPress}
-              isDisabled={formCompleted}>
+              isDisabled={formCompleted}
+              isLoading={loading}>
               Registrarme
             </CustomButton>
             <View style={styles.mixedTextContainer}>
@@ -176,14 +195,6 @@ export default ({navigation}): React.ReactElement => {
   );
 };
 
-const alertStyles = StyleSheet.create({
-  container: {
-    backgroundColor: globalColors.greenPrimary,
-    width: '100%',
-    margin: 0,
-    borderRadius: 15,
-  },
-});
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,9 +202,6 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     paddingTop: 24,
-  },
-  signUpButton: {
-    marginTop: 56,
   },
   mixedTextContainer: {
     marginVertical: 32,

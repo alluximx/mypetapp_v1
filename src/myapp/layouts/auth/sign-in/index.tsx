@@ -1,8 +1,7 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 import {ErrorMessage} from '../../../components/error-message';
-import {AuthContext} from '../../../context/AuthContext';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CloseButton from '../../../components/buttons/close-button';
@@ -11,70 +10,80 @@ import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
+// Global styles
+import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
+// Context
+import {AuthContext} from '../../../context/AuthContext';
+
+interface SignInFormFields {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export default ({navigation, error}): React.ReactElement => {
-  const [errors, setErrors] = useState({
-    emailError: false,
-    passwordError: false,
-  });
-  const [data, setData] = useState({
+  // Context
+  const authContext = useContext(AuthContext);
+  // Default values for form fields.
+  const defaultValues = {
+    username: '',
     email: '',
     password: '',
+    non_field_errors: '',
+  };
+
+  // Form fields...
+  const [form, setForm] = useState<SignInFormFields>(defaultValues);
+  const [errors, setErrors] = useState<SignInFormFields>({
+    username: '',
+    email: '',
+    password: '',
+    non_field_errors: '',
   });
 
-  const [alert, setAlert] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const [loading, setLoading] = useState(false);
+  // Has filled every field...
+  const formCompleted = form.email !== '' && form.password !== '';
+  // Are there any errors...
+  const hasErrors =
+    errors.email !== '' ||
+    errors.password !== '' ||
+    errors.non_field_errors !== '';
 
-  // const emailRef = useRef<any>(null);
-  // const passwordRef = useRef<Input>(null);
-  // const {signIn} = useContext(AuthContext);
+  /*****************
+   * Event Methods *
+   *****************/
 
-  const showAlert = () => {
-    setAlert(true);
+  const onChange = ({name, value}) => {
+    setForm({...form, [name]: value});
   };
-
-  const hideAlert = () => {
-    setAlert(false);
-  };
-
-  useEffect(() => {
-    setErrorMessage(error);
-  }, [error]);
-
-  const login = async () => {
-    navigation && navigation.navigate('Home');
-
-    const authenticateParams = {
-      email: data.email,
-      password: data.password,
-    };
-
-    setErrors({
-      emailError: authenticateParams.email === '',
-      passwordError: authenticateParams.password === '',
-    });
-
-    if (!errors.emailError && !errors.passwordError) {
-      // let response = await signIn(authenticateParams);
-      // if (!response) {
-      //   showAlert();
-      // }
-      // return response;
-      console.log('success');
-    }
-    return false;
-  };
-
-  /**************
-   * Navigation *
-   **************/
 
   const onSignUpTextPress = (): void => {
     navigation && navigation.navigate('SignUp');
   };
 
-  const onSignInButtonPress = (): void => {
-    navigation && navigation.navigate('Home');
+  const onSignInButtonPress = async (): Promise<void> => {
+    // Show spinner
+    setLoading(true);
+    // Clear errors
+    setErrors(defaultValues);
+
+    if (formCompleted) {
+      const response = await authContext.signIn(form);
+
+      if (response.status) {
+        navigation && navigation.navigate('Home');
+      } else {
+        setErrors({
+          ...defaultValues,
+          ...response.data,
+        });
+      }
+    }
+
+    // Hide spinner
+    setLoading(false);
   };
 
   const onForgotPasswordTextPress = (): void => {
@@ -89,14 +98,39 @@ export default ({navigation, error}): React.ReactElement => {
           <CloseButton navigation={navigation} />
           <TitleHeader>Inicia Sesión</TitleHeader>
           <View style={styles.form}>
-            <UserInput placeholder="Correo" />
-            <UserInput placeholder="Contraseña" isPassword={true} />
-            {errorMessage && <ErrorMessage message={errorMessage} />}
+            <UserInput
+              placeholder="Correo"
+              value={form.email}
+              onChangeText={(value: string) => {
+                // onChange({name: 'email', value});
+                setForm({...form, email: value, username: value});
+              }}
+              error={errors.email}
+            />
+            <UserInput
+              placeholder="Contraseña"
+              value={form.password}
+              onChangeText={(value: string) => {
+                onChange({name: 'password', value});
+              }}
+              error={errors.password}
+              isPassword={true}
+            />
+            {hasErrors &&
+              // Map errors...
+              Object.entries(errors).map(([key, value]) => {
+                return (
+                  value !== '' && (
+                    <Text style={styles.errorMessage}>{value}</Text>
+                  )
+                );
+              })}
             <CustomButton
               style={styles.signInButton}
               appearance="control"
               onPress={onSignInButtonPress}
-              isDisabled={true}>
+              isDisabled={formCompleted}
+              isLoading={loading}>
               Iniciar Sesión
             </CustomButton>
           </View>
@@ -134,4 +168,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   signUpLink: {marginLeft: 5},
+  errorMessage: {
+    color: globalColors.red,
+    fontFamily: globalVars.fontRegular,
+  },
 });
