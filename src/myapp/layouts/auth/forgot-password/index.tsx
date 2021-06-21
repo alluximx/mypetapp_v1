@@ -75,9 +75,10 @@ export default ({navigation}): React.ReactElement => {
         });
       }
     } else {
-      const response = await authContext.passwordReset({email: form.email});
+      const response = await authContext.passwordReset({email: form.email, resend: true});
+      // const response = {status: false};
 
-      if (true) {
+      if (response.status) {
         setIsModalVisible(true);
       } else {
         setErrors({

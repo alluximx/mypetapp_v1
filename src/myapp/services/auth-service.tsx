@@ -33,14 +33,23 @@ class AuthService {
   };
 
   PostChangePassword = async (data) => {
-    const request = await axios.post(
-      API_URL + 'dj-rest-auth/password/change/',
-      data,
-      {
-        headers: {'Content-Type': 'application/json'},
-      },
-    );
-    return request;
+    console.log(data);
+    // try {
+    //   const token = await AsyncStorage.getItem('auth_token');
+    //   const request = await axios.post(
+    //     API_URL + 'api/v1/users/check_email/',
+    //     data,
+    //     {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: 'Token ' + token,
+    //       },
+    //     },
+    //   );
+    //   return request;
+    // } catch (error) {
+    //   return {status: false, data: error.response.data};
+    // }
   };
 
   me = async () => {
