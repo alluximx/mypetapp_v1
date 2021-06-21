@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {Layout} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../styles/colors';
@@ -16,6 +16,7 @@ const DefaultLayout = (props): React.ReactElement => {
 const style = StyleSheet.create({
   defaultLayout: {
     padding: globalVars.outsidePadding,
+    paddingBottom: 0,
     backgroundColor: globalColors.backgroundDefault,
     flex: 1,
   },

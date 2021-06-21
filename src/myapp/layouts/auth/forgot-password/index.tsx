@@ -96,7 +96,7 @@ export default ({navigation}): React.ReactElement => {
     if (isSettingPassword) {
       navigation && navigation.navigate('SignIn');
     } else {
-      navigation && navigation.navigate('RecoveryKey');
+      navigation && navigation.navigate('RecoveryKey', {email: form.email});
     }
   };
 

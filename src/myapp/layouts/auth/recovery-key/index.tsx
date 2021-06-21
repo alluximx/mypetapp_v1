@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
+import {useRoute, RouteProp} from '@react-navigation/native';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import BackButton from '../../../components/buttons/back-button';
@@ -20,6 +21,8 @@ import globalStyles from '../../../styles/style';
 import style from '../../../styles/style';
 
 export default ({navigation}): React.ReactElement => {
+  const route = useRoute<RouteProp<{params: {email: string}}, 'params'>>();
+
   const NUMBER_OF_DIGITS = 5;
 
   const [code, setCode] = useState<string>('');
@@ -66,7 +69,7 @@ export default ({navigation}): React.ReactElement => {
           <TitleHeader style={styles.title}>
             Se ha enviado un correo a:
           </TitleHeader>
-          <TitleHeader style={styles.email}>****n.bel@gmail.com</TitleHeader>
+          <TitleHeader style={styles.email}>{route.params.email}</TitleHeader>
           <DefaultText style={styles.subtitle}>
             Ingresa el código de 5 dígitos que enviamos a tu correo.
           </DefaultText>

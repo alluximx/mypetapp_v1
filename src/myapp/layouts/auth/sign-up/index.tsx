@@ -156,10 +156,12 @@ export default ({navigation}): React.ReactElement => {
               />
               {hasErrors &&
                 // Map errors...
-                Object.entries(errors).map(([key, value]) => {
+                Object.entries(errors).map(([_, value], idx) => {
                   return (
                     value !== '' && (
-                      <Text style={styles.errorMessage}>{value}</Text>
+                      <Text key={idx} style={styles.errorMessage}>
+                        {value}
+                      </Text>
                     )
                   );
                 })}
@@ -183,11 +185,11 @@ export default ({navigation}): React.ReactElement => {
           </View>
           <View style={styles.mixedTextContainer}>
             <DefaultText style={styles.defaultText}>
-              Al registrarte confirmas que leíste y aceptas los
+              Al registrarte confirmas que leíste y aceptas los{' '}
+              <AnchorText style={styles.link} onPress={onTermsTextPress}>
+                Términos y Condiciones
+              </AnchorText>
             </DefaultText>
-            <AnchorText style={styles.link} onPress={onTermsTextPress}>
-              Términos y Condiciones
-            </AnchorText>
           </View>
         </View>
       </KeyboardAvoidingView>
