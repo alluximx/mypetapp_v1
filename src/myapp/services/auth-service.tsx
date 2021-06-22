@@ -21,35 +21,66 @@ class AuthService {
     return request;
   };
 
-  PostPasswordReset = async (data) => {
-    const request = await axios.post(
-      API_URL + 'dj-rest-auth/password/reset/',
-      data,
-      {
-        headers: {'Content-Type': 'application/json'},
-      },
-    );
-    return request;
+  PostValidateRecoveryKey = async (data) => {
+    try {
+      // const token = await AsyncStorage.getItem('auth_token');
+      const token = "token 489fff93d8bb357eba2dbe6fefb1f9fea9481af5";
+      const request = await axios.post(
+        API_URL + 'api/v1/users/check_code_password/',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          },
+        },
+      );
+      console.log(request.data)
+      return request;
+    } catch (error) {
+      return {status: false, data: error.response.data};
+    }
   };
 
-  PostChangePassword = async (data) => {
-    console.log(data);
-    // try {
-    //   const token = await AsyncStorage.getItem('auth_token');
-    //   const request = await axios.post(
-    //     API_URL + 'api/v1/users/check_email/',
-    //     data,
-    //     {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: 'Token ' + token,
-    //       },
-    //     },
-    //   );
-    //   return request;
-    // } catch (error) {
-    //   return {status: false, data: error.response.data};
-    // }
+  PostGenerateRecoveryKey = async (data) => {
+    try {
+      // const token = await AsyncStorage.getItem('auth_token');
+      const token = "489fff93d8bb357eba2dbe6fefb1f9fea9481af5";      
+      const request = await axios.post(
+        API_URL + 'api/v1/users/check_email/',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'token ' + token,
+          },
+        },
+      );
+      return request;
+    } catch (error) {
+      return {data: { status: false, ...error.response.data}};
+    }
+  };
+
+  PutUpdatePassword = async (data) => {
+    try {
+      // const token = await AsyncStorage.getItem('auth_token');
+      const token = "489fff93d8bb357eba2dbe6fefb1f9fea9481af5";      
+      const request = await axios.put(
+        API_URL + 'api/v1/users/' + data.userId + '/update_password/',
+        data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'token ' + token,
+          },
+        },
+      );
+      return request;
+    } catch (error) {
+      console.log(error);
+      return {data: { status: false, ...error.response.data}};
+    }
   };
 
   me = async () => {

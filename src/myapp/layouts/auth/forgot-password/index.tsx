@@ -13,8 +13,8 @@ import CustomModal from '../../../components/modals/custom-modal';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
-// Context
-import {AuthContext} from '../../../context/AuthContext';
+// Services
+import auth_service from '../../../services/auth-service';
 
 interface ForgotPasswordFormFields {
   email: string;
@@ -22,8 +22,6 @@ interface ForgotPasswordFormFields {
 }
 
 export default ({navigation}): React.ReactElement => {
-  // Context
-  const authContext = useContext(AuthContext);
 
   const defaultValues = {
     email: '',
@@ -31,11 +29,11 @@ export default ({navigation}): React.ReactElement => {
   };
   // Form fields...
   const [form, setForm] = useState<ForgotPasswordFormFields>(defaultValues);
-  const [errors, setErrors] = useState<ForgotPasswordFormFields>({
+  const [errors, setErrors] = useState({
     ...defaultValues,
-    new_password1: '',
-    new_password2: '',
+    detail: '',
   });
+  const [userId, setUserId] = useState(null);
   // Modal and spinner.
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,23 +48,23 @@ export default ({navigation}): React.ReactElement => {
     (form.password !== '' && isSettingPassword);
 
   // Are there any errors...
-  const hasErrors = errors.email !== '' || errors.password !== '';
+  const hasErrors = errors.email !== '' || errors.password !== '' || errors.detail !== '';
 
   const onResetPasswordButtonPress = async (): Promise<void> => {
     setLoading(true);
     // Clear errors
-    setErrors(defaultValues);
+    setErrors({...defaultValues, "detail": ''});
 
     if (isSettingPassword) {
       // navigation && navigation.navigate('SignIn');
-      const response = await authContext.passwordChange({
+      const response = await auth_service.PutUpdatePassword({
         new_password1: form.password,
         new_password2: form.password,
       });
 
       console.log(response.data);
 
-      if (true) {
+      if (response.data.status) {
         setIsModalVisible(true);
       } else {
         setErrors({
@@ -75,18 +73,19 @@ export default ({navigation}): React.ReactElement => {
         });
       }
     } else {
-      const response = await authContext.passwordReset({email: form.email, resend: true});
-      // const response = {status: false};
+      const response = await auth_service.PostGenerateRecoveryKey({email: form.email, resend: false});
 
-      if (response.status) {
+      console.log(response.data)
+
+      if (response.data.status) {
         setIsModalVisible(true);
+        setUserId(response.data.user.id);
       } else {
         setErrors({
           ...defaultValues,
           ...response.data,
         });
       }
-      // navigation && navigation.navigate('RecoveryKey');
     }
 
     setLoading(false);
@@ -97,7 +96,7 @@ export default ({navigation}): React.ReactElement => {
     if (isSettingPassword) {
       navigation && navigation.navigate('SignIn');
     } else {
-      navigation && navigation.navigate('RecoveryKey', {email: form.email});
+      navigation && navigation.navigate('RecoveryKey', {email: form.email, userId: userId});
     }
   };
 
@@ -153,7 +152,7 @@ export default ({navigation}): React.ReactElement => {
         </View>
         {hasErrors &&
           // Map errors...
-          Object.entries(errors).map(([key, value]) => {
+          Object.entries(errors).map(([_, value]) => {
             return (
               value !== '' && <Text style={styles.errorMessage}>{value}</Text>
             );
