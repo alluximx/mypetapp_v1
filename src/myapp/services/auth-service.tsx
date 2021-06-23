@@ -23,19 +23,13 @@ class AuthService {
 
   PostValidateRecoveryKey = async (data) => {
     try {
-      // const token = await AsyncStorage.getItem('auth_token');
-      const token = "token 489fff93d8bb357eba2dbe6fefb1f9fea9481af5";
       const request = await axios.post(
         API_URL + 'api/v1/users/check_code_password/',
         data,
         {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
+          headers: {'Content-Type': 'application/json'},
         },
       );
-      console.log(request.data)
       return request;
     } catch (error) {
       return {status: false, data: error.response.data};
@@ -44,42 +38,34 @@ class AuthService {
 
   PostGenerateRecoveryKey = async (data) => {
     try {
-      // const token = await AsyncStorage.getItem('auth_token');
-      const token = "489fff93d8bb357eba2dbe6fefb1f9fea9481af5";      
       const request = await axios.post(
         API_URL + 'api/v1/users/check_email/',
         data,
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'token ' + token,
           },
         },
       );
       return request;
     } catch (error) {
-      return {data: { status: false, ...error.response.data}};
+      return {data: {status: false, ...error.response.data}};
     }
   };
 
   PutUpdatePassword = async (data) => {
     try {
-      // const token = await AsyncStorage.getItem('auth_token');
-      const token = "489fff93d8bb357eba2dbe6fefb1f9fea9481af5";      
       const request = await axios.put(
         API_URL + 'api/v1/users/' + data.userId + '/update_password/',
         data,
         {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'token ' + token,
-          },
+          headers: {'Content-Type': 'application/json'},
         },
       );
       return request;
     } catch (error) {
       console.log(error);
-      return {data: { status: false, ...error.response.data}};
+      return {data: {status: false, ...error.response.data}};
     }
   };
 

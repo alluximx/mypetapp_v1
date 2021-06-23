@@ -22,7 +22,6 @@ interface ForgotPasswordFormFields {
 }
 
 export default ({navigation}): React.ReactElement => {
-
   const defaultValues = {
     email: '',
     password: '',
@@ -38,7 +37,15 @@ export default ({navigation}): React.ReactElement => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const route = useRoute<
-    RouteProp<{params: {isSettingPassword: boolean}}, 'params'>
+    RouteProp<
+      {
+        params: {
+          isSettingPassword: boolean;
+          userId: number;
+        };
+      },
+      'params'
+    >
   >();
   const isSettingPassword: boolean = route.params.isSettingPassword;
 
@@ -48,18 +55,19 @@ export default ({navigation}): React.ReactElement => {
     (form.password !== '' && isSettingPassword);
 
   // Are there any errors...
-  const hasErrors = errors.email !== '' || errors.password !== '' || errors.detail !== '';
+  const hasErrors =
+    errors.email !== '' || errors.password !== '' || errors.detail !== '';
 
   const onResetPasswordButtonPress = async (): Promise<void> => {
     setLoading(true);
     // Clear errors
-    setErrors({...defaultValues, "detail": ''});
+    setErrors({...defaultValues, detail: ''});
 
     if (isSettingPassword) {
       // navigation && navigation.navigate('SignIn');
       const response = await auth_service.PutUpdatePassword({
-        new_password1: form.password,
-        new_password2: form.password,
+        userId: route.params.userId,
+        password: form.password,
       });
 
       console.log(response.data);
@@ -73,9 +81,12 @@ export default ({navigation}): React.ReactElement => {
         });
       }
     } else {
-      const response = await auth_service.PostGenerateRecoveryKey({email: form.email, resend: false});
+      const response = await auth_service.PostGenerateRecoveryKey({
+        email: form.email,
+        resend: false,
+      });
 
-      console.log(response.data)
+      console.log(response.data);
 
       if (response.data.status) {
         setIsModalVisible(true);
@@ -96,7 +107,8 @@ export default ({navigation}): React.ReactElement => {
     if (isSettingPassword) {
       navigation && navigation.navigate('SignIn');
     } else {
-      navigation && navigation.navigate('RecoveryKey', {email: form.email, userId: userId});
+      navigation &&
+        navigation.navigate('RecoveryKey', {email: form.email, userId: userId});
     }
   };
 

@@ -1,7 +1,6 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import {ErrorMessage} from '../../../components/error-message';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CloseButton from '../../../components/buttons/close-button';
@@ -14,82 +13,60 @@ import UserInput from '../../../components/inputs/user-input';
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Context
-import {AuthContext} from '../../../context/AuthContext';
+import {AuthContext, AuthContextType} from '../../../context/AuthContext';
+// Types
+import {SignInErrors, SignInFormFields} from '../../../types/auth/sign-in';
 
-interface SignInFormFields {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export default ({navigation, error}): React.ReactElement => {
-  // Context
-  const authContext = useContext(AuthContext);
+export default ({navigation}): React.ReactElement => {
   // Default values for form fields.
-  const defaultValues = {
-    username: '',
-    email: '',
-    password: '',
-    non_field_errors: '',
-  };
+  const defaultValues = {email: '', password: ''};
+  // Default values for errors.
+  const defaultErrors = {password: '', non_field_errors: ''};
 
-  // Form fields...
+  const authContext = useContext<AuthContextType>(AuthContext);
   const [form, setForm] = useState<SignInFormFields>(defaultValues);
-  const [errors, setErrors] = useState<SignInFormFields>({
-    username: '',
-    email: '',
-    password: '',
-    non_field_errors: '',
-  });
-
+  const [errors, setErrors] = useState<SignInErrors>(defaultErrors);
   const [loading, setLoading] = useState(false);
-  // Has filled every field...
+
+  // Has filled every field of the form...
   const formCompleted = form.email !== '' && form.password !== '';
   // Are there any errors...
-  const hasErrors =
-    errors.email !== '' ||
-    errors.password !== '' ||
-    errors.non_field_errors !== '';
+  const hasErrors = errors.password !== '' || errors.non_field_errors !== '';
 
-  /*****************
-   * Event Methods *
-   *****************/
+  /**************
+   *** Events ***
+   **************/
+  const onChange = ({name, value}): void => setForm({...form, [name]: value});
 
-  const onChange = ({name, value}) => {
-    setForm({...form, [name]: value});
-  };
-
-  const onSignUpTextPress = (): void => {
+  const onSignUpTextPress = (): void =>
     navigation && navigation.navigate('SignUp');
-  };
 
   const onSignInButtonPress = async (): Promise<void> => {
-    // Show spinner
+    // Show spinner.
     setLoading(true);
-    // Clear errors
-    setErrors(defaultValues);
+    // Clear errors.
+    setErrors(defaultErrors);
 
+    // If the form is filled...
     if (formCompleted) {
       const response = await authContext.signIn(form);
 
+      // If there are no errors...
       if (response.status) {
         navigation && navigation.navigate('Home');
       } else {
-        setErrors({
-          ...defaultValues,
-          ...response.data,
-        });
+        // Update errors.
+        setErrors({...defaultErrors, ...response.data});
       }
     }
 
-    // Hide spinner
+    // Hide spinner.
     setLoading(false);
   };
 
-  const onForgotPasswordTextPress = (): void => {
+  const onForgotPasswordTextPress = (): void =>
     navigation &&
-      navigation.navigate('ForgotPassword', {isSettingPassword: false});
-  };
+    navigation.navigate('ForgotPassword', {isSettingPassword: false});
 
   return (
     <DefaultLayout>
@@ -102,10 +79,9 @@ export default ({navigation, error}): React.ReactElement => {
               placeholder="Correo"
               value={form.email}
               onChangeText={(value: string) => {
-                // onChange({name: 'email', value});
-                setForm({...form, email: value, username: value});
+                onChange({name: 'email', value});
               }}
-              error={errors.email}
+              error={errors.non_field_errors}
             />
             <UserInput
               placeholder="Contraseña"
@@ -118,7 +94,7 @@ export default ({navigation, error}): React.ReactElement => {
             />
             {hasErrors &&
               // Map errors...
-              Object.entries(errors).map(([key, value]) => {
+              Object.entries(errors).map(([, value]) => {
                 return (
                   value !== '' && (
                     <Text style={styles.errorMessage}>{value}</Text>

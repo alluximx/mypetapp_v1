@@ -25,7 +25,9 @@ import style from '../../../styles/style';
 import auth_service from '../../../services/auth-service';
 
 export default ({navigation}): React.ReactElement => {
-  const route = useRoute<RouteProp<{params: {email: string, userId: number}}, 'params'>>();
+  const route = useRoute<
+    RouteProp<{params: {email: string; userId: number}}, 'params'>
+  >();
 
   const NUMBER_OF_DIGITS = 5;
 
@@ -40,14 +42,17 @@ export default ({navigation}): React.ReactElement => {
     // Show spinner.
     setLoading(true);
 
-    const response = await auth_service.PostGenerateRecoveryKey({email: route.params.email, resend: true});
+    const response = await auth_service.PostGenerateRecoveryKey({
+      email: route.params.email,
+      resend: true,
+    });
 
     if (response.data.status) {
       // Show modal.
       setIsModalVisible(true);
     } else {
       // Show Error.
-      console.log("error");
+      console.log('error');
     }
 
     // Hide spinner
@@ -59,14 +64,17 @@ export default ({navigation}): React.ReactElement => {
 
     // Check is filled.
     if (code.length === NUMBER_OF_DIGITS) {
-      
-      const response = await auth_service.PostValidateRecoveryKey(
-        {id: route.params.userId, code}
-      );
+      const response = await auth_service.PostValidateRecoveryKey({
+        id: route.params.userId,
+        code,
+      });
 
       if (response.data.status) {
         setMessage('Código correcto');
-        navigation.navigate('ForgotPassword', {isSettingPassword: true});
+        navigation.navigate('ForgotPassword', {
+          isSettingPassword: true,
+          userId: route.params.userId,
+        });
       } else {
         setError(response.data.message);
         setCode('');
@@ -101,10 +109,10 @@ export default ({navigation}): React.ReactElement => {
   return (
     <DefaultLayout>
       <KeyboardAvoidingView>
-      <CustomModal
+        <CustomModal
           visible={isModalVisible}
-          title='Código reenviado'
-          text='Te hemos enviado a tu correo un código de 5 dígitos.'
+          title="Código reenviado"
+          text="Te hemos enviado a tu correo un código de 5 dígitos."
           onAccept={() => setIsModalVisible(false)}
           onCancel={null}
           showCancel={false}
@@ -120,7 +128,7 @@ export default ({navigation}): React.ReactElement => {
             Ingresa el código de 5 dígitos que enviamos a tu correo.
           </DefaultText>
         </View>
-        { loading ? (
+        {loading ? (
           <View style={styles.spinner}>
             <Spinner status="success" />
           </View>
@@ -132,10 +140,16 @@ export default ({navigation}): React.ReactElement => {
               </View>
             </TouchableWithoutFeedback>
             <View style={styles.feedbackContainer}>
-              {error !== '' && <DefaultText style={styles.errorMessage}>{error}</DefaultText>}
-              {message !== '' && <DefaultText style={styles.successMessage}>{message}</DefaultText>}
+              {error !== '' && (
+                <DefaultText style={styles.errorMessage}>{error}</DefaultText>
+              )}
+              {message !== '' && (
+                <DefaultText style={styles.successMessage}>
+                  {message}
+                </DefaultText>
+              )}
             </View>
-            <View style={globalStyles.mixedTextContainer}>  
+            <View style={globalStyles.mixedTextContainer}>
               <DefaultText>¿No recibiste el código?</DefaultText>
               <AnchorText
                 style={globalStyles.mixedTextContainerLink}
@@ -190,14 +204,14 @@ const styles = StyleSheet.create({
   errorMessage: {
     color: 'red',
     textAlign: 'center',
-    fontSize: 14
+    fontSize: 14,
   },
   successMessage: {
     color: globalColors.greenPrimary,
     textAlign: 'center',
-    fontSize: 14
+    fontSize: 14,
   },
   spinner: {
     alignItems: 'center',
-  }
+  },
 });
