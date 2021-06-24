@@ -49,7 +49,7 @@ const App = ({mapping, theme}): React.ReactElement => {
   );
 
   return (
-    <React.Fragment>
+    <>
       <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
       <AppearanceProvider>
         <ApplicationProvider {...currentMapping} theme={currentTheme}>
@@ -63,7 +63,7 @@ const App = ({mapping, theme}): React.ReactElement => {
           </Theming.MappingContext.Provider>
         </ApplicationProvider>
       </AppearanceProvider>
-    </React.Fragment>
+    </>
   );
 };
 
