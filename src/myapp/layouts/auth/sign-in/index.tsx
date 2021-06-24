@@ -1,10 +1,6 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {View} from 'react-native';
-import {Input, StyleService, useStyleSheet} from '@ui-kitten/components';
+import React, {useContext, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import {ErrorMessage} from '../../../components/error-message';
-import {AuthContext} from '../../../context/AuthContext';
-// import AwesomeAlert from 'react-native-awesome-alerts';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CloseButton from '../../../components/buttons/close-button';
@@ -13,68 +9,64 @@ import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
+// Global styles
+import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
+// Context
+import {AuthContext, AuthContextType} from '../../../context/AuthContext';
+// Types
+import {SignInErrors, SignInFormFields} from '../../../types/auth/sign-in';
 
-export default ({navigation, error}): React.ReactElement => {
-  const [email, setEmail] = React.useState<string>();
-  const [password, setPassword] = React.useState<string>();
-  const [alert, setAlert] = React.useState<boolean>(false);
+export default ({navigation}): React.ReactElement => {
+  // Default values for form fields.
+  const defaultValues = {email: '', password: ''};
+  // Default values for errors.
+  const defaultErrors = {password: '', non_field_errors: ''};
 
-  const [passwordVisible, setPasswordVisible] = React.useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>();
+  const authContext = useContext<AuthContextType>(AuthContext);
+  const [form, setForm] = useState<SignInFormFields>(defaultValues);
+  const [errors, setErrors] = useState<SignInErrors>(defaultErrors);
+  const [loading, setLoading] = useState(false);
 
-  const styles = useStyleSheet(themedStyles);
-  const passwordRef = useRef<Input>(null);
-  // const {signIn} = useContext(AuthContext);
+  // Has filled every field of the form...
+  const formCompleted = form.email !== '' && form.password !== '';
+  // Are there any errors...
+  const hasErrors = errors.password !== '' || errors.non_field_errors !== '';
 
-  const showAlert = () => {
-    setAlert(true);
-  };
+  /**************
+   *** Events ***
+   **************/
+  const onChange = ({name, value}): void => setForm({...form, [name]: value});
 
-  const hideAlert = () => {
-    setAlert(false);
-  };
-
-  useEffect(() => {
-    setErrorMessage(error);
-  }, [error]);
-
-  const login = async () => {
-    navigation && navigation.navigate('Home');
-
-    const authenticateParams = {
-      email: email,
-      password: password,
-    };
-
-    // setEmailError(authenticateParams.email === '');
-
-    // setPasswordError(authenticateParams.password === '');
-
-    // if (authenticateParams.email !== '' || authenticateParams.password !== '') {
-    //   let response = await signIn(authenticateParams);
-    //   if (!response) {
-    //     showAlert();
-    //   }
-    //   return response;
-    // }
-    return false;
-  };
-
-  const onSignUpTextPress = (): void => {
+  const onSignUpTextPress = (): void =>
     navigation && navigation.navigate('SignUp');
+
+  const onSignInButtonPress = async (): Promise<void> => {
+    // Show spinner.
+    setLoading(true);
+    // Clear errors.
+    setErrors(defaultErrors);
+
+    // If the form is filled...
+    if (formCompleted) {
+      const response = await authContext.signIn(form);
+
+      // If there are no errors...
+      if (response.status) {
+        navigation && navigation.navigate('Home');
+      } else {
+        // Update errors.
+        setErrors({...defaultErrors, ...response.data});
+      }
+    }
+
+    // Hide spinner.
+    setLoading(false);
   };
 
-  const onSignInButtonPress = (): void => {
-    navigation && navigation.navigate('Home');
-  };
-
-  const onForgotPasswordTextPress = (): void => {
-    navigation && navigation.navigate('ForgotPassword');
-  };
-
-  const onPasswordIconPress = (): void => {
-    setPasswordVisible(!passwordVisible);
-  };
+  const onForgotPasswordTextPress = (): void =>
+    navigation &&
+    navigation.navigate('ForgotPassword', {isSettingPassword: false});
 
   return (
     <DefaultLayout>
@@ -83,14 +75,38 @@ export default ({navigation, error}): React.ReactElement => {
           <CloseButton navigation={navigation} />
           <TitleHeader>Inicia Sesión</TitleHeader>
           <View style={styles.form}>
-            <UserInput placeholder="Correo" />
-            <UserInput placeholder="Contraseña" isPassword={true} />
-            {errorMessage && <ErrorMessage message={errorMessage} />}
+            <UserInput
+              placeholder="Correo"
+              value={form.email}
+              onChangeText={(value: string) => {
+                onChange({name: 'email', value});
+              }}
+              error={errors.non_field_errors}
+            />
+            <UserInput
+              placeholder="Contraseña"
+              value={form.password}
+              onChangeText={(value: string) => {
+                onChange({name: 'password', value});
+              }}
+              error={errors.password}
+              isPassword={true}
+            />
+            {hasErrors &&
+              // Map errors...
+              Object.entries(errors).map(([, value]) => {
+                return (
+                  value !== '' && (
+                    <Text style={styles.errorMessage}>{value}</Text>
+                  )
+                );
+              })}
             <CustomButton
               style={styles.signInButton}
               appearance="control"
               onPress={onSignInButtonPress}
-              isDisabled={true}>
+              isDisabled={formCompleted}
+              isLoading={loading}>
               Iniciar Sesión
             </CustomButton>
           </View>
@@ -106,27 +122,12 @@ export default ({navigation, error}): React.ReactElement => {
             </AnchorText>
           </View>
         </View>
-
-        {/* <AwesomeAlert
-        show={alert}
-        showProgress={false}
-        label="Iniciar Sesión"
-        message="Contraseña o usuario incorrecto, revisa que hayas ingresado tus datos correctamente."
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        showConfirmButton={true}
-        confirmText="Aceptar"
-        confirmButtonColor="#DD6B55"
-        onConfirmPressed={() => {
-          hideAlert();
-        }}
-      /> */}
       </KeyboardAvoidingView>
     </DefaultLayout>
   );
 };
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   form: {
     marginTop: 16,
   },
@@ -143,4 +144,8 @@ const themedStyles = StyleService.create({
     justifyContent: 'center',
   },
   signUpLink: {marginLeft: 5},
+  errorMessage: {
+    color: globalColors.red,
+    fontFamily: globalVars.fontRegular,
+  },
 });

@@ -1,12 +1,19 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Button, Text} from '@ui-kitten/components';
+import {StyleSheet, View} from 'react-native';
+import {Button, Spinner, Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 
 const CustomButton = (props): React.ReactElement => {
+  const loadingSpinner = () => (
+    <View style={styles.spinner}>
+      <Spinner size="medium" status="basic" />
+    </View>
+  );
+
   return props.type === 'primary' ? (
+    // Light Button
     <Button
       appearance="ghost"
       style={[styles.button, styles.lightButton, props.style]}
@@ -14,12 +21,21 @@ const CustomButton = (props): React.ReactElement => {
       {() => <Text style={styles.lightButtonText}>{props.children}</Text>}
     </Button>
   ) : (
-    // Not finished yet...
+    // Default Button...
     <Button
-      style={[styles.button, styles.defaultButton, props.style]}
+      style={[
+        styles.button,
+        props.isDisabled ? styles.defaultButtonDisabled : styles.defaultButton,
+        props.style,
+      ]}
       onPress={props.onPress}
-      disabled={props.isDisabled}>
-      {() => <Text style={styles.defaultButtonText}>{props.children}</Text>}
+      disabled={!props.isDisabled}
+      accessoryLeft={props.isLoading ? loadingSpinner : null}>
+      {() =>
+        !props.isLoading && (
+          <Text style={styles.defaultButtonText}>{props.children}</Text>
+        )
+      }
     </Button>
   );
 };
@@ -47,6 +63,10 @@ const styles = StyleSheet.create({
     fontFamily: globalVars.fontBold,
     fontSize: 17,
   },
+  defaultButtonDisabled: {
+    backgroundColor: globalColors.greenSecondary,
+  },
+  spinner: {paddingHorizontal: 10},
 });
 
 export default CustomButton;

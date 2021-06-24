@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, StyleSheet} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 // My components
 import AnchorText from '../../components/texts/anchor-text';
@@ -55,6 +55,8 @@ export default ({navigation}): React.ReactElement => {
   );
 };
 
+const {width, height} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: globalColors.greenPrimary,
@@ -68,7 +70,8 @@ const styles = StyleSheet.create({
   dogImage: {
     alignSelf: 'center',
     resizeMode: 'contain',
-    height: '50%',
+    height: height - 420,
+    maxHeight: 350,
     marginVertical: 5,
   },
   h1: {
@@ -95,6 +98,6 @@ const styles = StyleSheet.create({
   },
   signInAsInvited: {
     textAlign: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
   },
 });

@@ -1,12 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button, Input, Text } from '@ui-kitten/components';
-import { ImageOverlay } from './extra/image-overlay.component';
-import { EmailIcon } from './extra/icons';
-import { KeyboardAvoidingView } from './extra/3rd-party';
+import {StyleSheet, View} from 'react-native';
+import {Button, Input, Text} from '@ui-kitten/components';
+import {ImageOverlay} from './extra/image-overlay.component';
+import {KeyboardAvoidingView} from './extra/3rd-party';
 
-export default ({ navigation }): React.ReactElement => {
-
+export default ({navigation}): React.ReactElement => {
   const [email, setEmail] = React.useState<string>();
 
   const onResetPasswordButtonPress = (): void => {
@@ -18,29 +16,21 @@ export default ({ navigation }): React.ReactElement => {
       <ImageOverlay
         style={styles.container}
         source={require('./assets/image-background.jpg')}>
-        <Text
-          style={styles.forgotPasswordLabel}
-          category='h4'
-          status='control'>
+        <Text style={styles.forgotPasswordLabel} category="h4" status="control">
           Forgot Password
         </Text>
-        <Text
-          style={styles.enterEmailLabel}
-          status='control'>
+        <Text style={styles.enterEmailLabel} status="control">
           Please enter your email address
         </Text>
         <View style={styles.formContainer}>
           <Input
-            status='control'
-            placeholder='Email'
-            icon={EmailIcon}
+            status="control"
+            placeholder="Email"
             value={email}
             onChangeText={setEmail}
           />
         </View>
-        <Button
-          size='giant'
-          onPress={onResetPasswordButtonPress}>
+        <Button size="giant" onPress={onResetPasswordButtonPress}>
           RESET PASSWORD
         </Button>
       </ImageOverlay>
