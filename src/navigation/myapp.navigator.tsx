@@ -1,17 +1,20 @@
 import React, {useEffect, useMemo, useReducer} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStackNavigator} from '@react-navigation/stack';
-// AUTH SCREENS
-import {SignInScreen} from '../myapp/auth/sign-in.component';
-import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
-import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
-import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
 // Services
 import AuthService from '../myapp/services/auth-service';
 // Context
 import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
 // Reducer
 import {reducer, initialState} from '../../src/reducer';
+/***************
+ *** SCREENS ***
+ ***************/
+// AUTH
+import {SignInScreen} from '../myapp/auth/sign-in.component';
+import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
+import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
+import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
 // OTHER
 import {StartScreen} from '../myapp/scenes/start/start.component';
 import {TermsScreen} from '../myapp/scenes/terms/terms.component';
@@ -36,7 +39,7 @@ export const MyAppNavigator = (): React.ReactElement => {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken: string;
 
       try {
         userToken = await AsyncStorage.getItem('auth_token');
@@ -50,7 +53,7 @@ export const MyAppNavigator = (): React.ReactElement => {
   }, []);
 
   const authContext = useMemo(
-    () => ({
+    (): AuthContextType => ({
       signIn: async (data) => {
         try {
           const response = await AuthService.PostLogin(data);
@@ -97,8 +100,8 @@ export const MyAppNavigator = (): React.ReactElement => {
   return (
     <AuthContext.Provider value={authContext}>
       <Stack.Navigator headerMode="none">
-        {/* AUTH */}
         <Stack.Screen name="Start" component={StartScreen} />
+        {/* AUTH */}
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Terms" component={TermsScreen} />
