@@ -74,25 +74,11 @@ export const MyAppNavigator = (): React.ReactElement => {
           return {status: false, data: error.response.data};
         }
       },
-      // personalData: async (data) => {
-      //   try {
-      //     const response = await AuthService.PostLogin(data);
-      //     await AsyncStorage.setItem('auth_token', response.data.token);
-      //     return true;
-      //   } catch (e) {
-      //     // console.log(e);
-      //   }
-      // },
       // To switch from Register screens to User screens
       goHome: async () => {
         const token = await AsyncStorage.getItem('auth_token');
         dispatch({type: 'SIGN_IN', token: token});
       },
-      // signOut: async () => {
-      //   await AsyncStorage.removeItem('auth_token');
-      //   await queryClient.clear();
-      //   dispatch({type: 'SIGN_OUT'});
-      // },
     }),
     [],
   );
