@@ -3,48 +3,21 @@ import {StyleSheet, View} from 'react-native';
 import {
   Drawer,
   DrawerElement,
-  DrawerHeaderElement,
   DrawerItem,
+  DrawerItemElement,
   Layout,
   Icon,
-  MenuItemType,
   Text,
 } from '@ui-kitten/components';
-import {BookIcon, GithubIcon} from '../../components/icons';
 import {SafeAreaLayout} from '../../components/safe-area-layout.component';
-import {WebBrowserService} from '../../services/web-browser.service';
 import {AppInfoService} from '../../services/app-info.service';
-
-const DATA: MenuItemType[] = [
-  {title: 'Libraries', icon: GithubIcon},
-  {title: 'Documentation', icon: BookIcon},
-];
-
-const version: string = AppInfoService.getVersion();
 
 export const HomeDrawer = ({navigation}): DrawerElement => {
   const onHomeButtonPress = (): void => {
     navigation && navigation.navigate('Home');
   };
 
-  const onItemSelect = (index: number): void => {
-    switch (index) {
-      case 0: {
-        navigation.toggleDrawer();
-        navigation.navigate('Home');
-        return;
-      }
-      case 1: {
-        WebBrowserService.openBrowserAsync(
-          'https://akveo.github.io/react-native-ui-kitten',
-        );
-        navigation.toggleDrawer();
-        return;
-      }
-    }
-  };
-
-  const renderHeader = (): DrawerHeaderElement => (
+  const renderHeader = (): DrawerItemElement => (
     <Layout style={styles.header} level="2">
       <View style={styles.profileContainer}>
         {/* <Avatar
@@ -61,7 +34,7 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
     </Layout>
   );
 
-  const renderFooter = (): DrawerHeaderElement => (
+  const renderFooter = (): DrawerItemElement => (
     <Layout style={styles.header} level="2">
       <View style={styles.profileContainer}>
         <Text style={styles.profileName} category="s2">

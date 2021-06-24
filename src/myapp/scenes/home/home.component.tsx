@@ -7,13 +7,11 @@ import {DrawerShowcase} from '../components/drawer/drawer-showcase.component';
 
 export const HomeScreen = ({navigation}): React.ReactElement => {
   const renderRightActions = (): React.ReactElement => (
-    <React.Fragment>
-      <DrawerShowcase onPress={navigation.toggleDrawer} />
-    </React.Fragment>
+    <DrawerShowcase onPress={navigation.toggleDrawer} />
   );
   return (
     <SafeAreaLayout style={styles.container} insets="top">
-      <TopNavigation title="Inicio" accessoryRight={renderRightActions} />
+      <TopNavigation title="Inicio" accessoryLeft={renderRightActions} />
       <Divider />
       <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ContentView navigation={navigation} />

@@ -103,8 +103,8 @@ export const MyAppNavigator = (): React.ReactElement => {
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        {/* OTHER */}
         <Stack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
+        {/* OTHER */}
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
         <Stack.Screen name="AddVaccine" component={AddVaccineScreen} />
