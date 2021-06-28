@@ -1,9 +1,8 @@
 import React, {useContext, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
+import {useRoute, RouteProp} from '@react-navigation/native';
 // My Components
-import BackButton from '../../../components/buttons/back-button';
 import CustomButton from '../../../components/buttons/custom-button';
 import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
@@ -64,13 +63,10 @@ export default ({navigation}): React.ReactElement => {
     setErrors({...defaultValues, detail: ''});
 
     if (isSettingPassword) {
-      // navigation && navigation.navigate('SignIn');
       const response = await auth_service.PutUpdatePassword({
         userId: route.params.userId,
         password: form.password,
       });
-
-      console.log(response.data);
 
       if (response.data.status) {
         setIsModalVisible(true);
@@ -86,11 +82,14 @@ export default ({navigation}): React.ReactElement => {
         resend: false,
       });
 
-      console.log(response.data);
-
       if (response.data.status) {
-        setIsModalVisible(true);
-        setUserId(response.data.user.id);
+        const userId = response.data.user.id;
+        setUserId(userId);
+        navigation &&
+          navigation.navigate('RecoveryKey', {
+            email: form.email,
+            userId: userId,
+          });
       } else {
         setErrors({
           ...defaultValues,
@@ -104,12 +103,7 @@ export default ({navigation}): React.ReactElement => {
 
   const onModalAccept = (): void => {
     setIsModalVisible(false);
-    if (isSettingPassword) {
-      navigation && navigation.navigate('SignIn');
-    } else {
-      navigation &&
-        navigation.navigate('RecoveryKey', {email: form.email, userId: userId});
-    }
+    navigation && navigation.navigate('SignIn');
   };
 
   return (
@@ -130,7 +124,6 @@ export default ({navigation}): React.ReactElement => {
           showCancel={false}
           labelAccept="Entendido"
         />
-        <BackButton navigation={navigation} />
         <View>
           <TitleHeader style={isSettingPassword && styles.setPasswordSpace}>
             Restablecer Contraseña

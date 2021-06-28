@@ -19,11 +19,7 @@ const BackButton = (props): React.ReactElement => {
 
 const styles = StyleSheet.create({
   backButton: {
-    width: 40,
-    height: 40,
-    marginLeft: -5,
-    marginTop: 15,
-    marginBottom: 10,
+    marginVertical: 10,
   },
 });
 

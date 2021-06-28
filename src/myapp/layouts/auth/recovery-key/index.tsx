@@ -11,7 +11,6 @@ import {useRoute, RouteProp} from '@react-navigation/native';
 import {Spinner} from '@ui-kitten/components';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
-import BackButton from '../../../components/buttons/back-button';
 import CustomModal from '../../../components/modals/custom-modal';
 import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
@@ -20,7 +19,6 @@ import RecoveryCodeInput from '../../../components/inputs/recovery-code-input';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalStyles from '../../../styles/style';
-import style from '../../../styles/style';
 // Services
 import auth_service from '../../../services/auth-service';
 
@@ -118,7 +116,6 @@ export default ({navigation}): React.ReactElement => {
           showCancel={false}
           labelAccept="Entendido"
         />
-        <BackButton navigation={navigation} />
         <View>
           <TitleHeader style={styles.title}>
             Se ha enviado un correo a:

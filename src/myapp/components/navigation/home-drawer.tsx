@@ -1,93 +1,74 @@
 import React from 'react';
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  Drawer,
-  DrawerElement,
-  DrawerItemElement,
-  Layout,
-  Icon,
-  Text,
-} from '@ui-kitten/components';
-import {SafeAreaLayout} from '../safe-area-layout.component';
-import {AppInfoService} from '../../../services/app-info.service';
+import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {DrawerElement} from '@ui-kitten/components';
 // My Components
 import DrawerItem from './drawer-item';
 // Global Styles
 import globalColors from '../../styles/colors';
+import {useState} from 'react';
 
 export const HomeDrawer = ({navigation}): DrawerElement => {
-  const onHomeButtonPress = (): void => {
-    navigation && navigation.navigate('Home');
-  };
-
-  const renderHeader = (): DrawerItemElement => (
-    <Layout style={styles.header}>
-      <Image
-        style={styles.logo}
-        source={require('../../assets/images/logo-white.png')}
-      />
-    </Layout>
-  );
-
-  const LogoutIcon = (props) => <Icon {...props} name="power-outline" />;
-
-  const AccessIcon = (props) => (
-    <Icon {...props} name="arrow-circle-up-outline" />
-  );
-
-  const onAccessButtonPress = (): void => {
-    navigation && navigation.navigate('Access');
-  };
-
-  const onLogoutButtonPress = (): void => {
-    navigation && navigation.navigate('SignIn');
-  };
+  const [currentTab, setCurrentTab] = useState<string>('Mis Mascotas');
 
   return (
     <SafeAreaView style={styles.container}>
-      {/*<SafeAreaLayout style={styles.safeArea}>
-       <Drawer header={renderHeader} style={styles.drawerBody}>
-        <DrawerItem
-          style={[styles.menuItem]}
-          onPress={onHomeButtonPress}
-          accessoryLeft={AccessIcon}
-          title="Mis Mascotas"
-        />
-        <DrawerItem
-          style={[styles.menuItem]}
-          onPress={onAccessButtonPress}
-          accessoryLeft={AccessIcon}
-          title="Mi Perfil"
-        />
-        <DrawerItem
-          style={[styles.menuItem]}
-          onPress={onLogoutButtonPress}
-          accessoryLeft={LogoutIcon}
-          title="Cerrar Sesión"
-        />
-      </Drawer> 
-    </SafeAreaLayout>*/}
-      <View style={styles.containerView}>
+      <ScrollView contentContainerStyle={styles.containerView}>
         <Image
           style={styles.logo}
           source={require('../../assets/images/logo-white.png')}
         />
-        <View style={{flexGrow: 1, marginTop: 50}}>
+        <View style={styles.optionsContainer}>
           {/* Menu Buttons */}
           <DrawerItem
-            currentTab=""
-            setCurrentTab={() => {}}
-            title="hola"
-            image=""
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Mi Perfil"
+            image={require('../../assets/images/menu/my-profile.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Mis Mascotas"
+            image={require('../../assets/images/menu/my-pets.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Próximos Servicios"
+            image={require('../../assets/images/menu/coming-services.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Adopciones"
+            image={require('../../assets/images/menu/adoptions.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Productos"
+            image={require('../../assets/images/menu/products.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Estéticas"
+            image={require('../../assets/images/menu/pet-stylists.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Veterinarias"
+            image={require('../../assets/images/menu/vets.png')}
+          />
+          <DrawerItem
+            currentTab={currentTab}
+            setCurrentTab={setCurrentTab}
+            title="Características de Razas"
+            image={require('../../assets/images/menu/breed-characteristics.png')}
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -101,20 +82,15 @@ const styles = StyleSheet.create({
   },
   containerView: {
     justifyContent: 'flex-start',
-    paddingHorizontal: 15,
-    paddingTop: 40,
+    paddingHorizontal: 24,
+    paddingTop: 60,
   },
-  safeArea: {
-    backgroundColor: globalColors.greenPrimary,
+  logo: {
+    height: 44,
+    resizeMode: 'contain',
   },
-  header: {
-    backgroundColor: globalColors.greenPrimary,
-  },
-  logo: {},
-  drawerBody: {
-    backgroundColor: globalColors.greenPrimary,
-  },
-  menuItem: {
-    backgroundColor: 'transparent',
+  optionsContainer: {
+    flexGrow: 1,
+    marginTop: 50,
   },
 });

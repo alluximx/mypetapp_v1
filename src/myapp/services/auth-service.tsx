@@ -64,7 +64,6 @@ class AuthService {
       );
       return request;
     } catch (error) {
-      console.log(error);
       return {data: {status: false, ...error.response.data}};
     }
   };

@@ -7,10 +7,10 @@ import globalColors from '../../styles/colors';
 const CloseButton = (props): React.ReactElement => {
   return (
     <Icon
-      style={[styles.closeButton, props.style]}
       height={35}
-      onPress={props.navigation.goBack}
       width={35}
+      style={[styles.closeButton, props.style]}
+      onPress={props.navigation.goBack}
       fill={globalColors.greenSecondary}
       name="close-outline"
     />
@@ -19,11 +19,7 @@ const CloseButton = (props): React.ReactElement => {
 
 const styles = StyleSheet.create({
   closeButton: {
-    width: 40,
-    height: 40,
-    marginLeft: -5,
-    marginTop: 15,
-    marginBottom: 10,
+    marginVertical: 10,
   },
 });
 

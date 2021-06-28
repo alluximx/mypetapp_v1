@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
-import CloseButton from '../../../components/buttons/close-button';
 import CustomButton from '../../../components/buttons/custom-button';
 import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
@@ -72,7 +71,6 @@ export default ({navigation}): React.ReactElement => {
     <DefaultLayout>
       <KeyboardAvoidingView>
         <View>
-          <CloseButton navigation={navigation} />
           <TitleHeader>Inicia Sesión</TitleHeader>
           <View style={styles.form}>
             <UserInput

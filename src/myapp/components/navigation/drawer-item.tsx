@@ -1,49 +1,70 @@
 import React from 'react';
-import {TouchableOpacity, View, Text, Image} from 'react-native';
+import {
+  Image,
+  ImageSourcePropType,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import globalColors from '../../styles/colors';
 
-const DrawerItem = ({
-  currentTab = '',
-  setCurrentTab = (titleVar) => {},
-  title = '',
-  image = '',
-}) => {
+interface DrawerItemProps {
+  title: string;
+  currentTab: string;
+  setCurrentTab: (title: string) => void;
+  image: ImageSourcePropType;
+}
+
+const DrawerItem = (props: DrawerItemProps) => {
+  // If active, change color.
+  const color =
+    props.currentTab == props.title ? 'white' : globalColors.greenSecondary;
+
   return (
     <TouchableOpacity
       onPress={() => {
-        if (title == 'LogOut') {
-          // Do your Stuff...
-        } else {
-          setCurrentTab(title);
-        }
+        props.setCurrentTab(props.title);
       }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          paddingVertical: 8,
-          backgroundColor: currentTab == title ? 'white' : 'transparent',
-          paddingLeft: 13,
-          paddingRight: 35,
-          borderRadius: 8,
-          marginTop: 15,
-        }}>
-        {/* <Image source={image} style={{
-            width: 25, height: 25,
-            tintColor: currentTab == title ? "#5359D1" : "white"
-          }}></Image> */}
+      <View style={styles.itemContainer}>
+        <Image
+          source={props.image}
+          style={[
+            styles.icon,
+            {
+              tintColor: color,
+            },
+          ]}></Image>
 
         <Text
-          style={{
-            fontSize: 15,
-            fontWeight: 'bold',
-            paddingLeft: 15,
-            color: currentTab == title ? '#5359D1' : 'white',
-          }}>
-          {title}
+          style={[
+            styles.text,
+            {
+              color: color,
+            },
+          ]}>
+          {props.title}
         </Text>
       </View>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  icon: {
+    width: 40,
+    height: 40,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingLeft: 15,
+  },
+});
 
 export default DrawerItem;
