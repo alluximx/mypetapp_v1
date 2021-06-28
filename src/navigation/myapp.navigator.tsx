@@ -1,6 +1,18 @@
-import React, {useEffect, useMemo, useReducer} from 'react';
+import React, {useEffect, useMemo, useReducer, useRef} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from 'react-native-screens/native-stack';
+import {useIsDrawerOpen} from '@react-navigation/drawer';
+import {Animated, StyleSheet} from 'react-native';
+// Global Styles.
+import globalColors from '../myapp/styles/colors';
+// My Components
+import BackButton from '../myapp/components/buttons/back-button';
+import CloseButton from '../myapp/components/buttons/close-button';
+// AUTH SCREENS
+import {SignInScreen} from '../myapp/scenes/auth/sign-in.component';
+import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
+import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
+import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
 // Services
 import AuthService from '../myapp/services/auth-service';
 // Context
@@ -17,7 +29,7 @@ import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.compone
 import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
 // OTHER
 import {StartScreen} from '../myapp/scenes/start/start.component';
-import {TermsScreen} from '../myapp/scenes/terms/terms.component';
+import {TermsScreen} from '../myapp/scenes/auth/terms.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {QueryClient} from 'react-query';
 import {AddPetScreen} from '../myapp/scenes/pets/add.component';
@@ -30,12 +42,20 @@ import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
 import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
 import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
 import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
+// Native screens.
+import {enableScreens} from 'react-native-screens';
 
-const Stack = createStackNavigator();
+enableScreens(true);
+const Stack = createNativeStackNavigator();
 const queryClient = new QueryClient();
 
-export const MyAppNavigator = (): React.ReactElement => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+export const MyAppNavigator = ({navigation}): React.ReactElement => {
+  const isDrawerOpen = useIsDrawerOpen();
+  const translateX = useRef(new Animated.Value(0)).current;
+  const [, dispatch] = useReducer(reducer, initialState);
+
+  // Drawer's animation.
+  useEffect(() => {}, [translateX]);
 
   useEffect(() => {
     const bootstrapAsync = async () => {
@@ -83,18 +103,56 @@ export const MyAppNavigator = (): React.ReactElement => {
     [],
   );
 
+  const closeButton = () => <CloseButton navigation={navigation} />;
+
+  const backButton = () => <BackButton navigation={navigation} />;
+
   return (
     <AuthContext.Provider value={authContext}>
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Start" component={StartScreen} />
+      <Stack.Navigator
+        initialRouteName="Start"
+        screenOptions={{
+          contentStyle: isDrawerOpen ? styles.openDrawer : {},
+          headerLeft: backButton,
+          headerHideShadow: true,
+          headerStyle: styles.header,
+          stackAnimation: 'slide_from_right',
+        }}>
         {/* AUTH */}
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen
+          name="Start"
+          component={StartScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="SignIn"
+          component={SignInScreen}
+          options={{
+            headerLeft: closeButton,
+            stackAnimation: 'flip',
+          }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{
+            headerLeft: closeButton,
+            stackAnimation: 'flip',
+          }}
+        />
         <Stack.Screen name="Terms" component={TermsScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        {/* OTHER */}
         <Stack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        {/* HOME */}
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="AddPet" component={AddPetScreen} />
         <Stack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <Stack.Screen name="AddVisit" component={AddVisitScreen} />
@@ -112,3 +170,21 @@ export const MyAppNavigator = (): React.ReactElement => {
     </AuthContext.Provider>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    backgroundColor: globalColors.backgroundDefault,
+  },
+  openDrawer: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    transform: [
+      {
+        scale: 0.7,
+      },
+      {
+        translateX: -80,
+      },
+    ],
+  },
+});

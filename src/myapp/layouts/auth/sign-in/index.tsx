@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
-import CloseButton from '../../../components/buttons/close-button';
 import CustomButton from '../../../components/buttons/custom-button';
 import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
@@ -19,7 +18,7 @@ import {SignInErrors, SignInFormFields} from '../../../types/auth/sign-in';
 
 export default ({navigation}): React.ReactElement => {
   // Default values for form fields.
-  const defaultValues = {email: '', password: ''};
+  const defaultValues = {username: '', password: ''};
   // Default values for errors.
   const defaultErrors = {password: '', non_field_errors: '', detail: ''};
 
@@ -29,7 +28,8 @@ export default ({navigation}): React.ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
 
   // Has filled every field of the form...
-  const formCompleted: boolean = form.email !== '' && form.password !== '';
+  const formCompleted = form.username !== '' && form.password !== '';
+  
   // Are there any errors...
   const hasErrors: boolean =
     errors.password !== '' ||
@@ -79,14 +79,13 @@ export default ({navigation}): React.ReactElement => {
     <DefaultLayout>
       <KeyboardAvoidingView>
         <View>
-          <CloseButton navigation={navigation} />
           <TitleHeader>Inicia Sesión</TitleHeader>
           <View style={styles.form}>
             <UserInput
               placeholder="Correo"
-              value={form.email}
+              value={form.username}
               onChangeText={(value: string) => {
-                onChangeInputText({name: 'email', value});
+                onChange({name: 'username', value});
               }}
               error={errors.non_field_errors}
             />
@@ -96,7 +95,11 @@ export default ({navigation}): React.ReactElement => {
               onChangeText={(value: string) => {
                 onChangeInputText({name: 'password', value});
               }}
-              error={errors.password !== '' || errors.non_field_errors}
+              error={
+                errors.password !== ''
+                  ? errors.password
+                  : errors.non_field_errors
+              }
               isPassword={true}
             />
             {hasErrors &&

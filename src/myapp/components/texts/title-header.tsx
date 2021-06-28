@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: globalVars.fontBold,
     color: globalColors.darkerGray,
-    marginTop: 18,
     marginBottom: 8,
   },
 });

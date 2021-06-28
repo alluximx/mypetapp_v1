@@ -3,6 +3,7 @@ import {
   ImageBackground,
   ListRenderItemInfo,
   ScrollView,
+  StyleSheet,
   View,
 } from 'react-native';
 import {
@@ -17,6 +18,8 @@ import {
 import {CategoryList} from './extra/category-list.component';
 import {MessageCircleIcon} from './extra/icons';
 import {Service, Profile} from './extra/data';
+// My Component
+import DefaultLayout from '../../components/default-layout';
 
 const profile: Profile = Profile.helenKuper();
 
@@ -27,8 +30,6 @@ const services: Service[] = [
 ];
 
 export default ({navigation}): React.ReactElement => {
-  const styles = useStyleSheet(themedStyle);
-
   const onAddPetButtonPress = (pet) => {
     navigation &&
       navigation.navigate('AddPet', {
@@ -91,59 +92,55 @@ export default ({navigation}): React.ReactElement => {
   };
 
   return (
-    <ScrollView style={styles.contentContainer}>
-      <Layout style={styles.header} level="1">
-        <View style={styles.profileContainer}>
-          <View style={styles.profileDetailsContainer}>
-            <Text category="h4">{profile.fullName}</Text>
-            <View style={styles.profileLocationContainer}>
-              <Text
-                style={styles.profileLocation}
-                appearance="hint"
-                category="s1">
-                {profile.location}
-              </Text>
+    <DefaultLayout>
+      <ScrollView style={styles.contentContainer}>
+        <View style={styles.header}>
+          <View style={styles.profileContainer}>
+            <View style={styles.profileDetailsContainer}>
+              <Text category="h4">{profile.fullName}</Text>
+              <View style={styles.profileLocationContainer}>
+                <Text
+                  style={styles.profileLocation}
+                  appearance="hint"
+                  category="s1">
+                  {profile.location}
+                </Text>
+              </View>
             </View>
           </View>
-          <Avatar
-            style={styles.profileAvatar}
-            size="large"
-            source={profile.photo}
-          />
+          <View style={styles.profileButtonsContainer}>
+            {renderButtons()}
+            <Button
+              appearance="outline"
+              style={styles.profileButton}
+              icon={MessageCircleIcon}
+              onPress={onAddPetButtonPress}>
+              +
+            </Button>
+          </View>
         </View>
-        <View style={styles.profileButtonsContainer}>
-          {renderButtons()}
-
-          <Button
-            appearance="outline"
-            style={styles.profileButton}
-            icon={MessageCircleIcon}
-            onPress={onAddPetButtonPress}>
-            +
-          </Button>
-        </View>
-      </Layout>
-      <CategoryList
-        contentContainerStyle={styles.postsList}
-        hint="¿Que necesitan tus mascotas hoy?"
-        hintLink="MisPedidos"
-        navigation={navigation}
-        data={[...services, ...services]}
-        renderItem={renderServiceItem}
-      />
-      <Card style={styles.banner}>
-        <Text style={styles.profileLocation} category="s1">
-          ¡Haz un nuevo amigo!
-        </Text>
-        <Text style={styles.profileLocation} category="s2">
-          Adopta una mascota hoy
-        </Text>
-      </Card>
-    </ScrollView>
+        <CategoryList
+          contentContainerStyle={styles.postsList}
+          hint="¿Que necesitan tus mascotas hoy?"
+          hintLink="MisPedidos"
+          navigation={navigation}
+          data={[...services, ...services]}
+          renderItem={renderServiceItem}
+        />
+        <Card style={styles.banner}>
+          <Text style={styles.profileLocation} category="s1">
+            ¡Haz un nuevo amigo!
+          </Text>
+          <Text style={styles.profileLocation} category="s2">
+            Adopta una mascota hoy
+          </Text>
+        </Card>
+      </ScrollView>
+    </DefaultLayout>
   );
 };
 
-const themedStyle = StyleService.create({
+const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
   },

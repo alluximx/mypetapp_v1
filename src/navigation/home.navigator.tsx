@@ -1,14 +1,26 @@
 import React from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createDrawerNavigator, useIsDrawerOpen} from '@react-navigation/drawer';
+import {StyleSheet, Text} from 'react-native';
 import {MyAppNavigator} from './myapp.navigator';
-import {HomeDrawer} from '../scenes/home/home-drawer.component';
+import {HomeDrawer} from '../myapp/components/navigation/home-drawer';
+// Global Styles
+import globalColors from '../myapp/styles/colors';
 
 const Drawer = createDrawerNavigator();
 
 export const HomeNavigator = (): React.ReactElement => (
   <Drawer.Navigator
-    screenOptions={{gestureEnabled: false}}
-    drawerContent={(props) => <HomeDrawer {...props} />}>
+    overlayColor="transparent"
+    drawerStyle={styles.drawer}
+    drawerType="slide"
+    screenOptions={{gestureEnabled: true}}
+    drawerContent={(props) => {
+      return <HomeDrawer {...props} />;
+    }}>
     <Drawer.Screen name="MyApp" component={MyAppNavigator} />
   </Drawer.Navigator>
 );
+
+const styles = StyleSheet.create({
+  drawer: {},
+});
