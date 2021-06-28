@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {
   StyleSheet,
-  Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
@@ -69,10 +68,12 @@ export default ({navigation}): React.ReactElement => {
 
       if (response.data.status) {
         setMessage('Código correcto');
-        navigation.navigate('ForgotPassword', {
-          isSettingPassword: true,
-          userId: route.params.userId,
-        });
+        setTimeout(() => {
+          navigation.navigate('ForgotPassword', {
+            isSettingPassword: true,
+            userId: route.params.userId,
+          });
+        }, 1500);
       } else {
         setError(response.data.message);
         setCode('');
@@ -125,37 +126,41 @@ export default ({navigation}): React.ReactElement => {
             Ingresa el código de 5 dígitos que enviamos a tu correo.
           </DefaultText>
         </View>
-        {loading ? (
-          <View style={styles.spinner}>
-            <Spinner status="success" />
-          </View>
-        ) : (
-          <>
-            <TouchableWithoutFeedback onPress={handleOnPress}>
-              <View style={styles.inputContainer}>
-                {codeDigitsArray.map<React.ReactElement>(toDigitInput)}
+        {
+          // If loading show spinner.
+          loading ? (
+            <View style={styles.spinner}>
+              <Spinner status="success" />
+            </View>
+          ) : (
+            // Show inputs otherwise.
+            <>
+              <TouchableWithoutFeedback onPress={handleOnPress}>
+                <View style={styles.inputContainer}>
+                  {codeDigitsArray.map<React.ReactElement>(toDigitInput)}
+                </View>
+              </TouchableWithoutFeedback>
+              <View style={styles.feedbackContainer}>
+                {error !== '' && (
+                  <DefaultText style={styles.errorMessage}>{error}</DefaultText>
+                )}
+                {message !== '' && (
+                  <DefaultText style={styles.successMessage}>
+                    {message}
+                  </DefaultText>
+                )}
               </View>
-            </TouchableWithoutFeedback>
-            <View style={styles.feedbackContainer}>
-              {error !== '' && (
-                <DefaultText style={styles.errorMessage}>{error}</DefaultText>
-              )}
-              {message !== '' && (
-                <DefaultText style={styles.successMessage}>
-                  {message}
-                </DefaultText>
-              )}
-            </View>
-            <View style={globalStyles.mixedTextContainer}>
-              <DefaultText>¿No recibiste el código?</DefaultText>
-              <AnchorText
-                style={globalStyles.mixedTextContainerLink}
-                onPress={onResendCodeTextPress}>
-                Reenviar
-              </AnchorText>
-            </View>
-          </>
-        )}
+              <View style={globalStyles.mixedTextContainer}>
+                <DefaultText>¿No recibiste el código?</DefaultText>
+                <AnchorText
+                  style={globalStyles.mixedTextContainerLink}
+                  onPress={onResendCodeTextPress}>
+                  Reenviar
+                </AnchorText>
+              </View>
+            </>
+          )
+        }
         <TextInput
           ref={ref}
           value={code}

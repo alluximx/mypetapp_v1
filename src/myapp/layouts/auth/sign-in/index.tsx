@@ -18,7 +18,7 @@ import {SignInErrors, SignInFormFields} from '../../../types/auth/sign-in';
 
 export default ({navigation}): React.ReactElement => {
   // Default values for form fields.
-  const defaultValues = {email: '', password: ''};
+  const defaultValues = {username: '', password: ''};
   // Default values for errors.
   const defaultErrors = {password: '', non_field_errors: ''};
 
@@ -28,7 +28,7 @@ export default ({navigation}): React.ReactElement => {
   const [loading, setLoading] = useState(false);
 
   // Has filled every field of the form...
-  const formCompleted = form.email !== '' && form.password !== '';
+  const formCompleted = form.username !== '' && form.password !== '';
   // Are there any errors...
   const hasErrors = errors.password !== '' || errors.non_field_errors !== '';
 
@@ -75,9 +75,9 @@ export default ({navigation}): React.ReactElement => {
           <View style={styles.form}>
             <UserInput
               placeholder="Correo"
-              value={form.email}
+              value={form.username}
               onChangeText={(value: string) => {
-                onChange({name: 'email', value});
+                onChange({name: 'username', value});
               }}
               error={errors.non_field_errors}
             />
@@ -87,7 +87,11 @@ export default ({navigation}): React.ReactElement => {
               onChangeText={(value: string) => {
                 onChange({name: 'password', value});
               }}
-              error={errors.password}
+              error={
+                errors.password !== ''
+                  ? errors.password
+                  : errors.non_field_errors
+              }
               isPassword={true}
             />
             {hasErrors &&
