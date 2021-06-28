@@ -2,14 +2,12 @@ import React from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 // My components
 import DefaultLayout from '../../components/default-layout';
-import BackButton from '../../components/buttons/back-button';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 
-export default ({navigation}): React.ReactElement => {
+export default (): React.ReactElement => {
   return (
     <DefaultLayout>
-      <BackButton navigation={navigation} />
       <ScrollView>
         <TitleHeader style={styles.textSpace}>
           Términos y Condiciones

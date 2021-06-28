@@ -120,7 +120,6 @@ export default ({navigation}): React.ReactElement => {
         />
         <View style={styles.container}>
           <View>
-            <CloseButton navigation={navigation} />
             <View>
               <TitleHeader>Regístrate ahora</TitleHeader>
               <DefaultText>

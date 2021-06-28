@@ -15,10 +15,10 @@ const DefaultLayout = (props): React.ReactElement => {
 
 const style = StyleSheet.create({
   defaultLayout: {
-    padding: globalVars.outsidePadding,
-    paddingBottom: 0,
+    paddingHorizontal: globalVars.outsidePadding,
     backgroundColor: globalColors.backgroundDefault,
     flex: 1,
+    paddingTop: 10,
   },
 });
 

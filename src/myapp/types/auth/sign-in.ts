@@ -1,6 +1,6 @@
 // Fields to be filled on the Sign In Form.
 export interface SignInFormFields {
-  email: string;
+  username: string;
   password: string;
 }
 

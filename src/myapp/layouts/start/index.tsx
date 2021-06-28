@@ -26,10 +26,12 @@ export default ({navigation}): React.ReactElement => {
       <View>
         <Image
           style={styles.logo}
-          source={require('./assets/logo-white.png')}></Image>
+          source={require('../../assets/images/logo-white.png')}
+        />
         <Image
           style={styles.dogImage}
-          source={require('./assets/dog-image.png')}></Image>
+          source={require('./assets/dog-image.png')}
+        />
         <Text style={styles.h1} category="h1">
           Todos los servicios para el cuidado de tu mascota en un solo lugar.
         </Text>
