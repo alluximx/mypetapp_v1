@@ -1,35 +1,66 @@
-import React from 'react';
-import {
-  ImageBackground,
-  ListRenderItemInfo,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {
-  Avatar,
-  Button,
-  Card,
-  Layout,
-  StyleService,
-  Text,
-  useStyleSheet,
-} from '@ui-kitten/components';
-import {CategoryList} from './extra/category-list.component';
-import {MessageCircleIcon} from './extra/icons';
-import {Service, Profile} from './extra/data';
-// My Component
+import React, {useEffect, useState} from 'react';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, Card, List, Text} from '@ui-kitten/components';
+import {AddIcon} from './extra/icons';
+// My Components
 import DefaultLayout from '../../components/default-layout';
+import TitleHeader from '../../components/texts/title-header';
+import DefaultText from '../../components/texts/default-text';
+// Services
+import auth_service from '../../services/auth-service';
+// Global styles
+import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 
-const profile: Profile = Profile.helenKuper();
+const pets = [
+  {
+    name: 'Argos',
+    imageUrl: require('./assets/image-pet-1.jpg'),
+    age: 3,
+  },
+  {
+    name: 'Valerio',
+    imageUrl: require('./assets/image-pet-2.jpg'),
+    age: 1,
+  },
+];
 
-const services: Service[] = [
-  Service.service1(),
-  Service.service2(),
-  Service.service3(),
+const servicesList = [
+  {
+    serviceName: 'Veterinaria',
+    icon: require('../../assets/images/menu/vets.png'),
+  },
+  {
+    serviceName: 'Estética',
+    icon: require('../../assets/images/menu/pet-stylists.png'),
+  },
+  {
+    serviceName: 'Productos',
+    icon: require('../../assets/images/menu/products.png'),
+  },
 ];
 
 export default ({navigation}): React.ReactElement => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState({});
+  const hasPets = pets.length != 0;
+
+  useEffect(() => {
+    const getMyInfo = async () => {
+      const response = await auth_service.me();
+
+      if (response.status) {
+        setUser(response.data);
+      } else {
+        console.log('ERROR: ' + response.data);
+        // Pregunar cómo se debe ver cuando entre como invitado.
+      }
+    };
+
+    getMyInfo();
+    setIsLoading(false);
+  }, []);
+
   const onAddPetButtonPress = (pet) => {
     navigation &&
       navigation.navigate('AddPet', {
@@ -52,88 +83,110 @@ export default ({navigation}): React.ReactElement => {
       });
   };
 
-  const Footer = (props) => (
-    <View {...props} style={[props.style, styles.footerContainer]}>
-      <Text style={styles.profileLocation} category="s1">
-        {props.item.category}
-      </Text>
+  const renderHeader = () => (
+    <View>
+      <TitleHeader style={styles.greeting}>
+        Hola{' '}
+        <TitleHeader style={styles.highlightedText}>
+          {user.username}
+        </TitleHeader>
+      </TitleHeader>
+      {hasPets ? (
+        <DefaultText>¿Cómo están tus mascotas hoy?</DefaultText>
+      ) : (
+        <DefaultText>Aún no tienes mascotas registradas</DefaultText>
+      )}
     </View>
   );
 
-  const renderServiceItem = (
-    info: ListRenderItemInfo<Post>,
-  ): React.ReactElement => (
-    <View style={styles.profileLocationContainer}>
-      <Card
-        onPress={(info) => onServiceButtonPress(info)}
-        style={styles.card}
-        info={info}
-        footer={() => Footer(info)}>
-        <ImageBackground style={styles.postItem} source={info.item.photo} />
+  const renderPetButton = (pet) => (
+    <Button
+      activeOpacity={0.9}
+      accessoryLeft={() => (
+        <Image style={styles.dogProfileImage} source={pet.item.imageUrl} />
+      )}
+      accessoryRight={() => (
+        <Text style={styles.ageText}>
+          {pet.item.age} {pet.item.age == 1 ? 'año' : 'años'}
+        </Text>
+      )}
+      style={styles.profileButton}
+      onPress={(pet) => onDetailPetButtonPress(pet)}>
+      {() => <Text style={styles.petNameText}>{pet.item.name}</Text>}
+    </Button>
+  );
+
+  const renderAddPetButton = () => (
+    <Button
+      activeOpacity={0.8}
+      style={styles.addButton}
+      accessoryLeft={AddIcon}
+      onPress={onAddPetButtonPress}
+    />
+  );
+
+  const renderServiceItem = (service) => (
+    <View style={styles.serviceContainer}>
+      <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
+        <Image style={styles.serviceIcon} source={service.item.icon} />
       </Card>
+      <DefaultText style={styles.serviceNameText}>
+        {service.item.serviceName}
+      </DefaultText>
     </View>
   );
-
-  const renderButtons = () => {
-    const pets = [{name: 'Argos'}];
-    const views = [];
-    pets.map((pet) => {
-      views.push(
-        <Button
-          style={styles.profileButton}
-          icon={MessageCircleIcon}
-          onPress={(pet) => onDetailPetButtonPress(pet)}>
-          {pet.name}
-        </Button>,
-      );
-    });
-
-    return views;
-  };
 
   return (
-    <DefaultLayout>
-      <ScrollView style={styles.contentContainer}>
-        <View style={styles.header}>
-          <View style={styles.profileContainer}>
-            <View style={styles.profileDetailsContainer}>
-              <Text category="h4">{profile.fullName}</Text>
-              <View style={styles.profileLocationContainer}>
-                <Text
-                  style={styles.profileLocation}
-                  appearance="hint"
-                  category="s1">
-                  {profile.location}
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View style={styles.profileButtonsContainer}>
-            {renderButtons()}
-            <Button
-              appearance="outline"
-              style={styles.profileButton}
-              icon={MessageCircleIcon}
-              onPress={onAddPetButtonPress}>
-              +
-            </Button>
-          </View>
-        </View>
-        <CategoryList
-          contentContainerStyle={styles.postsList}
-          hint="¿Que necesitan tus mascotas hoy?"
-          hintLink="MisPedidos"
-          navigation={navigation}
-          data={[...services, ...services]}
+    <DefaultLayout style={{paddingRight: 0, paddingBottom: 0}}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {renderHeader()}
+
+        <List
+          style={styles.petButtonsContainer}
+          contentContainerStyle={[
+            styles.petButtonsContentContainer,
+            !hasPets && styles.petButtonContentContainerEmpty,
+          ]}
+          horizontal={true}
+          ListFooterComponent={renderAddPetButton}
+          ListFooterComponentStyle={styles.addButtonContainer}
+          data={pets}
+          renderItem={renderPetButton}
+          ListEmptyComponent={() => (
+            <DefaultText style={styles.emptyText}>
+              Agrega tu primera mascota
+            </DefaultText>
+          )}
+        />
+
+        <TitleHeader>
+          ¿Qué necesitan tus{' '}
+          <TitleHeader style={styles.highlightedText}>mascotas</TitleHeader>?
+        </TitleHeader>
+
+        <List
+          style={styles.servicesContainer}
+          contentContainerStyle={styles.servicesContentContainer}
+          horizontal={true}
+          data={servicesList}
           renderItem={renderServiceItem}
         />
-        <Card style={styles.banner}>
-          <Text style={styles.profileLocation} category="s1">
+
+        <Card activeOpacity={0.8} style={styles.adoptionBanner}>
+          <TitleHeader style={styles.adoptionTitle}>
             ¡Haz un nuevo amigo!
-          </Text>
-          <Text style={styles.profileLocation} category="s2">
+          </TitleHeader>
+          <DefaultText style={styles.adoptionText}>
             Adopta una mascota hoy
-          </Text>
+          </DefaultText>
+          <Image
+            style={[styles.paw, styles.pawLeft]}
+            source={require('../../assets/images/paw.png')}
+          />
+          <Image
+            style={[styles.paw, styles.pawRight]}
+            source={require('../../assets/images/paw.png')}
+          />
         </Card>
       </ScrollView>
     </DefaultLayout>
@@ -141,71 +194,124 @@ export default ({navigation}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
+  greeting: {
+    marginBottom: 4,
   },
-  card: {
-    borderWidth: 0,
-  },
-  header: {
-    padding: 16,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-  },
-  profileDetailsContainer: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  profileLocationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileLocation: {
-    marginHorizontal: 8,
-  },
-  profileAvatar: {
-    marginHorizontal: 8,
-  },
-  profileButtonsContainer: {
-    flexDirection: 'row',
-    marginVertical: 24,
+  highlightedText: {
+    color: globalColors.greenPrimary,
   },
   profileButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    borderRadius: 30,
+    backgroundColor: globalColors.greenSecondary,
+    borderWidth: 0,
+    flexDirection: 'column',
+    borderRadius: 16,
+    width: 128,
+    paddingTop: 16,
+    paddingBottom: 24,
+    marginRight: 24,
   },
-  profileSocialsDivider: {
-    marginHorizontal: -16,
+  petButtonsContainer: {
+    backgroundColor: 'transparent',
+    marginVertical: 24,
+    paddingBottom: 8,
   },
-  profileSocialsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: 24,
+  petButtonsContentContainer: {
+    paddingBottom: 8,
+  },
+  petButtonContentContainerEmpty: {
+    flexDirection: 'column-reverse',
+    width: '100%',
+    paddingRight: globalVars.outsidePadding,
+    paddingTop: 50,
+    paddingBottom: 40,
+  },
+  emptyText: {
+    marginTop: 16,
+    textAlign: 'center',
+  },
+  dogProfileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     marginBottom: 8,
   },
-  postsList: {
-    paddingHorizontal: 8,
+  petNameText: {
+    fontFamily: globalVars.fontBold,
+    color: globalColors.white,
+    fontSize: 16,
+    marginBottom: 4,
   },
-  banner: {
-    margin: 20,
-    padding: 20,
+  ageText: {
+    color: globalColors.white,
+    fontSize: 14,
   },
-  postItem: {
-    width: 144,
-    height: 144,
-    borderRadius: 4,
-    borderWidth: 0,
-    marginHorizontal: 8,
-    overflow: 'hidden',
+  addButton: {
+    height: 40,
+    width: 40,
+    borderRadius: 40,
+    backgroundColor: globalColors.greenSecondary,
   },
-  footerContainer: {
-    borderWidth: 0,
+  addButtonContainer: {
+    alignSelf: 'center',
+    marginRight: 24,
+  },
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginVertical: 16,
+    paddingBottom: 8,
+  },
+  servicesContentContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    paddingBottom: 8,
+    backgroundColor: 'transparent',
   },
-  footerControl: {
-    marginHorizontal: 2,
+  serviceContainer: {
+    marginRight: 33,
+    alignItems: 'center',
+  },
+  serviceIconContainer: {
+    borderRadius: 16,
+    width: 64,
+    height: 64,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+  },
+  serviceIcon: {
+    height: 55,
+    width: 55,
+  },
+  serviceNameText: {
+    color: globalColors.black,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  adoptionBanner: {
+    marginRight: globalVars.outsidePadding,
+    backgroundColor: globalColors.greenPrimary,
+    borderRadius: 16,
+    paddingVertical: 8,
+  },
+  adoptionTitle: {
+    color: globalColors.white,
+    zIndex: 10,
+  },
+  adoptionText: {
+    color: globalColors.white,
+    zIndex: 10,
+  },
+  paw: {
+    position: 'absolute',
+    height: 90,
+    width: 82,
+  },
+  pawLeft: {
+    top: -35,
+    left: -15,
+    transform: [{rotateZ: '-50deg'}],
+  },
+  pawRight: {
+    right: 2,
+    top: 5,
   },
 });
