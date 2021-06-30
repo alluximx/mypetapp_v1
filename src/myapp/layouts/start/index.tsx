@@ -22,7 +22,10 @@ export default ({navigation}): React.ReactElement => {
   };
 
   return (
-    <DefaultLayout style={styles.container}>
+    <DefaultLayout
+      style={styles.container}
+      statusBarStyle="light-content"
+      statusBarBackgroundColor={globalColors.greenPrimary}>
       <View>
         <Image
           style={styles.logo}
