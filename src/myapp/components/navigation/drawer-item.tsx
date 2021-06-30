@@ -14,6 +14,9 @@ interface DrawerItemProps {
   currentTab: string;
   setCurrentTab: (title: string) => void;
   image: ImageSourcePropType;
+  urlKey: string;
+  params: {};
+  onPressOption: (urlKey: string, params: {}) => void;
 }
 
 const DrawerItem = (props: DrawerItemProps) => {
@@ -25,6 +28,7 @@ const DrawerItem = (props: DrawerItemProps) => {
     <TouchableOpacity
       onPress={() => {
         props.setCurrentTab(props.title);
+        props.onPressOption(props.urlKey, props.params);
       }}>
       <View style={styles.itemContainer}>
         <Image

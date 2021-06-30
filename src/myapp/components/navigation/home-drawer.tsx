@@ -10,6 +10,10 @@ import {useState} from 'react';
 export const HomeDrawer = ({navigation}): DrawerElement => {
   const [currentTab, setCurrentTab] = useState<string>('Mis Mascotas');
 
+  const navigateToScreen = (urlKey: string, params: {}) => {
+    navigation.navigate(urlKey, params);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerView}>
@@ -20,48 +24,72 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
         <View style={styles.optionsContainer}>
           {/* Menu Buttons */}
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Mi Perfil"
             image={require('../../assets/images/menu/my-profile.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Mis Mascotas"
             image={require('../../assets/images/menu/my-pets.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Próximos Servicios"
             image={require('../../assets/images/menu/coming-services.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Adopciones"
             image={require('../../assets/images/menu/adoptions.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Productos"
             image={require('../../assets/images/menu/products.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Estéticas"
             image={require('../../assets/images/menu/pet-stylists.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Veterinarias"
             image={require('../../assets/images/menu/vets.png')}
           />
           <DrawerItem
+            urlKey="Home"
+            params={{}}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Características de Razas"
