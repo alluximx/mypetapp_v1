@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {useIsDrawerOpen} from '@react-navigation/drawer';
 import {Animated, StyleSheet} from 'react-native';
+import {QueryClient, QueryClientProvider} from 'react-query';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
 // My Components
@@ -13,17 +14,18 @@ import {SignInScreen} from '../myapp/scenes/auth/sign-in.component';
 import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
 import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
 import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
-// Services
-import AuthService from '../myapp/services/auth-service';
 // Context
 import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
+// Services
+import AuthService from '../myapp/services/auth-service';
 // Reducer
 import {reducer, initialState} from '../../src/reducer';
+// Types
+import RootStackParamList from '../myapp/types/navigation/root-stack';
 // OTHER
 import {StartScreen} from '../myapp/scenes/start/start.component';
 import {TermsScreen} from '../myapp/scenes/auth/terms.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
-import {QueryClient} from 'react-query';
 import {AddPetScreen} from '../myapp/scenes/pets/add.component';
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
@@ -36,9 +38,9 @@ import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component
 import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
-
 enableScreens(true);
-const Stack = createNativeStackNavigator();
+
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
 
 export const MyAppNavigator = ({navigation}): React.ReactElement => {
@@ -51,7 +53,7 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken: string;
 
       try {
         userToken = await AsyncStorage.getItem('auth_token');
@@ -65,7 +67,7 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
   }, []);
 
   const authContext = useMemo(
-    () => ({
+    (): AuthContextType => ({
       signIn: async (data) => {
         try {
           const response = await AuthService.PostLogin(data);
@@ -86,10 +88,10 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
           return {status: false, data: error.response.data};
         }
       },
-      // To switch from Register screens to User screens
-      goHome: async () => {
-        const token = await AsyncStorage.getItem('auth_token');
-        dispatch({type: 'SIGN_IN', token: token});
+      signOut: async () => {
+        await AsyncStorage.removeItem('auth_token');
+        queryClient.clear();
+        dispatch({type: 'SIGN_OUT'});
       },
     }),
     [],
@@ -100,68 +102,86 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
   const backButton = () => <BackButton navigation={navigation} />;
 
   return (
-    <AuthContext.Provider value={authContext}>
-      <Stack.Navigator
-        initialRouteName="Start"
-        screenOptions={{
-          contentStyle: isDrawerOpen ? styles.openDrawer : {},
-          headerLeft: backButton,
-          headerHideShadow: true,
-          headerStyle: styles.header,
-          stackAnimation: 'slide_from_right',
-        }}>
-        {/* AUTH */}
-        <Stack.Screen
-          name="Start"
-          component={StartScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="SignIn"
-          component={SignInScreen}
-          options={{
-            headerLeft: closeButton,
-            stackAnimation: 'flip',
-          }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUpScreen}
-          options={{
-            headerLeft: closeButton,
-            stackAnimation: 'flip',
-          }}
-        />
-        <Stack.Screen name="Terms" component={TermsScreen} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        <Stack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
-        {/* HOME */}
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            headerShown: false,
-            stackAnimation: 'flip',
-          }}
-        />
-        {/* PETS */}
-        <Stack.Screen name="AddPet" component={AddPetScreen} />
-        <Stack.Screen name="DetailPet" component={DetailPetScreen} />
-        <Stack.Screen name="AddVaccine" component={AddVaccineScreen} />
-        <Stack.Screen name="AddVisit" component={AddVisitScreen} />
-        <Stack.Screen name="AddDeworming" component={AddDewormingScreen} />
-        <Stack.Screen
-          name="ClinicalHistory"
-          component={ClinicalHistoryScreen}
-        />
-        <Stack.Screen name="Orders" component={OrdersScreen} />
-        <Stack.Screen name="ProductList" component={ProductListScreen} />
-        <Stack.Screen name="ProductDetail" component={ProductDetailScreen} />
-        <Stack.Screen name="Cart" component={CartScreen} />
-      </Stack.Navigator>
-    </AuthContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContext.Provider value={authContext}>
+        <RootStack.Navigator
+          initialRouteName="Start"
+          screenOptions={{
+            contentStyle: isDrawerOpen ? styles.openDrawer : {},
+            headerLeft: backButton,
+            headerHideShadow: true,
+            headerStyle: styles.header,
+            stackAnimation: 'slide_from_right',
+          }}>
+          {/* AUTH */}
+          <RootStack.Screen
+            name="Start"
+            component={StartScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <RootStack.Screen
+            name="SignIn"
+            component={SignInScreen}
+            options={{
+              headerLeft: closeButton,
+              stackAnimation: 'flip',
+            }}
+          />
+          <RootStack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{
+              headerLeft: closeButton,
+              stackAnimation: 'flip',
+            }}
+          />
+          <RootStack.Screen name="Terms" component={TermsScreen} />
+          <RootStack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
+            initialParams={{
+              isSettingPassword: false,
+              userId: null,
+            }}
+          />
+          <RootStack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
+          {/* HOME */}
+          <RootStack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+              stackAnimation: 'flip',
+            }}
+            initialParams={{
+              isGuest: false,
+            }}
+          />
+          {/* PETS */}
+          <RootStack.Screen name="AddPet" component={AddPetScreen} />
+          <RootStack.Screen name="DetailPet" component={DetailPetScreen} />
+          <RootStack.Screen name="AddVaccine" component={AddVaccineScreen} />
+          <RootStack.Screen name="AddVisit" component={AddVisitScreen} />
+          <RootStack.Screen
+            name="AddDeworming"
+            component={AddDewormingScreen}
+          />
+          <RootStack.Screen
+            name="ClinicalHistory"
+            component={ClinicalHistoryScreen}
+          />
+          <RootStack.Screen name="Orders" component={OrdersScreen} />
+          <RootStack.Screen name="ProductList" component={ProductListScreen} />
+          <RootStack.Screen
+            name="ProductDetail"
+            component={ProductDetailScreen}
+          />
+          <RootStack.Screen name="Cart" component={CartScreen} />
+        </RootStack.Navigator>
+      </AuthContext.Provider>
+    </QueryClientProvider>
   );
 };
 
