@@ -19,6 +19,14 @@ import AuthService from '../myapp/services/auth-service';
 import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
 // Reducer
 import {reducer, initialState} from '../../src/reducer';
+/***************
+ *** SCREENS ***
+ ***************/
+// AUTH
+import {SignInScreen} from '../myapp/auth/sign-in.component';
+import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
+import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
+import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
 // OTHER
 import {StartScreen} from '../myapp/scenes/start/start.component';
 import {TermsScreen} from '../myapp/scenes/auth/terms.component';
@@ -51,7 +59,7 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-      let userToken;
+      let userToken: string;
 
       try {
         userToken = await AsyncStorage.getItem('auth_token');
@@ -65,7 +73,7 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
   }, []);
 
   const authContext = useMemo(
-    () => ({
+    (): AuthContextType => ({
       signIn: async (data) => {
         try {
           const response = await AuthService.PostLogin(data);
@@ -86,25 +94,11 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
           return {status: false, data: error.response.data};
         }
       },
-      // personalData: async (data) => {
-      //   try {
-      //     const response = await AuthService.PostLogin(data);
-      //     await AsyncStorage.setItem('auth_token', response.data.token);
-      //     return true;
-      //   } catch (e) {
-      //     // console.log(e);
-      //   }
-      // },
       // To switch from Register screens to User screens
       goHome: async () => {
         const token = await AsyncStorage.getItem('auth_token');
         dispatch({type: 'SIGN_IN', token: token});
       },
-      // signOut: async () => {
-      //   await AsyncStorage.removeItem('auth_token');
-      //   await queryClient.clear();
-      //   dispatch({type: 'SIGN_OUT'});
-      // },
     }),
     [],
   );
