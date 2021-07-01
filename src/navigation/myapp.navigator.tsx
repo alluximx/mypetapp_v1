@@ -9,6 +9,8 @@ import globalColors from '../myapp/styles/colors';
 // My Components
 import BackButton from '../myapp/components/buttons/back-button';
 import CloseButton from '../myapp/components/buttons/close-button';
+// Navigators
+import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // AUTH SCREENS
 import {SignInScreen} from '../myapp/scenes/auth/sign-in.component';
 import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
@@ -162,7 +164,7 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
           {/* PETS */}
           <RootStack.Screen
             name="AddPet"
-            component={AddPetScreen}
+            component={AddPetNavigator}
             options={{
               headerLeft: closeButton,
               stackAnimation: 'fade',

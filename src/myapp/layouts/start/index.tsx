@@ -39,7 +39,7 @@ export default ({navigation}): React.ReactElement => {
           Todos los servicios para el cuidado de tu mascota en un solo lugar.
         </Text>
         <CustomButton
-          type="primary"
+          isLight={true}
           style={styles.signUpButton}
           onPress={onStartButtonPress}>
           ¡Empieza Ahora!
