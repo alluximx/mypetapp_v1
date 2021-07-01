@@ -160,7 +160,14 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
             }}
           />
           {/* PETS */}
-          <RootStack.Screen name="AddPet" component={AddPetScreen} />
+          <RootStack.Screen
+            name="AddPet"
+            component={AddPetScreen}
+            options={{
+              headerLeft: closeButton,
+              stackAnimation: 'fade',
+            }}
+          />
           <RootStack.Screen name="DetailPet" component={DetailPetScreen} />
           <RootStack.Screen name="AddVaccine" component={AddVaccineScreen} />
           <RootStack.Screen name="AddVisit" component={AddVisitScreen} />

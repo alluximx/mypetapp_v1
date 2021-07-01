@@ -11,6 +11,8 @@ import {
 } from '@ui-kitten/components';
 import {ProfileAvatar} from '../../auth/sign-up/extra/profile-avatar.component';
 import {PlusIcon} from '../../auth/sign-up/extra/icons';
+// My Components
+import DefaultLayout from '../../../components/default-layout';
 
 export default ({navigation}): React.ReactElement => {
   const [userName, setUserName] = React.useState<string>();
@@ -45,72 +47,74 @@ export default ({navigation}): React.ReactElement => {
   const filterPickerState = useDatepickerState();
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <ProfileAvatar
-          style={styles.profileAvatar}
-          resizeMode="center"
-          editButton={renderEditAvatarButton}
-          source={require('../../home/assets/image-pet-1.jpg')}
-        />
-      </View>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Nombre"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Raza"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Sexo"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Edad"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Datepicker
-          date={date}
-          onSelect={(nextDate) => setDate(nextDate)}
-          placeholder="Fecha de nacimiento"
-          filter={filter}
-          {...filterPickerState}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
+    <DefaultLayout>
+      <KeyboardAvoidingView>
+        <View style={styles.headerContainer}>
+          <ProfileAvatar
+            style={styles.profileAvatar}
+            resizeMode="center"
+            editButton={renderEditAvatarButton}
+            source={require('../../home/assets/image-pet-1.jpg')}
+          />
+        </View>
+        <Layout style={styles.formContainer} level="1">
+          <Input
+            autoCapitalize="none"
+            placeholder="Nombre"
+            value={userName}
+            onChangeText={setUserName}
+          />
+        </Layout>
+        <Layout style={styles.formContainer} level="1">
+          <Input
+            autoCapitalize="none"
+            placeholder="Raza"
+            value={userName}
+            onChangeText={setUserName}
+          />
+        </Layout>
+        <Layout style={styles.formContainer} level="1">
+          <Input
+            autoCapitalize="none"
+            placeholder="Sexo"
+            value={userName}
+            onChangeText={setUserName}
+          />
+        </Layout>
+        <Layout style={styles.formContainer} level="1">
+          <Input
+            autoCapitalize="none"
+            placeholder="Edad"
+            value={userName}
+            onChangeText={setUserName}
+          />
+        </Layout>
+        <Layout style={styles.formContainer} level="1">
+          <Datepicker
+            date={date}
+            onSelect={(nextDate) => setDate(nextDate)}
+            placeholder="Fecha de nacimiento"
+            filter={filter}
+            {...filterPickerState}
+          />
+        </Layout>
+        <Layout style={styles.formContainer} level="1">
+          <Button
+            style={styles.signUpButton}
+            size="medium"
+            onPress={onAddButtonPress}>
+            AGREGAR
+          </Button>
+        </Layout>
         <Button
-          style={styles.signUpButton}
-          size="medium"
-          onPress={onAddButtonPress}>
-          AGREGAR
+          style={styles.signInButton}
+          appearance="ghost"
+          status="basic"
+          onPress={onBackButtonPress}>
+          ¿No necesitas agregar una mascota?
         </Button>
-      </Layout>
-      <Button
-        style={styles.signInButton}
-        appearance="ghost"
-        status="basic"
-        onPress={onBackButtonPress}>
-        ¿No necesitas agregar una mascota?
-      </Button>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </DefaultLayout>
   );
 };
 
