@@ -1,29 +1,33 @@
 import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import {Button, Card, List, Text} from '@ui-kitten/components';
+import {BackHandler, Image, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, Card, List, Spinner, Text} from '@ui-kitten/components';
 import {AddIcon} from './extra/icons';
+import {useRoute, useFocusEffect} from '@react-navigation/native';
 // My Components
 import DefaultLayout from '../../components/default-layout';
-import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
-// Services
-import auth_service from '../../services/auth-service';
+import TitleHeader from '../../components/texts/title-header';
 // Global styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Hooks
+import useMyProfile from '../../hooks/user/useMyProfile';
+import useMyPets from '../../hooks/user/useMyPets';
+// Types
+import {HomeRouteParams} from '../../types/navigation/root-stack';
 
-const pets = [
-  {
-    name: 'Argos',
-    imageUrl: require('./assets/image-pet-1.jpg'),
-    age: 3,
-  },
-  {
-    name: 'Valerio',
-    imageUrl: require('./assets/image-pet-2.jpg'),
-    age: 1,
-  },
-];
+// const pets = [
+//   {
+//     name: 'Argos',
+//     imageUrl: require('./assets/image-pet-1.jpg'),
+//     age: 3,
+//   },
+//   {
+//     name: 'Valerio',
+//     imageUrl: require('./assets/image-pet-2.jpg'),
+//     age: 1,
+//   },
+// ];
 
 const servicesList = [
   {
@@ -41,25 +45,33 @@ const servicesList = [
 ];
 
 export default ({navigation}): React.ReactElement => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState({});
+  const route = useRoute<HomeRouteParams>();
+  const userQuery = useMyProfile(route.params.isGuest);
+  const petsQuery = useMyPets();
+  console.log(petsQuery.data?.data);
+
+  const pets = petsQuery.data?.data ?? 0;
   const hasPets = pets.length != 0;
+  // const [isSelectionModeEnabled, setIsSelectionModeEnabled] = useState(false);
 
-  useEffect(() => {
-    const getMyInfo = async () => {
-      const response = await auth_service.me();
+  // // Logout on double back press.
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const onBackPress = () => {
+  //       if (isSelectionModeEnabled) {
+  //         setIsSelectionModeEnabled(true);
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     };
 
-      if (response.status) {
-        setUser(response.data);
-      } else {
-        console.log('ERROR: ' + response.data);
-        // Pregunar cómo se debe ver cuando entre como invitado.
-      }
-    };
+  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
-    getMyInfo();
-    setIsLoading(false);
-  }, []);
+  //     return () =>
+  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  //   }, [isSelectionModeEnabled, setIsSelectionModeEnabled]),
+  // );
 
   const onAddPetButtonPress = (pet) => {
     navigation &&
@@ -88,7 +100,7 @@ export default ({navigation}): React.ReactElement => {
       <TitleHeader style={styles.greeting}>
         Hola{' '}
         <TitleHeader style={styles.highlightedText}>
-          {user.username}
+          {userQuery.data?.data.username}
         </TitleHeader>
       </TitleHeader>
       {hasPets ? (
@@ -99,22 +111,27 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  const renderPetButton = (pet) => (
-    <Button
-      activeOpacity={0.9}
-      accessoryLeft={() => (
-        <Image style={styles.dogProfileImage} source={pet.item.imageUrl} />
-      )}
-      accessoryRight={() => (
-        <Text style={styles.ageText}>
-          {pet.item.age} {pet.item.age == 1 ? 'año' : 'años'}
-        </Text>
-      )}
-      style={styles.profileButton}
-      onPress={(pet) => onDetailPetButtonPress(pet)}>
-      {() => <Text style={styles.petNameText}>{pet.item.name}</Text>}
-    </Button>
-  );
+  const renderPetButton = (pet) => {
+    const {age, name} = pet.item;
+    const image = pet.birthday;
+
+    return (
+      <Button
+        activeOpacity={0.9}
+        accessoryLeft={() => (
+          <Image style={styles.dogProfileImage} source={image} />
+        )}
+        accessoryRight={() => (
+          <Text style={styles.ageText}>
+            {age} {age == 1 ? 'año' : 'años'}
+          </Text>
+        )}
+        style={styles.profileButton}
+        onPress={(pet) => onDetailPetButtonPress(pet)}>
+        {() => <Text style={styles.petNameText}>{name}</Text>}
+      </Button>
+    );
+  };
 
   const renderAddPetButton = () => (
     <Button
@@ -136,7 +153,11 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  return (
+  return userQuery.isLoading || petsQuery.isLoading ? (
+    <DefaultLayout style={styles.loadingContainer}>
+      <Spinner status="success" />
+    </DefaultLayout>
+  ) : (
     <DefaultLayout style={{paddingRight: 0, paddingBottom: 0}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderHeader()}
@@ -194,6 +215,10 @@ export default ({navigation}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   greeting: {
     marginBottom: 4,
   },
@@ -250,6 +275,7 @@ const styles = StyleSheet.create({
     width: 40,
     borderRadius: 40,
     backgroundColor: globalColors.greenSecondary,
+    borderWidth: 0,
   },
   addButtonContainer: {
     alignSelf: 'center',
