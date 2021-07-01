@@ -18,7 +18,7 @@ export default ({navigation}): React.ReactElement => {
   };
 
   const onSignInAsInvitedTextPress = (): void => {
-    navigation && navigation.navigate('Home');
+    navigation && navigation.navigate('Home', {isGuest: true});
   };
 
   return (
