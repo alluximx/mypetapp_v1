@@ -6,10 +6,7 @@ import globalColors from '../../styles/colors';
 const SplashScreen = (): React.ReactElement => {
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('./assets/logo-splash.png')}
-      />
+      <Image style={styles.image} source={require('./assets/logo-white.png')} />
     </View>
   );
 };
@@ -17,7 +14,7 @@ const SplashScreen = (): React.ReactElement => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: globalColors.backgroundDefault,
+    backgroundColor: globalColors.greenPrimary,
     alignItems: 'center',
     justifyContent: 'center',
   },
