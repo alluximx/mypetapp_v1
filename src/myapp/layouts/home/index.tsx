@@ -103,7 +103,7 @@ export default ({navigation}): React.ReactElement => {
           {userQuery.data?.data.username}
         </TitleHeader>
       </TitleHeader>
-      {hasPets ? (
+      {hasPets && !route.params.isGuest ? (
         <DefaultText>¿Cómo están tus mascotas hoy?</DefaultText>
       ) : (
         <DefaultText>Aún no tienes mascotas registradas</DefaultText>
@@ -154,7 +154,8 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  return userQuery.isLoading || petsQuery.isLoading ? (
+  return (userQuery.isLoading || petsQuery.isLoading) &&
+    !route.params.isGuest ? (
     <DefaultLayout style={styles.loadingContainer}>
       <Spinner status="success" />
     </DefaultLayout>
@@ -167,7 +168,8 @@ export default ({navigation}): React.ReactElement => {
           style={styles.petButtonsContainer}
           contentContainerStyle={[
             styles.petButtonsContentContainer,
-            !hasPets && styles.petButtonContentContainerEmpty,
+            (!hasPets || route.params.isGuest) &&
+              styles.petButtonContentContainerEmpty,
           ]}
           horizontal={true}
           ListFooterComponent={renderAddPetButton}

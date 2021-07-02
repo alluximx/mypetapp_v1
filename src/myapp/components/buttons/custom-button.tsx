@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     paddingVertical: 14,
+    borderWidth: 0,
   },
   lightButton: {
     backgroundColor: globalColors.white,
