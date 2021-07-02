@@ -18,11 +18,14 @@ export default ({navigation}): React.ReactElement => {
   };
 
   const onSignInAsInvitedTextPress = (): void => {
-    navigation && navigation.navigate('Home');
+    navigation && navigation.navigate('Home', {isGuest: true});
   };
 
   return (
-    <DefaultLayout style={styles.container}>
+    <DefaultLayout
+      style={styles.container}
+      statusBarStyle="light-content"
+      statusBarBackgroundColor={globalColors.greenPrimary}>
       <View>
         <Image
           style={styles.logo}

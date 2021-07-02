@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
-import {useRoute, RouteProp} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 // My Components
 import CustomButton from '../../../components/buttons/custom-button';
 import DefaultLayout from '../../../components/default-layout';
@@ -14,6 +14,8 @@ import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Services
 import auth_service from '../../../services/auth-service';
+// Types
+import {ForgotPasswordRouteParams} from '../../../types/navigation/root-stack';
 
 interface ForgotPasswordFormFields {
   email: string;
@@ -35,17 +37,7 @@ export default ({navigation}): React.ReactElement => {
   // Modal and spinner.
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const route = useRoute<
-    RouteProp<
-      {
-        params: {
-          isSettingPassword: boolean;
-          userId: number;
-        };
-      },
-      'params'
-    >
-  >();
+  const route = useRoute<ForgotPasswordRouteParams>();
   const isSettingPassword: boolean = route.params.isSettingPassword;
 
   // Has filled every field...

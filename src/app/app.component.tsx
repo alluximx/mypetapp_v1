@@ -6,7 +6,6 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {AppLoading, LoadFontsTask, Task} from './app-loading.component';
 import {appMappings, appThemes} from './app-theming';
 import {AppIconsPack} from './app-icons-pack';
-import {StatusBar} from '../components/status-bar.component';
 import {SplashImage} from '../components/splash-image.component';
 import {AppNavigator} from '../navigation/app.navigator';
 import {AppStorage} from '../services/app-storage.service';
@@ -56,7 +55,6 @@ const App = ({mapping, theme}): React.ReactElement => {
           <Theming.MappingContext.Provider value={mappingContext}>
             <Theming.ThemeContext.Provider value={themeContext}>
               <SafeAreaProvider>
-                <StatusBar />
                 <AppNavigator />
               </SafeAreaProvider>
             </Theming.ThemeContext.Provider>

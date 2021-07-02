@@ -4,7 +4,7 @@ import enviroments from '../environments';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class AppServices {
-  get = async (url, authorization = false) => {
+  get = async (url: string, authorization: boolean = false) => {
     const token = await AsyncStorage.getItem('auth_token');
     return axios.get(api_url + url, {
       headers: {
@@ -14,7 +14,7 @@ class AppServices {
     });
   };
 
-  search = async (url, term) => {
+  search = async (url: string, term: string) => {
     const token = await AsyncStorage.getItem('auth_token');
     return axios.get(api_url + url + '?search=' + term, {
       headers: {
@@ -24,7 +24,7 @@ class AppServices {
     });
   };
 
-  delete = async (url, id) => {
+  delete = async (url: string, id: number) => {
     const token = await AsyncStorage.getItem('auth_token');
     const full_url = api_url + url + id + '/';
     return axios.delete(full_url, {
@@ -34,7 +34,12 @@ class AppServices {
     });
   };
 
-  post = async (url, data, authorization = false, hasFiles = false) => {
+  post = async (
+    url: string,
+    data: {},
+    authorization = false,
+    hasFiles = false,
+  ) => {
     const token = await AsyncStorage.getItem('auth_token');
     if (!hasFiles) {
       return axios.post(api_url + url, data, {
@@ -56,7 +61,12 @@ class AppServices {
     }
   };
 
-  put = async (url, data, authorization = false, hasFiles = false) => {
+  put = async (
+    url: string,
+    data: {},
+    authorization = false,
+    hasFiles = false,
+  ) => {
     const token = await AsyncStorage.getItem('auth_token');
     if (!hasFiles) {
       return axios.put(api_url + url, data, {
