@@ -16,18 +16,18 @@ import useMyPets from '../../hooks/user/useMyPets';
 // Types
 import {HomeRouteParams} from '../../types/navigation/root-stack';
 
-// const pets = [
-//   {
-//     name: 'Argos',
-//     imageUrl: require('./assets/image-pet-1.jpg'),
-//     age: 3,
-//   },
-//   {
-//     name: 'Valerio',
-//     imageUrl: require('./assets/image-pet-2.jpg'),
-//     age: 1,
-//   },
-// ];
+const staticPets = [
+  {
+    name: 'Argos',
+    imageUrl: require('./assets/image-pet-1.jpg'),
+    age: 3,
+  },
+  {
+    name: 'Valerio',
+    imageUrl: require('./assets/image-pet-2.jpg'),
+    age: 1,
+  },
+];
 
 const servicesList = [
   {
@@ -47,7 +47,7 @@ const servicesList = [
 export default ({navigation}): React.ReactElement => {
   const route = useRoute<HomeRouteParams>();
   const userQuery = useMyProfile(route.params.isGuest);
-  const petsQuery = useMyPets();
+  const petsQuery = useMyPets(userQuery.data?.data.id);
   console.log(petsQuery.data?.data);
 
   const pets = petsQuery.data?.data ?? 0;
@@ -112,8 +112,9 @@ export default ({navigation}): React.ReactElement => {
   );
 
   const renderPetButton = (pet) => {
-    const {age, name} = pet.item;
-    const image = pet.birthday;
+    const {name} = pet.item;
+    const image = require('./assets/image-pet-1.jpg');
+    const age = 3;
 
     return (
       <Button
