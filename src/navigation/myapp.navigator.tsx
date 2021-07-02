@@ -22,8 +22,17 @@ import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
 import AuthService from '../myapp/services/auth-service';
 // Reducer
 import {reducer, initialState} from '../../src/reducer';
-// Types
 import RootStackParamList from '../myapp/types/navigation/root-stack';
+
+/***************
+ *** SCREENS ***
+ ***************/
+// AUTH
+import {SignInScreen} from '../myapp/auth/sign-in.component';
+import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
+import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
+import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
+
 // OTHER
 import {StartScreen} from '../myapp/scenes/start/start.component';
 import {TermsScreen} from '../myapp/scenes/auth/terms.component';
@@ -94,6 +103,11 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
         await AsyncStorage.removeItem('auth_token');
         queryClient.clear();
         dispatch({type: 'SIGN_OUT'});
+      },
+      // To switch from Register screens to User screens
+      goHome: async () => {
+        const token = await AsyncStorage.getItem('auth_token');
+        dispatch({type: 'SIGN_IN', token: token});
       },
     }),
     [],

@@ -20,21 +20,25 @@ export default ({navigation}): React.ReactElement => {
   // Default values for form fields.
   const defaultValues = {username: '', password: ''};
   // Default values for errors.
-  const defaultErrors = {password: '', non_field_errors: ''};
+  const defaultErrors = {password: '', non_field_errors: '', detail: ''};
 
   const authContext = useContext<AuthContextType>(AuthContext);
   const [form, setForm] = useState<SignInFormFields>(defaultValues);
   const [errors, setErrors] = useState<SignInErrors>(defaultErrors);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const hasCompletedForm = form.username !== '' && form.password !== '';
   // Are there any errors...
-  const hasErrors = errors.password !== '' || errors.non_field_errors !== '';
+  const hasErrors: boolean =
+    errors.password !== '' ||
+    errors.non_field_errors !== '' ||
+    errors.detail !== '';
 
   /**************
    *** Events ***
    **************/
-  const onChange = ({name, value}): void => setForm({...form, [name]: value});
+  const onChangeInputText = ({name, value}): void =>
+    setForm({...form, [name]: value});
 
   const onSignUpTextPress = (): void =>
     navigation && navigation.navigate('SignUp');
@@ -47,7 +51,6 @@ export default ({navigation}): React.ReactElement => {
 
     if (hasCompletedForm) {
       const response = await authContext.signIn(form);
-
       // If there are no errors...
       if (response.status) {
         navigation && navigation.navigate('Home');
@@ -83,7 +86,7 @@ export default ({navigation}): React.ReactElement => {
               placeholder="Contraseña"
               value={form.password}
               onChangeText={(value: string) => {
-                onChange({name: 'password', value});
+                onChangeInputText({name: 'password', value});
               }}
               error={
                 errors.password !== ''

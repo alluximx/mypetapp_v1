@@ -8,4 +8,5 @@ export interface SignInFormFields {
 export interface SignInErrors {
   password: string;
   non_field_errors: string;
+  detail: string;
 }
