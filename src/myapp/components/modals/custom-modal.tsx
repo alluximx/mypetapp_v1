@@ -57,7 +57,7 @@ const CustomModal = ({
                   </DefaultText>
                 );
               })}
-            <CustomButton type="primary" onPress={onAccept}>
+            <CustomButton onPress={onAccept} isLight={true}>
               {labelAccept}
             </CustomButton>
             {showCancel ? (

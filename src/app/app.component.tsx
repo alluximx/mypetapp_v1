@@ -10,6 +10,8 @@ import {SplashImage} from '../components/splash-image.component';
 import {AppNavigator} from '../navigation/app.navigator';
 import {AppStorage} from '../services/app-storage.service';
 import {Mapping, Theme, Theming} from '../services/theme.service';
+// Screens
+import {SplashScreen} from '../myapp/scenes/splash/splash.component';
 
 const loadingTasks: Task[] = [
   // Should be used it when running Expo.
@@ -65,12 +67,11 @@ const App = ({mapping, theme}): React.ReactElement => {
   );
 };
 
-const Splash = ({loading}): React.ReactElement => (
-  <SplashImage
-    loading={loading}
-    source={require('../assets/images/image-splash.png')}
-  />
-);
+const Splash = ({loading}): React.ReactElement => {
+  if (loading) {
+    return <SplashScreen />;
+  }
+};
 
 export default (): React.ReactElement => (
   <AppLoading

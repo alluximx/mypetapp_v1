@@ -4,15 +4,17 @@ import {Button, Spinner, Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Types
+import {CustomButtonProps} from '../../types/components/buttons';
 
-const CustomButton = (props): React.ReactElement => {
+const CustomButton = (props: CustomButtonProps): React.ReactElement => {
   const loadingSpinner = () => (
     <View style={styles.spinner}>
       <Spinner size="medium" status="basic" />
     </View>
   );
 
-  return props.type === 'primary' ? (
+  return props.isLight ? (
     // Light Button
     <Button
       appearance="ghost"
@@ -25,11 +27,11 @@ const CustomButton = (props): React.ReactElement => {
     <Button
       style={[
         styles.button,
-        props.isDisabled ? styles.defaultButtonDisabled : styles.defaultButton,
+        props.isDisabled ? styles.defaultButton : styles.defaultButtonDisabled,
         props.style,
       ]}
       onPress={props.onPress}
-      disabled={!props.isDisabled}
+      disabled={props.isDisabled}
       accessoryLeft={props.isLoading ? loadingSpinner : null}>
       {() =>
         !props.isLoading && (
@@ -44,6 +46,7 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 10,
     paddingVertical: 14,
+    borderWidth: 0,
   },
   lightButton: {
     backgroundColor: globalColors.white,

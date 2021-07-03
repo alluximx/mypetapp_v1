@@ -27,9 +27,7 @@ export default ({navigation}): React.ReactElement => {
   const [errors, setErrors] = useState<SignInErrors>(defaultErrors);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Has filled every field of the form...
-  const formCompleted = form.username !== '' && form.password !== '';
-  
+  const hasCompletedForm = form.username !== '' && form.password !== '';
   // Are there any errors...
   const hasErrors: boolean =
     errors.password !== '' ||
@@ -51,13 +49,8 @@ export default ({navigation}): React.ReactElement => {
     // Clear errors.
     setErrors(defaultErrors);
 
-    // If the form is filled...
-    if (formCompleted) {
-      const response = await authContext.signIn({
-        username: form.email,
-        password: form.password,
-      });
-
+    if (hasCompletedForm) {
+      const response = await authContext.signIn(form);
       // If there are no errors...
       if (response.status) {
         navigation && navigation.navigate('Home');
@@ -113,9 +106,8 @@ export default ({navigation}): React.ReactElement => {
               })}
             <CustomButton
               style={styles.signInButton}
-              appearance="control"
               onPress={onSignInButtonPress}
-              isDisabled={formCompleted}
+              isDisabled={!hasCompletedForm}
               isLoading={loading}>
               Iniciar Sesión
             </CustomButton>

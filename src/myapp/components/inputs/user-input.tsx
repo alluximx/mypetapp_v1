@@ -10,8 +10,10 @@ import {Input} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Types
+import {UserInputProps} from '../../types/components/inputs';
 
-const UserInput = (props): React.ReactElement => {
+const UserInput = (props: UserInputProps): React.ReactElement => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true);
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
@@ -66,7 +68,7 @@ const UserInput = (props): React.ReactElement => {
           {
             borderColor: inputOutline,
           },
-          props.error !== '' && styles.errorOutline,
+          props.error && props.error !== '' && styles.errorOutline,
         ]}
         textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
         value={props.value}

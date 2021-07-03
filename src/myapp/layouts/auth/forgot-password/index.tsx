@@ -40,8 +40,7 @@ export default ({navigation}): React.ReactElement => {
   const route = useRoute<ForgotPasswordRouteParams>();
   const isSettingPassword: boolean = route.params.isSettingPassword;
 
-  // Has filled every field...
-  const formCompleted =
+  const hasCompletedForm =
     (form.email !== '' && !isSettingPassword) ||
     (form.password !== '' && isSettingPassword);
 
@@ -157,7 +156,7 @@ export default ({navigation}): React.ReactElement => {
         <CustomButton
           style={styles.button}
           onPress={onResetPasswordButtonPress}
-          isDisabled={formCompleted}
+          isDisabled={!hasCompletedForm}
           isLoading={loading}>
           {isSettingPassword ? 'Restablecer Contraseña' : 'Enviar'}
         </CustomButton>

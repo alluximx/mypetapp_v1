@@ -41,8 +41,7 @@ export default ({navigation}): React.ReactElement => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Has filled every field...
-  const formCompleted =
+  const hasCompletedForm =
     form.username !== '' && form.email !== '' && form.password1 !== '';
   // Are there any errors...
   const hasErrors =
@@ -68,8 +67,7 @@ export default ({navigation}): React.ReactElement => {
     // Clear errors
     setErrors(defaultValues);
 
-    // If form is filled...
-    if (formCompleted) {
+    if (hasCompletedForm) {
       const response = await authContext.signUp(form);
 
       if (response.status) {
@@ -167,9 +165,8 @@ export default ({navigation}): React.ReactElement => {
             </View>
             <CustomButton
               style={buttonMargin}
-              appearance="control"
               onPress={onSignUpButtonPress}
-              isDisabled={formCompleted}
+              isDisabled={!hasCompletedForm}
               isLoading={loading}>
               Registrarme
             </CustomButton>
