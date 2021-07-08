@@ -6,7 +6,8 @@ const useMyProfile = (isGuest) => {
     return {
       data: {
         data: {
-          username: '',
+          id: -1,
+          name: '',
         },
       },
       isLoading: false,

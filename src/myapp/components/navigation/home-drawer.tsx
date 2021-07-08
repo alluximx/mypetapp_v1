@@ -1,17 +1,27 @@
-import React from 'react';
-import {Image, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {AuthContext} from '../../context/AuthContext';
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {DrawerElement} from '@ui-kitten/components';
 // My Components
 import DrawerItem from './drawer-item';
 // Global Styles
 import globalColors from '../../styles/colors';
-import {useState} from 'react';
+import globalVars from '../../styles/vars';
 
-export const HomeDrawer = ({navigation}): DrawerElement => {
+export const HomeDrawer = (props): DrawerElement => {
+  const authContext = useContext(AuthContext);
   const [currentTab, setCurrentTab] = useState<string>('Mis Mascotas');
 
   const navigateToScreen = (urlKey: string, params: {}) => {
-    navigation.navigate(urlKey, params);
+    props.navigation.navigate(urlKey, params);
   };
 
   return (
@@ -95,6 +105,11 @@ export const HomeDrawer = ({navigation}): DrawerElement => {
             title="Características de Razas"
             image={require('../../assets/images/menu/breed-characteristics.png')}
           />
+          <TouchableOpacity onPress={authContext.signOut}>
+            <View style={styles.itemContainer}>
+              <Text style={styles.text}>Cerrar Sesión</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -120,5 +135,16 @@ const styles = StyleSheet.create({
   optionsContainer: {
     flexGrow: 1,
     marginTop: 50,
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  text: {
+    fontSize: 16,
+    fontFamily: globalVars.fontBold,
+    paddingLeft: 15,
+    color: globalColors.greenSecondary,
   },
 });

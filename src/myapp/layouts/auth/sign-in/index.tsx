@@ -14,26 +14,30 @@ import globalVars from '../../../styles/vars';
 // Context
 import {AuthContext, AuthContextType} from '../../../context/AuthContext';
 // Types
-import {SignInErrors, SignInFormFields} from '../../../types/auth/sign-in';
+import {
+  SignInErrors,
+  SignInFormFields,
+} from '../../../types/screens/auth/sign-in';
+
+// Default values for form fields.
+const defaultValues = {username: '', password: ''};
+// Default values for errors.
+const defaultErrors = {non_field_errors: ''};
 
 export default ({navigation}): React.ReactElement => {
-  // Default values for form fields.
-  const defaultValues = {username: '', password: ''};
-  // Default values for errors.
-  const defaultErrors = {password: '', non_field_errors: ''};
-
   const authContext = useContext<AuthContextType>(AuthContext);
   const [form, setForm] = useState<SignInFormFields>(defaultValues);
   const [errors, setErrors] = useState<SignInErrors>(defaultErrors);
   const [loading, setLoading] = useState(false);
-
+  // Are there empty fields...
   const hasCompletedForm = form.username !== '' && form.password !== '';
   // Are there any errors...
-  const hasErrors = errors.password !== '' || errors.non_field_errors !== '';
+  const hasErrors = errors.non_field_errors !== '';
 
   /**************
    *** Events ***
    **************/
+
   const onChange = ({name, value}): void => setForm({...form, [name]: value});
 
   const onSignUpTextPress = (): void =>
@@ -50,7 +54,7 @@ export default ({navigation}): React.ReactElement => {
 
       // If there are no errors...
       if (response.status) {
-        navigation && navigation.navigate('Home');
+        // navigation && navigation.navigate('HomeNavigator', {screen: 'Home'});
       } else {
         // Update errors.
         setErrors({...defaultErrors, ...response.data});
@@ -72,25 +76,21 @@ export default ({navigation}): React.ReactElement => {
           <TitleHeader>Inicia Sesión</TitleHeader>
           <View style={styles.form}>
             <UserInput
-              placeholder="Correo"
-              value={form.username}
+              error={errors.non_field_errors}
               onChangeText={(value: string) => {
                 onChange({name: 'username', value});
               }}
-              error={errors.non_field_errors}
+              placeholder="Correo"
+              value={form.username}
             />
             <UserInput
-              placeholder="Contraseña"
-              value={form.password}
+              error={errors.non_field_errors}
+              isPassword={true}
               onChangeText={(value: string) => {
                 onChange({name: 'password', value});
               }}
-              error={
-                errors.password !== ''
-                  ? errors.password
-                  : errors.non_field_errors
-              }
-              isPassword={true}
+              placeholder="Contraseña"
+              value={form.password}
             />
             {hasErrors &&
               // Map errors...

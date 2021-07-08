@@ -1,7 +1,16 @@
 import {useQuery} from 'react-query';
 import api from '../../services/app-services';
 
-const useMyPets = (userId: number) => {
+const useMyPets = (isGuest: boolean, userId: number) => {
+  if (isGuest) {
+    return {
+      data: {
+        data: [],
+      },
+      isLoading: false,
+    };
+  }
+
   return useQuery(['my-pets', userId], () =>
     api.get('api/v1/pets/?owner_user=' + userId, true),
   );

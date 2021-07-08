@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {BackHandler, Image, ScrollView, StyleSheet, View} from 'react-native';
+import React, {useReducer} from 'react';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Card, List, Spinner, Text} from '@ui-kitten/components';
 import {AddIcon} from './extra/icons';
-import {useRoute, useFocusEffect} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 // My Components
 import DefaultLayout from '../../components/default-layout';
 import DefaultText from '../../components/texts/default-text';
@@ -13,8 +13,10 @@ import globalVars from '../../styles/vars';
 // Hooks
 import useMyProfile from '../../hooks/user/useMyProfile';
 import useMyPets from '../../hooks/user/useMyPets';
+// Reducer
+import {reducer} from '../../../reducer';
 // Types
-import {HomeRouteParams} from '../../types/navigation/root-stack';
+import {HomeRouteParams} from '../../types/navigation/home-navigator';
 
 const staticPets = [
   {
@@ -46,61 +48,27 @@ const servicesList = [
 
 export default ({navigation}): React.ReactElement => {
   const route = useRoute<HomeRouteParams>();
+  console.log(route.params);
   const userQuery = useMyProfile(route.params.isGuest);
-  const petsQuery = useMyPets(userQuery.data?.data.id);
-  console.log(petsQuery.data?.data);
-
+  const petsQuery = useMyPets(route.params.isGuest, userQuery.data?.data.id);
   const pets = petsQuery.data?.data ?? 0;
   const hasPets = pets.length != 0;
-  // const [isSelectionModeEnabled, setIsSelectionModeEnabled] = useState(false);
 
-  // // Logout on double back press.
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const onBackPress = () => {
-  //       if (isSelectionModeEnabled) {
-  //         setIsSelectionModeEnabled(true);
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     };
+  const onAddPetButtonPress = (pet) =>
+    navigation && navigation.navigate('AddPet', {pet: pet});
 
-  //     BackHandler.addEventListener('hardwareBackPress', onBackPress);
+  const onDetailPetButtonPress = (pet) =>
+    navigation && navigation.navigate('DetailPet', {pet: pet, id: pet.id});
 
-  //     return () =>
-  //       BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-  //   }, [isSelectionModeEnabled, setIsSelectionModeEnabled]),
-  // );
-
-  const onAddPetButtonPress = (pet) => {
-    navigation &&
-      navigation.navigate('AddPet', {
-        pet: pet,
-      });
-  };
-
-  const onDetailPetButtonPress = (pet) => {
-    navigation &&
-      navigation.navigate('DetailPet', {
-        pet: pet,
-        id: pet.id,
-      });
-  };
-
-  const onServiceButtonPress = (service) => {
-    navigation &&
-      navigation.navigate('ProductList', {
-        service: service,
-      });
-  };
+  const onServiceButtonPress = (service) =>
+    navigation && navigation.navigate('ProductList', {service: service});
 
   const renderHeader = () => (
     <View>
       <TitleHeader style={styles.greeting}>
         Hola{' '}
         <TitleHeader style={styles.highlightedText}>
-          {userQuery.data?.data.username}
+          {route.params.isGuest ? '' : userQuery.data?.data.name.split(' ')[0]}
         </TitleHeader>
       </TitleHeader>
       {hasPets && !route.params.isGuest ? (

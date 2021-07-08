@@ -15,7 +15,7 @@ import globalVars from '../../../styles/vars';
 // Services
 import auth_service from '../../../services/auth-service';
 // Types
-import {ForgotPasswordRouteParams} from '../../../types/navigation/root-stack';
+import {ForgotPasswordRouteParams} from '../../../types/navigation/auth-stack';
 
 interface ForgotPasswordFormFields {
   email: string;

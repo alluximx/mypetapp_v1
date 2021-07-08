@@ -7,7 +7,7 @@ import {AppLoading, LoadFontsTask, Task} from './app-loading.component';
 import {appMappings, appThemes} from './app-theming';
 import {AppIconsPack} from './app-icons-pack';
 import {SplashImage} from '../components/splash-image.component';
-import {AppNavigator} from '../navigation/app.navigator';
+import {MyAppNavigator} from '../navigation/myapp.navigator';
 import {AppStorage} from '../services/app-storage.service';
 import {Mapping, Theme, Theming} from '../services/theme.service';
 // Screens
@@ -57,7 +57,7 @@ const App = ({mapping, theme}): React.ReactElement => {
           <Theming.MappingContext.Provider value={mappingContext}>
             <Theming.ThemeContext.Provider value={themeContext}>
               <SafeAreaProvider>
-                <AppNavigator />
+                <MyAppNavigator />
               </SafeAreaProvider>
             </Theming.ThemeContext.Provider>
           </Theming.MappingContext.Provider>

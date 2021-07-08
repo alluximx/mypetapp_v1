@@ -11,13 +11,9 @@ class AuthService {
   };
 
   PostSignup = async (data) => {
-    const request = await axios.post(
-      API_URL + 'dj-rest-auth/registration/',
-      data,
-      {
-        headers: {'Content-Type': 'application/json'},
-      },
-    );
+    const request = await axios.post(API_URL + 'api/v1/users/', data, {
+      headers: {'Content-Type': 'application/json'},
+    });
     return request;
   };
 
@@ -71,6 +67,7 @@ class AuthService {
   me = async () => {
     try {
       const token = await AsyncStorage.getItem('auth_token');
+      console.log(token);
       const request = await axios.get(API_URL + 'api/v1/users/me/', {
         headers: {Authorization: 'Token ' + token},
       });
