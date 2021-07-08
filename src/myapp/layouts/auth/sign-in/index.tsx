@@ -51,7 +51,6 @@ export default ({navigation}): React.ReactElement => {
 
     if (hasCompletedForm) {
       const response = await authContext.signIn(form);
-
       // If there are no errors...
       if (response.status) {
         // navigation && navigation.navigate('HomeNavigator', {screen: 'Home'});
@@ -87,7 +86,7 @@ export default ({navigation}): React.ReactElement => {
               error={errors.non_field_errors}
               isPassword={true}
               onChangeText={(value: string) => {
-                onChange({name: 'password', value});
+                onChangeInputText({name: 'password', value});
               }}
               placeholder="Contraseña"
               value={form.password}

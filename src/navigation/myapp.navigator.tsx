@@ -20,7 +20,6 @@ import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
 import AuthService from '../myapp/services/auth-service';
 // Reducer
 import {reducer, initialState} from '../../src/reducer';
-// Types
 import RootStackParamList from '../myapp/types/navigation/root-stack';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
@@ -77,6 +76,11 @@ export const MyAppNavigator = (): React.ReactElement => {
         await AsyncStorage.removeItem('auth_token');
         queryClient.clear();
         dispatch({type: 'SIGN_OUT'});
+      },
+      // To switch from Register screens to User screens
+      goHome: async () => {
+        const token = await AsyncStorage.getItem('auth_token');
+        dispatch({type: 'SIGN_IN', token: token});
       },
     }),
     [],

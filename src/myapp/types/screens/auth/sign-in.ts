@@ -7,4 +7,5 @@ export interface SignInFormFields {
 // Fields the API returns with an error.
 export interface SignInErrors {
   non_field_errors: string;
+  detail: string;
 }
