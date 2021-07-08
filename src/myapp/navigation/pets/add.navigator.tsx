@@ -9,6 +9,7 @@ import globalColors from '../../styles/colors';
 import CustomButton from '../../components/buttons/custom-button';
 // Screens
 import {NameAndPictureScreen} from '../../scenes/pets/add/name-and-picture.component';
+import { SelectBreadScreen } from '../../scenes/pets/add/select-bread.component';
 
 const AddPetStack = createNativeStackNavigator();
 
@@ -44,7 +45,7 @@ const AddPetNavigator = (): React.ReactElement => {
   return (
     <AddPetContext.Provider value={addPetContext}>
       <AddPetStack.Navigator
-        initialRouteName="NameAndPicture"
+        initialRouteName="SelectBreadScreen"
         screenOptions={{
           title: '',
           headerStyle: styles.header,
@@ -65,6 +66,11 @@ const AddPetNavigator = (): React.ReactElement => {
             headerHideBackButton: true,
           }}
         />
+        <AddPetStack.Screen
+          name ="SelectBreadScreen"
+          component = {SelectBreadScreen}
+        />
+        
       </AddPetStack.Navigator>
     </AddPetContext.Provider>
   );
