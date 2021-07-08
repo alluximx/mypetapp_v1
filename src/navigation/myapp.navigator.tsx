@@ -1,21 +1,19 @@
 import React, {useEffect, useMemo, useReducer, useRef} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+} from '@react-navigation/native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {useIsDrawerOpen} from '@react-navigation/drawer';
-import {Animated, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {QueryClient, QueryClientProvider} from 'react-query';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
 // My Components
 import BackButton from '../myapp/components/buttons/back-button';
-import CloseButton from '../myapp/components/buttons/close-button';
-// Navigators
-import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
-// AUTH SCREENS
-import {SignInScreen} from '../myapp/scenes/auth/sign-in.component';
-import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
-import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
-import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
+// Navigators.
+import {AuthNavigator} from '../myapp/navigation/auth/auth.navigator';
+import {HomeNavigator} from './home.navigator';
 // Context
 import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
 // Services
@@ -23,30 +21,6 @@ import AuthService from '../myapp/services/auth-service';
 // Reducer
 import {reducer, initialState} from '../../src/reducer';
 import RootStackParamList from '../myapp/types/navigation/root-stack';
-
-/***************
- *** SCREENS ***
- ***************/
-// AUTH
-import {SignInScreen} from '../myapp/auth/sign-in.component';
-import {SignUpScreen} from '../myapp/scenes/auth/sign-up.component';
-import {ForgotPasswordScreen} from '../myapp/scenes/auth/forgot-password.component';
-import {RecoveryKeyScreen} from '../myapp/scenes/auth/recovery-key.component';
-
-// OTHER
-import {StartScreen} from '../myapp/scenes/start/start.component';
-import {TermsScreen} from '../myapp/scenes/auth/terms.component';
-import {HomeScreen} from '../myapp/scenes/home/home.component';
-import {AddPetScreen} from '../myapp/scenes/pets/add.component';
-import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
-import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
-import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
-import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
-import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
-import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
-import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
-import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
-import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
 enableScreens(true);
@@ -54,13 +28,9 @@ enableScreens(true);
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
 
-export const MyAppNavigator = ({navigation}): React.ReactElement => {
-  const isDrawerOpen = useIsDrawerOpen();
-  const translateX = useRef(new Animated.Value(0)).current;
-  const [, dispatch] = useReducer(reducer, initialState);
-
-  // Drawer's animation.
-  useEffect(() => {}, [translateX]);
+export const MyAppNavigator = (): React.ReactElement => {
+  const navigationRef = useRef<NavigationContainerRef>();
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const bootstrapAsync = async () => {
@@ -79,6 +49,9 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
 
   const authContext = useMemo(
     (): AuthContextType => ({
+      goHomeAsGuest: () => {
+        dispatch({type: 'GUEST_SIGN_IN'});
+      },
       signIn: async (data) => {
         try {
           const response = await AuthService.PostLogin(data);
@@ -113,115 +86,53 @@ export const MyAppNavigator = ({navigation}): React.ReactElement => {
     [],
   );
 
-  const closeButton = () => <CloseButton navigation={navigation} />;
-
-  const backButton = () => <BackButton navigation={navigation} />;
+  const backButton = () => <BackButton navigation={navigationRef} />;
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthContext.Provider value={authContext}>
-        <RootStack.Navigator
-          initialRouteName="Start"
-          screenOptions={{
-            contentStyle: isDrawerOpen ? styles.openDrawer : {},
-            headerLeft: backButton,
-            headerHideShadow: true,
-            headerStyle: styles.header,
-            stackAnimation: 'slide_from_right',
-          }}>
-          {/* AUTH */}
-          <RootStack.Screen
-            name="Start"
-            component={StartScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <RootStack.Screen
-            name="SignIn"
-            component={SignInScreen}
-            options={{
-              headerLeft: closeButton,
-              stackAnimation: 'flip',
-            }}
-          />
-          <RootStack.Screen
-            name="SignUp"
-            component={SignUpScreen}
-            options={{
-              headerLeft: closeButton,
-              stackAnimation: 'flip',
-            }}
-          />
-          <RootStack.Screen name="Terms" component={TermsScreen} />
-          <RootStack.Screen
-            name="ForgotPassword"
-            component={ForgotPasswordScreen}
-            initialParams={{
-              isSettingPassword: false,
-              userId: null,
-            }}
-          />
-          <RootStack.Screen name="RecoveryKey" component={RecoveryKeyScreen} />
-          {/* HOME */}
-          <RootStack.Screen
-            name="Home"
-            component={HomeScreen}
-            options={{
-              headerShown: false,
-              stackAnimation: 'flip',
-            }}
-            initialParams={{
-              isGuest: false,
-            }}
-          />
-          {/* PETS */}
-          <RootStack.Screen
-            name="AddPet"
-            component={AddPetNavigator}
-            options={{
-              headerLeft: closeButton,
-              stackAnimation: 'fade',
-            }}
-          />
-          <RootStack.Screen name="DetailPet" component={DetailPetScreen} />
-          <RootStack.Screen name="AddVaccine" component={AddVaccineScreen} />
-          <RootStack.Screen name="AddVisit" component={AddVisitScreen} />
-          <RootStack.Screen
-            name="AddDeworming"
-            component={AddDewormingScreen}
-          />
-          <RootStack.Screen
-            name="ClinicalHistory"
-            component={ClinicalHistoryScreen}
-          />
-          <RootStack.Screen name="Orders" component={OrdersScreen} />
-          <RootStack.Screen name="ProductList" component={ProductListScreen} />
-          <RootStack.Screen
-            name="ProductDetail"
-            component={ProductDetailScreen}
-          />
-          <RootStack.Screen name="Cart" component={CartScreen} />
-        </RootStack.Navigator>
-      </AuthContext.Provider>
-    </QueryClientProvider>
+    <NavigationContainer ref={navigationRef}>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider value={authContext}>
+          <RootStack.Navigator
+            initialRouteName="AuthNavigator"
+            screenOptions={{
+              headerLeft: backButton,
+              headerHideShadow: true,
+              headerStyle: styles.header,
+              headerTopInsetEnabled: false,
+              stackAnimation: 'slide_from_right',
+            }}>
+            {state.userToken || state.isGuest ? (
+              <RootStack.Screen
+                name="HomeNavigator"
+                component={HomeNavigator}
+                options={{
+                  headerShown: false,
+                }}
+                initialParams={{
+                  isGuest: state.isGuest,
+                }}
+              />
+            ) : (
+              <RootStack.Screen
+                name="AuthNavigator"
+                component={AuthNavigator}
+                initialParams={{
+                  isGuest: state.isGuest,
+                }}
+                options={{
+                  headerShown: false,
+                }}
+              />
+            )}
+          </RootStack.Navigator>
+        </AuthContext.Provider>
+      </QueryClientProvider>
+    </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
     backgroundColor: globalColors.backgroundDefault,
-  },
-  openDrawer: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    transform: [
-      {
-        scale: 0.7,
-      },
-      {
-        translateX: -80,
-      },
-    ],
   },
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface AuthContextType {
+  goHomeAsGuest: () => void;
   signIn: (data: any) => Promise<{status: boolean; data: any}>;
   signUp: (data: any) => Promise<{status: boolean; data: any}>;
   signOut: () => Promise<void>;
@@ -8,6 +9,7 @@ export interface AuthContextType {
 
 // Default function definitions.
 export const AuthContext = React.createContext<AuthContextType>({
+  goHomeAsGuest: () => {},
   signIn: async (data) => {
     return data;
   },

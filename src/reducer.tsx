@@ -10,6 +10,7 @@ export const reducer = (prevState, action) => {
       return {
         ...prevState,
         isSignout: false,
+        isGuest: false,
         userToken: action.token,
       };
     case 'SIGN_OUT':
@@ -17,11 +18,20 @@ export const reducer = (prevState, action) => {
         ...prevState,
         isSignout: true,
         userToken: null,
+        isGuest: false,
+      };
+    case 'GUEST_SIGN_IN':
+      return {
+        ...prevState,
+        isGuest: true,
+        isSignout: false,
+        userToken: null,
       };
   }
 };
 
 export const initialState = {
+  isGuest: false,
   isLoading: true,
   isSignout: false,
   userToken: null,

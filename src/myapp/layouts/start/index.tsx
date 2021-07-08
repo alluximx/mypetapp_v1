@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
+// Context
+import {AuthContext, AuthContextType} from '../../context/AuthContext';
 // My components
 import AnchorText from '../../components/texts/anchor-text';
 import CustomButton from '../../components/buttons/custom-button';
@@ -9,16 +11,13 @@ import DefaultLayout from '../../components/default-layout';
 import globalColors from '../../styles/colors';
 
 export default ({navigation}): React.ReactElement => {
+  const authContext = useContext<AuthContextType>(AuthContext);
   const onStartButtonPress = (): void => {
     navigation && navigation.navigate('SignUp');
   };
 
   const onSignInTextPress = (): void => {
     navigation && navigation.navigate('SignIn');
-  };
-
-  const onSignInAsInvitedTextPress = (): void => {
-    navigation && navigation.navigate('Home', {isGuest: true});
   };
 
   return (
@@ -53,7 +52,7 @@ export default ({navigation}): React.ReactElement => {
       </View>
       <AnchorText
         style={styles.signInAsInvited}
-        onPress={onSignInAsInvitedTextPress}>
+        onPress={authContext.goHomeAsGuest}>
         Ingresar como invitado
       </AnchorText>
     </DefaultLayout>

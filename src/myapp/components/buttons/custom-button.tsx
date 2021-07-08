@@ -17,6 +17,7 @@ const CustomButton = (props: CustomButtonProps): React.ReactElement => {
   return props.isLight ? (
     // Light Button
     <Button
+      activeOpacity={0.8}
       appearance="ghost"
       style={[styles.button, styles.lightButton, props.style]}
       onPress={props.onPress}>
@@ -25,6 +26,7 @@ const CustomButton = (props: CustomButtonProps): React.ReactElement => {
   ) : (
     // Default Button...
     <Button
+      activeOpacity={0.8}
       style={[
         styles.button,
         props.isDisabled ? styles.defaultButton : styles.defaultButtonDisabled,

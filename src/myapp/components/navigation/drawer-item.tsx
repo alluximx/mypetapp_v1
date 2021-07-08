@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
 
 interface DrawerItemProps {
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: globalVars.fontBold,
     paddingLeft: 15,
   },
 });

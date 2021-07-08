@@ -3,7 +3,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
-import CloseButton from '../../../components/buttons/close-button';
 import CustomButton from '../../../components/buttons/custom-button';
 import DefaultLayout from '../../../components/default-layout';
 import DefaultText from '../../../components/texts/default-text';
@@ -15,60 +14,58 @@ import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Context
 import {AuthContext} from '../../../context/AuthContext';
+// Types
+import {
+  SignUpErrors,
+  SignUpFormFields,
+} from '../../../types/screens/auth/sign-up';
 
-interface SignUpFormFields {
-  username: string;
-  email: string;
-  password1: string;
-  password2: string;
-}
+// Default values for form fields.
+const defaultValues = {
+  username: '',
+  name: '',
+  password: '',
+};
+// Default values for errors.
+const defaultErrors = {
+  username: '',
+  name: '',
+  password: '',
+};
 
 export default ({navigation}): React.ReactElement => {
-  // Context
+  // Context.
   const authContext = useContext(AuthContext);
-  // Default values for form fields.
-  const defaultValues = {
-    username: '',
-    email: '',
-    password1: '',
-    password2: '',
-  };
-
   // Form fields...
   const [form, setForm] = useState<SignUpFormFields>(defaultValues);
-  const [errors, setErrors] = useState<SignUpFormFields>(defaultValues);
+  const [errors, setErrors] = useState<SignUpErrors>(defaultErrors);
   // Modal and spinner.
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  // If there is no empty field...
   const hasCompletedForm =
-    form.username !== '' && form.email !== '' && form.password1 !== '';
+    form.username !== '' && form.name !== '' && form.password !== '';
   // Are there any errors...
-  const hasErrors =
-    errors.username !== '' ||
-    errors.email !== '' ||
-    errors.password1 !== '' ||
-    errors.password2 !== '';
-
-  // Conditional styles
+  const hasErrors = errors.password !== '' || errors.username !== '';
+  // Conditional styles.
   const buttonMargin = hasErrors ? {marginTop: 10} : {marginTop: 56};
 
   /*****************
    * Event Methods *
    *****************/
 
-  const onChange = ({name, value}) => {
-    setForm({...form, [name]: value});
-  };
-
   const onSignUpButtonPress = async (): Promise<void> => {
     // Show spinner
     setLoading(true);
     // Clear errors
-    setErrors(defaultValues);
+    setErrors(defaultErrors);
 
     if (hasCompletedForm) {
-      const response = await authContext.signUp(form);
+      const newForm = {
+        ...form,
+        email: form.username,
+      };
+      const response = await authContext.signUp(newForm);
 
       if (response.status) {
         setIsModalVisible(true);
@@ -78,26 +75,19 @@ export default ({navigation}): React.ReactElement => {
           ...response.data,
         });
       }
-    } else {
-      setErrors({
-        username: form.username === '' && 'El campo Nombre es requerido',
-        email: form.email === '' && 'El campo Correo es requerido',
-        password1: form.password1 === '' && 'El campo Contraseña es requerido',
-        password2: '',
-      });
     }
 
     // Hide spinner
     setLoading(false);
   };
 
-  const onSignInTextPress = (): void => {
-    navigation && navigation.navigate('SignIn');
-  };
+  const onChange = ({name, value}): void => setForm({...form, [name]: value});
 
-  const onTermsTextPress = (): void => {
+  const onSignInTextPress = (): void =>
+    navigation && navigation.navigate('SignIn');
+
+  const onTermsTextPress = (): void =>
     navigation && navigation.navigate('Terms');
-  };
 
   const onModalAccept = (): void => {
     setIsModalVisible(false);
@@ -127,29 +117,29 @@ export default ({navigation}): React.ReactElement => {
             </View>
             <View style={styles.formContainer}>
               <UserInput
+                autoCapitalize={true}
+                onChangeText={(value: string) => {
+                  onChange({name: 'name', value});
+                }}
                 placeholder="Nombre"
-                value={form.username}
+                value={form.name}
+              />
+              <UserInput
+                error={errors.username}
                 onChangeText={(value: string) => {
                   onChange({name: 'username', value});
                 }}
-                error={errors.username}
-              />
-              <UserInput
                 placeholder="Correo"
-                value={form.email}
-                onChangeText={(value: string) => {
-                  onChange({name: 'email', value});
-                }}
-                error={errors.email}
+                value={form.username}
               />
               <UserInput
-                placeholder="Contraseña"
+                error={errors.password}
                 isPassword={true}
-                value={form.password1}
                 onChangeText={(value: string) => {
-                  setForm({...form, password1: value, password2: value});
+                  onChange({name: 'password', value});
                 }}
-                error={errors.password1}
+                placeholder="Contraseña"
+                value={form.password}
               />
               {hasErrors &&
                 // Map errors...

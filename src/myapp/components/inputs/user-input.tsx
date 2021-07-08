@@ -63,6 +63,14 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         {props.placeholder}
       </Animated.Text>
       <Input
+        accessoryRight={props.isPassword ? renderIcon : null}
+        autoCapitalize={props.autoCapitalize ? 'words' : 'none'}
+        onBlur={() => setIsFocused(false)}
+        onChangeText={(value) => {
+          props.onChangeText(value);
+        }}
+        onFocus={() => setIsFocused(true)}
+        secureTextEntry={props.isPassword ? secureTextEntry : null}
         style={[
           styles.inputValue,
           {
@@ -72,13 +80,6 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         ]}
         textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
         value={props.value}
-        onChangeText={(value) => {
-          props.onChangeText(value);
-        }}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        secureTextEntry={props.isPassword ? secureTextEntry : null}
-        accessoryRight={props.isPassword ? renderIcon : null}
       />
     </View>
   );
