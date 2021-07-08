@@ -33,7 +33,7 @@ const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
 
-const Screens = ({navigation, style}) => {
+const Screens = ({navigation, route, style}) => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
 
@@ -56,7 +56,7 @@ const Screens = ({navigation, style}) => {
             headerShown: false,
           }}
           initialParams={{
-            isGuest: false,
+            isGuest: route.params.isGuest,
           }}
         />
         {/* PETS */}
@@ -87,7 +87,7 @@ const Screens = ({navigation, style}) => {
   );
 };
 
-export const HomeNavigator = (): React.ReactElement => {
+export const HomeNavigator = ({route}): React.ReactElement => {
   const [progress, setProgress] = React.useState<Animated.Node<number>>(
     new Animated.Value(0),
   );
@@ -120,7 +120,7 @@ export const HomeNavigator = (): React.ReactElement => {
         setProgress(props.progress);
         return <HomeDrawer {...props} />;
       }}>
-      <Drawer.Screen name="Screens">
+      <Drawer.Screen name="Screens" initialParams={route.params}>
         {(props) => <Screens {...props} style={animatedStyle} />}
       </Drawer.Screen>
     </Drawer.Navigator>

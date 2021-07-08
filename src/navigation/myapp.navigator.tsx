@@ -104,6 +104,9 @@ export const MyAppNavigator = (): React.ReactElement => {
                 options={{
                   headerShown: false,
                 }}
+                initialParams={{
+                  isGuest: state.isGuest,
+                }}
               />
             ) : (
               <RootStack.Screen
