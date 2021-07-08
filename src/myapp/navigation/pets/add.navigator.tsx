@@ -11,6 +11,7 @@ import AnchorText from '../../components/texts/anchor-text';
 // Screens
 import {NameAndPictureScreen} from '../../scenes/pets/add/name-and-picture.component';
 import {SexAndAgeScreen} from '../../scenes/pets/add/sex-and-age.component';
+import { SelectBreadScreen } from '../../scenes/pets/add/select-bread.component';
 
 const AddPetStack = createNativeStackNavigator();
 
@@ -45,7 +46,7 @@ const AddPetNavigator = (): React.ReactElement => {
   return (
     <AddPetContext.Provider value={addPetContext}>
       <AddPetStack.Navigator
-        initialRouteName="NameAndPicture"
+        initialRouteName="SelectBreadScreen"
         screenOptions={{
           title: '',
           headerStyle: styles.header,
@@ -70,6 +71,10 @@ const AddPetNavigator = (): React.ReactElement => {
             renderButtonNext,
             renderButtonBack,
           }}
+        />
+        <AddPetStack.Screen
+          name ="SelectBreadScreen"
+          component = {SelectBreadScreen}
         />
       </AddPetStack.Navigator>
     </AddPetContext.Provider>
