@@ -1,11 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   Alert,
   Image,
   Modal,
   StyleSheet,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -15,6 +14,7 @@ import DefaultText from '../texts/default-text';
 import TitleHeader from '../texts/title-header';
 // Global Styles
 import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 
 const CustomModal = ({
   visible,
@@ -25,18 +25,12 @@ const CustomModal = ({
   showCancel,
   labelAccept,
 }) => {
-  const [modalVisible, setModalVisible] = useState(visible);
-
-  useEffect(() => {
-    setModalVisible(visible);
-  }, [visible]);
-
   return (
     <View>
       <Modal
         animationType="slide"
         transparent={true}
-        visible={modalVisible}
+        visible={visible}
         onRequestClose={() => {
           Alert.alert('Modal tiene que ser cerrado');
         }}>
@@ -61,7 +55,7 @@ const CustomModal = ({
               {labelAccept}
             </CustomButton>
             {showCancel ? (
-              <TouchableOpacity onPress={onCancel}>
+              <TouchableOpacity activeOpacity={0.8} onPress={onCancel}>
                 <Text style={styles.textCancel}>Cancelar</Text>
               </TouchableOpacity>
             ) : null}
@@ -99,9 +93,10 @@ const styles = StyleSheet.create({
   },
   textCancel: {
     color: globalColors.white,
-    fontWeight: 'bold',
+    fontFamily: globalVars.fontBold,
+    fontSize: 16,
     textAlign: 'center',
-    paddingTop: 20,
+    paddingTop: 28,
   },
   modalTitle: {
     color: globalColors.white,
