@@ -1,9 +1,9 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Card, List, Spinner, Text} from '@ui-kitten/components';
-import {AddIcon} from './extra/icons';
 import {useRoute} from '@react-navigation/native';
 // My Components
+import AddButton from '../../components/buttons/add-button';
 import DefaultLayout from '../../components/default-layout';
 import DefaultText from '../../components/texts/default-text';
 import TitleHeader from '../../components/texts/title-header';
@@ -102,15 +102,6 @@ export default ({navigation}): React.ReactElement => {
     );
   };
 
-  const renderAddPetButton = () => (
-    <Button
-      activeOpacity={0.8}
-      style={styles.addButton}
-      accessoryLeft={AddIcon}
-      onPress={onAddPetButtonPress}
-    />
-  );
-
   const renderServiceItem = (service) => (
     <View style={styles.serviceContainer}>
       <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
@@ -140,7 +131,7 @@ export default ({navigation}): React.ReactElement => {
               styles.petButtonContentContainerEmpty,
           ]}
           horizontal={true}
-          ListFooterComponent={renderAddPetButton}
+          ListFooterComponent={() => <AddButton onAdd={onAddPetButtonPress} />}
           ListFooterComponentStyle={styles.addButtonContainer}
           data={pets}
           renderItem={renderPetButton}
@@ -240,13 +231,6 @@ const styles = StyleSheet.create({
   ageText: {
     color: globalColors.white,
     fontSize: 14,
-  },
-  addButton: {
-    height: 40,
-    width: 40,
-    borderRadius: 40,
-    backgroundColor: globalColors.greenSecondary,
-    borderWidth: 0,
   },
   addButtonContainer: {
     alignSelf: 'center',
