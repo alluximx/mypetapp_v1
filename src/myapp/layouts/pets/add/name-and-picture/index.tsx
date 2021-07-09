@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useLayoutEffect} from 'react';
 import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 // My Components
 import DefaultLayout from '../../../../components/default-layout';
@@ -9,8 +9,19 @@ import UserInput from '../../../../components/inputs/user-input';
 // Context
 import {AddPetContext} from '../../../../context/AddPetContext';
 
-export default (): React.ReactElement => {
+export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
+
+  useLayoutEffect(() => {
+    const isDisabled = form.name === '' || form.image === '';
+
+    navigation.setOptions({
+      headerRight: () =>
+        route.params.renderButtonNext(isDisabled, () => {
+          navigation.navigate('SexAndAge');
+        }),
+    });
+  }, [navigation, form]);
 
   return (
     <DefaultLayout>

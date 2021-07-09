@@ -9,7 +9,7 @@ import {AddIcon} from '../icons';
 interface AddButtonProps {
   iconStyle?: {};
   style?: {};
-  onAdd: () => void;
+  onAdd: (props?: {}) => void;
 }
 
 const AddButton = (props: AddButtonProps): React.ReactElement => {

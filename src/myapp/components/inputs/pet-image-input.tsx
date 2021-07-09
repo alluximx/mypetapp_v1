@@ -6,8 +6,6 @@ import {
   CameraOptions,
   ImagePickerResponse,
 } from 'react-native-image-picker';
-// Global styles.
-import globalColors from '../../styles/colors';
 // My Components.
 import AddButton from '../buttons/add-button';
 
