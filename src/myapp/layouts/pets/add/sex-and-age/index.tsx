@@ -3,7 +3,7 @@ import {KeyboardAvoidingView, StyleSheet, Text} from 'react-native';
 // Global Styles.
 import globalStyles from '../../../../styles/style';
 // My Components
-import DefaultLayout from '../../../../components/default-layout';
+import DefaultLayout from '../../../../components/layouts/default-layout';
 import OptionSelect from '../../../../components/inputs/option-select';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';

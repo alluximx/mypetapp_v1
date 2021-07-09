@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 // My components
-import DefaultLayout from '../../components/default-layout';
+import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 

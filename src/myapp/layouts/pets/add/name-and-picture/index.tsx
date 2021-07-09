@@ -1,7 +1,7 @@
 import React, {useContext, useLayoutEffect} from 'react';
 import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 // My Components
-import DefaultLayout from '../../../../components/default-layout';
+import DefaultLayout from '../../../../components/layouts/default-layout';
 import DefaultText from '../../../../components/texts/default-text';
 import PetImageInput from '../../../../components/inputs/pet-image-input';
 import TitleHeader from '../../../../components/texts/title-header';

@@ -63,7 +63,18 @@ const Screens = ({navigation, route, style}) => {
             headerLeft: closeButton,
           }}
         />
-        <HomeStack.Screen name="DetailPet" component={DetailPetScreen} />
+        <HomeStack.Screen
+          name="DetailPet"
+          component={DetailPetScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: globalColors.greenSecondary,
+            },
+            headerLeft: () => (
+              <BackButton isWhite={true} navigation={navigation} />
+            ),
+          }}
+        />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />

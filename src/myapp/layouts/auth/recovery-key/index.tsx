@@ -11,7 +11,7 @@ import {Spinner} from '@ui-kitten/components';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
-import DefaultLayout from '../../../components/default-layout';
+import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import RecoveryCodeInput from '../../../components/inputs/recovery-code-input';

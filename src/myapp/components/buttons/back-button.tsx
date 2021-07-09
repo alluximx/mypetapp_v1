@@ -11,7 +11,7 @@ const BackButton = (props): React.ReactElement => {
       height={35}
       onPress={props.navigation.goBack}
       width={35}
-      fill={globalColors.greenSecondary}
+      fill={props.isWhite ? globalColors.white : globalColors.greenSecondary}
       name="arrow-back-outline"
     />
   );
