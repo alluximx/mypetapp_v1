@@ -84,6 +84,8 @@ const Screens = ({navigation, route, style}) => {
             headerLeft: closeButton,
           }}
         />
+        {/* Services aldair */}
+        <HomeStack.Screen name="ServicesDoc" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />

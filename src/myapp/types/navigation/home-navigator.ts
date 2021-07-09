@@ -15,6 +15,7 @@ type HomeNavigatorParamList = {
   ProductList: {};
   ProductDetail: {};
   Cart: {};
+  ServicesDoc: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;
