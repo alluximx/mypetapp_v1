@@ -86,7 +86,7 @@ export default ({navigation}): React.ReactElement => {
               error={errors.non_field_errors}
               isPassword={true}
               onChangeText={(value: string) => {
-                onChangeInputText({name: 'password', value});
+                onChange({name: 'password', value});
               }}
               placeholder="Contraseña"
               value={form.password}
