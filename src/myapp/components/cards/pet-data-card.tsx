@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     backgroundColor: globalColors.greenTertiary,
     borderRadius: 16,
     padding: 16,
-    width: width / 2 - globalVars.outsidePadding,
+    width: width / 2 - globalVars.outsidePadding - 8,
     marginRight: 16,
   },
   petDataCardTextTitle: {

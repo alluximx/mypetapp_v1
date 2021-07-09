@@ -103,11 +103,11 @@ const styles = StyleSheet.create({
   petDataCards: {
     flexDirection: 'row',
     marginTop: 32,
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
   },
   petImageContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
+    paddingHorizontal: 24,
   },
   petImage: {
     width: 80,
