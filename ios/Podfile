@@ -55,6 +55,8 @@ target 'mypetapp_v1' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
   target 'mypetapp_v1Tests' do
     inherit! :complete
     # Pods for testing

@@ -1,26 +1,69 @@
-import React from 'react';
+import React, {useCallback} from 'react';
+import {useState} from 'react';
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  launchCamera,
+  CameraOptions,
+  ImagePickerResponse,
+} from 'react-native-image-picker';
 // Global styles.
 import globalColors from '../../styles/colors';
 // My Components.
 import AddButton from '../buttons/add-button';
 
-const PetImageInput = ({image}): React.ReactElement => {
+const options: CameraOptions = {
+  mediaType: 'photo',
+  includeBase64: false,
+};
+
+const PetImageInput = ({image, setImage}): React.ReactElement => {
+  const [imageResponse, setImageResponse] = useState<any>(null);
+
+  const onPress = useCallback(() => {
+    launchCamera(options, (response: ImagePickerResponse) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('Error code: ', response.errorCode);
+      } else {
+        setImageResponse(response);
+        setImage(response.assets[0].uri);
+      }
+    });
+  }, []);
+
+  const renderPetImageAsset = () => {
+    let source = null;
+    let additionalStyles = {};
+
+    // If there is an image passed as prop and a picture
+    // hasn't been taken...
+    if (image !== '' && !imageResponse) {
+      source = image;
+    }
+    // And if an image has been taken...
+    else if (imageResponse) {
+      source = {uri: imageResponse.assets[0].uri};
+      additionalStyles = styles.takenPictureStyles;
+    }
+    // Otherwise show default image.
+    else {
+      source = require('../../assets/images/pets/add-pet-image.png');
+    }
+
+    return (
+      <Image style={[styles.addPetImage, additionalStyles]} source={source} />
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.8}>
-        {image !== '' ? (
-          <Image source={image} />
-        ) : (
-          <Image
-            style={styles.addPetImage}
-            source={require('../../assets/images/pets/add-pet-image.png')}
-          />
-        )}
+      <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
+        {renderPetImageAsset()}
         <AddButton
           iconStyle={styles.addIcon}
           style={styles.addButton}
-          onAdd={() => {}}
+          onAdd={onPress}
         />
       </TouchableOpacity>
     </View>
@@ -37,6 +80,11 @@ const styles = StyleSheet.create({
     height: 88,
     width: 88,
     resizeMode: 'contain',
+  },
+  takenPictureStyles: {
+    resizeMode: 'cover',
+    borderRadius: 50,
+    overflow: 'hidden',
   },
   addButton: {
     height: 26,

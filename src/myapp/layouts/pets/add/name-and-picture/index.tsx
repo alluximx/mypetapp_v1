@@ -16,7 +16,10 @@ export default (): React.ReactElement => {
     <DefaultLayout>
       <KeyboardAvoidingView>
         <View style={styles.imageInputContainer}>
-          <PetImageInput image={form.image} />
+          <PetImageInput
+            image={form.image}
+            setImage={(val: string) => setForm({...form, image: val})}
+          />
           <DefaultText style={styles.imageInputText}>
             Agrega su mejor foto
           </DefaultText>
