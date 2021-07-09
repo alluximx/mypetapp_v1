@@ -79,8 +79,6 @@ const AddPetNavigator = (): React.ReactElement => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: globalColors.backgroundDefault,
-    padding: 0,
-    margin: 0,
   },
   nextButton: {
     paddingVertical: 10,

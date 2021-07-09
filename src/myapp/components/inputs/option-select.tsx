@@ -3,9 +3,9 @@ import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 // Types
 import {OptionSelectProps} from '../../types/components/inputs';
-import globalVars from '../../styles/vars';
 
 const width = Dimensions.get('window').width;
 const optionGap = 16;
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
+    fontFamily: globalVars.fontRegular,
   },
   optionTextSelected: {
     color: globalColors.white,

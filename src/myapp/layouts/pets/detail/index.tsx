@@ -27,14 +27,15 @@ const servicesList = [
 
 export default ({navigation, route}): React.ReactElement => {
   const {bread, image, name, sex} = route.params.pet;
-  console.log(route.params.pet);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <AnchorText
           style={styles.headerRight}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() =>
+            navigation.navigate('EditPet', {pet: route.params.pet})
+          }>
           Editar
         </AnchorText>
       ),

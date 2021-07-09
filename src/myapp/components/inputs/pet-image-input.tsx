@@ -14,7 +14,7 @@ const options: CameraOptions = {
   includeBase64: false,
 };
 
-const PetImageInput = ({image, setImage}): React.ReactElement => {
+const PetImageInput = ({image, setImage, style}): React.ReactElement => {
   const [imageResponse, setImageResponse] = useState<any>(null);
 
   const onPress = useCallback(() => {
@@ -38,6 +38,7 @@ const PetImageInput = ({image, setImage}): React.ReactElement => {
     // hasn't been taken...
     if (image !== '' && !imageResponse) {
       source = image;
+      additionalStyles = styles.takenPictureStyles;
     }
     // And if an image has been taken...
     else if (imageResponse) {
@@ -55,7 +56,7 @@ const PetImageInput = ({image, setImage}): React.ReactElement => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
         {renderPetImageAsset()}
         <AddButton

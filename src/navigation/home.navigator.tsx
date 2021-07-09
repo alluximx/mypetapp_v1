@@ -17,7 +17,9 @@ import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
 import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
+// Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
+import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
@@ -73,6 +75,13 @@ const Screens = ({navigation, route, style}) => {
             headerLeft: () => (
               <BackButton isWhite={true} navigation={navigation} />
             ),
+          }}
+        />
+        <HomeStack.Screen
+          name="EditPet"
+          component={EditPetScreen}
+          options={{
+            headerLeft: closeButton,
           }}
         />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
