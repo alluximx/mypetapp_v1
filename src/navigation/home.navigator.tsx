@@ -1,13 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {Dimensions, StyleSheet} from 'react-native';
 import Animated from 'react-native-reanimated';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
-// Hooks.
-import useIsGuest from '../myapp/hooks/useIsGuest';
 // My Components.
 import {HomeDrawer} from '../myapp/components/navigation/home-drawer';
 import BackButton from '../myapp/components/buttons/back-button';
@@ -27,7 +24,6 @@ import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component
 import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
-import {useState} from 'react';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
