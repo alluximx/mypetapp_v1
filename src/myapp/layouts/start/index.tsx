@@ -6,7 +6,7 @@ import {AuthContext, AuthContextType} from '../../context/AuthContext';
 // My components
 import AnchorText from '../../components/texts/anchor-text';
 import CustomButton from '../../components/buttons/custom-button';
-import DefaultLayout from '../../components/default-layout';
+import DefaultLayout from '../../components/layouts/default-layout';
 // Global styles.
 import globalColors from '../../styles/colors';
 

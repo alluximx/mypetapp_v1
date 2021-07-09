@@ -4,8 +4,10 @@ import {Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Types
+import {AnchorTextProps} from '../../types/components/texts';
 
-const AnchorText = (props): React.ReactElement => {
+const AnchorText = (props: AnchorTextProps): React.ReactElement => {
   return (
     <Text style={[styles.anchorText, props.style]} onPress={props.onPress}>
       {props.children}

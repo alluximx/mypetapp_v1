@@ -2,31 +2,29 @@ import React from 'react';
 import {StatusBarStyle, StyleSheet} from 'react-native';
 import {Layout} from '@ui-kitten/components';
 // My components
-import FocusAwareStatusBar from './focus-aware-status-bar';
+import DefaultLayout from './default-layout';
 // Global styles.
-import globalColors from '../styles/colors';
-import globalVars from '../styles/vars';
+import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 
-interface DefaultLayoutProps {
+interface CardLayoutProps {
   style?: {};
-  children: React.ReactFragment;
+  cardContent: React.ReactFragment;
   statusBarBackgroundColor?: string;
   statusBarStyle?: StatusBarStyle;
 }
 
-const DefaultLayout = (props: DefaultLayoutProps): React.ReactElement => {
+const CardLayout = (props: CardLayoutProps): React.ReactElement => {
   const barStyle = props.statusBarStyle ?? 'dark-content';
   const backgroundColor =
     props.statusBarBackgroundColor ?? globalColors.backgroundDefault;
 
   return (
-    <Layout style={[style.defaultLayout, props.style]} level="1">
-      <FocusAwareStatusBar
-        barStyle={barStyle}
-        backgroundColor={backgroundColor}
-      />
-      {props.children}
-    </Layout>
+    <DefaultLayout
+      statusBarStyle={barStyle}
+      statusBarBackgroundColor={backgroundColor}>
+      <DefaultLayout>{props.cardContent}</DefaultLayout>
+    </DefaultLayout>
   );
 };
 
@@ -39,4 +37,4 @@ const style = StyleSheet.create({
   },
 });
 
-export default DefaultLayout;
+export default CardLayout;

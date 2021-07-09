@@ -1,6 +1,12 @@
 import React from 'react';
-import {ImageStyle} from 'react-native';
+import {ImageStyle, StyleSheet} from 'react-native';
 import {Icon, IconElement} from '@ui-kitten/components';
+// Global styles.
+import globalColors from '../styles/colors';
+
+export const AddIcon = ({style}): IconElement => (
+  <Icon style={[styles.addIcon, style]} name="plus-outline" />
+);
 
 export const ArrowIosBackIcon = (style: ImageStyle): IconElement => (
   <Icon {...style} name="arrow-ios-back" />
@@ -321,3 +327,11 @@ export const AssetTopNavigationIcon = (style: ImageStyle): IconElement => (
 export const AssetTopNavigationDarkIcon = (style: ImageStyle): IconElement => (
   <Icon {...style} pack="app" name="top-navigation-dark" />
 );
+
+const styles = StyleSheet.create({
+  addIcon: {
+    height: 25,
+    width: 25,
+    tintColor: globalColors.white,
+  },
+});

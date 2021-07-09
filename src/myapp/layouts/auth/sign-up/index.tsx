@@ -4,7 +4,7 @@ import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomButton from '../../../components/buttons/custom-button';
-import DefaultLayout from '../../../components/default-layout';
+import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';

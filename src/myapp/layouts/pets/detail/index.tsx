@@ -1,188 +1,161 @@
-import React from 'react';
-import {
-  ScrollView,
-  View,
-  ListRenderItemInfo,
-  ImageBackground,
-} from 'react-native';
-import {
-  Button,
-  Text,
-  Layout,
-  Card,
-  StyleService,
-  useStyleSheet,
-} from '@ui-kitten/components';
-import {ProfileAvatar} from '../../auth/sign-up/extra/profile-avatar.component';
-import {PlusIcon} from '../../auth/sign-up/extra/icons';
-import {Service} from '../extra/data';
-import {CategoryList} from '../extra/category-list.component';
+import React, {useLayoutEffect} from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import {Card, List} from '@ui-kitten/components';
+// Global Styles.
+import globalColors from '../../../styles/colors';
+// My Components.
+import AnchorText from '../../../components/texts/anchor-text';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import PetDataCard from '../../../components/cards/pet-data-card';
+import TitleHeader from '../../../components/texts/title-header';
 
-export default ({navigation}): React.ReactElement => {
-  const styles = useStyleSheet(themedStyles);
+const servicesList = [
+  {
+    serviceName: 'Visitas',
+    icon: require('../../../assets/images/menu/vets.png'),
+  },
+  {
+    serviceName: 'Vacunas',
+    icon: require('../../../assets/images/menu/pet-stylists.png'),
+  },
+  {
+    serviceName: 'Desparaci...',
+    icon: require('../../../assets/images/menu/products.png'),
+  },
+];
 
-  const services: Service[] = [
-    Service.travel1(),
-    Service.travel2(),
-    Service.travel3(),
-  ];
+export default ({navigation, route}): React.ReactElement => {
+  const {bread, image, name, sex} = route.params.pet;
 
-  const onEventPetButtonPress = (event) => {
-    navigation && navigation.navigate(event.item.screen, {});
-  };
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AnchorText
+          style={styles.headerRight}
+          onPress={() =>
+            navigation.navigate('EditPet', {pet: route.params.pet})
+          }>
+          Editar
+        </AnchorText>
+      ),
+    });
+  }, [navigation]);
 
-  const onClinicalHistoryButtonPress = (event) => {
-    navigation && navigation.navigate('ClinicalHistory', {});
-  };
-
-  const renderEditAvatarButton = (): React.ReactElement => (
-    <Button style={styles.editAvatarButton} status="basic" icon={PlusIcon} />
-  );
-
-  const Footer = (props) => (
-    <View {...props} style={[props.style, styles.footerContainer]}>
-      <Text style={styles.profileLocation} category="s1">
-        {props.item.category}
-      </Text>
-    </View>
-  );
-
-  const renderPostItem = (
-    info: ListRenderItemInfo<Service>,
-  ): React.ReactElement => (
-    <View style={styles.profileLocationContainer}>
-      <Card
-        onPress={() => onEventPetButtonPress(info)}
-        style={styles.card}
-        info={info}
-        footer={() => Footer(info)}>
-        <ImageBackground style={styles.postItem} source={info.item.photo} />
+  const renderServiceItem = (service) => (
+    <View style={styles.serviceContainer}>
+      <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
+        <Image style={styles.serviceIcon} source={service.item.icon} />
       </Card>
+      <DefaultText style={styles.serviceNameText}>
+        {service.item.serviceName}
+      </DefaultText>
     </View>
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <ProfileAvatar
-          style={styles.profileAvatar}
-          resizeMode="center"
-          editButton={renderEditAvatarButton}
+    <DefaultLayout style={styles.container}>
+      <View style={styles.petImageContainer}>
+        <Image
+          style={styles.petImage}
           source={require('../../home/assets/image-pet-1.jpg')}
         />
+        <View style={styles.petDataContainer}>
+          <TitleHeader style={styles.whiteText}>{name}</TitleHeader>
+          <DefaultText style={styles.whiteText}>Beagle</DefaultText>
+        </View>
       </View>
-      <Layout style={styles.formContainer} level="1">
-        <Text>Molly</Text>
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Text>Schnauzer (H)</Text>
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Text>3 años</Text>
-        <Text>22 de Septiembre</Text>
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Text
-          style={styles.clinicHistoryText}
-          onPress={onClinicalHistoryButtonPress}>
-          Ver historial clínico
-        </Text>
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <CategoryList
-          contentContainerStyle={styles.postsList}
-          hint="Agregar"
-          hintLink=""
-          navigation={navigation}
-          data={[...services]}
-          renderItem={renderPostItem}
+      <View style={styles.petDataCards}>
+        <PetDataCard title="Macho" subtitle="Sexo" />
+        <PetDataCard title="3 Años" subtitle="Edad" />
+      </View>
+      <DefaultLayout
+        statusBarBackgroundColor={globalColors.greenSecondary}
+        statusBarStyle="light-content"
+        style={styles.cardSection}>
+        <TitleHeader style={styles.bottomSpace}>Historial Clínico</TitleHeader>
+        <List
+          style={styles.servicesContainer}
+          contentContainerStyle={styles.servicesContentContainer}
+          horizontal={true}
+          data={servicesList}
+          renderItem={renderServiceItem}
         />
-      </Layout>
-    </ScrollView>
+      </DefaultLayout>
+    </DefaultLayout>
   );
 };
 
-const themedStyles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'background-basic-color-1',
+    backgroundColor: globalColors.greenSecondary,
+    paddingTop: 32,
+    paddingHorizontal: 0,
   },
-  card: {
-    borderWidth: 0,
+  headerRight: {
+    color: globalColors.white,
+    marginRight: 12,
   },
-  clinicHistoryText: {
-    textDecorationLine: 'underline',
+  whiteText: {
+    color: globalColors.white,
   },
-  postItem: {
-    width: 144,
-    height: 144,
-    borderRadius: 4,
-    borderWidth: 0,
-    marginHorizontal: 8,
+  petDataCards: {
+    flexDirection: 'row',
+    marginTop: 32,
+    paddingHorizontal: 24,
+  },
+  petImageContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 24,
+  },
+  petImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 50,
     overflow: 'hidden',
   },
-  headerContainer: {
+  petDataContainer: {
+    marginLeft: 16,
+    justifyContent: 'center',
+  },
+  cardSection: {
+    marginTop: 32,
+    borderTopEndRadius: 40,
+    borderTopStartRadius: 40,
+    paddingTop: 32,
+  },
+  bottomSpace: {
+    marginBottom: 24,
+  },
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    paddingBottom: 8,
+  },
+  servicesContentContainer: {
+    flexDirection: 'row',
+    paddingBottom: 8,
+    backgroundColor: 'transparent',
+  },
+  serviceContainer: {
+    marginRight: 33,
+    alignItems: 'center',
+  },
+  serviceIconContainer: {
+    borderRadius: 16,
+    width: 64,
+    height: 64,
     justifyContent: 'center',
     alignItems: 'center',
-    minHeight: 216,
+    padding: 12,
   },
-  profileLocationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  serviceIcon: {
+    height: 55,
+    width: 55,
   },
-  profileAvatar: {
-    width: 116,
-    height: 116,
-    borderRadius: 58,
-    alignSelf: 'center',
-    backgroundColor: 'color-primary-default',
-    tintColor: 'color-primary-default',
-  },
-  editAvatarButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  formContainer: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 16,
-    alignItems: 'center',
-  },
-  profileButtonsContainer: {
-    flexDirection: 'row',
-    marginVertical: 24,
-  },
-  profileButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    borderRadius: 30,
-  },
-  emailInput: {
-    marginTop: 16,
-  },
-  postsList: {
-    paddingHorizontal: 8,
-  },
-  passwordInput: {
-    marginTop: 16,
-  },
-  termsCheckBox: {
-    marginTop: 24,
-  },
-  termsCheckBoxText: {
-    color: 'text-hint-color',
-  },
-  signUpButton: {
-    marginHorizontal: 16,
-  },
-  signInButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
-  },
-  footerContainer: {
-    borderWidth: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  serviceNameText: {
+    color: globalColors.black,
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

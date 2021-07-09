@@ -77,11 +77,6 @@ export const MyAppNavigator = (): React.ReactElement => {
         queryClient.clear();
         dispatch({type: 'SIGN_OUT'});
       },
-      // To switch from Register screens to User screens
-      goHome: async () => {
-        const token = await AsyncStorage.getItem('auth_token');
-        dispatch({type: 'SIGN_IN', token: token});
-      },
     }),
     [],
   );

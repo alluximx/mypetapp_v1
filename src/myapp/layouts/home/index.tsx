@@ -1,14 +1,15 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Card, List, Spinner, Text} from '@ui-kitten/components';
-import {AddIcon} from './extra/icons';
 import {useRoute} from '@react-navigation/native';
 // My Components
-import DefaultLayout from '../../components/default-layout';
+import AddButton from '../../components/buttons/add-button';
+import DefaultLayout from '../../components/layouts/default-layout';
 import DefaultText from '../../components/texts/default-text';
 import TitleHeader from '../../components/texts/title-header';
 // Global styles
 import globalColors from '../../styles/colors';
+import globalStyles from '../../styles/style';
 import globalVars from '../../styles/vars';
 // Hooks
 import useMyProfile from '../../hooks/user/useMyProfile';
@@ -48,7 +49,6 @@ const servicesList = [
 
 export default ({navigation}): React.ReactElement => {
   const route = useRoute<HomeRouteParams>();
-  console.log(route.params);
   const userQuery = useMyProfile(route.params.isGuest);
   const petsQuery = useMyPets(route.params.isGuest, userQuery.data?.data.id);
   const pets = petsQuery.data?.data ?? 0;
@@ -58,7 +58,7 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.navigate('AddPet', {pet: pet});
 
   const onDetailPetButtonPress = (pet) =>
-    navigation && navigation.navigate('DetailPet', {pet: pet, id: pet.id});
+    navigation && navigation.navigate('DetailPet', {pet: pet});
 
   const onServiceButtonPress = (service) =>
     navigation && navigation.navigate('ProductList', {service: service});
@@ -67,8 +67,9 @@ export default ({navigation}): React.ReactElement => {
     <View>
       <TitleHeader style={styles.greeting}>
         Hola{' '}
-        <TitleHeader style={styles.highlightedText}>
-          {route.params.isGuest ? '' : userQuery.data?.data.name.split(' ')[0]}
+        <TitleHeader style={globalStyles.highlightedText}>
+          {/* {route.params.isGuest ? '' : userQuery.data?.data.name.split(' ')[0]} */}
+          {console.log(route.params.isGuest)}
         </TitleHeader>
       </TitleHeader>
       {hasPets && !route.params.isGuest ? (
@@ -96,20 +97,11 @@ export default ({navigation}): React.ReactElement => {
           </Text>
         )}
         style={styles.profileButton}
-        onPress={(pet) => onDetailPetButtonPress(pet)}>
+        onPress={() => onDetailPetButtonPress(pet.item)}>
         {() => <Text style={styles.petNameText}>{name}</Text>}
       </Button>
     );
   };
-
-  const renderAddPetButton = () => (
-    <Button
-      activeOpacity={0.8}
-      style={styles.addButton}
-      accessoryLeft={AddIcon}
-      onPress={onAddPetButtonPress}
-    />
-  );
 
   const renderServiceItem = (service) => (
     <View style={styles.serviceContainer}>
@@ -140,7 +132,7 @@ export default ({navigation}): React.ReactElement => {
               styles.petButtonContentContainerEmpty,
           ]}
           horizontal={true}
-          ListFooterComponent={renderAddPetButton}
+          ListFooterComponent={() => <AddButton onAdd={onAddPetButtonPress} />}
           ListFooterComponentStyle={styles.addButtonContainer}
           data={pets}
           renderItem={renderPetButton}
@@ -153,7 +145,10 @@ export default ({navigation}): React.ReactElement => {
 
         <TitleHeader>
           ¿Qué necesitan tus{' '}
-          <TitleHeader style={styles.highlightedText}>mascotas</TitleHeader>?
+          <TitleHeader style={globalStyles.highlightedText}>
+            mascotas
+          </TitleHeader>
+          ?
         </TitleHeader>
 
         <List
@@ -192,9 +187,6 @@ const styles = StyleSheet.create({
   },
   greeting: {
     marginBottom: 4,
-  },
-  highlightedText: {
-    color: globalColors.greenPrimary,
   },
   profileButton: {
     backgroundColor: globalColors.greenSecondary,
@@ -240,13 +232,6 @@ const styles = StyleSheet.create({
   ageText: {
     color: globalColors.white,
     fontSize: 14,
-  },
-  addButton: {
-    height: 40,
-    width: 40,
-    borderRadius: 40,
-    backgroundColor: globalColors.greenSecondary,
-    borderWidth: 0,
   },
   addButtonContainer: {
     alignSelf: 'center',

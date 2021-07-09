@@ -7,8 +7,10 @@ import {AddPetContext, AddPetContextType} from '../../context/AddPetContext';
 import globalColors from '../../styles/colors';
 // My components
 import CustomButton from '../../components/buttons/custom-button';
+import AnchorText from '../../components/texts/anchor-text';
 // Screens
 import {NameAndPictureScreen} from '../../scenes/pets/add/name-and-picture.component';
+import {SexAndAgeScreen} from '../../scenes/pets/add/sex-and-age.component';
 
 const AddPetStack = createNativeStackNavigator();
 
@@ -23,22 +25,21 @@ const AddPetNavigator = (): React.ReactElement => {
   });
 
   const addPetContext = useMemo(
-    (): AddPetContextType => ({
-      form: form,
-      setForm: setForm,
-    }),
+    (): AddPetContextType => ({form: form, setForm: setForm}),
     [form],
   );
 
-  const renderButtonNext = (isDisabled, onPress) => {
-    return (
-      <CustomButton
-        isDisabled={isDisabled}
-        onPress={onPress}
-        style={styles.nextButton}>
-        Siguiente
-      </CustomButton>
-    );
+  const renderButtonNext = (isDisabled: boolean, onPress: () => void) => (
+    <CustomButton
+      isDisabled={isDisabled}
+      onPress={onPress}
+      style={styles.nextButton}>
+      Siguiente
+    </CustomButton>
+  );
+
+  const renderButtonBack = (onPress: () => void) => {
+    return <AnchorText onPress={onPress}>Atrás</AnchorText>;
   };
 
   return (
@@ -50,19 +51,24 @@ const AddPetNavigator = (): React.ReactElement => {
           headerStyle: styles.header,
           headerHideShadow: true,
           headerTopInsetEnabled: false,
+          stackAnimation: 'slide_from_right',
         }}>
         <AddPetStack.Screen
           name="NameAndPicture"
           component={NameAndPictureScreen}
+          initialParams={{
+            renderButtonNext,
+          }}
           options={{
-            headerRight: () => {
-              const isDisabled =
-                addPetContext.form.name === '' ||
-                addPetContext.form.image === '';
-
-              return renderButtonNext(isDisabled, () => {});
-            },
             headerHideBackButton: true,
+          }}
+        />
+        <AddPetStack.Screen
+          name="SexAndAge"
+          component={SexAndAgeScreen}
+          initialParams={{
+            renderButtonNext,
+            renderButtonBack,
           }}
         />
       </AddPetStack.Navigator>
@@ -73,8 +79,6 @@ const AddPetNavigator = (): React.ReactElement => {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: globalColors.backgroundDefault,
-    padding: 0,
-    margin: 0,
   },
   nextButton: {
     paddingVertical: 10,

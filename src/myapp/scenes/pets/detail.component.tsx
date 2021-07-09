@@ -1,43 +1,6 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {
-  Divider,
-  Layout,
-  TopNavigation,
-  TopNavigationAction,
-} from '@ui-kitten/components';
-import {SafeAreaLayout} from '../../components/safe-area-layout.component';
-import {ArrowIosBackIcon} from '../../components/icons';
-import ContentView from '../../layouts/pets/detail/index';
-import {DrawerShowcase} from '../components/drawer/drawer-showcase.component';
+import ContentView from '../../layouts/pets/detail';
 
-export const DetailPetScreen = ({navigation}): React.ReactElement => {
-  const renderBackAction = (): React.ReactElement => (
-    <TopNavigationAction icon={ArrowIosBackIcon} onPress={navigation.goBack} />
-  );
-  const renderRightActions = (): React.ReactElement => (
-    <React.Fragment>
-      <DrawerShowcase onPress={navigation.toggleDrawer} />
-    </React.Fragment>
-  );
-
-  return (
-    <SafeAreaLayout style={styles.container} insets="top">
-      <TopNavigation
-        title="Molly"
-        accessoryLeft={renderBackAction}
-        accessoryRight={renderRightActions}
-      />
-      <Divider />
-      <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ContentView navigation={navigation} />
-      </Layout>
-    </SafeAreaLayout>
-  );
+export const DetailPetScreen = ({navigation, route}): React.ReactElement => {
+  return <ContentView navigation={navigation} route={route} />;
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
