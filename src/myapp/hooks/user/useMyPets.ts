@@ -8,6 +8,7 @@ const useMyPets = (isGuest: boolean, userId: number) => {
         data: [],
       },
       isLoading: false,
+      isSuccess: true,
     };
   }
 

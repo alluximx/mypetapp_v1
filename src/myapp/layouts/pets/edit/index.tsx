@@ -12,7 +12,6 @@ import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation, route}): React.ReactElement => {
   const {bread, image, name, sex} = route.params.pet;
-
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [form, setForm] = useState({
@@ -35,9 +34,7 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
-  const onDeleteTextPress = () => {
-    // Show Confirmation Alert.
-    setIsModalVisible(true);
+  const onDeleteAccept = () => {
     console.log('deleted pet');
   };
 
@@ -47,8 +44,8 @@ export default ({navigation, route}): React.ReactElement => {
         labelAccept="Eliminar Registro"
         title="Eliminar Registro"
         text="¿Seguro que quieres eliminar este registro?"
-        onAccept={() => {}}
-        onCancel={() => {}}
+        onAccept={onDeleteAccept}
+        onCancel={() => setIsModalVisible(false)}
         showCancel={true}
         visible={isModalVisible}
       />
@@ -86,7 +83,9 @@ export default ({navigation, route}): React.ReactElement => {
           setForm({...form, birthday: value});
         }}
       />
-      <AnchorText style={styles.deleteText} onPress={onDeleteTextPress}>
+      <AnchorText
+        style={styles.deleteText}
+        onPress={() => setIsModalVisible(true)}>
         Eliminar registro
       </AnchorText>
     </DefaultLayout>

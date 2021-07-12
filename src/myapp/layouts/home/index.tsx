@@ -12,7 +12,7 @@ import globalColors from '../../styles/colors';
 import globalStyles from '../../styles/style';
 import globalVars from '../../styles/vars';
 // Hooks
-import useMyProfile from '../../hooks/user/useMyProfile';
+import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
 import useMyPets from '../../hooks/user/useMyPets';
 // Reducer
 import {reducer} from '../../../reducer';
@@ -49,10 +49,8 @@ const servicesList = [
 
 export default ({navigation}): React.ReactElement => {
   const route = useRoute<HomeRouteParams>();
-  const userQuery = useMyProfile(route.params.isGuest);
-  const petsQuery = useMyPets(route.params.isGuest, userQuery.data?.data.id);
-  const pets = petsQuery.data?.data ?? 0;
-  const hasPets = pets.length != 0;
+  const data = useMyNameAndPets();
+  const hasPets = data.pets.length != 0;
 
   const onAddPetButtonPress = (pet) =>
     navigation && navigation.navigate('AddPet', {pet: pet});
@@ -68,8 +66,7 @@ export default ({navigation}): React.ReactElement => {
       <TitleHeader style={styles.greeting}>
         Hola{' '}
         <TitleHeader style={globalStyles.highlightedText}>
-          {/* {route.params.isGuest ? '' : userQuery.data?.data.name.split(' ')[0]} */}
-          {console.log(route.params.isGuest)}
+          {data.userName.split(' ')[0]}
         </TitleHeader>
       </TitleHeader>
       {hasPets && !route.params.isGuest ? (
@@ -114,8 +111,7 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  return (userQuery.isLoading || petsQuery.isLoading) &&
-    !route.params.isGuest ? (
+  return data.isLoading ? (
     <DefaultLayout style={styles.loadingContainer}>
       <Spinner status="success" />
     </DefaultLayout>
@@ -134,7 +130,7 @@ export default ({navigation}): React.ReactElement => {
           horizontal={true}
           ListFooterComponent={() => <AddButton onAdd={onAddPetButtonPress} />}
           ListFooterComponentStyle={styles.addButtonContainer}
-          data={pets}
+          data={data.pets}
           renderItem={renderPetButton}
           ListEmptyComponent={() => (
             <DefaultText style={styles.emptyText}>

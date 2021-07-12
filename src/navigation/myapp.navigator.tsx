@@ -38,17 +38,17 @@ export const MyAppNavigator = (): React.ReactElement => {
 
       try {
         userToken = await AsyncStorage.getItem('auth_token');
+        dispatch({type: 'RESTORE_TOKEN', token: userToken});
       } catch (e) {
         // Restoring token failed
       }
-
-      dispatch({type: 'RESTORE_TOKEN', token: userToken});
     };
     bootstrapAsync();
   }, []);
 
   const authContext = useMemo(
     (): AuthContextType => ({
+      isGuest: state.userToken == null ? true : false,
       goHomeAsGuest: () => {
         dispatch({type: 'GUEST_SIGN_IN'});
       },
@@ -78,7 +78,7 @@ export const MyAppNavigator = (): React.ReactElement => {
         dispatch({type: 'SIGN_OUT'});
       },
     }),
-    [],
+    [state.userToken],
   );
 
   const backButton = () => <BackButton navigation={navigationRef} />;
