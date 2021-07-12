@@ -9,7 +9,6 @@ import auth_service from '../../services/auth-service';
 
 const useMyNameAndPets = () => {
   const authContext = useContext(AuthContext);
-  console.log(authContext.isGuest);
 
   const [data, setData] = useState({
     isLoading: false,
@@ -41,7 +40,7 @@ const useMyNameAndPets = () => {
           userName: profileQuery.data?.data.name,
         });
       } else {
-        console.log('There was an error while fetching the profile.');
+        console.log('There was an error while fetching my profile.');
       }
     }, [profileQuery.isSuccess]);
 
@@ -54,7 +53,7 @@ const useMyNameAndPets = () => {
           isLoading: false,
         });
       } else {
-        console.log('There was an error while fetching the pets.');
+        console.log('There was an error while fetching my pets.');
       }
     }, [petsQuery.isSuccess]);
   }
