@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+// Global Styles
+import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 // My Components
 import CustomButton from '../buttons/custom-button';
 import DefaultText from '../texts/default-text';
 import TitleHeader from '../texts/title-header';
-// Global Styles
-import globalColors from '../../styles/colors';
-import globalVars from '../../styles/vars';
 
 const CustomModal = ({
   visible,
@@ -28,12 +28,10 @@ const CustomModal = ({
   return (
     <View>
       <Modal
-        animationType="slide"
+        animationType="fade"
+        statusBarTranslucent={true}
         transparent={true}
-        visible={visible}
-        onRequestClose={() => {
-          Alert.alert('Modal tiene que ser cerrado');
-        }}>
+        visible={visible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Image
