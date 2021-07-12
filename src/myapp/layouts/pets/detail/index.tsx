@@ -1,6 +1,6 @@
-import React, {useLayoutEffect} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {Card, List} from '@ui-kitten/components';
+import React, { useLayoutEffect } from 'react';
+import { Button, Image, StyleSheet, View } from 'react-native';
+import { Card, List } from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../../styles/colors';
 // My Components.
@@ -25,8 +25,8 @@ const servicesList = [
   },
 ];
 
-export default ({navigation, route}): React.ReactElement => {
-  const {bread, image, name, sex} = route.params.pet;
+export default ({ navigation, route }): React.ReactElement => {
+  const { bread, image, name, sex } = route.params.pet;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,24 +34,38 @@ export default ({navigation, route}): React.ReactElement => {
         <AnchorText
           style={styles.headerRight}
           onPress={() =>
-            navigation.navigate('EditPet', {pet: route.params.pet})
+            navigation.navigate('EditPet', { pet: route.params.pet })
           }>
           Editar
         </AnchorText>
       ),
     });
   }, [navigation]);
+  const presionar = () => {
+    navigation.navigate('ServicesDoc', {})
+  }
+  const renderServiceItem = (service) => {
+    if (service.item.serviceName=="Visitas") {
+      return (<View style={styles.serviceContainer}>
+        <Card activeOpacity={0.8} style={styles.serviceIconContainer} onPress={presionar}>
+          <Image style={styles.serviceIcon} source={service.item.icon} />
+        </Card>
+        <DefaultText style={styles.serviceNameText} onPress={presionar}>
+          {service.item.serviceName}
+        </DefaultText>
+      </View>);
+    } else {
+      return (<View style={styles.serviceContainer}>
+        <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
+          <Image style={styles.serviceIcon} source={service.item.icon} />
+        </Card>
+        <DefaultText style={styles.serviceNameText}>
+          {service.item.serviceName}
+        </DefaultText>
+      </View>);
 
-  const renderServiceItem = (service) => (
-    <View style={styles.serviceContainer}>
-      <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
-        <Image style={styles.serviceIcon} source={service.item.icon} />
-      </Card>
-      <DefaultText style={styles.serviceNameText}>
-        {service.item.serviceName}
-      </DefaultText>
-    </View>
-  );
+    }
+  };
 
   return (
     <DefaultLayout style={styles.container}>
