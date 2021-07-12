@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {TouchableOpacity, StyleSheet} from 'react-native';
 import {Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
@@ -9,9 +9,9 @@ import {AnchorTextProps} from '../../types/components/texts';
 
 const AnchorText = (props: AnchorTextProps): React.ReactElement => {
   return (
-    <Text style={[styles.anchorText, props.style]} onPress={props.onPress}>
-      {props.children}
-    </Text>
+    <TouchableOpacity activeOpacity={0.8} onPress={props.onPress}>
+      <Text style={[styles.anchorText, props.style]}>{props.children}</Text>
+    </TouchableOpacity>
   );
 };
 
