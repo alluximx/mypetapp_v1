@@ -4,6 +4,7 @@ import {StyleSheet} from 'react-native';
 import globalColors from '../../../styles/colors';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
+import CustomModal from '../../../components/modals/custom-modal';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import PetImageInput from '../../../components/inputs/pet-image-input';
 import TitleHeader from '../../../components/texts/title-header';
@@ -11,6 +12,7 @@ import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation, route}): React.ReactElement => {
   const {bread, image, name, sex} = route.params.pet;
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [form, setForm] = useState({
     image: require('../../home/assets/image-pet-1.jpg'),
@@ -32,8 +34,21 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
+  const onDeleteAccept = () => {
+    console.log('deleted pet');
+  };
+
   return (
     <DefaultLayout style={styles.container}>
+      <CustomModal
+        labelAccept="Eliminar Registro"
+        title="Eliminar Registro"
+        text="¿Seguro que quieres eliminar este registro?"
+        onAccept={onDeleteAccept}
+        onCancel={() => setIsModalVisible(false)}
+        showCancel={true}
+        visible={isModalVisible}
+      />
       <TitleHeader>Editar Perfil</TitleHeader>
       <PetImageInput
         style={styles.imageInput}
@@ -68,6 +83,11 @@ export default ({navigation, route}): React.ReactElement => {
           setForm({...form, birthday: value});
         }}
       />
+      <AnchorText
+        style={styles.deleteText}
+        onPress={() => setIsModalVisible(true)}>
+        Eliminar registro
+      </AnchorText>
     </DefaultLayout>
   );
 };
@@ -80,6 +100,11 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   imageInput: {
+    marginTop: 16,
+    marginBottom: 32,
+  },
+  deleteText: {
+    textAlign: 'center',
     marginTop: 16,
     marginBottom: 32,
   },
