@@ -228,6 +228,7 @@ const styles = StyleSheet.create({
     color: globalColors.white,
     fontSize: 16,
     marginBottom: 4,
+    textAlign: 'center',
   },
   ageText: {
     color: globalColors.white,

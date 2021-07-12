@@ -102,7 +102,7 @@ export const HomeDrawer = (props): DrawerElement => {
             onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
-            title="Características de Razas"
+            title="Info. de Razas"
             image={require('../../assets/images/menu/breed-characteristics.png')}
           />
           <TouchableOpacity onPress={authContext.signOut}>
