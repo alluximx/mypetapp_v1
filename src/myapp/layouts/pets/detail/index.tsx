@@ -1,6 +1,6 @@
-import React, {useLayoutEffect} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import {Card, List} from '@ui-kitten/components';
+import React, { useLayoutEffect } from 'react';
+import { Button, Image, StyleSheet, View } from 'react-native';
+import { Card, List } from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../../styles/colors';
 // My Components.
@@ -14,19 +14,22 @@ const servicesList = [
   {
     serviceName: 'Visitas',
     icon: require('../../../assets/images/menu/vets.png'),
+    screen: 'ServicesDoc'
   },
   {
     serviceName: 'Vacunas',
     icon: require('../../../assets/images/menu/pet-stylists.png'),
+    screen: 'Home'
   },
   {
     serviceName: 'Desparaci...',
     icon: require('../../../assets/images/menu/products.png'),
+    screen: 'Home'
   },
 ];
 
-export default ({navigation, route}): React.ReactElement => {
-  const {bread, image, name, sex} = route.params.pet;
+export default ({ navigation, route }): React.ReactElement => {
+  const { bread, image, name, sex } = route.params.pet;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,24 +37,23 @@ export default ({navigation, route}): React.ReactElement => {
         <AnchorText
           style={styles.headerRight}
           onPress={() =>
-            navigation.navigate('EditPet', {pet: route.params.pet})
+            navigation.navigate('EditPet', { pet: route.params.pet })
           }>
           Editar
         </AnchorText>
       ),
     });
   }, [navigation]);
-
-  const renderServiceItem = (service) => (
-    <View style={styles.serviceContainer}>
-      <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
-        <Image style={styles.serviceIcon} source={service.item.icon} />
-      </Card>
-      <DefaultText style={styles.serviceNameText}>
-        {service.item.serviceName}
-      </DefaultText>
-    </View>
-  );
+  const renderServiceItem = (service) => {
+      return (<View style={styles.serviceContainer}>
+        <Card activeOpacity={0.8} style={styles.serviceIconContainer} onPress={()=>{navigation.navigate(service.item.screen, {})}}>
+          <Image style={styles.serviceIcon} source={service.item.icon} />
+        </Card>
+        <DefaultText style={styles.serviceNameText} onPress={()=>{navigation.navigate(service.item.screen, {})}}>
+          {service.item.serviceName}
+        </DefaultText>
+      </View>);
+  };
 
   return (
     <DefaultLayout style={styles.container}>

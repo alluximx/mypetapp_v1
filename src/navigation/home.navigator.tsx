@@ -26,7 +26,8 @@ import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component
 import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
-
+//visits
+import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
@@ -83,6 +84,11 @@ const Screens = ({navigation, route, style}) => {
           options={{
             headerLeft: closeButton,
           }}
+        />
+        {/* Services visits */}
+        <HomeStack.Screen 
+          name="ServicesDoc" 
+          component={InfVisitinScreen}
         />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />

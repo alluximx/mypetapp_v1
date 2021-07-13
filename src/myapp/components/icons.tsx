@@ -327,11 +327,19 @@ export const AssetTopNavigationIcon = (style: ImageStyle): IconElement => (
 export const AssetTopNavigationDarkIcon = (style: ImageStyle): IconElement => (
   <Icon {...style} pack="app" name="top-navigation-dark" />
 );
+export const AddIconGreen = ({style}): IconElement => (
+  <Icon style={[styles.addIconGreen, style]} name="plus-outline" />
+);
 
 const styles = StyleSheet.create({
   addIcon: {
     height: 25,
     width: 25,
     tintColor: globalColors.white,
+  },
+  addIconGreen: {
+    height: 40,
+    width: 40,
+    tintColor: globalColors.lightGreen,
   },
 });
