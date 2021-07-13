@@ -14,14 +14,17 @@ const servicesList = [
   {
     serviceName: 'Visitas',
     icon: require('../../../assets/images/menu/vets.png'),
+    screen: 'ServicesDoc'
   },
   {
     serviceName: 'Vacunas',
     icon: require('../../../assets/images/menu/pet-stylists.png'),
+    screen: 'Home'
   },
   {
     serviceName: 'Desparaci...',
     icon: require('../../../assets/images/menu/products.png'),
+    screen: 'Home'
   },
 ];
 
@@ -41,30 +44,15 @@ export default ({ navigation, route }): React.ReactElement => {
       ),
     });
   }, [navigation]);
-  const presionar = () => {
-    navigation.navigate('ServicesDoc', {})
-  }
   const renderServiceItem = (service) => {
-    if (service.item.serviceName=="Visitas") {
       return (<View style={styles.serviceContainer}>
-        <Card activeOpacity={0.8} style={styles.serviceIconContainer} onPress={presionar}>
+        <Card activeOpacity={0.8} style={styles.serviceIconContainer} onPress={()=>{navigation.navigate(service.item.screen, {})}}>
           <Image style={styles.serviceIcon} source={service.item.icon} />
         </Card>
-        <DefaultText style={styles.serviceNameText} onPress={presionar}>
+        <DefaultText style={styles.serviceNameText} onPress={()=>{navigation.navigate(service.item.screen, {})}}>
           {service.item.serviceName}
         </DefaultText>
       </View>);
-    } else {
-      return (<View style={styles.serviceContainer}>
-        <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
-          <Image style={styles.serviceIcon} source={service.item.icon} />
-        </Card>
-        <DefaultText style={styles.serviceNameText}>
-          {service.item.serviceName}
-        </DefaultText>
-      </View>);
-
-    }
   };
 
   return (

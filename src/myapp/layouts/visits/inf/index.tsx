@@ -1,40 +1,53 @@
-import { Layout, StyleService, useStyleSheet, Text, Icon, TopNavigationAction, Button } from "@ui-kitten/components";
+import { Layout, StyleService, useStyleSheet, Text, List } from "@ui-kitten/components";
 import React, { useLayoutEffect } from "react"
 import { Image, Dimensions } from 'react-native';
 import DefaultLayout from "../../../components/layouts/default-layout";
 import globalColors from '../../../styles/colors';
-import { AddIcon } from '../../../components/icons';
 import AddButton from '../../../components/buttons/add-button'
 import GenericCard from '../../../components/cards/generic-card';
 export default ({ navigation, route }): React.ReactElement => {
     const styles = useStyleSheet(themedStyles);
-    const datos = [
+    const data = [
         {
             date: new Date(),
             title: 'Vómitos y fiebre',
             content: 'El veterinario dijo que era una reacción normal por la vacuna que le pussieron.',
             buttonText: 'Editar',
-            buttonAling: 'left',
-            imagenes: []
+            buttonAlign: 'left',
+            images: [],
+            styleCard: {}
+        },
+        {
+            date: new Date(),
+            title: 'Vómitos y fiebre',
+            content: 'El veterinario dijo que era una reacción normal por la vacuna que le pussieron.',
+            buttonText: 'Editar',
+            buttonAlign: 'left',
+            images: [],
+            styleCard: {}
         },
         {
             date: null,
             title: 'Patita lastimada',
             content: 'Hay que llevar a Valerio a una terapia especial para que se pueda recuperar totalmemte y no siga cojeando. El veterinario va a pasar el contacto de una clínica especializada.',
             buttonText: 'Editar',
-            buttonAling: 'right',
-            imagenes: ["../assets/dog-visit.png", "../assets/dog-visit.png"]
+            buttonAlign: 'right',
+            images: ["../assets/dog-visit.png", "../assets/dog-visit.png"],
+            styleCard: {}
         }
     ];
     useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <AddButton style={{backgroundColor: globalColors.backgroundDefault}} 
-                iconStyle={{tintColor: globalColors.greenSecondary, height: 35, width: 35}} onAdd={() => navigation.navigate('AddVisit', {})} />
+                <AddButton style={{ backgroundColor: globalColors.backgroundDefault }}
+                    iconStyle={{ tintColor: globalColors.greenSecondary, height: 35, width: 35 }} onAdd={() => navigation.navigate('AddVisit', {})} />
             ),
         });
     }, [navigation]);
-    if (datos.length > 0) {
+    const renderServiceItem = (service) => {
+        return (<GenericCard data={service.item}/>);
+    };
+    if (data.length > 0) {
 
         return (
             <DefaultLayout
@@ -43,12 +56,11 @@ export default ({ navigation, route }): React.ReactElement => {
                     <Text style={styles.title}>
                         Visitas Veterinario
                     </Text>
-
-                    {datos.map(data => {
-                        return (
-                            <GenericCard datos={data} ></GenericCard>
-                        );
-                    })}
+                    <List
+                        style={styles.servicesContainer}
+                        data={data}
+                        renderItem={renderServiceItem}
+                    />
                 </Layout>
             </DefaultLayout>
         );
@@ -149,5 +161,16 @@ const themedStyles = StyleService.create({
         borderRadius: 40,
         backgroundColor: globalColors.greenSecondary,
         borderWidth: 0,
+    }, servicesContainer: {
+        backgroundColor: 'transparent',
+        marginBottom: 10,
+        width: width,
+        marginTop: 10
+    },
+    servicesContentContainer: {
+        flexDirection: 'row',
+        paddingBottom: 8,
+        backgroundColor: 'transparent',
+        width: width,
     }
 });
