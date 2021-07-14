@@ -23,6 +23,9 @@ export const HomeDrawer = (props): DrawerElement => {
   const navigateToScreen = (urlKey: string, params: {}) => {
     props.navigation.navigate(urlKey, params);
   };
+  const navigateBreed = ()=>{
+    props.navigation.navigate('Breed', {})
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,7 +102,7 @@ export const HomeDrawer = (props): DrawerElement => {
           <DrawerItem
             urlKey="Home"
             params={{}}
-            onPressOption={navigateToScreen}
+            onPressOption={navigateBreed}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Info. de Razas"
