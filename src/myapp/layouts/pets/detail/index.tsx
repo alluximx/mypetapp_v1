@@ -28,8 +28,8 @@ const servicesList = [
   },
 ];
 
-export default ({ navigation, route }): React.ReactElement => {
-  const { breed, image, name, sex } = route.params.pet;
+export default ({navigation, route}): React.ReactElement => {
+  const {breed, image, name, sex} = route.params.pet;
 
   useLayoutEffect(() => {
     navigation.setOptions({
