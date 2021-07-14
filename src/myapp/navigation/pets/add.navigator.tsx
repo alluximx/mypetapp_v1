@@ -46,7 +46,7 @@ const AddPetNavigator = (): React.ReactElement => {
   return (
     <AddPetContext.Provider value={addPetContext}>
       <AddPetStack.Navigator
-        initialRouteName="SelectBreadScreen"
+        initialRouteName="NameAndPicture"
         screenOptions={{
           title: '',
           headerStyle: styles.header,
