@@ -11,7 +11,7 @@ import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {bread, image, name, sex} = route.params.pet;
+  const {breed, image, name, sex} = route.params.pet;
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [form, setForm] = useState({

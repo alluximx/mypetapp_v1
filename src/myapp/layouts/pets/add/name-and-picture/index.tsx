@@ -18,7 +18,7 @@ export default ({navigation, route}): React.ReactElement => {
     navigation.setOptions({
       headerRight: () =>
         route.params.renderButtonNext(isDisabled, () => {
-          navigation.navigate('SexAndAge');
+          navigation.navigate('SelectBreedScreen');
         }),
     });
   }, [navigation, form]);
