@@ -28,6 +28,8 @@ import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 //visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
+//Breed
+import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
@@ -90,6 +92,8 @@ const Screens = ({navigation, route, style}) => {
           name="ServicesDoc" 
           component={InfVisitinScreen}
         />
+        {/* Breed */}
+        <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
