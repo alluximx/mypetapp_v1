@@ -13,4 +13,5 @@ export interface OptionSelectProps {
   horizontal: boolean;
   currentValue: string;
   setCurrentValue: (key: string) => void;
+  style? : {};
 }

@@ -11,7 +11,7 @@ import AnchorText from '../../components/texts/anchor-text';
 // Screens
 import {NameAndPictureScreen} from '../../scenes/pets/add/name-and-picture.component';
 import {SexAndAgeScreen} from '../../scenes/pets/add/sex-and-age.component';
-import { SelectBreadScreen } from '../../scenes/pets/add/select-bread.component';
+import { SelectBreedScreen } from '../../scenes/pets/add/select-breed.component';
 
 const AddPetStack = createNativeStackNavigator();
 
@@ -19,7 +19,7 @@ const AddPetNavigator = (): React.ReactElement => {
   const [form, setForm] = useState({
     image: '',
     name: '',
-    breedId: -1,
+    breedId: '',
     userId: -1,
     sex: '',
     birthday: '',
@@ -46,7 +46,7 @@ const AddPetNavigator = (): React.ReactElement => {
   return (
     <AddPetContext.Provider value={addPetContext}>
       <AddPetStack.Navigator
-        initialRouteName="SelectBreadScreen"
+        initialRouteName="NameAndPicture"
         screenOptions={{
           title: '',
           headerStyle: styles.header,
@@ -64,6 +64,14 @@ const AddPetNavigator = (): React.ReactElement => {
             headerHideBackButton: true,
           }}
         />
+         <AddPetStack.Screen
+          name ="SelectBreedScreen"
+          component = {SelectBreedScreen}
+          initialParams={{
+            renderButtonNext,
+            renderButtonBack,
+          }}
+        />
         <AddPetStack.Screen
           name="SexAndAge"
           component={SexAndAgeScreen}
@@ -71,10 +79,6 @@ const AddPetNavigator = (): React.ReactElement => {
             renderButtonNext,
             renderButtonBack,
           }}
-        />
-        <AddPetStack.Screen
-          name ="SelectBreadScreen"
-          component = {SelectBreadScreen}
         />
       </AddPetStack.Navigator>
     </AddPetContext.Provider>
