@@ -14,7 +14,13 @@ const options: CameraOptions = {
   includeBase64: false,
 };
 
-const PetImageInput = ({image, setImage, style}): React.ReactElement => {
+interface PetImageInputProps {
+  image : string;
+  setImage : (image:string) => void;
+  style? : {};
+}
+
+const PetImageInput = ({image, setImage, style} : PetImageInputProps): React.ReactElement => {
   const [imageResponse, setImageResponse] = useState<any>(null);
 
   const onPress = useCallback(() => {

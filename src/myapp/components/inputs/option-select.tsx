@@ -49,7 +49,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
       scrollEnabled={props.horizontal ? false : true}
       data={props.data}
-      style={styles.optionsContainer}
+      style={[styles.optionsContainer, props.style]}
       renderItem={renderOption}
       horizontal={props.horizontal}
     />
