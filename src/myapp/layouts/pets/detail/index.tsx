@@ -29,7 +29,7 @@ const servicesList = [
 ];
 
 export default ({ navigation, route }): React.ReactElement => {
-  const { bread, image, name, sex } = route.params.pet;
+  const { breed, image, name, sex } = route.params.pet;
 
   useLayoutEffect(() => {
     navigation.setOptions({
