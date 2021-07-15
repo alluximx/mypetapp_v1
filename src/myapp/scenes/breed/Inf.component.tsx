@@ -3,5 +3,5 @@ import React from "react";
 import InfBreedScreen from "../../layouts/breed/inf/index";
 
 export const InfoBreedScreen = ({navigation}): React.ReactElement =>{
-    return (<InfBreedScreen />);
+    return (<InfBreedScreen navigation={navigation} />);
 }

@@ -1,11 +1,12 @@
-import { StyleService, useStyleSheet, Layout, Text, Input, Icon, Card, List } from "@ui-kitten/components";
-import React from "react";
+import { StyleService, useStyleSheet, Layout, Text, Input, Icon, Card, List, Spinner } from "@ui-kitten/components";
+import React, { useEffect } from "react";
 import DefaultLayout from "../../../components/layouts/default-layout";
 import globalColors from "../../../styles/colors";
-import { Dimensions, TouchableWithoutFeedback } from "react-native";
+import { Dimensions, TouchableWithoutFeedback, Image, View } from "react-native";
+import useBreedsInformation from "../../../hooks/breed/useBreedsInformation";
 import style from "src/myapp/styles/style";
 
-const InfBreedScreen = () => {
+const InfBreedScreen = ({ navigation }): React.ReactElement => {
     const styles = useStyleSheet(themedStyles);
     const data = [
         { name: "Doberman", content: "" },
@@ -15,15 +16,24 @@ const InfBreedScreen = () => {
         { name: "Pastor Aleman", content: "" },
         { name: "Pomeranian", content: "" },
     ];
-    const [breeds, onChangeBreed] = React.useState(data);
-    const onFilter = (event: string) => {
-        let aux = data.filter(breed => {
-            return breed.name.toLocaleUpperCase().indexOf(event.toLocaleUpperCase()) >= 0;
+    const datos = useBreedsInformation();
+    const [breeds, setBreeds] = React.useState([]);
+    const [list, setList] = React.useState([]);
+    useEffect(() => {
+        if (datos.data) {
+            setBreeds(datos.data.data);
+            setList(datos.data.data);
+        }
+    }, [datos.data]);
+    const onFilter = async (event: string) => {
+        let aux = list.filter(breed => {
+            return breed.breed.name.toLocaleUpperCase().indexOf(event.toLocaleUpperCase()) >= 0;
         });
         if (event == '') {
-            aux = aux.length > 0 ? aux : data;
+            //aux.push(datos.refetch());
+            datos.refetch();
         }
-        onChangeBreed(aux);
+        setBreeds(aux);
     }
     const renderIcon = (props) => (
         <TouchableWithoutFeedback>
@@ -33,7 +43,7 @@ const InfBreedScreen = () => {
     const renderServiceItem = service => {
         return (
             <Card style={styles.cardStyle}>
-                <Text style={styles.tituloCard}>{service.item.name}</Text>
+                <Text style={styles.tituloCard}>{service.item.breed.name}</Text>
             </Card>
         )
     }
@@ -48,20 +58,33 @@ const InfBreedScreen = () => {
                     placeholder='Nombre'
                     onChangeText={onFilter}
                 />
-                <Layout style={styles.cardLayout}>
-                    {
+
+                {
+                    datos.isLoading ?
+                        <View style={styles.viewContainer}>
+                            <Spinner size='large' status='success' />
+                        </View>
+                        :
                         breeds.length > 0 ?
-                            <List
-                                style={styles.servicesContainer}
-                                data={breeds}
-                                renderItem={renderServiceItem}
-                            />
+                            <Layout style={styles.cardLayout}>
+                                <List
+                                    style={styles.servicesContainer}
+                                    data={breeds}
+                                    renderItem={renderServiceItem}
+                                />
+                            </Layout>
                             :
-                            <Card style={styles.cardStyle}>
-                                <Text style={styles.tituloCard}>No hay datos</Text>
-                            </Card>
-                    }
-                </Layout>
+                            <Layout style={[styles.formContainer, { backgroundColor: globalColors.backgroundDefault }]}>
+                                <Image
+                                    style={styles.imgNot}
+                                    source={require('../assets/breed-not-found.png')}
+                                />
+                                <Text style={styles.labelNot}>
+                                    No se encontraron resultados
+                                </Text>
+                            </Layout>
+                }
+
             </Layout>
         </DefaultLayout>
     );
@@ -97,6 +120,23 @@ const themedStyles = StyleService.create({
         borderRadius: 16
     }, servicesContainer: {
         backgroundColor: 'transparent'
-    }, tituloCard: { fontFamily: 'Montserrat-Bold', fontSize: 20 }
+    }, tituloCard: { fontFamily: 'Montserrat-Bold', fontSize: 20 },
+    imgNot: {
+        width: width,
+        height: 320,
+
+    },
+    labelNot: {
+        fontFamily: 'Montserrat-Bold',
+        fontSize: 20,
+        alignSelf: 'center',
+        marginTop: 8,
+        marginLeft: 24,
+        marginRight: 24
+    }, viewContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 export default InfBreedScreen;
