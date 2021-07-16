@@ -11,9 +11,6 @@ import DatepickerInput from '../../../../components/inputs/date-picker'
 // Context
 import {AddPetContext} from '../../../../context/AddPetContext';
 //kitten component
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider} from '@ui-kitten/components';
-import { default as theme } from '../../../../../theme/theme.json'; 
 
 const data = [
   {
@@ -42,9 +39,6 @@ export default ({navigation, route}): React.ReactElement => {
   }, [navigation, form]);
 
   return (
-    //<ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
-
-    
     <DefaultLayout style={styles.container}>
       <KeyboardAvoidingView>
         <TitleHeader style={styles.bottomSpace}>
@@ -67,9 +61,6 @@ export default ({navigation, route}): React.ReactElement => {
        
       </KeyboardAvoidingView>
     </DefaultLayout>
-
-
-    //</ApplicationProvider>
   );
 };
 

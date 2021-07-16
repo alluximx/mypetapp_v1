@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet} from 'react-native';
 import {Datepicker, Icon, NativeDateService } from '@ui-kitten/components';
 
 const i18n = {
@@ -38,6 +38,7 @@ const useDatepickerState = (initialDate = null) => {
 };
 
 const now = new Date();
+const minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 18520);
 
 
 const DatepickerInput = (props) => {
@@ -50,6 +51,7 @@ const DatepickerInput = (props) => {
           dateService={localeDateService}
           {...mediumDatepickerState}
           accessoryRight={CalendarIcon}
+          min = {minDate}
           max = {now}
         />
  
