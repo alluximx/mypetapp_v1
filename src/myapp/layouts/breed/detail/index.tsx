@@ -133,25 +133,29 @@ export default ({ navigation, route }): React.ReactElement => {
     return (
         <>
             <ImageBackground source={image} resizeMode="cover" style={styles.petImageContainer} />
-            <ScrollView>
-            <DefaultLayout
-                statusBarTranslucent
-                statusBarStyle={"light-content"}
-                statusBarBackgroundColor={"transparent"}
-                style={styles.container}>
-                <DefaultLayout
-                    statusBarTranslucent
-                    statusBarBackgroundColor={"transparent"}
-                    style={styles.cardSection}>
-                    <TitleHeader style={styles.bottomSpace}>{route.params.breed.breed.name}</TitleHeader>
-                    <List
-                        style={styles.servicesContainer}
-                        data={data}
-                        renderItem={renderDataItem}
-                    />
-                </DefaultLayout>
-            </DefaultLayout>
-            </ScrollView>
+            <View style={{ flex: 1, justifyContent: 'flex-start', position: 'relative', marginTop: 75 }}>
+            </View>
+            <View style={{marginBottom:50}}>
+                <ScrollView>
+                    <DefaultLayout
+                        statusBarTranslucent
+                        statusBarStyle={"light-content"}
+                        statusBarBackgroundColor={"rgba(230,240,233,0.50)"}
+                        style={styles.container}>
+                        <DefaultLayout
+                            statusBarTranslucent
+                            statusBarBackgroundColor={"rgba(230,240,233,0.50)"}
+                            style={styles.cardSection}>
+                            <TitleHeader style={styles.bottomSpace}>{route.params.breed.breed.name}</TitleHeader>
+                            <List
+                                style={styles.servicesContainer}
+                                data={data}
+                                renderItem={renderDataItem}
+                            />
+                        </DefaultLayout>
+                    </DefaultLayout>
+                </ScrollView>
+            </View>
         </>
     );
 }
@@ -182,8 +186,8 @@ const styles = StyleSheet.create({
     },
     cardSection: {
         borderTopEndRadius: 40,
-        borderTopStartRadius: 40,        
-        marginTop: height / 2 - 20,
+        borderTopStartRadius: 40,
+        marginTop: height / 2-100,
     },
     bottomSpace: {
         marginBottom: 24,
