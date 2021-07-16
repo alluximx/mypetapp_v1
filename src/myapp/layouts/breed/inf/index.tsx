@@ -4,36 +4,30 @@ import DefaultLayout from "../../../components/layouts/default-layout";
 import globalColors from "../../../styles/colors";
 import { Dimensions, TouchableWithoutFeedback, Image, View } from "react-native";
 import useBreedsInformation from "../../../hooks/breed/useBreedsInformation";
-import style from "src/myapp/styles/style";
+import UserInput from '../../../components/inputs/user-input';
 
 const InfBreedScreen = ({ navigation }): React.ReactElement => {
     const styles = useStyleSheet(themedStyles);
-    const data = [
-        { name: "Doberman", content: "" },
-        { name: "Golden Retriver", content: "" },
-        { name: "Pug", content: "" },
-        { name: "Chihuahua", content: "" },
-        { name: "Pastor Aleman", content: "" },
-        { name: "Pomeranian", content: "" },
-    ];
-    const datos = useBreedsInformation();
+    const data = useBreedsInformation();
     const [breeds, setBreeds] = React.useState([]);
     const [list, setList] = React.useState([]);
+    const [name, setName] = React.useState('');;
     useEffect(() => {
-        if (datos.data) {
-            setBreeds(datos.data.data);
-            setList(datos.data.data);
+        if (data.data) {
+            setBreeds(data.data.data);
+            setList(data.data.data);
         }
-    }, [datos.data]);
+    }, [data.data]);
     const onFilter = async (event: string) => {
         let aux = list.filter(breed => {
             return breed.breed.name.toLocaleUpperCase().indexOf(event.toLocaleUpperCase()) >= 0;
         });
         if (event == '') {
-            //aux.push(datos.refetch());
-            datos.refetch();
+            //aux.push(data.refetch());
+            data.refetch();
         }
         setBreeds(aux);
+        setName(event);
     }
     const renderIcon = (props) => (
         <TouchableWithoutFeedback>
@@ -41,9 +35,15 @@ const InfBreedScreen = ({ navigation }): React.ReactElement => {
         </TouchableWithoutFeedback>
     );
     const renderServiceItem = service => {
+        const param = service.item;
         return (
-            <Card style={styles.cardStyle}>
-                <Text style={styles.tituloCard}>{service.item.breed.name}</Text>
+            <Card style={styles.cardStyle} onPress={() =>
+                navigation.navigate('DetailBreed', { breed: param })
+            }>
+                <View style={{ flexDirection: "row" }}>
+                    <Image style={{ width: 48, height: 48, margin: 1 }} source={require('../assets/dog.png')} />
+                    <Text style={styles.tituloCard}>{service.item.breed.name}</Text>
+                </View>
             </Card>
         )
     }
@@ -51,16 +51,16 @@ const InfBreedScreen = ({ navigation }): React.ReactElement => {
         <DefaultLayout style={[styles.container, { color: 'black' }]}>
             <Layout style={[styles.formContainer, { backgroundColor: globalColors.backgroundDefault }]} >
                 <Text style={styles.title}>Características de Razas</Text>
-                <Input
-                    accessoryLeft={renderIcon}
-                    size='large'
-                    style={styles.filter}
-                    placeholder='Nombre'
-                    onChangeText={onFilter}
-                />
+                <Layout style={styles.filter}>
+                    <UserInput
+                        value={name}
+                        placeholder="Nombre"
+                        onChangeText={onFilter}
+                    />
+                </Layout>
 
                 {
-                    datos.isLoading ?
+                    data.isLoading ?
                         <View style={styles.viewContainer}>
                             <Spinner size='large' status='success' />
                         </View>
@@ -108,29 +108,35 @@ const themedStyles = StyleService.create({
         fontSize: 20,
 
     }, filter: {
-        margin: 24,
+        marginTop: 24,
+        marginLeft: 24,
+        marginRight: 24,
+        marginBottom: 8,
         borderRadius: 4,
+        backgroundColor: globalColors.backgroundDefault
     },
     cardLayout: {
-        margin: 24,
-        backgroundColor: globalColors.backgroundDefault
+        marginLeft: 24,
+        marginRight: 24,
+        marginBottom: 24,
+        backgroundColor: globalColors.backgroundDefault,
     },
     cardStyle: {
         marginBottom: 24,
-        borderRadius: 16
+        borderRadius: 16,
+        height: 80
     }, servicesContainer: {
         backgroundColor: 'transparent'
-    }, tituloCard: { fontFamily: 'Montserrat-Bold', fontSize: 20 },
+    }, tituloCard: { fontFamily: 'Montserrat-Bold', fontSize: 20, marginTop: 14, marginLeft: 15},
     imgNot: {
         width: width,
         height: 320,
-
     },
     labelNot: {
         fontFamily: 'Montserrat-Bold',
         fontSize: 20,
         alignSelf: 'center',
-        marginTop: 8,
+        marginTop: 20,
         marginLeft: 24,
         marginRight: 24
     }, viewContainer: {
