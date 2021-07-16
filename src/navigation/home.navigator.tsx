@@ -97,12 +97,12 @@ const Screens = ({ navigation, route, style }) => {
         <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
         <HomeStack.Screen name="DetailBreed" component={DetailBreed}
           options={{
-            headerStyle: {
-              backgroundColor: globalColors.lightGray,
-            },
             headerLeft: () => (
-              <BackButton isWhite={true} navigation={navigation} />
+              <BackButton style={{backgroundColor: globalColors.backgroundDefault}}  navigation={navigation} />
             ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
           }} />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
