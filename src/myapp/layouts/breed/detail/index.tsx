@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
-import { Dimensions, Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Image, ImageBackground, StyleSheet, Text, View, ScrollView } from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
 import { Icon, Layout, List, Button } from "@ui-kitten/components";
-import style from "src/myapp/styles/style";
 export default ({ navigation, route }): React.ReactElement => {
     const data = [route.params.breed];
     const image = require("../assets/dog-notFound.jpg");
@@ -115,10 +114,10 @@ export default ({ navigation, route }): React.ReactElement => {
     );
 
     const renderpawPrintItem = (service) => {
-        return service.item.num == "si" ? 
+        return service.item.num == "si" ?
             //<Button style={{ margin: 2 }} appearance='ghost' status='success' accessoryLeft={StarIcon} />
             <Image style={styles.pawPrint} source={require('../assets/pawColor.png')} />
-        :
+            :
             //<Button style={{ margin: 2 }} appearance='ghost' status='basic'  accessoryLeft={StarIcon} />
             <Image style={styles.pawPrint} source={require('../assets/paw.png')} />
             ;
@@ -132,12 +131,17 @@ export default ({ navigation, route }): React.ReactElement => {
         )
     }
     return (
-        <ImageBackground source={image} resizeMode="cover" style={styles.petImageContainer} >
-            <DefaultLayout style={styles.container}>
-                <View style={{ height: 250 }}>
-
-                </View>
+        <>
+            <ImageBackground source={image} resizeMode="cover" style={styles.petImageContainer} />
+            <ScrollView>
+            <DefaultLayout
+                statusBarTranslucent
+                statusBarStyle={"light-content"}
+                statusBarBackgroundColor={"transparent"}
+                style={styles.container}>
                 <DefaultLayout
+                    statusBarTranslucent
+                    statusBarBackgroundColor={"transparent"}
                     style={styles.cardSection}>
                     <TitleHeader style={styles.bottomSpace}>{route.params.breed.breed.name}</TitleHeader>
                     <List
@@ -147,7 +151,8 @@ export default ({ navigation, route }): React.ReactElement => {
                     />
                 </DefaultLayout>
             </DefaultLayout>
-        </ImageBackground>
+            </ScrollView>
+        </>
     );
 }
 const { width, height } = Dimensions.get('window');
@@ -165,8 +170,9 @@ const styles = StyleSheet.create({
     petImageContainer: {
         width: width,
         flex: 1,
-        height: 280,
+        height: height / 2,
         resizeMode: 'cover',
+        position: 'absolute'
     },
     petImage: {
         width: 80,
@@ -176,7 +182,8 @@ const styles = StyleSheet.create({
     },
     cardSection: {
         borderTopEndRadius: 40,
-        borderTopStartRadius: 40,
+        borderTopStartRadius: 40,        
+        marginTop: height / 2 - 20,
     },
     bottomSpace: {
         marginBottom: 24,
