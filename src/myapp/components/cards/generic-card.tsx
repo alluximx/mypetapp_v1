@@ -55,10 +55,11 @@ const themedStyles = StyleService.create({
         fontSize: 18,
         fontFamily: 'Montserrat-Medium',
         color: '#707070',
-        marginTop: 8
+        marginTop: 8,
+        lineHeight: 24
     },
     labelDate: {
-        fontSize: 14,
+        fontSize: 16,
         fontFamily: 'Montserrat-Medium',
         color: '#707070',
         marginTop: 8
