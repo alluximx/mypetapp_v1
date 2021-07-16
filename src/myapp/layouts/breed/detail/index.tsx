@@ -9,52 +9,19 @@ import { Icon, Layout, List, Button } from "@ui-kitten/components";
 export default ({ navigation, route }): React.ReactElement => {
     const data = [route.params.breed];
     const image = require("../assets/dog-notFound.jpg");
+    const nivel=(number)=>{
+        let aux = []
+        for (let index = 0; index < 5; index++) {
+            index<=(number-1)? aux.push({ num: 1 }) : aux.push({ num: 0 });
+        }
+        return aux;
+    }
     const renderDataItem = (service) => {
-        let energy_level = [];
-        for (let index = 0; index < service.item.energy_level; index++) {
-            energy_level.push({ num: 'si' });
-
-        }
-        for (let index = parseInt(service.item.energy_level); index < 5; index++) {
-            energy_level.push({ num: 'no' });
-
-        }
-        let slobber_level = [];
-        for (let index = 0; index < service.item.slobber_level; index++) {
-            slobber_level.push({ num: 'si' });
-
-        }
-        for (let index = parseInt(service.item.slobber_level); index < 5; index++) {
-            slobber_level.push({ num: 'no' });
-
-        }
-        let snoring_level = [];
-        for (let index = 0; index < service.item.snoring_level; index++) {
-            snoring_level.push({ num: 'si' });
-
-        }
-        for (let index = parseInt(service.item.snoring_level); index < 5; index++) {
-            snoring_level.push({ num: 'no' });
-
-        }
-        let barking_level = [];
-        for (let index = 0; index < service.item.barking_level; index++) {
-            barking_level.push({ num: 'si' });
-
-        }
-        for (let index = parseInt(service.item.barking_level); index < 5; index++) {
-            barking_level.push({ num: 'no' });
-
-        }
-        let attention_level = [];
-        for (let index = 0; index < service.item.attention_level; index++) {
-            attention_level.push({ num: 'si' });
-
-        }
-        for (let index = parseInt(service.item.attention_level); index < 5; index++) {
-            attention_level.push({ num: 'no' });
-
-        }
+        let energy_level = nivel(parseInt(service.item.energy_level));
+        let slobber_level = nivel(parseInt(service.item.slobber_level));
+        let snoring_level = nivel(parseInt(service.item.snoring_level));
+        let barking_level = nivel(parseInt(service.item.barking_level));
+        let attention_level = nivel(parseInt(service.item.attention_level));
         return (
             <View style={styles.servicesContainer}>
                 <Text style={styles.subtitulo}>Descripción general</Text>
@@ -109,26 +76,15 @@ export default ({ navigation, route }): React.ReactElement => {
             </View>
         )
     }
-    const StarIcon = (props) => (
-        <Icon {...props} name='star' />
-    );
 
     const renderpawPrintItem = (service) => {
-        return service.item.num == "si" ?
+        return service.item.num == 1 ?
             //<Button style={{ margin: 2 }} appearance='ghost' status='success' accessoryLeft={StarIcon} />
             <Image style={styles.pawPrint} source={require('../assets/pawColor.png')} />
             :
             //<Button style={{ margin: 2 }} appearance='ghost' status='basic'  accessoryLeft={StarIcon} />
             <Image style={styles.pawPrint} source={require('../assets/paw.png')} />
             ;
-    }
-    const renderpawNnotItem = (service) => {
-        console.log("antes");
-        console.log(service.item.num);
-        return (
-            <Button style={{ margin: 2 }} appearance='ghost' status='success' accessoryLeft={StarIcon} />
-            //<Image style={styles.pawPrint} source={require('../../../assets/images/menu/my-profile.png')} />
-        )
     }
     return (
         <>
