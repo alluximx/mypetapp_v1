@@ -12,8 +12,6 @@ const useUpdatePet = () => {
 
   return useMutation((data: any) => putPet(data), {
     onSuccess: (response, variables) => {
-      console.log('Response', response);
-      console.log('successs');
       queryClient.invalidateQueries(['my-pets', variables.owner_user]);
     },
   });

@@ -11,12 +11,12 @@ import AddButton from '../buttons/add-button';
 
 const options: CameraOptions = {
   mediaType: 'photo',
-  includeBase64: false,
+  includeBase64: true,
 };
 
 interface PetImageInputProps {
   image: string;
-  setImage: (image: string) => void;
+  setImage: (image: any) => void;
   style?: {};
 }
 
@@ -35,7 +35,7 @@ const PetImageInput = ({
         console.log('Error code: ', response.errorCode);
       } else {
         setImageResponse(response);
-        setImage(response.assets[0].uri);
+        setImage(response.assets[0]);
       }
     });
   }, []);
@@ -59,8 +59,6 @@ const PetImageInput = ({
     else {
       source = require('../../assets/images/pets/add-pet-image.png');
     }
-
-    console.log(source);
 
     return (
       <Image style={[styles.addPetImage, additionalStyles]} source={source} />

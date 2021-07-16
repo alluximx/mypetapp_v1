@@ -34,8 +34,7 @@ const PetCard = ({onPress, pet}: PetCardProps): React.ReactElement => {
   // Format age.
   const monthsMessage = `${months} ${months == 1 ? 'mes' : 'meses'}`;
   const yearsMessage = `${years} ${years == 1 ? 'año' : 'años'}`;
-  const formattedAge =
-    years > 0 ? `${yearsMessage} ${monthsMessage}` : monthsMessage;
+  const formattedAge = years > 0 ? yearsMessage : monthsMessage;
 
   return (
     <Button

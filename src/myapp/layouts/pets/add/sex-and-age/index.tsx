@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useLayoutEffect} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {KeyboardAvoidingView, StyleSheet} from 'react-native';
 import {useQuery} from 'react-query';
 // Global Styles.
@@ -16,6 +16,7 @@ import UserInput from '../../../../components/inputs/user-input';
 import {AddPetContext} from '../../../../context/AddPetContext';
 // Services
 import auth_service from '../../../../services/auth-service';
+import {Spinner} from '@ui-kitten/components';
 
 const sexOptions = [
   {key: 'M', value: 'Macho'},
@@ -24,6 +25,7 @@ const sexOptions = [
 
 export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
+  const [isLoading, setIsLoading] = useState(false);
   const {data: sizes} = useSizes();
   const addPetQuery = useSavePet();
 
@@ -36,28 +38,31 @@ export default ({navigation, route}): React.ReactElement => {
   }, [user]);
 
   useLayoutEffect(() => {
-    const isDisabled = form.sex === '' || form.birthday === '';
+    const isDisabled = form.sex === '' || form.birthday === '' || isLoading;
 
     navigation.setOptions({
       headerRight: () =>
         route.params.renderButtonNext(isDisabled, () => {
+          setIsLoading(true);
           addPetQuery.mutate(form, {
             onSuccess: () => {
-              // navigation.navigate('Home');
-            },
-            onError: () => {
-              console.log('errorrr!');
+              navigation.navigate('Home');
+              setIsLoading(false);
             },
           });
         }),
       headerLeft: () =>
         route.params.renderButtonBack(() => {
           navigation.goBack();
-        }),
+        }, isDisabled),
     });
-  }, [navigation, form]);
+  }, [navigation, form, isLoading]);
 
-  return (
+  return isLoading ? (
+    <DefaultLayout style={styles.loadingContainer}>
+      <Spinner status="success" />
+    </DefaultLayout>
+  ) : (
     <DefaultLayout style={styles.container}>
       <KeyboardAvoidingView>
         <TitleHeader style={styles.bottomSpace}>
@@ -117,5 +122,9 @@ const styles = StyleSheet.create({
   },
   topSpace: {
     marginTop: 16,
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

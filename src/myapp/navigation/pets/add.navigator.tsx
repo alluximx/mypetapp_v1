@@ -40,8 +40,12 @@ const AddPetNavigator = (): React.ReactElement => {
     </CustomButton>
   );
 
-  const renderButtonBack = (onPress: () => void) => {
-    return <AnchorText onPress={onPress}>Atrás</AnchorText>;
+  const renderButtonBack = (onPress: () => void, isDisabled?: boolean) => {
+    return (
+      <AnchorText isDisabled={isDisabled ?? false} onPress={onPress}>
+        Atrás
+      </AnchorText>
+    );
   };
 
   return (

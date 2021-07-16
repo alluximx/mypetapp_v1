@@ -11,24 +11,16 @@ const postPet = (data) => {
 
 const useSavePet = () => {
   const queryClient = useQueryClient();
-  const savePetQuery = useSavePetImage();
+  const savePetImageQuery = useSavePetImage();
 
   return useMutation((data: any) => postPet(data), {
     onSuccess: (response, variables) => {
       // Save Pet image.
-      savePetQuery.mutate(
-        {
-          pet_image: response.data.id,
-          file: variables.image,
-        },
-        {
-          onSuccess: (response) => {
-            console.log(response);
-            // queryClient.invalidateQueries('my-pets');
-          },
-        },
-      );
-      // queryClient.invalidateQueries('my-pets');
+      savePetImageQuery.mutate({
+        pet_image: response.data.id,
+        file: variables.image,
+      });
+      queryClient.invalidateQueries(['my-pets', variables.owner_user]);
     },
   });
 };
