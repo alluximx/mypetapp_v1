@@ -1,10 +1,10 @@
 export interface Breed {
-  id: number;
+  id: string;
   name: string;
 }
 
 export interface Size {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -17,10 +17,15 @@ export interface User {
 }
 
 export interface Pet {
-  id: number;
-  name: string;
   birthday: string;
-  size: Size;
   breed: Breed;
+  id: string;
+  image: string;
+  name: string;
   ownerUser: User;
+  pet_age: {
+    years: number;
+    months: number;
+  };
+  size: Size;
 }

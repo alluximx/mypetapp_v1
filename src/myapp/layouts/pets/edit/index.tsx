@@ -1,7 +1,9 @@
-import React, {useLayoutEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {ImageSourcePropType, StyleSheet, View} from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
+// Hooks.
+import useUpdatePet from '../../../hooks/pets/useUpdatePet';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
@@ -9,25 +11,60 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import PetImageInput from '../../../components/inputs/pet-image-input';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
+import useMyPetImage from '../../../hooks/pets/useMyPetImage';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import useSizes from '../../../hooks/pets/useSizes';
+
+const sexOptions = [
+  {key: 'M', value: 'Macho'},
+  {key: 'H', value: 'Hembra'},
+];
 
 export default ({navigation, route}): React.ReactElement => {
-  const {breed, image, name, sex} = route.params.pet;
+  const {birthday, breed, id, name, owner_user, sex, size} = route.params.pet;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const {data: sizes} = useSizes();
+  const [image, setImage] = useState<ImageSourcePropType>(null);
+  const {data: petImage} = useMyPetImage(id);
+  const updatePetQuery = useUpdatePet();
+
+  useEffect(() => {
+    if (petImage) {
+      setImage({
+        uri: petImage.data[0].file,
+      });
+    }
+  }, [petImage]);
 
   const [form, setForm] = useState({
-    image: require('../../home/assets/image-pet-1.jpg'),
+    id: id,
     name: name,
-    breedId: -1,
-    breed: 'Beagle',
-    userId: -1,
-    sex: 'Macho',
-    birthday: '12/07/2018',
+    breedId: breed.name,
+    breed: breed.id,
+    owner_user: owner_user,
+    sex: sex,
+    size: size.id,
+    sizeId: size.name,
+    birthday: birthday,
   });
+
+  console.log(form);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <AnchorText style={styles.headerRight} onPress={() => {}}>
+        <AnchorText
+          style={styles.headerRight}
+          onPress={() => {
+            updatePetQuery.mutate(form, {
+              onSuccess: () => {
+                navigation.navigate('Home');
+              },
+              onError: () => {
+                console.log('errorrr!');
+              },
+            });
+          }}>
           Guardar
         </AnchorText>
       ),
@@ -52,7 +89,7 @@ export default ({navigation, route}): React.ReactElement => {
       <TitleHeader>Editar Perfil</TitleHeader>
       <PetImageInput
         style={styles.imageInput}
-        image={form.image}
+        image={image}
         setImage={(img: string) => setForm({...form, image: img})}
       />
       <UserInput
@@ -64,24 +101,46 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <UserInput
         placeholder="Raza"
-        value={form.breed}
+        value={form.breedId}
         onChangeText={(value: string) => {
           setForm({...form, breed: value});
         }}
       />
-      <UserInput
-        placeholder="Sexo"
-        value={form.sex}
-        onChangeText={(value: string) => {
-          setForm({...form, sex: value});
-        }}
-      />
+      <View style={{marginBottom: 14}}>
+        <DropdownPicker
+          data={sexOptions.map((option) => {
+            return {value: option.key, label: option.value};
+          })}
+          currentValue={form.sex}
+          placeholder="Sexo"
+          setCurrentValue={(sex: string) => {
+            setForm({...form, sex});
+          }}
+        />
+      </View>
       <UserInput
         placeholder="Cumpleaños"
         value={form.birthday}
         onChangeText={(value: string) => {
           setForm({...form, birthday: value});
         }}
+      />
+      <DropdownPicker
+        data={
+          !sizes
+            ? [
+                {
+                  value: null,
+                  label: 'Cargando...',
+                },
+              ]
+            : sizes?.data.map((option) => {
+                return {value: option.id, label: option.name};
+              })
+        }
+        currentValue={form.size}
+        placeholder="Seleccione un tamaño..."
+        setCurrentValue={(size) => setForm({...form, size})}
       />
       <AnchorText
         style={styles.deleteText}

@@ -7,11 +7,24 @@ export interface UserInputProps {
   value: string;
 }
 
+export interface Option {
+  key: string;
+  value: string;
+}
+
 export interface OptionSelectProps {
-  data: any[];
-  optionStyle?: {};
-  horizontal: boolean;
   currentValue: string;
+  data: any[];
+  horizontal: boolean;
+  optionStyle?: {};
   setCurrentValue: (key: string) => void;
-  style? : {};
+  style?: {};
+}
+
+export interface DropdownPickerProps {
+  currentValue: string;
+  data: any[];
+  placeholder?: string;
+  setCurrentValue: (key: string) => void;
+  style?: {};
 }

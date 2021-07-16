@@ -1,8 +1,10 @@
-import React, { useLayoutEffect } from 'react';
-import { Button, Image, StyleSheet, View } from 'react-native';
-import { Card, List } from '@ui-kitten/components';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {Image, ImageSourcePropType, StyleSheet, View} from 'react-native';
+import {Card, List} from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../../styles/colors';
+// Hooks.
+import useMyPetImage from '../../../hooks/pets/useMyPetImage';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -14,22 +16,45 @@ const servicesList = [
   {
     serviceName: 'Visitas',
     icon: require('../../../assets/images/menu/vets.png'),
-    screen: 'ServicesDoc'
+    screen: 'ServicesDoc',
   },
   {
     serviceName: 'Vacunas',
     icon: require('../../../assets/images/menu/pet-stylists.png'),
-    screen: 'Home'
+    screen: 'Home',
   },
   {
     serviceName: 'Desparaci...',
     icon: require('../../../assets/images/menu/products.png'),
-    screen: 'Home'
+    screen: 'Home',
   },
 ];
 
+const sexDirectory = {
+  M: 'Macho',
+  H: 'Hembra',
+};
+
 export default ({navigation, route}): React.ReactElement => {
-  const {breed, image, name, sex} = route.params.pet;
+  const {id, breed, name, pet_age, sex} = route.params.pet;
+  const {years, months} = pet_age;
+  // Format age.
+  const monthsMessage = `${months} ${months == 1 ? 'Mes' : 'Meses'}`;
+  const yearsMessage = `${years} ${years == 1 ? 'Año' : 'Años'}`;
+  const formattedAge =
+    years > 0 ? `${yearsMessage} ${monthsMessage}` : monthsMessage;
+
+  const [image, setImage] = useState<ImageSourcePropType>(null);
+
+  const {data: petImage} = useMyPetImage(id);
+
+  useEffect(() => {
+    if (petImage) {
+      setImage({
+        uri: petImage.data[0].file,
+      });
+    }
+  }, [petImage]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,7 +62,10 @@ export default ({navigation, route}): React.ReactElement => {
         <AnchorText
           style={styles.headerRight}
           onPress={() =>
-            navigation.navigate('EditPet', { pet: route.params.pet })
+            navigation.navigate('EditPet', {
+              pet: route.params.pet,
+              petImage: image,
+            })
           }>
           Editar
         </AnchorText>
@@ -45,31 +73,39 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
   const renderServiceItem = (service) => {
-      return (<View style={styles.serviceContainer}>
-        <Card activeOpacity={0.8} style={styles.serviceIconContainer} onPress={()=>{navigation.navigate(service.item.screen, {})}}>
+    return (
+      <View style={styles.serviceContainer}>
+        <Card
+          activeOpacity={0.8}
+          style={styles.serviceIconContainer}
+          onPress={() => {
+            navigation.navigate(service.item.screen, {});
+          }}>
           <Image style={styles.serviceIcon} source={service.item.icon} />
         </Card>
-        <DefaultText style={styles.serviceNameText} onPress={()=>{navigation.navigate(service.item.screen, {})}}>
+        <DefaultText
+          style={styles.serviceNameText}
+          onPress={() => {
+            navigation.navigate(service.item.screen, {});
+          }}>
           {service.item.serviceName}
         </DefaultText>
-      </View>);
+      </View>
+    );
   };
 
   return (
     <DefaultLayout style={styles.container}>
       <View style={styles.petImageContainer}>
-        <Image
-          style={styles.petImage}
-          source={require('../../home/assets/image-pet-1.jpg')}
-        />
+        <Image style={styles.petImage} source={image} />
         <View style={styles.petDataContainer}>
           <TitleHeader style={styles.whiteText}>{name}</TitleHeader>
-          <DefaultText style={styles.whiteText}>Beagle</DefaultText>
+          <DefaultText style={styles.whiteText}>{breed.name}</DefaultText>
         </View>
       </View>
       <View style={styles.petDataCards}>
-        <PetDataCard title="Macho" subtitle="Sexo" />
-        <PetDataCard title="3 Años" subtitle="Edad" />
+        <PetDataCard title={sexDirectory[sex]} subtitle="Sexo" />
+        <PetDataCard title={formattedAge} subtitle="Edad" />
       </View>
       <DefaultLayout
         statusBarBackgroundColor={globalColors.greenSecondary}

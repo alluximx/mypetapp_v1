@@ -1,37 +1,15 @@
-import React, {useEffect, useMemo, useReducer} from 'react';
+import React from 'react';
 import {AppearanceProvider} from 'react-native-appearance';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import {AppLoading, LoadFontsTask, Task} from './app-loading.component';
+import {AppLoading} from './app-loading.component';
 import {appMappings, appThemes} from './app-theming';
 import {AppIconsPack} from './app-icons-pack';
-import {SplashImage} from '../components/splash-image.component';
 import {MyAppNavigator} from '../navigation/myapp.navigator';
-import {AppStorage} from '../services/app-storage.service';
 import {Mapping, Theme, Theming} from '../services/theme.service';
 // Screens
 import {SplashScreen} from '../myapp/scenes/splash/splash.component';
-
-const loadingTasks: Task[] = [
-  // Should be used it when running Expo.
-  // In Bare RN Project this is configured by react-native.config.js
-  () =>
-    LoadFontsTask({
-      'montserrat-medium': require('../assets/fonts/Montserrat-Medium.ttf'),
-      'montserrat-bold': require('../assets/fonts/Montserrat-Bold.ttf'),
-    }),
-  () =>
-    AppStorage.getMapping(defaultConfig.mapping).then((result) => [
-      'mapping',
-      result,
-    ]),
-  () =>
-    AppStorage.getTheme(defaultConfig.theme).then((result) => [
-      'theme',
-      result,
-    ]),
-];
 
 const defaultConfig: {mapping: Mapping; theme: Theme} = {
   mapping: 'eva',
@@ -74,10 +52,7 @@ const Splash = ({loading}): React.ReactElement => {
 };
 
 export default (): React.ReactElement => (
-  <AppLoading
-    tasks={loadingTasks}
-    initialConfig={defaultConfig}
-    placeholder={Splash}>
+  <AppLoading initialConfig={defaultConfig} placeholder={Splash}>
     {(props) => <App {...props} />}
   </AppLoading>
 );

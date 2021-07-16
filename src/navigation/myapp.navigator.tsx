@@ -59,7 +59,6 @@ export const MyAppNavigator = (): React.ReactElement => {
           dispatch({type: 'SIGN_IN', token: response.data.token});
           return {status: true, data: response.data};
         } catch (error) {
-          console.log('Err', error);
           return {status: false, data: error.response.data};
         }
       },
@@ -68,7 +67,6 @@ export const MyAppNavigator = (): React.ReactElement => {
           const response = await AuthService.PostSignup(data);
           return {status: true, data: response.data};
         } catch (error) {
-          // console.log('Err', error.response.data);
           return {status: false, data: error.response.data};
         }
       },

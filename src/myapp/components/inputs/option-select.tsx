@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Dimensions, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Global Styles.

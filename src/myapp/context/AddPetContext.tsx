@@ -3,9 +3,10 @@ import React from 'react';
 interface AddPetFormParams {
   image: string;
   name: string;
-  breedId: string;
-  userId: number;
+  breed: string;
+  owner_user: number;
   sex: string;
+  size: string;
   birthday: string;
 }
 
@@ -19,9 +20,10 @@ export const AddPetContext = React.createContext<AddPetContextType>({
   form: {
     image: '',
     name: '',
-    breedId: '',
-    userId: -1,
+    breed: '',
+    owner_user: -1,
     sex: '',
+    size: '',
     birthday: '',
   },
   setForm: (form) => {},

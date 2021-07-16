@@ -1,11 +1,12 @@
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import {Button, Card, List, Spinner, Text} from '@ui-kitten/components';
+import {Card, List, Spinner} from '@ui-kitten/components';
 import {useRoute} from '@react-navigation/native';
 // My Components
 import AddButton from '../../components/buttons/add-button';
 import DefaultLayout from '../../components/layouts/default-layout';
 import DefaultText from '../../components/texts/default-text';
+import PetCard from '../../components/cards/pet-card';
 import TitleHeader from '../../components/texts/title-header';
 // Global styles
 import globalColors from '../../styles/colors';
@@ -13,24 +14,8 @@ import globalStyles from '../../styles/style';
 import globalVars from '../../styles/vars';
 // Hooks
 import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
-import useMyPets from '../../hooks/user/useMyPets';
-// Reducer
-import {reducer} from '../../../reducer';
 // Types
 import {HomeRouteParams} from '../../types/navigation/home-navigator';
-
-const staticPets = [
-  {
-    name: 'Argos',
-    imageUrl: require('./assets/image-pet-1.jpg'),
-    age: 3,
-  },
-  {
-    name: 'Valerio',
-    imageUrl: require('./assets/image-pet-2.jpg'),
-    age: 1,
-  },
-];
 
 const servicesList = [
   {
@@ -77,28 +62,9 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  const renderPetButton = (pet) => {
-    const {name} = pet.item;
-    const image = require('./assets/image-pet-1.jpg');
-    const age = 3;
-
-    return (
-      <Button
-        activeOpacity={0.9}
-        accessoryLeft={() => (
-          <Image style={styles.dogProfileImage} source={image} />
-        )}
-        accessoryRight={() => (
-          <Text style={styles.ageText}>
-            {age} {age == 1 ? 'año' : 'años'}
-          </Text>
-        )}
-        style={styles.profileButton}
-        onPress={() => onDetailPetButtonPress(pet.item)}>
-        {() => <Text style={styles.petNameText}>{name}</Text>}
-      </Button>
-    );
-  };
+  const renderPetButton = (pet) => (
+    <PetCard pet={pet.item} onPress={onDetailPetButtonPress} />
+  );
 
   const renderServiceItem = (service) => (
     <View style={styles.serviceContainer}>
@@ -184,16 +150,6 @@ const styles = StyleSheet.create({
   greeting: {
     marginBottom: 4,
   },
-  profileButton: {
-    backgroundColor: globalColors.greenSecondary,
-    borderWidth: 0,
-    flexDirection: 'column',
-    borderRadius: 16,
-    width: 128,
-    paddingTop: 16,
-    paddingBottom: 24,
-    marginRight: 24,
-  },
   petButtonsContainer: {
     backgroundColor: 'transparent',
     marginVertical: 24,
@@ -212,23 +168,6 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 16,
     textAlign: 'center',
-  },
-  dogProfileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 8,
-  },
-  petNameText: {
-    fontFamily: globalVars.fontBold,
-    color: globalColors.white,
-    fontSize: 16,
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  ageText: {
-    color: globalColors.white,
-    fontSize: 14,
   },
   addButtonContainer: {
     alignSelf: 'center',

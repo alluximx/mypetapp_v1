@@ -30,8 +30,6 @@ const useMyNameAndPets = () => {
       profileQuery.data?.data.id,
     );
 
-    console.log(profileQuery.isSuccess);
-
     useEffect(() => {
       // Update profile data if success...
       if (profileQuery.isSuccess) {
@@ -39,10 +37,8 @@ const useMyNameAndPets = () => {
           ...data,
           userName: profileQuery.data?.data.name,
         });
-      } else {
-        console.log('There was an error while fetching my profile.');
       }
-    }, [profileQuery.isSuccess]);
+    }, [profileQuery.data]);
 
     useEffect(() => {
       // Update pets data if sucess...
@@ -52,10 +48,8 @@ const useMyNameAndPets = () => {
           pets: petsQuery.data?.data,
           isLoading: false,
         });
-      } else {
-        console.log('There was an error while fetching my pets.');
       }
-    }, [petsQuery.isSuccess]);
+    }, [petsQuery.data]);
   }
 
   return data;

@@ -4,6 +4,10 @@ import {Icon, IconElement} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../styles/colors';
 
+export const DropDownIcon = ({style}: {style?: {}}): IconElement => (
+  <Icon style={[styles.dropdownIcon, style]} name="chevron-down-outline" />
+);
+
 export const AddIcon = ({style}): IconElement => (
   <Icon style={[styles.addIcon, style]} name="plus-outline" />
 );
@@ -341,5 +345,12 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     tintColor: globalColors.lightGreen,
+  },
+  dropdownIcon: {
+    height: 35,
+    width: 35,
+    tintColor: globalColors.greenSecondary,
+    top: 10,
+    right: 10,
   },
 });

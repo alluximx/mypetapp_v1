@@ -1,4 +1,4 @@
-import React, {useContext, useLayoutEffect, useState, useEffect } from 'react';
+import React, {useContext, useLayoutEffect, useState, useEffect} from 'react';
 import {Spinner} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 // Global Styles.
@@ -14,33 +14,32 @@ import useGetBreeds from '../../../../hooks/useGetBreeds';
 
 export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
-  console.log(form);
   const [breeds, setBreeds] = useState([]);
 
   //const isDisabled = form.name === '' || form.image === '';
-  const isDisabled = form.breedId === '';
+  const isDisabled = form.breed === '';
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
         route.params.renderButtonNext(isDisabled, () => {
-        navigation.navigate('SexAndAge');
-      }),
+          navigation.navigate('SexAndAge');
+        }),
       headerLeft: () =>
         route.params.renderButtonBack(() => {
-        navigation.goBack();
-      }),
+          navigation.goBack();
+        }),
     });
-  }, [navigation, form]); 
-    
+  }, [navigation, form]);
+
   const userQuery = useGetBreeds();
   useEffect(() => {
-    if(userQuery.data){
-      const data =  userQuery.data.data.map((obj:any)=>{
-        return {key : obj.id, value : obj.name}
-      }); 
+    if (userQuery.data) {
+      const data = userQuery.data.data.map((obj: any) => {
+        return {key: obj.id, value: obj.name};
+      });
       setBreeds(data);
     }
-  }, [userQuery.data])
+  }, [userQuery.data]);
 
   return userQuery.isLoading ? (
     <DefaultLayout style={styles.loadingContainer}>
@@ -48,29 +47,24 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   ) : (
     <DefaultLayout style={styles.container}>
-      
       <TitleHeader>
-        ¿Que raza es{' '} 
+        ¿Que raza es{' '}
         <TitleHeader style={globalStyles.highlightedText}>
           {form.name}
         </TitleHeader>
-        <TitleHeader>
-          {' '}?
-        </TitleHeader>
+        <TitleHeader> ?</TitleHeader>
       </TitleHeader>
-        
+
       <OptionSelect
-        currentValue={form.breedId}
-        setCurrentValue={(breedId) => setForm({...form, breedId})}
+        currentValue={form.breed}
+        setCurrentValue={(breed) => setForm({...form, breed})}
         horizontal={false}
         data={breeds}
         style={styles.select}
         optionStyle={styles.options}
       />
-
     </DefaultLayout>
   );
-
 };
 
 const styles = StyleSheet.create({
@@ -79,15 +73,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  container:{
-    paddingBottom : 0,
+  container: {
+    paddingBottom: 0,
   },
 
-  select : {
-    marginBottom : 0,
+  select: {
+    marginBottom: 0,
   },
 
-  options : {
-    marginTop : 15
-  }
+  options: {
+    marginTop: 15,
+  },
 });

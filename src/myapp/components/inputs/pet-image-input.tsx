@@ -15,12 +15,16 @@ const options: CameraOptions = {
 };
 
 interface PetImageInputProps {
-  image : string;
-  setImage : (image:string) => void;
-  style? : {};
+  image: string;
+  setImage: (image: string) => void;
+  style?: {};
 }
 
-const PetImageInput = ({image, setImage, style} : PetImageInputProps): React.ReactElement => {
+const PetImageInput = ({
+  image,
+  setImage,
+  style,
+}: PetImageInputProps): React.ReactElement => {
   const [imageResponse, setImageResponse] = useState<any>(null);
 
   const onPress = useCallback(() => {
@@ -55,6 +59,8 @@ const PetImageInput = ({image, setImage, style} : PetImageInputProps): React.Rea
     else {
       source = require('../../assets/images/pets/add-pet-image.png');
     }
+
+    console.log(source);
 
     return (
       <Image style={[styles.addPetImage, additionalStyles]} source={source} />
