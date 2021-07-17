@@ -14,7 +14,7 @@ import {Mapping, Theme, Theming} from '../services/theme.service';
 import {SplashScreen} from '../myapp/scenes/splash/splash.component';
 
 import * as eva from '@eva-design/eva';
-import { default as customTheme } from '../theme/custom-theme.json'; 
+import { default as customTheme } from '../theme/custom-theme.json';
 
 const loadingTasks: Task[] = [
   // Should be used it when running Expo.
@@ -56,7 +56,7 @@ const App = ({mapping, theme}): React.ReactElement => {
     <>
       <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
       <AppearanceProvider>
-        <ApplicationProvider {...eva} theme={{ ...eva.light, ...customTheme }}>
+        <ApplicationProvider {...currentMapping} theme={{ ...eva.light, ...customTheme }}>
           <Theming.MappingContext.Provider value={mappingContext}>
             <Theming.ThemeContext.Provider value={themeContext}>
               <SafeAreaProvider>
