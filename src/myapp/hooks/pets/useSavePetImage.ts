@@ -1,4 +1,4 @@
-import {useMutation, useQueryClient} from 'react-query';
+import {useMutation} from 'react-query';
 import api from '../../services/app-services';
 
 const postPetImage = (data) => {
@@ -9,14 +9,6 @@ const postPetImage = (data) => {
   return api.post('api/v1/pets_images/', newData, true, true);
 };
 
-const useSavePetImage = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation((data: any) => postPetImage(data), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('my-pet-image');
-    },
-  });
-};
+const useSavePetImage = () => useMutation((data: any) => postPetImage(data));
 
 export default useSavePetImage;

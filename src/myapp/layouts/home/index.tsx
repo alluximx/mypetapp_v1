@@ -47,7 +47,7 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.navigate('ProductList', {service: service});
 
   const renderHeader = () => (
-    <View>
+    <View style={styles.centeredContainer}>
       <TitleHeader style={styles.greeting}>
         Hola{' '}
         <TitleHeader style={globalStyles.highlightedText}>
@@ -82,7 +82,7 @@ export default ({navigation}): React.ReactElement => {
       <Spinner status="success" />
     </DefaultLayout>
   ) : (
-    <DefaultLayout style={{paddingRight: 0, paddingBottom: 0}}>
+    <DefaultLayout style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderHeader()}
 
@@ -105,7 +105,7 @@ export default ({navigation}): React.ReactElement => {
           )}
         />
 
-        <TitleHeader>
+        <TitleHeader style={styles.centeredContainer}>
           ¿Qué necesitan tus{' '}
           <TitleHeader style={globalStyles.highlightedText}>
             mascotas
@@ -143,9 +143,12 @@ export default ({navigation}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    paddingHorizontal: 0,
+    paddingBottom: 0,
+  },
+  centeredContainer: {
+    marginHorizontal: globalVars.outsidePadding,
   },
   greeting: {
     marginBottom: 4,
@@ -157,6 +160,7 @@ const styles = StyleSheet.create({
   },
   petButtonsContentContainer: {
     paddingBottom: 8,
+    paddingHorizontal: globalVars.outsidePadding,
   },
   petButtonContentContainerEmpty: {
     flexDirection: 'column-reverse',
@@ -184,7 +188,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   serviceContainer: {
-    marginRight: 33,
+    marginHorizontal: 33,
     alignItems: 'center',
   },
   serviceIconContainer: {
@@ -205,7 +209,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   adoptionBanner: {
-    marginRight: globalVars.outsidePadding,
+    marginHorizontal: globalVars.outsidePadding,
     backgroundColor: globalColors.greenPrimary,
     borderRadius: 16,
     paddingVertical: 8,
