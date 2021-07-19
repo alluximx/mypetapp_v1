@@ -6,6 +6,7 @@ import {sexOptions} from '../../../constants';
 import useGetBreeds from '../../../hooks/useGetBreeds';
 import useSizes from '../../../hooks/pets/useSizes';
 import useUpdatePet from '../../../hooks/pets/useUpdatePet';
+import useDeletePet from '../../../hooks/pets/useDeletePet';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
@@ -39,6 +40,7 @@ export default ({navigation, route}): React.ReactElement => {
   const sizesList = formList(sizes);
   const breedsList = formList(breeds);
   const updatePetQuery = useUpdatePet();
+  const deletePetQuery = useDeletePet();
 
   const [form, setForm] = useState({
     id: id,
@@ -72,7 +74,8 @@ export default ({navigation, route}): React.ReactElement => {
   }, [navigation, form, isLoading]);
 
   const onDeleteAccept = () => {
-    console.log('deleted pet');
+    setIsLoading(true);
+    deletePetQuery.mutate(form);
   };
 
   return isLoading ? (
