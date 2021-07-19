@@ -65,13 +65,14 @@ export default ({navigation, route}): React.ReactElement => {
             navigation.navigate('EditPet', {
               pet: route.params.pet,
               petImage: image,
+              petImageId: petImage.data[0].id,
             })
           }>
           Editar
         </AnchorText>
       ),
     });
-  }, [navigation]);
+  }, [navigation, image]);
   const renderServiceItem = (service) => {
     return (
       <View style={styles.serviceContainer}>

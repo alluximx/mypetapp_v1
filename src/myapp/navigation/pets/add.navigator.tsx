@@ -17,7 +17,7 @@ const AddPetStack = createNativeStackNavigator();
 
 const AddPetNavigator = (): React.ReactElement => {
   const [form, setForm] = useState({
-    image: '',
+    image: null,
     name: '',
     breed: '',
     owner_user: -1,

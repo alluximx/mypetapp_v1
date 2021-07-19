@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
+import {Animated, StyleSheet, View} from 'react-native';
 // Global Styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
@@ -10,51 +11,98 @@ import {DropdownPickerProps} from '../../types/components/inputs';
 
 const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
   const {currentValue, data, placeholder, setCurrentValue} = props;
+  const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  useEffect(() => {
+    Animated.timing(focusAnim, {
+      toValue: props.currentValue !== '' ? 0 : 1,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [props.currentValue]);
+
   return (
-    <RNPickerSelect
-      value={currentValue}
-      onValueChange={setCurrentValue}
-      placeholder={{
-        value: '',
-        label: placeholder ?? 'Seleccione una opción...',
-      }}
-      pickerProps={{
-        mode: 'dropdown',
-        onBlur: () => setIsDropdownOpen(false),
-        onFocus: () => setIsDropdownOpen(true),
-      }}
-      Icon={() => <DropDownIcon />}
-      useNativeAndroidPickerStyle={false}
-      items={data}
-      style={
-        !isDropdownOpen
-          ? selectorStyles
-          : {
-              inputAndroid: {
-                ...selectorStyles.inputAndroid,
-                borderWidth: 1,
-                borderColor: globalColors.greenSecondary,
-              },
-            }
-      }
-    />
+    <View style={[styles.container, props.style]}>
+      <Animated.Text
+        style={[
+          styles.inputLabel,
+          // Label animations
+          {
+            top: focusAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [6, 16],
+            }),
+            fontSize: focusAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [14, 16],
+            }),
+            color: focusAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: [globalColors.darkGray, globalColors.lightGray],
+            }),
+          },
+        ]}>
+        {props.placeholder}
+      </Animated.Text>
+      <RNPickerSelect
+        Icon={() => <DropDownIcon />}
+        items={data}
+        onValueChange={setCurrentValue}
+        pickerProps={{
+          mode: 'dropdown',
+          onBlur: () => setIsDropdownOpen(false),
+          onFocus: () => setIsDropdownOpen(true),
+        }}
+        placeholder={{
+          value: '',
+          label: placeholder ?? 'Seleccione una opción...',
+        }}
+        style={
+          !isDropdownOpen
+            ? selectorStyles
+            : {
+                inputAndroid: {
+                  ...selectorStyles.inputAndroid,
+                  borderWidth: 1,
+                  borderColor: globalColors.greenSecondary,
+                },
+              }
+        }
+        useNativeAndroidPickerStyle={false}
+        value={currentValue}
+      />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 14,
+  },
+  inputLabel: {
+    color: globalColors.darkGray,
+    fontFamily: globalVars.fontRegular,
+    fontSize: 14,
+    left: 16,
+    position: 'absolute',
+    zIndex: 5,
+  },
+});
 
 const selectorStyles = {
   inputAndroid: {
     backgroundColor: globalColors.lightGreen,
-    height: 56,
     borderRadius: 10,
-    padding: 15,
-    fontSize: 16,
-    fontFamily: globalVars.fontRegular,
     color: globalColors.black,
+    fontFamily: globalVars.fontRegular,
+    fontSize: 16,
+    height: 56,
+    padding: 15,
+    paddingBottom: -20,
   },
   placeholder: {
-    color: globalColors.lightGray,
+    color: 'transparent',
   },
 };
 

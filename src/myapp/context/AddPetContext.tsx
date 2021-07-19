@@ -1,7 +1,8 @@
 import React from 'react';
+import {ImageSourcePropType} from 'react-native';
 
 interface AddPetFormParams {
-  image: string;
+  image: ImageSourcePropType;
   name: string;
   breed: string;
   owner_user: number;
@@ -18,7 +19,7 @@ export interface AddPetContextType {
 // Default function definitions.
 export const AddPetContext = React.createContext<AddPetContextType>({
   form: {
-    image: '',
+    image: null,
     name: '',
     breed: '',
     owner_user: -1,
