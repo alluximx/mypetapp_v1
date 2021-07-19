@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 // Constants.
 import {sexOptions} from '../../../constants';
 // Hooks.
@@ -11,6 +11,7 @@ import useDeletePet from '../../../hooks/pets/useDeletePet';
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
 import CustomSpinner from '../../../components/custom-spinner';
+import DatepickerInput from '../../../components/inputs/date-picker';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import PetImageInput from '../../../components/inputs/pet-image-input';
@@ -126,13 +127,19 @@ export default ({navigation, route}): React.ReactElement => {
           setForm({...form, sex});
         }}
       />
-      <UserInput
+      {/* <UserInput
         placeholder="Cumpleaños"
         value={form.birthday}
         onChangeText={(value: string) => {
           setForm({...form, birthday: value});
         }}
-      />
+      /> */}
+      <View style={{marginVertical: 8}}>
+        <DatepickerInput
+          currentValue={form.birthday}
+          onSelect={(birthday) => setForm({...form, birthday})}
+        />
+      </View>
       <DropdownPicker
         data={sizesList}
         currentValue={form.size}

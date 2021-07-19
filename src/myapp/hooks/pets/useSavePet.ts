@@ -4,9 +4,7 @@ import api from '../../services/app-services';
 // Hooks.
 import useSavePetImage from './useSavePetImage';
 
-const postPet = (data) => {
-  return api.post('api/v1/pets/', data, true);
-};
+const postPet = (data) => api.post('api/v1/pets/', data, true);
 
 const useSavePet = () => {
   const navigation = useNavigation();

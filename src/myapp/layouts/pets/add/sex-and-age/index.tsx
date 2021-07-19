@@ -17,7 +17,7 @@ import DropdownPicker from '../../../../components/inputs/dropdown-picker';
 import OptionSelect from '../../../../components/inputs/option-select';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';
-import DatepickerInput from '../../../../components/inputs/date-picker'
+import DatepickerInput from '../../../../components/inputs/date-picker';
 // Context
 import {AddPetContext} from '../../../../context/AddPetContext';
 // Services
@@ -83,13 +83,17 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader style={styles.bottomSpace}>
           ¿Cuándo cumple años?
         </TitleHeader>
-        <UserInput
+        <DatepickerInput
+          currentValue={form.birthday}
+          onSelect={(birthday) => setForm({...form, birthday})}
+        />
+        {/* <UserInput
           placeholder="DD/MM/AAAA"
           value={form.birthday}
           onChangeText={(value: string) => {
             setForm({...form, birthday: value});
           }}
-        />
+        /> */}
         <TitleHeader style={[styles.bottomSpace, styles.topSpace]}>
           ¿De qué tamaño es?
         </TitleHeader>
@@ -99,8 +103,6 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Seleccione un tamaño..."
           setCurrentValue={(size) => setForm({...form, size})}
         />
-        <DatepickerInput ></DatepickerInput>
-       
       </KeyboardAvoidingView>
     </DefaultLayout>
   );

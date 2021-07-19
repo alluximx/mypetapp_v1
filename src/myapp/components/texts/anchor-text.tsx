@@ -10,7 +10,7 @@ import {AnchorTextProps} from '../../types/components/texts';
 const AnchorText = (props: AnchorTextProps): React.ReactElement => {
   return (
     <TouchableOpacity
-      disabled={props.isDisabled}
+      disabled={props.isDisabled ?? false}
       activeOpacity={0.8}
       onPress={props.onPress}>
       <Text
