@@ -1,41 +1,41 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createNativeStackNavigator } from 'react-native-screens/native-stack';
-import { Dimensions, StyleSheet } from 'react-native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createNativeStackNavigator} from 'react-native-screens/native-stack';
+import {Dimensions, StyleSheet} from 'react-native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
 // My Components.
-import { HomeDrawer } from '../myapp/components/navigation/home-drawer';
+import {HomeDrawer} from '../myapp/components/navigation/home-drawer';
 import BackButton from '../myapp/components/buttons/back-button';
 import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
-import { AddDewormingScreen } from '../myapp/scenes/deworming/add.component';
-import { AddVaccineScreen } from '../myapp/scenes/vaccines/add.component';
-import { AddVisitScreen } from '../myapp/scenes/visits/add.component';
-import { CartScreen } from '../myapp/scenes/cart/shopping-cart.component';
-import { ClinicalHistoryScreen } from '../myapp/scenes/clinical-history/clinical-history.component';
+import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
+import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
+import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
+import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
+import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
 // Pets
-import { DetailPetScreen } from '../myapp/scenes/pets/detail.component';
-import { EditPetScreen } from '../myapp/scenes/pets/edit.component';
-import { HomeScreen } from '../myapp/scenes/home/home.component';
-import { OrdersScreen } from '../myapp/scenes/orders/orders.component';
-import { ProductDetailScreen } from '../myapp/scenes/cart/product-detail.component';
-import { ProductListScreen } from '../myapp/scenes/cart/product-list.component';
+import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
+import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
+import {HomeScreen} from '../myapp/scenes/home/home.component';
+import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
+import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
+import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 //visits
-import { InfVisitinScreen } from '../myapp/scenes/visits/Inf.component';
+import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 //Breed
-import { InfoBreedScreen } from '../myapp/scenes/breed/Inf.component';
-import { DetailBreed } from '../myapp/scenes/breed/detail.component'
+import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
+import {DetailBreed} from '../myapp/scenes/breed/detail.component';
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
 
-const Screens = ({ navigation, route, style }) => {
+const Screens = ({navigation, route, style}) => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
 
@@ -89,21 +89,28 @@ const Screens = ({ navigation, route, style }) => {
           }}
         />
         {/* Services visits */}
-        <HomeStack.Screen
-          name="ServicesDoc"
-          component={InfVisitinScreen}
-        />
+        <HomeStack.Screen name="ServicesDoc" component={InfVisitinScreen} />
         {/* Breed */}
         <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
-        <HomeStack.Screen name="DetailBreed" component={DetailBreed}
+        <HomeStack.Screen
+          name="DetailBreed"
+          component={DetailBreed}
           options={{
             headerLeft: () => (
-              <BackButton style={{backgroundColor: globalColors.backgroundDefault, borderRadius: 100, padding:5}}  navigation={navigation} />
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  padding: 5,
+                }}
+                navigation={navigation}
+              />
             ),
             headerTopInsetEnabled: true,
             headerTranslucent: true,
             headerStyle: {backgroundColor: 'transparent'},
-          }} />
+          }}
+        />
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
@@ -123,7 +130,7 @@ const Screens = ({ navigation, route, style }) => {
   );
 };
 
-export const HomeNavigator = ({ route }): React.ReactElement => {
+export const HomeNavigator = ({route}): React.ReactElement => {
   const [progress, setProgress] = React.useState<Animated.Node<number>>(
     new Animated.Value(0),
   );
@@ -140,7 +147,7 @@ export const HomeNavigator = ({ route }): React.ReactElement => {
     outputRange: [0, 20],
   });
 
-  const animatedStyle = { transform: [{ scale }, { translateX }], borderRadius };
+  const animatedStyle = {transform: [{scale}, {translateX}], borderRadius};
 
   return (
     <Drawer.Navigator
