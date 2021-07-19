@@ -13,6 +13,9 @@ import {Mapping, Theme, Theming} from '../services/theme.service';
 // Screens
 import {SplashScreen} from '../myapp/scenes/splash/splash.component';
 
+import * as eva from '@eva-design/eva';
+import { default as customTheme } from '../theme/custom-theme.json';
+
 const loadingTasks: Task[] = [
   // Should be used it when running Expo.
   // In Bare RN Project this is configured by react-native.config.js
@@ -53,7 +56,7 @@ const App = ({mapping, theme}): React.ReactElement => {
     <>
       <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
       <AppearanceProvider>
-        <ApplicationProvider {...currentMapping} theme={currentTheme}>
+        <ApplicationProvider {...currentMapping} theme={{ ...eva.light, ...customTheme }}>
           <Theming.MappingContext.Provider value={mappingContext}>
             <Theming.ThemeContext.Provider value={themeContext}>
               <SafeAreaProvider>

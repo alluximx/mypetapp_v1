@@ -7,8 +7,10 @@ import DefaultLayout from '../../../../components/layouts/default-layout';
 import OptionSelect from '../../../../components/inputs/option-select';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';
+import DatepickerInput from '../../../../components/inputs/date-picker'
 // Context
 import {AddPetContext} from '../../../../context/AddPetContext';
+//kitten component
 
 const data = [
   {
@@ -55,13 +57,8 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader style={styles.bottomSpace}>
           ¿Cuándo cumple años?
         </TitleHeader>
-        <UserInput
-          placeholder="DD/MM/AAAA"
-          value={form.birthday}
-          onChangeText={(value: string) => {
-            setForm({...form, birthday: value});
-          }}
-        />
+        <DatepickerInput ></DatepickerInput>
+       
       </KeyboardAvoidingView>
     </DefaultLayout>
   );
