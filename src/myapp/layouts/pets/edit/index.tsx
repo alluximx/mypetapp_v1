@@ -1,7 +1,7 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {ImageSourcePropType, StyleSheet, View} from 'react-native';
-// Global Styles.
-import globalColors from '../../../styles/colors';
+// Constants.
+import {sexOptions} from '../../../constants';
 // Hooks.
 import useUpdatePet from '../../../hooks/pets/useUpdatePet';
 // My Components.
@@ -14,11 +14,6 @@ import UserInput from '../../../components/inputs/user-input';
 import useMyPetImage from '../../../hooks/pets/useMyPetImage';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import useSizes from '../../../hooks/pets/useSizes';
-
-const sexOptions = [
-  {key: 'M', value: 'Macho'},
-  {key: 'H', value: 'Hembra'},
-];
 
 export default ({navigation, route}): React.ReactElement => {
   const {birthday, breed, id, name, owner_user, sex, size} = route.params.pet;

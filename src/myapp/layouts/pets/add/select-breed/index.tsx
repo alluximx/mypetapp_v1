@@ -1,23 +1,23 @@
 import React, {useContext, useLayoutEffect, useState, useEffect} from 'react';
-import {Spinner} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 // Global Styles.
 import globalStyles from '../../../../styles/style';
-// My Components
+// My Components.
+import CustomSpinner from '../../../../components/custom-spinner';
 import DefaultLayout from '../../../../components/layouts/default-layout';
 import TitleHeader from '../../../../components/texts/title-header';
 import OptionSelect from '../../../../components/inputs/option-select';
-// Context
+// Context.
 import {AddPetContext} from '../../../../context/AddPetContext';
-//Hook
+// Hook.
 import useGetBreeds from '../../../../hooks/useGetBreeds';
 
 export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
   const [breeds, setBreeds] = useState([]);
-
-  //const isDisabled = form.name === '' || form.image === '';
   const isDisabled = form.breed === '';
+  const breedsQuery = useGetBreeds();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
@@ -41,18 +41,16 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [userQuery.data]);
 
-  return userQuery.isLoading ? (
-    <DefaultLayout style={styles.loadingContainer}>
-      <Spinner status="success" />
-    </DefaultLayout>
+  return breedsQuery.isLoading ? (
+    <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
       <TitleHeader>
-        ¿Que raza es{' '}
+        ¿Qué raza es{' '}
         <TitleHeader style={globalStyles.highlightedText}>
           {form.name}
         </TitleHeader>
-        <TitleHeader> ?</TitleHeader>
+        <TitleHeader>?</TitleHeader>
       </TitleHeader>
 
       <OptionSelect
@@ -68,19 +66,12 @@ export default ({navigation, route}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   container: {
     paddingBottom: 0,
   },
-
   select: {
-    marginBottom: 0,
+    marginBottom: 16,
   },
-
   options: {
     marginTop: 15,
   },

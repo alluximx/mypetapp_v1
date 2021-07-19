@@ -4,6 +4,7 @@ import {Card, List, Spinner} from '@ui-kitten/components';
 import {useRoute} from '@react-navigation/native';
 // My Components
 import AddButton from '../../components/buttons/add-button';
+import CustomSpinner from '../../components/custom-spinner';
 import DefaultLayout from '../../components/layouts/default-layout';
 import DefaultText from '../../components/texts/default-text';
 import PetCard from '../../components/cards/pet-card';
@@ -78,9 +79,7 @@ export default ({navigation}): React.ReactElement => {
   );
 
   return data.isLoading ? (
-    <DefaultLayout style={styles.loadingContainer}>
-      <Spinner status="success" />
-    </DefaultLayout>
+    <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>

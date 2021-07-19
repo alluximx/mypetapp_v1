@@ -11,6 +11,7 @@ import useSizes from '../../../../hooks/pets/useSizes';
 // Models.
 import {Size} from '../../../../types/models';
 // My Components
+import CustomSpinner from '../../../../components/custom-spinner';
 import DefaultLayout from '../../../../components/layouts/default-layout';
 import DropdownPicker from '../../../../components/inputs/dropdown-picker';
 import OptionSelect from '../../../../components/inputs/option-select';
@@ -61,9 +62,7 @@ export default ({navigation, route}): React.ReactElement => {
   }, [navigation, form, isLoading]);
 
   return isLoading ? (
-    <DefaultLayout style={styles.loadingContainer}>
-      <Spinner status="success" />
-    </DefaultLayout>
+    <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
       <KeyboardAvoidingView>
@@ -113,9 +112,5 @@ const styles = StyleSheet.create({
   },
   topSpace: {
     marginTop: 16,
-  },
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
