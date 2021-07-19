@@ -17,6 +17,7 @@ import DropdownPicker from '../../../../components/inputs/dropdown-picker';
 import OptionSelect from '../../../../components/inputs/option-select';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';
+import DatepickerInput from '../../../../components/inputs/date-picker'
 // Context
 import {AddPetContext} from '../../../../context/AddPetContext';
 // Services
@@ -98,6 +99,8 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Seleccione un tamaño..."
           setCurrentValue={(size) => setForm({...form, size})}
         />
+        <DatepickerInput ></DatepickerInput>
+       
       </KeyboardAvoidingView>
     </DefaultLayout>
   );
