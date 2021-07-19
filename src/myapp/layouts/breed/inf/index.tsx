@@ -5,6 +5,7 @@ import globalColors from "../../../styles/colors";
 import { Dimensions, TouchableWithoutFeedback, Image, View } from "react-native";
 import useBreedsInformation from "../../../hooks/breed/useBreedsInformation";
 import UserInput from '../../../components/inputs/user-input';
+import { TextInput } from "react-native-gesture-handler";
 
 const InfBreedScreen = ({ navigation }): React.ReactElement => {
     const styles = useStyleSheet(themedStyles);
@@ -29,11 +30,6 @@ const InfBreedScreen = ({ navigation }): React.ReactElement => {
         setBreeds(aux);
         setName(event);
     }
-    const renderIcon = (props) => (
-        <TouchableWithoutFeedback>
-            <Icon {...props} name='maximize-outline' />
-        </TouchableWithoutFeedback>
-    );
     const renderServiceItem = service => {
         const param = service.item;
         return (
@@ -47,15 +43,25 @@ const InfBreedScreen = ({ navigation }): React.ReactElement => {
             </Card>
         )
     }
+    const renderIcon = (props) => (
+        <Icon {...props} name={'search'} />
+    );
     return (
         <DefaultLayout style={[styles.container, { color: 'black' }]}>
             <Layout style={[styles.formContainer, { backgroundColor: globalColors.backgroundDefault }]} >
                 <Text style={styles.title}>Características de Razas</Text>
                 <Layout style={styles.filter}>
-                    <UserInput
+                    {/* {<UserInput
                         value={name}
                         placeholder="Nombre"
                         onChangeText={onFilter}
+                    />} */}
+                    <Input
+                        placeholder='Nombre'
+                        accessoryLeft={renderIcon}
+                        style={styles.inputContainer}
+                        onChangeText={onFilter}
+                        textStyle={{ minHeight: 50, fontSize:20 }}
                     />
                 </Layout>
 
@@ -111,7 +117,7 @@ const themedStyles = StyleService.create({
         marginTop: 24,
         marginLeft: 24,
         marginRight: 24,
-        marginBottom: 8,
+        marginBottom: 24,
         borderRadius: 4,
         backgroundColor: globalColors.backgroundDefault
     },
@@ -122,12 +128,12 @@ const themedStyles = StyleService.create({
         backgroundColor: globalColors.backgroundDefault,
     },
     cardStyle: {
-        marginBottom: 24,
+        marginBottom: 16,
         borderRadius: 16,
         height: 80
     }, servicesContainer: {
         backgroundColor: 'transparent'
-    }, tituloCard: { fontFamily: 'Montserrat-Bold', fontSize: 20, marginTop: 14, marginLeft: 15},
+    }, tituloCard: { fontFamily: 'Montserrat-Bold', fontSize: 20, marginTop: 14, marginLeft: 15 },
     imgNot: {
         width: width,
         height: 320,
@@ -143,6 +149,9 @@ const themedStyles = StyleService.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    }, inputContainer: {
+        backgroundColor: globalColors.lightGreen,
+        borderRadius: 10,
     }
 });
 export default InfBreedScreen;

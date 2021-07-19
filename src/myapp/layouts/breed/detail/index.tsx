@@ -5,23 +5,19 @@ import globalColors from '../../../styles/colors';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
-import { Icon, Layout, List, Button } from "@ui-kitten/components";
+import { Icon, Layout, List, Button, StyleService } from "@ui-kitten/components";
+import PawBreed from "../../../components/utils/paw-breed"
 export default ({ navigation, route }): React.ReactElement => {
     const data = [route.params.breed];
     const image = require("../assets/dog-notFound.jpg");
-    const nivel=(number)=>{
+    const nivel = (number) => {
         let aux = []
         for (let index = 0; index < 5; index++) {
-            index<=(number-1)? aux.push({ num: 1 }) : aux.push({ num: 0 });
+            index <= (number - 1) ? aux.push({ num: 1 }) : aux.push({ num: 0 });
         }
         return aux;
     }
     const renderDataItem = (service) => {
-        let energy_level = nivel(parseInt(service.item.energy_level));
-        let slobber_level = nivel(parseInt(service.item.slobber_level));
-        let snoring_level = nivel(parseInt(service.item.snoring_level));
-        let barking_level = nivel(parseInt(service.item.barking_level));
-        let attention_level = nivel(parseInt(service.item.attention_level));
         return (
             <View style={styles.servicesContainer}>
                 <Text style={styles.subtitulo}>Descripción general</Text>
@@ -39,76 +35,38 @@ export default ({ navigation, route }): React.ReactElement => {
                 <Text style={styles.subtitulo}>Principales características</Text>
                 <Text style={styles.label}>{service.item.main_characteristics}</Text>
                 <Text style={styles.subtitulo}>Nivel energético</Text>
-                <List
-                    style={styles.servicesContainer}
-                    horizontal={true}
-                    data={energy_level}
-                    renderItem={renderpawPrintItem}
-                />
+                <PawBreed numberTteam={5} number={parseInt(service.item.energy_level)} />
                 <Text style={styles.subtitulo}>Tendencia a babear</Text>
-                <List
-                    style={styles.servicesContainer}
-                    horizontal={true}
-                    data={slobber_level}
-                    renderItem={renderpawPrintItem}
-                />
+                <PawBreed numberTteam={5} number={parseInt(service.item.slobber_level)} />
                 <Text style={styles.subtitulo}>Tendencia a roncar</Text>
-                <List
-                    style={styles.servicesContainer}
-                    horizontal={true}
-                    data={snoring_level}
-                    renderItem={renderpawPrintItem}
-                />
+                <PawBreed numberTteam={5} number={parseInt(service.item.snoring_level)} />
                 <Text style={styles.subtitulo}>Tendencia a ladrar</Text>
-                <List
-                    style={styles.servicesContainer}
-                    horizontal={true}
-                    data={barking_level}
-                    renderItem={renderpawPrintItem}
-                />
+                <PawBreed numberTteam={5} number={parseInt(service.item.barking_level)} />
                 <Text style={styles.subtitulo}>Necesidad de atención</Text>
-                <List
-                    style={styles.servicesContainer}
-                    horizontal={true}
-                    data={attention_level}
-                    renderItem={renderpawPrintItem}
-                />
+                <PawBreed numberTteam={5} number={parseInt(service.item.attention_level)} />
             </View>
         )
-    }
-
-    const renderpawPrintItem = (service) => {
-        return service.item.num == 1 ?
-            //<Button style={{ margin: 2 }} appearance='ghost' status='success' accessoryLeft={StarIcon} />
-            <Image style={styles.pawPrint} source={require('../assets/pawColor.png')} />
-            :
-            //<Button style={{ margin: 2 }} appearance='ghost' status='basic'  accessoryLeft={StarIcon} />
-            <Image style={styles.pawPrint} source={require('../assets/paw.png')} />
-            ;
     }
     return (
         <>
             <ImageBackground source={image} resizeMode="cover" style={styles.petImageContainer} />
-            <View style={{ flex: 1, justifyContent: 'flex-start', position: 'relative', marginTop: 75 }}>
+            <View style={{ flex: 1, justifyContent: 'flex-start', position: 'relative', marginTop: 88 }}>
             </View>
-            <View style={{marginBottom:50}}>
-                <ScrollView>
+            <View style={{ marginBottom: 50, borderRadius:40, overflow: "hidden"}}>
+                <ScrollView stickyHeaderIndices={[0]}>
+                    <View style={styles.titleCard}>
+                        <TitleHeader style={styles.bottomSpace}>{route.params.breed.breed.name}</TitleHeader>
+                    </View>
                     <DefaultLayout
                         statusBarTranslucent
                         statusBarStyle={"light-content"}
                         statusBarBackgroundColor={"rgba(230,240,233,0.50)"}
                         style={styles.container}>
-                        <DefaultLayout
-                            statusBarTranslucent
-                            statusBarBackgroundColor={"rgba(230,240,233,0.50)"}
-                            style={styles.cardSection}>
-                            <TitleHeader style={styles.bottomSpace}>{route.params.breed.breed.name}</TitleHeader>
-                            <List
-                                style={styles.servicesContainer}
-                                data={data}
-                                renderItem={renderDataItem}
-                            />
-                        </DefaultLayout>
+                        <List
+                            style={styles.servicesContainer}
+                            data={data}
+                            renderItem={renderDataItem}
+                        />
                     </DefaultLayout>
                 </ScrollView>
             </View>
@@ -118,9 +76,11 @@ export default ({ navigation, route }): React.ReactElement => {
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'transparent',
-        paddingHorizontal: 0,
+        marginTop: height / 2 - 100,
+        paddingTop: 32,
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        marginBottom: 30
     },
     petDataCards: {
         flexDirection: 'row',
@@ -140,13 +100,8 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         overflow: 'hidden',
     },
-    cardSection: {
-        borderTopEndRadius: 40,
-        borderTopStartRadius: 40,
-        marginTop: height / 2-100,
-    },
     bottomSpace: {
-        marginBottom: 24,
+        marginBottom: 24
     },
     servicesContainer: {
         backgroundColor: "transparent",
@@ -162,10 +117,22 @@ const styles = StyleSheet.create({
         fontFamily: "Montserrat-Medium",
         marginTop: 8,
         textAlign: 'justify',
-        color: '#707070'
+        color: '#707070',
+        lineHeight: 24
     },
     pawPrint: {
         width: 60,
         height: 60
+    },
+    titleCard: {
+        backgroundColor: globalColors.backgroundDefault,
+        borderTopLeftRadius: 40,
+        borderTopRightRadius: 40,
+        paddingLeft:24,
+        paddingTop:32,
+        position: 'absolute',
+        top: height/2 -135,
+        width: '100%',
+        
     }
 });

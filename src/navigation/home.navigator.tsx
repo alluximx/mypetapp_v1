@@ -98,7 +98,7 @@ const Screens = ({ navigation, route, style }) => {
         <HomeStack.Screen name="DetailBreed" component={DetailBreed}
           options={{
             headerLeft: () => (
-              <BackButton style={{backgroundColor: globalColors.backgroundDefault, borderRadius: 100}}  navigation={navigation} />
+              <BackButton style={{backgroundColor: globalColors.backgroundDefault, borderRadius: 100, padding:5}}  navigation={navigation} />
             ),
             headerTopInsetEnabled: true,
             headerTranslucent: true,
