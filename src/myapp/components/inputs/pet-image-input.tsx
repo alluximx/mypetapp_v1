@@ -1,6 +1,12 @@
 import React, {useCallback} from 'react';
 import {useState} from 'react';
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   launchCamera,
   CameraOptions,
@@ -11,16 +17,20 @@ import AddButton from '../buttons/add-button';
 
 const options: CameraOptions = {
   mediaType: 'photo',
-  includeBase64: false,
+  includeBase64: true,
 };
 
 interface PetImageInputProps {
-  image : string;
-  setImage : (image:string) => void;
-  style? : {};
+  image: ImageSourcePropType;
+  setImage: (image: ImageSourcePropType) => void;
+  style?: {};
 }
 
-const PetImageInput = ({image, setImage, style} : PetImageInputProps): React.ReactElement => {
+const PetImageInput = ({
+  image,
+  setImage,
+  style,
+}: PetImageInputProps): React.ReactElement => {
   const [imageResponse, setImageResponse] = useState<any>(null);
 
   const onPress = useCallback(() => {
@@ -31,7 +41,7 @@ const PetImageInput = ({image, setImage, style} : PetImageInputProps): React.Rea
         console.log('Error code: ', response.errorCode);
       } else {
         setImageResponse(response);
-        setImage(response.assets[0].uri);
+        setImage(response.assets[0]);
       }
     });
   }, []);
@@ -42,11 +52,11 @@ const PetImageInput = ({image, setImage, style} : PetImageInputProps): React.Rea
 
     // If there is an image passed as prop and a picture
     // hasn't been taken...
-    if (image !== '' && !imageResponse) {
+    if (image && !imageResponse) {
       source = image;
       additionalStyles = styles.takenPictureStyles;
     }
-    // And if an image has been taken...
+    // Or an image has been taken...
     else if (imageResponse) {
       source = {uri: imageResponse.assets[0].uri};
       additionalStyles = styles.takenPictureStyles;

@@ -13,8 +13,8 @@ export default ({ navigation, route }): React.ReactElement => {
             title: 'Vómitos y fiebre',
             content: 'El veterinario dijo que era una reacción normal por la vacuna que le pussieron.',
             buttonText: 'Editar',
-            buttonAlign: 'left',
-            images: [],
+            buttonAlign: 'right',
+            images: ["../assets/dog-visit.png", "../assets/dog-visit.png"],
             styleCard: {}
         },
         {
@@ -22,8 +22,8 @@ export default ({ navigation, route }): React.ReactElement => {
             title: 'Vómitos y fiebre',
             content: 'El veterinario dijo que era una reacción normal por la vacuna que le pussieron.',
             buttonText: 'Editar',
-            buttonAlign: 'left',
-            images: [],
+            buttonAlign: 'right',
+            images: ["../assets/dog-visit.png", "../assets/dog-visit.png"],
             styleCard: {}
         },
         {
@@ -81,7 +81,7 @@ export default ({ navigation, route }): React.ReactElement => {
                         Aún no has agregado visitas al
                     </Text>
                     <Text style={styles.textLabel} category='label'>
-                        veterinario para tu mascota.
+                        veterinario para tu mascota
                     </Text>
                 </Layout>
             </DefaultLayout>
@@ -111,6 +111,7 @@ const themedStyles = StyleService.create({
         fontFamily: 'Montserrat-Bold',
         alignSelf: 'center',
         lineHeight: 24,
+        color: '#707070'
     },
     dogImage: {
         alignSelf: 'center',

@@ -98,13 +98,13 @@ export default ({navigation}): React.ReactElement => {
     <DefaultLayout>
       <KeyboardAvoidingView>
         <CustomModal
-          visible={isModalVisible}
-          title="Registro Exitoso"
-          text="Se ha enviado un correo de confirmación a la dirección que indicaste en tu registro."
+          labelAccept="Entendido"
           onAccept={onModalAccept}
           onCancel={null}
           showCancel={false}
-          labelAccept="Entendido"
+          text="Se ha enviado un correo de confirmación a la dirección que indicaste en tu registro."
+          title="Registro Exitoso"
+          visible={isModalVisible}
         />
         <View style={styles.container}>
           <View>
@@ -172,10 +172,10 @@ export default ({navigation}): React.ReactElement => {
           <View style={styles.mixedTextContainer}>
             <DefaultText style={styles.defaultText}>
               Al registrarte confirmas que leíste y aceptas los{' '}
-              <AnchorText style={styles.link} onPress={onTermsTextPress}>
-                Términos y Condiciones
-              </AnchorText>
             </DefaultText>
+            <AnchorText style={styles.link} onPress={onTermsTextPress}>
+              Términos y Condiciones
+            </AnchorText>
           </View>
         </View>
       </KeyboardAvoidingView>

@@ -1,44 +1,87 @@
 import React, {useLayoutEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
-// Global Styles.
-import globalColors from '../../../styles/colors';
+import {StyleSheet, View} from 'react-native';
+// Constants.
+import {sexOptions} from '../../../constants';
+// Hooks.
+import useGetBreeds from '../../../hooks/useGetBreeds';
+import useSizes from '../../../hooks/pets/useSizes';
+import useUpdatePet from '../../../hooks/pets/useUpdatePet';
+import useDeletePet from '../../../hooks/pets/useDeletePet';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
+import CustomSpinner from '../../../components/custom-spinner';
+import DatepickerInput from '../../../components/inputs/date-picker';
 import DefaultLayout from '../../../components/layouts/default-layout';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import PetImageInput from '../../../components/inputs/pet-image-input';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {breed, image, name, sex} = route.params.pet;
+  const {birthday, breed, id, name, owner_user, sex, size} = route.params.pet;
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const {data: breeds} = useGetBreeds();
+  const {data: sizes} = useSizes();
+
+  const formList = (queryData) => {
+    return !queryData
+      ? [
+          {
+            value: null,
+            label: 'Cargando...',
+          },
+        ]
+      : queryData?.data.map((option) => {
+          return {value: option.id, label: option.name};
+        });
+  };
+
+  const sizesList = formList(sizes);
+  const breedsList = formList(breeds);
+  const updatePetQuery = useUpdatePet();
+  const deletePetQuery = useDeletePet();
 
   const [form, setForm] = useState({
-    image: require('../../home/assets/image-pet-1.jpg'),
+    id: id,
+    image: route.params.petImage,
+    imageId: route.params.petImageId,
+    imageChanged: false,
     name: name,
-    breedId: -1,
-    breed: 'Beagle',
-    userId: -1,
-    sex: 'Macho',
-    birthday: '12/07/2018',
+    breedId: breed.name,
+    breed: breed.id,
+    owner_user: owner_user,
+    sex: sex,
+    size: size.id,
+    sizeId: size.name,
+    birthday: birthday,
   });
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <AnchorText style={styles.headerRight} onPress={() => {}}>
+        <AnchorText
+          style={styles.headerRight}
+          isDisabled={isLoading}
+          onPress={() => {
+            setIsLoading(true);
+            updatePetQuery.mutate(form);
+          }}>
           Guardar
         </AnchorText>
       ),
     });
-  }, [navigation]);
+  }, [navigation, form, isLoading]);
 
   const onDeleteAccept = () => {
-    console.log('deleted pet');
+    setIsLoading(true);
+    deletePetQuery.mutate(form);
   };
 
-  return (
+  return isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout style={styles.container}>
       <CustomModal
         labelAccept="Eliminar Registro"
@@ -53,7 +96,13 @@ export default ({navigation, route}): React.ReactElement => {
       <PetImageInput
         style={styles.imageInput}
         image={form.image}
-        setImage={(img: string) => setForm({...form, image: img})}
+        setImage={(img) =>
+          setForm({
+            ...form,
+            image: img,
+            imageChanged: true,
+          })
+        }
       />
       <UserInput
         placeholder="Nombre"
@@ -62,26 +111,40 @@ export default ({navigation, route}): React.ReactElement => {
           setForm({...form, name: value});
         }}
       />
-      <UserInput
+      <DropdownPicker
+        data={breedsList}
+        currentValue={form.breed}
         placeholder="Raza"
-        value={form.breed}
-        onChangeText={(value: string) => {
-          setForm({...form, breed: value});
-        }}
+        setCurrentValue={(breedId) => setForm({...form, breed: breedId})}
       />
-      <UserInput
+      <DropdownPicker
+        data={sexOptions.map((option) => {
+          return {value: option.key, label: option.value};
+        })}
+        currentValue={form.sex}
         placeholder="Sexo"
-        value={form.sex}
-        onChangeText={(value: string) => {
-          setForm({...form, sex: value});
+        setCurrentValue={(sex: string) => {
+          setForm({...form, sex});
         }}
       />
-      <UserInput
+      {/* <UserInput
         placeholder="Cumpleaños"
         value={form.birthday}
         onChangeText={(value: string) => {
           setForm({...form, birthday: value});
         }}
+      /> */}
+      <View style={{marginVertical: 8}}>
+        <DatepickerInput
+          currentValue={form.birthday}
+          onSelect={(birthday) => setForm({...form, birthday})}
+        />
+      </View>
+      <DropdownPicker
+        data={sizesList}
+        currentValue={form.size}
+        placeholder="Tamaño"
+        setCurrentValue={(size) => setForm({...form, size})}
       />
       <AnchorText
         style={styles.deleteText}
@@ -103,6 +166,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 32,
   },
+  dropdownContainer: {marginBottom: 14},
   deleteText: {
     textAlign: 'center',
     marginTop: 16,

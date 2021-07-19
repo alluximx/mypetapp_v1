@@ -4,11 +4,12 @@ import {List} from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
-// Types
+// Types.
 import {OptionSelectProps} from '../../types/components/inputs';
 
-const width = Dimensions.get('window').width;
-const optionGap = 16;
+const {height, width} = Dimensions.get('window');
+const OPTION_GAP = 16;
+const LIST_ITEM_HEIGHT = 56;
 
 const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
   const renderOption = (option) => {
@@ -22,11 +23,11 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
           styles.option,
           props.currentValue == key && styles.optionSelected,
           props.horizontal && {
-            marginRight: optionGap,
+            marginRight: OPTION_GAP,
             width:
               width / props.data.length -
               globalVars.outsidePadding * 2 +
-              optionGap,
+              OPTION_GAP,
           },
           props.optionStyle,
         ]}
@@ -44,14 +45,26 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
     );
   };
 
+  const selectedIndex = props.data
+    .map((option) => option.key)
+    .indexOf(props.currentValue);
+
   return (
     <List
-      showsHorizontalScrollIndicator={props.horizontal ? false : true}
-      scrollEnabled={props.horizontal ? false : true}
       data={props.data}
-      style={[styles.optionsContainer, props.style]}
-      renderItem={renderOption}
+      getItemLayout={(data, index) => ({
+        length: LIST_ITEM_HEIGHT,
+        offset: LIST_ITEM_HEIGHT * index,
+        index,
+      })}
       horizontal={props.horizontal}
+      renderItem={renderOption}
+      onScroll={(e) => {
+        console.log(e);
+      }}
+      scrollEnabled={props.horizontal ? false : true}
+      showsHorizontalScrollIndicator={props.horizontal ? false : true}
+      style={[styles.optionsContainer, props.style]}
     />
   );
 };

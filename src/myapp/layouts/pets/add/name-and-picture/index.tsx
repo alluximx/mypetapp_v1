@@ -13,7 +13,7 @@ export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
 
   useLayoutEffect(() => {
-    const isDisabled = form.name === '' || form.image === '';
+    const isDisabled = form.name === '' || form.image === null;
 
     navigation.setOptions({
       headerRight: () =>
@@ -29,7 +29,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={styles.imageInputContainer}>
           <PetImageInput
             image={form.image}
-            setImage={(val: string) => setForm({...form, image: val})}
+            setImage={(val: any) => setForm({...form, image: val})}
           />
           <DefaultText style={styles.imageInputText}>
             Agrega su mejor foto

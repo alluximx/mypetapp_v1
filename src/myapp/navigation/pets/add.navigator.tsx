@@ -11,17 +11,18 @@ import AnchorText from '../../components/texts/anchor-text';
 // Screens
 import {NameAndPictureScreen} from '../../scenes/pets/add/name-and-picture.component';
 import {SexAndAgeScreen} from '../../scenes/pets/add/sex-and-age.component';
-import { SelectBreedScreen } from '../../scenes/pets/add/select-breed.component';
+import {SelectBreedScreen} from '../../scenes/pets/add/select-breed.component';
 
 const AddPetStack = createNativeStackNavigator();
 
 const AddPetNavigator = (): React.ReactElement => {
   const [form, setForm] = useState({
-    image: '',
+    image: null,
     name: '',
-    breedId: '',
-    userId: -1,
+    breed: '',
+    owner_user: -1,
     sex: '',
+    size: '',
     birthday: '',
   });
 
@@ -39,8 +40,12 @@ const AddPetNavigator = (): React.ReactElement => {
     </CustomButton>
   );
 
-  const renderButtonBack = (onPress: () => void) => {
-    return <AnchorText onPress={onPress}>Atrás</AnchorText>;
+  const renderButtonBack = (onPress: () => void, isDisabled?: boolean) => {
+    return (
+      <AnchorText isDisabled={isDisabled ?? false} onPress={onPress}>
+        Atrás
+      </AnchorText>
+    );
   };
 
   return (
@@ -64,9 +69,9 @@ const AddPetNavigator = (): React.ReactElement => {
             headerHideBackButton: true,
           }}
         />
-         <AddPetStack.Screen
-          name ="SelectBreedScreen"
-          component = {SelectBreedScreen}
+        <AddPetStack.Screen
+          name="SelectBreedScreen"
+          component={SelectBreedScreen}
           initialParams={{
             renderButtonNext,
             renderButtonBack,

@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 import {useRoute, RouteProp} from '@react-navigation/native';
-import {Spinner} from '@ui-kitten/components';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
@@ -129,9 +129,7 @@ export default ({navigation}): React.ReactElement => {
         {
           // If loading show spinner.
           loading ? (
-            <View style={styles.spinner}>
-              <Spinner status="success" />
-            </View>
+            <CustomSpinner />
           ) : (
             // Show inputs otherwise.
             <>
@@ -212,8 +210,5 @@ const styles = StyleSheet.create({
     color: globalColors.greenPrimary,
     textAlign: 'center',
     fontSize: 14,
-  },
-  spinner: {
-    alignItems: 'center',
   },
 });

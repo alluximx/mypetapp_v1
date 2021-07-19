@@ -1,93 +1,77 @@
-import React, {useContext, useLayoutEffect, useState, useEffect } from 'react';
-import {Spinner} from '@ui-kitten/components';
+import React, {useContext, useLayoutEffect, useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 // Global Styles.
 import globalStyles from '../../../../styles/style';
-// My Components
+// My Components.
+import CustomSpinner from '../../../../components/custom-spinner';
 import DefaultLayout from '../../../../components/layouts/default-layout';
 import TitleHeader from '../../../../components/texts/title-header';
 import OptionSelect from '../../../../components/inputs/option-select';
-// Context
+// Context.
 import {AddPetContext} from '../../../../context/AddPetContext';
-//Hook
+// Hook.
 import useGetBreeds from '../../../../hooks/useGetBreeds';
 
 export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
-  console.log(form);
   const [breeds, setBreeds] = useState([]);
+  const isDisabled = form.breed === '';
+  const breedsQuery = useGetBreeds();
 
-  //const isDisabled = form.name === '' || form.image === '';
-  const isDisabled = form.breedId === '';
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
         route.params.renderButtonNext(isDisabled, () => {
-        navigation.navigate('SexAndAge');
-      }),
+          navigation.navigate('SexAndAge');
+        }),
       headerLeft: () =>
         route.params.renderButtonBack(() => {
-        navigation.goBack();
-      }),
+          navigation.goBack();
+        }),
     });
-  }, [navigation, form]); 
-    
-  const userQuery = useGetBreeds();
+  }, [navigation, form]);
+
   useEffect(() => {
-    if(userQuery.data){
-      const data =  userQuery.data.data.map((obj:any)=>{
-        return {key : obj.id, value : obj.name}
-      }); 
+    if (breedsQuery.data) {
+      const data = breedsQuery.data.data.map((obj: any) => {
+        return {key: obj.id, value: obj.name};
+      });
       setBreeds(data);
     }
-  }, [userQuery.data])
+  }, [breedsQuery.data]);
 
-  return userQuery.isLoading ? (
-    <DefaultLayout style={styles.loadingContainer}>
-      <Spinner status="success" />
-    </DefaultLayout>
+  return breedsQuery.isLoading ? (
+    <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
-      
       <TitleHeader>
-        ¿Que raza es{' '} 
+        ¿Qué raza es{' '}
         <TitleHeader style={globalStyles.highlightedText}>
           {form.name}
         </TitleHeader>
-        <TitleHeader>
-          {' '}?
-        </TitleHeader>
+        <TitleHeader>?</TitleHeader>
       </TitleHeader>
-        
+
       <OptionSelect
-        currentValue={form.breedId}
-        setCurrentValue={(breedId) => setForm({...form, breedId})}
+        currentValue={form.breed}
+        setCurrentValue={(breed) => setForm({...form, breed})}
         horizontal={false}
         data={breeds}
         style={styles.select}
         optionStyle={styles.options}
       />
-
     </DefaultLayout>
   );
-
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    paddingBottom: 0,
   },
-
-  container:{
-    paddingBottom : 0,
+  select: {
+    marginBottom: 16,
   },
-
-  select : {
-    marginBottom : 0,
+  options: {
+    marginTop: 15,
   },
-
-  options : {
-    marginTop : 15
-  }
 });

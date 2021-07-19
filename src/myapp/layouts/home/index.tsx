@@ -1,11 +1,13 @@
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
-import {Button, Card, List, Spinner, Text} from '@ui-kitten/components';
+import {Card, List, Spinner} from '@ui-kitten/components';
 import {useRoute} from '@react-navigation/native';
 // My Components
 import AddButton from '../../components/buttons/add-button';
+import CustomSpinner from '../../components/custom-spinner';
 import DefaultLayout from '../../components/layouts/default-layout';
 import DefaultText from '../../components/texts/default-text';
+import PetCard from '../../components/cards/pet-card';
 import TitleHeader from '../../components/texts/title-header';
 // Global styles
 import globalColors from '../../styles/colors';
@@ -13,24 +15,8 @@ import globalStyles from '../../styles/style';
 import globalVars from '../../styles/vars';
 // Hooks
 import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
-import useMyPets from '../../hooks/user/useMyPets';
-// Reducer
-import {reducer} from '../../../reducer';
 // Types
 import {HomeRouteParams} from '../../types/navigation/home-navigator';
-
-const staticPets = [
-  {
-    name: 'Argos',
-    imageUrl: require('./assets/image-pet-1.jpg'),
-    age: 3,
-  },
-  {
-    name: 'Valerio',
-    imageUrl: require('./assets/image-pet-2.jpg'),
-    age: 1,
-  },
-];
 
 const servicesList = [
   {
@@ -62,7 +48,7 @@ export default ({navigation}): React.ReactElement => {
     navigation && navigation.navigate('ProductList', {service: service});
 
   const renderHeader = () => (
-    <View>
+    <View style={styles.centeredContainer}>
       <TitleHeader style={styles.greeting}>
         Hola{' '}
         <TitleHeader style={globalStyles.highlightedText}>
@@ -77,28 +63,9 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  const renderPetButton = (pet) => {
-    const {name} = pet.item;
-    const image = require('./assets/image-pet-1.jpg');
-    const age = 3;
-
-    return (
-      <Button
-        activeOpacity={0.9}
-        accessoryLeft={() => (
-          <Image style={styles.dogProfileImage} source={image} />
-        )}
-        accessoryRight={() => (
-          <Text style={styles.ageText}>
-            {age} {age == 1 ? 'año' : 'años'}
-          </Text>
-        )}
-        style={styles.profileButton}
-        onPress={() => onDetailPetButtonPress(pet.item)}>
-        {() => <Text style={styles.petNameText}>{name}</Text>}
-      </Button>
-    );
-  };
+  const renderPetButton = (pet) => (
+    <PetCard pet={pet.item} onPress={onDetailPetButtonPress} />
+  );
 
   const renderServiceItem = (service) => (
     <View style={styles.serviceContainer}>
@@ -112,11 +79,9 @@ export default ({navigation}): React.ReactElement => {
   );
 
   return data.isLoading ? (
-    <DefaultLayout style={styles.loadingContainer}>
-      <Spinner status="success" />
-    </DefaultLayout>
+    <CustomSpinner />
   ) : (
-    <DefaultLayout style={{paddingRight: 0, paddingBottom: 0}}>
+    <DefaultLayout style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderHeader()}
 
@@ -139,7 +104,7 @@ export default ({navigation}): React.ReactElement => {
           )}
         />
 
-        <TitleHeader>
+        <TitleHeader style={styles.centeredContainer}>
           ¿Qué necesitan tus{' '}
           <TitleHeader style={globalStyles.highlightedText}>
             mascotas
@@ -177,22 +142,15 @@ export default ({navigation}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  container: {
+    paddingHorizontal: 0,
+    paddingBottom: 0,
+  },
+  centeredContainer: {
+    marginHorizontal: globalVars.outsidePadding,
   },
   greeting: {
     marginBottom: 4,
-  },
-  profileButton: {
-    backgroundColor: globalColors.greenSecondary,
-    borderWidth: 0,
-    flexDirection: 'column',
-    borderRadius: 16,
-    width: 128,
-    paddingTop: 16,
-    paddingBottom: 24,
-    marginRight: 24,
   },
   petButtonsContainer: {
     backgroundColor: 'transparent',
@@ -201,6 +159,7 @@ const styles = StyleSheet.create({
   },
   petButtonsContentContainer: {
     paddingBottom: 8,
+    paddingHorizontal: globalVars.outsidePadding,
   },
   petButtonContentContainerEmpty: {
     flexDirection: 'column-reverse',
@@ -212,23 +171,6 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 16,
     textAlign: 'center',
-  },
-  dogProfileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 8,
-  },
-  petNameText: {
-    fontFamily: globalVars.fontBold,
-    color: globalColors.white,
-    fontSize: 16,
-    marginBottom: 4,
-    textAlign: 'center',
-  },
-  ageText: {
-    color: globalColors.white,
-    fontSize: 14,
   },
   addButtonContainer: {
     alignSelf: 'center',
@@ -245,7 +187,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   serviceContainer: {
-    marginRight: 33,
+    marginHorizontal: 33,
     alignItems: 'center',
   },
   serviceIconContainer: {
@@ -266,7 +208,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   adoptionBanner: {
-    marginRight: globalVars.outsidePadding,
+    marginHorizontal: globalVars.outsidePadding,
     backgroundColor: globalColors.greenPrimary,
     borderRadius: 16,
     paddingVertical: 8,
