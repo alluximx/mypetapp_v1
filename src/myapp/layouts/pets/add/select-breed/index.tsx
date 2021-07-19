@@ -31,15 +31,14 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation, form]);
 
-  const userQuery = useGetBreeds();
   useEffect(() => {
-    if (userQuery.data) {
-      const data = userQuery.data.data.map((obj: any) => {
+    if (breedsQuery.data) {
+      const data = breedsQuery.data.data.map((obj: any) => {
         return {key: obj.id, value: obj.name};
       });
       setBreeds(data);
     }
-  }, [userQuery.data]);
+  }, [breedsQuery.data]);
 
   return breedsQuery.isLoading ? (
     <CustomSpinner />
