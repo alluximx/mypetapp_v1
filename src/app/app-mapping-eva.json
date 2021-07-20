@@ -85,6 +85,35 @@
           }
         }
       }
+    },
+    "Datepicker": {
+      "meta": {},
+      "appearances": {
+        "default": {
+          "mapping": {},
+          "variantGroups": {
+            "status": {
+              "basic": {
+                "backgroundColor": "#CFE2D5",
+                "textColor": "text-basic-color",
+                "iconTintColor": "#0a7029"
+              }
+            },
+            "size": {
+              "small": {
+                "borderRadius": 10
+              },
+              "medium": {
+                "borderRadius": 10
+              },
+              "large": {
+                "minHeight": 56,
+                "borderRadius": 10
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

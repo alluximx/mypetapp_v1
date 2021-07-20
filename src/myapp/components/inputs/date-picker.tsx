@@ -1,7 +1,9 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {Datepicker, Icon, NativeDateService} from '@ui-kitten/components';
+import {Datepicker, NativeDateService} from '@ui-kitten/components';
 import moment from 'moment';
+// My Components.
+import {DropDownIcon} from '../icons';
 
 const i18n = {
   dayNames: {
@@ -52,7 +54,7 @@ const localeDateService = new NativeDateService('es', {
   startDayOfWeek: 1,
 });
 
-const CalendarIcon = (props) => <Icon {...props} name="arrow-ios-downward" />;
+const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
 
 const now = new Date();
 const minDate = new Date(
@@ -85,6 +87,10 @@ const styles = StyleSheet.create({
   },
   datepicker: {
     marginVertical: -2,
+  },
+  arrowIcon: {
+    top: 0,
+    right: 0,
   },
 });
 export default DatepickerInput;
