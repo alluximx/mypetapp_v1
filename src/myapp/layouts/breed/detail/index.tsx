@@ -18,13 +18,6 @@ import PawBreed from '../../../components/utils/paw-breed';
 export default ({navigation, route}): React.ReactElement => {
   const data = [route.params.breed];
   const image = require('../assets/dog-notFound.jpg');
-  const nivel = (number) => {
-    let aux = [];
-    for (let index = 0; index < 5; index++) {
-      index <= number - 1 ? aux.push({num: 1}) : aux.push({num: 0});
-    }
-    return aux;
-  };
   const renderDataItem = (service) => {
     return (
       <View style={styles.servicesContainer}>
@@ -76,11 +69,19 @@ export default ({navigation, route}): React.ReactElement => {
   };
   return (
     <>
-      <ImageBackground
-        source={image}
-        resizeMode="cover"
-        style={styles.petImageContainer}
-      />
+      {data[0].image == null ? (
+        <ImageBackground
+          source={image}
+          resizeMode="cover"
+          style={styles.petImageContainer}
+        />
+      ) : (
+        <ImageBackground
+          source={{uri: data[0].image}}
+          resizeMode="cover"
+          style={styles.petImageContainer}
+        />
+      )}
       <View
         style={{
           flex: 1,

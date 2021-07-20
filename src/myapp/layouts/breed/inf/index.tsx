@@ -51,10 +51,17 @@ const InfBreedScreen = ({navigation}): React.ReactElement => {
         style={styles.cardStyle}
         onPress={() => navigation.navigate('DetailBreed', {breed: param})}>
         <View style={{flexDirection: 'row'}}>
-          <Image
-            style={{width: 48, height: 48, margin: 1}}
-            source={require('../assets/dog.png')}
-          />
+          {service.item.image == null ? (
+            <Image
+              style={{width: 48, height: 48, margin: 1}}
+              source={require('../assets/dog.png')}
+            />
+          ) : (
+            <Image
+              style={{width: 48, height: 48, margin: 1}}
+              source={{uri: service.item.image}}
+            />
+          )}
           <Text style={styles.tituloCard}>{service.item.breed.name}</Text>
         </View>
       </Card>
@@ -89,13 +96,11 @@ const InfBreedScreen = ({navigation}): React.ReactElement => {
             <Spinner size="large" status="success" />
           </View>
         ) : breeds.length > 0 ? (
-          <Layout style={styles.cardLayout}>
-            <List
-              style={styles.servicesContainer}
-              data={breeds}
-              renderItem={renderServiceItem}
-            />
-          </Layout>
+          <List
+            style={styles.servicesContainer}
+            data={breeds}
+            renderItem={renderServiceItem}
+          />
         ) : (
           <Layout
             style={[
@@ -152,6 +157,9 @@ const themedStyles = StyleService.create({
   },
   servicesContainer: {
     backgroundColor: 'transparent',
+    marginLeft: 24,
+    marginRight: 24,
+    marginBottom: 20,
   },
   tituloCard: {
     fontFamily: 'Montserrat-Bold',
