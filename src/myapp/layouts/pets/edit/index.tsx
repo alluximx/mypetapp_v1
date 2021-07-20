@@ -138,6 +138,7 @@ export default ({navigation, route}): React.ReactElement => {
         <DatepickerInput
           currentValue={form.birthday}
           onSelect={(birthday) => setForm({...form, birthday})}
+          placeholder="Cumpleaños"
         />
       </View>
       <DropdownPicker
