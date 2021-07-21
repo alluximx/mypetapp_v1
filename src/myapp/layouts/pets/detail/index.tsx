@@ -80,14 +80,14 @@ export default ({navigation, route}): React.ReactElement => {
           activeOpacity={0.8}
           style={styles.serviceIconContainer}
           onPress={() => {
-            navigation.navigate(service.item.screen, {});
+            navigation.navigate(service.item.screen, {pet: route.params.pet});
           }}>
           <Image style={styles.serviceIcon} source={service.item.icon} />
         </Card>
         <DefaultText
           style={styles.serviceNameText}
           onPress={() => {
-            navigation.navigate(service.item.screen, {});
+            navigation.navigate(service.item.screen, {pet: route.params.pet});
           }}>
           {service.item.serviceName}
         </DefaultText>
