@@ -29,9 +29,12 @@ import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 //visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
+//Vaccines
+import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
 //Breed
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
+
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
@@ -92,6 +95,8 @@ const Screens = ({navigation, route, style}) => {
         {/* Services visits */}
         <HomeStack.Screen name="ServicesDoc" component={InfVisitinScreen} />
         <HomeStack.Screen name="NewVisitMedical" component={newVisitScreen} />
+        {/* Services Vaccines */}
+        <HomeStack.Screen name="VaccinesIndex" component={VaccineIndexScreen} />
         {/* Breed */}
         <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
         <HomeStack.Screen

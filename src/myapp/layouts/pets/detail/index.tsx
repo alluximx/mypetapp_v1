@@ -21,7 +21,7 @@ const servicesList = [
   {
     serviceName: 'Vacunas',
     icon: require('../../../assets/images/menu/pet-stylists.png'),
-    screen: 'Home',
+    screen: 'VaccinesIndex',
   },
   {
     serviceName: 'Desparaci...',
