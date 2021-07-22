@@ -1,4 +1,4 @@
-import { DetailBreed } from './../../scenes/breed/detail.component';
+import {DetailBreed} from './../../scenes/breed/detail.component';
 import {RouteProp} from '@react-navigation/native';
 
 type HomeNavigatorParamList = {
@@ -18,7 +18,8 @@ type HomeNavigatorParamList = {
   Cart: {};
   ServicesDoc: {};
   Breed: {};
-  DetailBreed: {}
+  DetailBreed: {};
+  VaccinesIndex: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

@@ -8,6 +8,14 @@ export const DropDownIcon = ({style}: {style?: {}}): IconElement => (
   <Icon style={[styles.dropdownIcon, style]} name="chevron-down-outline" />
 );
 
+export const DropUpIcon = ({style}: {style?: {}}): IconElement => (
+  <Icon style={[styles.dropdownIcon, style]} name="chevron-up-outline" />
+);
+
+export const NotificationIConGreen = ({style}: {style?: {}}): IconElement => (
+  <Icon style={[styles.notificationIcon, style]} name="bell-outline" />
+);
+
 export const AddIcon = ({style}): IconElement => (
   <Icon style={[styles.addIcon, style]} name="plus-outline" />
 );
@@ -352,5 +360,12 @@ const styles = StyleSheet.create({
     tintColor: globalColors.greenSecondary,
     top: 10,
     right: 10,
+  },
+  notificationIcon: {
+    height: 25,
+    width: 25,
+    tintColor: globalColors.greenSecondary,
+    right: 10,
+    top: 10,
   },
 });
