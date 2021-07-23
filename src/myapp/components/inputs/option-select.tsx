@@ -57,10 +57,10 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         offset: LIST_ITEM_HEIGHT * index,
         index,
       })}
-      horizontal={props.horizontal}
+      horizontal={props.horizontal ?? false}
       renderItem={renderOption}
       onScroll={(e) => {
-        console.log(e);
+        // console.log(e);
       }}
       scrollEnabled={props.horizontal ? false : true}
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
