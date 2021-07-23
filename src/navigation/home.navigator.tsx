@@ -13,7 +13,6 @@ import CloseButton from '../myapp/components/buttons/close-button';
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
-import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
 import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
@@ -24,6 +23,9 @@ import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
 import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
+// Vaccines.
+import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
+import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 //visits
@@ -111,9 +113,17 @@ const Screens = ({navigation, route, style}) => {
             headerStyle: {backgroundColor: 'transparent'},
           }}
         />
+        {/* Vaccines */}
         <HomeStack.Screen
           name="AddVaccine"
           component={AddVaccineScreen}
+          options={{
+            headerLeft: closeButton,
+          }}
+        />
+        <HomeStack.Screen
+          name="EditVaccine"
+          component={EditVaccineScreen}
           options={{
             headerLeft: closeButton,
           }}

@@ -2,24 +2,25 @@ import React, {useLayoutEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 // Constants.
 import {vaccineTypes} from '../../../constants';
+// Global Colors.
+import globalColors from '../../../styles/colors';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
+import CustomModal from '../../../components/modals/custom-modal';
 import CustomSpinner from '../../../components/custom-spinner';
 import DatepickerInput from '../../../components/inputs/date-picker';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
-import ReminderInput from '../../../components/inputs/reminder-input';
 import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isActive, setIsActive] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState({
-    vaccineType: '',
-    applicationDate: '',
-    expirationDate: '',
+    vaccineType: '1',
+    applicationDate: '2021-02-28',
+    expirationDate: '2022-02-28',
     ettiquete: '',
-    reminder: '1',
   });
 
   useLayoutEffect(() => {
@@ -50,7 +51,20 @@ export default ({navigation}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout>
-      <TitleHeader style={styles.title}>Nueva Vacuna</TitleHeader>
+      <CustomModal
+        labelAccept="Eliminar Vacuna"
+        title="Eliminar Vacuna"
+        text="¿Seguro que quieres eliminar el registro de esta vacuna?"
+        onAccept={() => {
+          console.log('Deleting...');
+          setIsModalVisible(false);
+          navigation.navigate('DetailPet');
+        }}
+        onCancel={() => setIsModalVisible(false)}
+        showCancel={true}
+        visible={isModalVisible}
+      />
+      <TitleHeader style={styles.title}>Editar Vacuna</TitleHeader>
       <DropdownPicker
         currentValue={form.vaccineType}
         data={vaccineTypes.map((option) => {
@@ -75,14 +89,9 @@ export default ({navigation}): React.ReactElement => {
         }}
         placeholder="Fecha de expiración"
       />
-      <ReminderInput
-        isActive={isActive}
-        setIsActive={setIsActive}
-        setValue={(reminder) => {
-          setForm({...form, reminder});
-        }}
-        value={form.reminder}
-      />
+      <AnchorText onPress={() => setIsModalVisible(true)} style={styles.delete}>
+        Eliminar
+      </AnchorText>
     </DefaultLayout>
   );
 };
@@ -90,4 +99,5 @@ export default ({navigation}): React.ReactElement => {
 const styles = StyleSheet.create({
   title: {marginBottom: 24},
   headerRight: {alignSelf: 'center'},
+  delete: {textAlign: 'center', color: globalColors.red, marginVertical: 16},
 });

@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: globalColors.white,
     borderRadius: 8,
+    height: 56,
   },
   optionSelected: {
     backgroundColor: globalColors.greenSecondary,
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     fontFamily: globalVars.fontRegular,
+    color: globalColors.darkerGray,
   },
   optionTextSelected: {
     color: globalColors.white,

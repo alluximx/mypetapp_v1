@@ -18,7 +18,7 @@ const ReminderInput = (props: ReminderInputProps): React.ReactElement => {
           <Text style={styles.label}>Recordatorio</Text>
           <Toggle
             checked={props.isActive}
-            onChange={(isActive) => props.setIsActive(isActive)}
+            onChange={props.setIsActive}
             status="success"
             style={styles.toggleInput}>
             {''}
