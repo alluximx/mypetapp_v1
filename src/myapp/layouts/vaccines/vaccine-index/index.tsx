@@ -8,7 +8,7 @@ import VaccineCard from '../../../components/cards/vaccine-index-card';
 //Global Styles
 import globalColors from '../../../styles/colors';
 //UI Kitten
-import {Layout, Text, StyleService} from '@ui-kitten/components';
+import {Layout, Text, StyleService, List} from '@ui-kitten/components';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
@@ -16,18 +16,53 @@ export default ({navigation, route}): React.ReactElement => {
   /* const vaccines = null;
   const vaccines2 = null; */
 
-  const vaccines = {
-    name: 'Parainfluenza',
-    validity: '28/02/2021',
-    notification: '2 dias antes',
-    status: 'Vencida',
-  };
+  const vaccines = [
+    {
+      name: 'Parainfluenza',
+      validity: '28/02/2021',
+      notification: '2 dias antes',
+      status: 'Vencida',
+      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
+    },
+    {
+      name: 'Parvovirus',
+      validity: 'Única',
+      notification: '1 semana antes',
+      status: 'Activa',
+      vaccineDates: ['28/02/2021', '28/02/2021'],
+    },
+    {
+      name: 'Polivalente',
+      validity: '28/02/2022',
+      notification: '2 semanas antes',
+      status: 'Activa',
+      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021', '28/02/2021'],
+    },
+    {
+      name: 'Parainfluenza',
+      validity: '28/02/2021',
+      notification: '2 dias antes',
+      status: 'Vencida',
+      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
+    },
+    {
+      name: 'Bordetella',
+      validity: 'Única',
+      notification: '1 semana antes',
+      status: 'Activa',
+      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
+    },
+  ];
 
-  const vaccines2 = {
-    name: 'Parvovirus',
-    validity: 'Única',
-    notification: '1 semana antes',
-    status: 'Activa',
+  const renderServiceItem = (service) => {
+    const auxData = {
+      name: service.item.name,
+      validity: service.item.validity,
+      notification: service.item.notification,
+      status: service.item.status,
+      vaccineDates: service.item.vaccineDates,
+    };
+    return <VaccineCard data={auxData} />;
   };
 
   useLayoutEffect(() => {
@@ -49,8 +84,11 @@ export default ({navigation, route}): React.ReactElement => {
   return vaccines !== null ? (
     <DefaultLayout>
       <Text style={styles.titleh1}>Vacunas</Text>
-      <VaccineCard data={vaccines} />
-      <VaccineCard data={vaccines2} />
+      <List
+        style={styles.servicesContainer}
+        data={vaccines}
+        renderItem={renderServiceItem}
+      />
     </DefaultLayout>
   ) : (
     <DefaultLayout style={[styles.container, {color: 'black'}]}>
@@ -112,5 +150,9 @@ const styles = StyleService.create({
     fontSize: 22,
     fontFamily: 'Montserrat-Bold',
     paddingBottom: 10,
+  },
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 10,
   },
 });

@@ -13,6 +13,18 @@ const VaccineCard = (props): React.ReactElement => {
     setIsOpen(!isOpen);
   }
 
+  const renderItem = ({item, index}) => {
+    /* console.log(item); */
+    /* return <Text>Hola</Text>; */
+    return (
+      <View style={styles.vaccinesIndividual}>
+        <NotificationIConGreen />
+        <Text style={styles.left}>{item}</Text>
+        <Text style={styles.edit}>Editar</Text>
+      </View>
+    );
+  };
+
   return (
     <Card style={styles.container}>
       <View style={styles.headerTitle}>
@@ -42,21 +54,11 @@ const VaccineCard = (props): React.ReactElement => {
       </View>
       {isOpen && (
         <View style={styles.vaccinesContainer}>
-          <View style={styles.vaccinesIndividual}>
-            <NotificationIConGreen />
-            <Text style={styles.left}>28/02/2021</Text>
-            <Text style={styles.edit}>Editar</Text>
-          </View>
-          <View style={styles.vaccinesIndividual}>
-            <NotificationIConGreen />
-            <Text style={styles.left}>28/02/2021</Text>
-            <Text style={styles.edit}>Editar</Text>
-          </View>
-          <View style={styles.vaccinesIndividual}>
-            <NotificationIConGreen />
-            <Text style={styles.left}>28/02/2021</Text>
-            <Text style={styles.edit}>Editar</Text>
-          </View>
+          <List
+            style={styles.listContainer}
+            data={props.data.vaccineDates}
+            renderItem={renderItem}
+          />
         </View>
       )}
     </Card>
@@ -137,6 +139,9 @@ const styles = StyleService.create({
     alignContent: 'center',
     marginLeft: 3,
     marginTop: 2,
+  },
+  listContainer: {
+    backgroundColor: 'transparent',
   },
 });
 
