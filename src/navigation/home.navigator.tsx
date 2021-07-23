@@ -33,7 +33,7 @@ import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.compone
 //Breed
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
-import vaccineIndex from 'src/myapp/layouts/vaccines/vaccine-index';
+
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
