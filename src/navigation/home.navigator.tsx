@@ -118,7 +118,13 @@ const Screens = ({navigation, route, style}) => {
             headerStyle: {backgroundColor: 'transparent'},
           }}
         />
-        <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
+        <HomeStack.Screen
+          name="AddVaccine"
+          component={AddVaccineScreen}
+          options={{
+            headerLeft: closeButton,
+          }}
+        />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
         <HomeStack.Screen

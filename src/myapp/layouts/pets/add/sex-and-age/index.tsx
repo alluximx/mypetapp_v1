@@ -88,12 +88,6 @@ export default ({navigation, route}): React.ReactElement => {
           onSelect={(birthday) => setForm({...form, birthday})}
           placeholder="DD/MM/AAAA"
         />
-        {/* <UserInput
-          placeholder="DD/MM/AAAA"
-          value={form.birthday}
-          onChangeText={(value: string) => {
-            setForm({...form, birthday: value});
-          }}
         /> */}
         <TitleHeader style={[styles.bottomSpace, styles.topSpace]}>
           ¿De qué tamaño es?
