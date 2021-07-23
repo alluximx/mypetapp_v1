@@ -90,12 +90,6 @@ export default ({navigation, route}): React.ReactElement => {
           minDate={new Date('Jan 01 1990')}
           maxDate={new Date()}
         />
-        {/* <UserInput
-          placeholder="DD/MM/AAAA"
-          value={form.birthday}
-          onChangeText={(value: string) => {
-            setForm({...form, birthday: value});
-          }}
         /> */}
         <TitleHeader style={[styles.bottomSpace, styles.topSpace]}>
           ¿De qué tamaño es?

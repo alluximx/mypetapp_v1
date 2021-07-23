@@ -127,13 +127,6 @@ export default ({navigation, route}): React.ReactElement => {
           setForm({...form, sex});
         }}
       />
-      {/* <UserInput
-        placeholder="Cumpleaños"
-        value={form.birthday}
-        onChangeText={(value: string) => {
-          setForm({...form, birthday: value});
-        }}
-      /> */}
       <View style={{marginVertical: 8}}>
         <DatepickerInput
           currentValue={form.birthday}

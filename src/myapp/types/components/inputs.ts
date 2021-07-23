@@ -1,9 +1,17 @@
-export interface UserInputProps {
-  autoCapitalize?: boolean;
-  error?: string;
-  isPassword?: boolean;
-  onChangeText: (value: string) => void;
-  placeholder: string;
+export interface DatasGeneric {
+  date?: Date | null;
+  title: string;
+  content: string;
+  buttonText: string;
+  buttonAlign: string;
+  images?: string[];
+}
+
+export interface ReminderInputProps {
+  isActive: boolean;
+  setIsActive: (isActive: boolean) => void;
+  setValue: (key: string) => void;
+  style?: {};
   value: string;
 }
 
@@ -15,18 +23,19 @@ export interface Option {
 export interface OptionSelectProps {
   currentValue: string;
   data: any[];
-  horizontal: boolean;
+  horizontal?: boolean;
   optionStyle?: {};
   setCurrentValue: (key: string) => void;
   style?: {};
 }
 
-export interface DropdownPickerProps {
-  currentValue: string;
-  data: any[];
-  placeholder?: string;
-  setCurrentValue: (key: string) => void;
-  style?: {};
+export interface UserInputProps {
+  autoCapitalize?: boolean;
+  error?: string;
+  isPassword?: boolean;
+  onChangeText: (value: string) => void;
+  placeholder: string;
+  value: string;
 }
 
 export interface DatePickerProps {
