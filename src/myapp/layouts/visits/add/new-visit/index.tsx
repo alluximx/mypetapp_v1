@@ -4,7 +4,7 @@ import DefaultLayout from '../../../../components/layouts/default-layout';
 import TitleHeader from '../../../../components/texts/title-header';
 import AnchorText from '../../../../components/texts/anchor-text';
 import {StyleSheet, View, Image} from 'react-native';
-import {Card, Input, Layout, Text} from '@ui-kitten/components';
+import {Layout, Text} from '@ui-kitten/components';
 import globalColors from '../../../../styles/colors';
 import DatepickerInput from '../../../../components/inputs/date-picker';
 import UserInput from '../../../../components/inputs/user-input';
@@ -14,6 +14,8 @@ import {useEffect} from 'react';
 import useAddVisitMedical from '../../../../hooks/visits/useAddVisitMedical';
 import useUpdateVisitMedical from '../../../../hooks/visits/useUpdateVisitMedical';
 import VisitsImgCard from '../../../../components/cards/visits-img-card';
+import CustomModal from '../../../../components/modals/custom-modal';
+import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const idVisit = route.params.visit.idVisit;
@@ -22,6 +24,7 @@ export default ({navigation, route}): React.ReactElement => {
   const date = route.params.visit.date;
   const addVisitMedicalQuery = useAddVisitMedical();
   const updateVisitMedicalQuery = useUpdateVisitMedical();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState(
     route.params.isGuardar
       ? {
@@ -39,6 +42,7 @@ export default ({navigation, route}): React.ReactElement => {
         },
   );
   const [isLoading, setIsLoading] = useState(true);
+  const useDelete = useDeleteVisit();
   const receta = {name: 'Fotografía receta', nameSeg: 'Receta'};
   const adicional = {name: 'Fotografía adicional', nameSeg: 'Adicional'};
   const titleHeader = route.params.isGuardar
@@ -78,8 +82,20 @@ export default ({navigation, route}): React.ReactElement => {
       setIsLoading(true);
     }
   }, [navigation, form, isLoading]);
+  const onDeleteAccept = () => {
+    useDelete.mutate(idVisit);
+  };
   return (
     <DefaultLayout>
+      <CustomModal
+        labelAccept="Entendido"
+        title="Eliminar Registro"
+        text="¿Estás seguro de que quieres eliminar este registro?"
+        onAccept={onDeleteAccept}
+        onCancel={() => setIsModalVisible(false)}
+        showCancel={true}
+        visible={isModalVisible}
+      />
       <TitleHeader>{titleHeader}</TitleHeader>
       <Layout style={styles.formLayout}>
         <View style={styles.formInput}>
@@ -113,7 +129,11 @@ export default ({navigation, route}): React.ReactElement => {
         <VisitsImgCard obj={adicional} />
         {!route.params.isGuardar && (
           <View>
-            <Text style={styles.eliminar}>Eliminar</Text>
+            <Text
+              style={styles.eliminar}
+              onPress={() => setIsModalVisible(true)}>
+              Eliminar
+            </Text>
           </View>
         )}
       </Layout>

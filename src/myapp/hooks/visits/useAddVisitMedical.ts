@@ -11,7 +11,6 @@ const useAddVisitMedical = () => {
   return useMutation((data: any) => postAddVisits(data), {
     onSuccess: (response) => {
       // Save Pet image.
-      console.log(response);
       queryClient.invalidateQueries(['visits-information']);
       navigation.goBack();
     },

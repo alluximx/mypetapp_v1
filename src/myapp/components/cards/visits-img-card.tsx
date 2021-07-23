@@ -47,16 +47,16 @@ const VisitsImgCard = (props): React.ReactElement => {
           source={{uri: imageResponse}}
         />
       )}
-      {statusReceta && <Text style={styles.addtext}>{props.obj.name}</Text>}
-      {statusReceta && (
+      {statusReceta ? (
+        <Text style={styles.addtext}>{props.obj.name}</Text>
+      ) : (
+        <Text style={styles.addtext2}>{props.obj.nameSeg}</Text>
+      )}
+      {statusReceta ? (
         <Text style={styles.addImg} onPress={onPress}>
           Agregar
         </Text>
-      )}
-      {!statusReceta && (
-        <Text style={styles.addtext2}>{props.obj.nameSeg}</Text>
-      )}
-      {!statusReceta && (
+      ) : (
         <Text style={styles.addImg2} onPress={onDelete}>
           Eliminar
         </Text>
