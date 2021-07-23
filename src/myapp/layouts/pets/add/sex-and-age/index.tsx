@@ -16,7 +16,6 @@ import DefaultLayout from '../../../../components/layouts/default-layout';
 import DropdownPicker from '../../../../components/inputs/dropdown-picker';
 import OptionSelect from '../../../../components/inputs/option-select';
 import TitleHeader from '../../../../components/texts/title-header';
-import UserInput from '../../../../components/inputs/user-input';
 import DatepickerInput from '../../../../components/inputs/date-picker';
 // Context
 import {AddPetContext} from '../../../../context/AddPetContext';
@@ -90,7 +89,6 @@ export default ({navigation, route}): React.ReactElement => {
           minDate={new Date('Jan 01 1990')}
           maxDate={new Date()}
         />
-        /> */}
         <TitleHeader style={[styles.bottomSpace, styles.topSpace]}>
           ¿De qué tamaño es?
         </TitleHeader>
