@@ -15,6 +15,7 @@ export interface DatasGeneric {
   buttonText: string;
   buttonAlign: string;
   images?: string[];
+  click: any;
 }
 const GenericCard = (props): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
@@ -49,7 +50,13 @@ const GenericCard = (props): React.ReactElement => {
       ) : (
         <Text></Text>
       )}
-      <Text style={stylesCart.header}>{props.data.buttonText}</Text>
+      <Text
+        style={stylesCart.header}
+        onPress={() => {
+          props.onClick(props.data);
+        }}>
+        {props.data.buttonText}
+      </Text>
     </Card>
   );
 };

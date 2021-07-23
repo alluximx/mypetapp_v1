@@ -14,6 +14,8 @@ import AddButton from '../../../components/buttons/add-button';
 import GenericCard from '../../../components/cards/generic-card';
 import useVisitsInformation from '../../../hooks/visits/useVisitsInformation';
 import {useEffect} from 'react';
+import moment from 'moment';
+
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const data = useVisitsInformation();
@@ -34,11 +36,35 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddVisit', {})}
+          onAdd={() =>
+            navigation.navigate('NewVisitMedical', {
+              pet: route.params.pet,
+              visit: {
+                idVisit: '',
+                title: '',
+                details: '',
+                date: '',
+              },
+              isGuardar: true,
+            })
+          }
         />
       ),
     });
   }, [navigation]);
+  const onEdit = (params) => {
+    const formattedDate = moment(params.date).format('YYYY-MM-DD');
+    navigation.navigate('NewVisitMedical', {
+      pet: route.params.pet,
+      visit: {
+        idVisit: params.data.id,
+        title: params.title,
+        details: params.content,
+        date: formattedDate,
+      },
+      isGuardar: false,
+    });
+  };
   const renderServiceItem = (service) => {
     const auxData = {
       date:
@@ -51,8 +77,9 @@ export default ({navigation, route}): React.ReactElement => {
       buttonAlign: 'right',
       images: [],
       styleCard: {},
+      data: service.item,
     };
-    return <GenericCard data={auxData} />;
+    return <GenericCard data={auxData} onClick={onEdit} />;
   };
   return data.isLoading ? (
     <View style={styles.viewContainer}>
