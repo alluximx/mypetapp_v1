@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
     height: 56,
     padding: 15,
     paddingTop: 25,
+    marginBottom: 10,
   },
   arrowIcon: {
     top: -7,
