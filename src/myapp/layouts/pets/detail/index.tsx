@@ -26,7 +26,7 @@ const servicesList = [
   {
     serviceName: 'Desparaci...',
     icon: require('../../../assets/images/menu/products.png'),
-    screen: 'Home',
+    screen: 'EditVaccine',
   },
 ];
 
