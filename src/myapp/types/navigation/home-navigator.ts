@@ -10,6 +10,7 @@ type HomeNavigatorParamList = {
   DetailPet: {};
   EditPet: {};
   AddVaccine: {};
+  EditVaccine: {};
   AddVisit: {};
   ClinicalHistory: {};
   Orders: {};

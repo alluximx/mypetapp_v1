@@ -116,7 +116,6 @@
       }
     },
     "Toggle": {
-      "meta": {},
       "appearances": {
         "default": {
           "mapping": {
@@ -136,6 +135,15 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "Card": {
+      "appearances": {
+        "outline": {
+          "mapping": {
+            "bodyPaddingHorizontal": 16
           }
         }
       }
