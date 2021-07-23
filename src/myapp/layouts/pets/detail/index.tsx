@@ -73,27 +73,26 @@ export default ({navigation, route}): React.ReactElement => {
       ),
     });
   }, [navigation, image]);
-  const renderServiceItem = (service) => {
-    return (
-      <View style={styles.serviceContainer}>
-        <Card
-          activeOpacity={0.8}
-          style={styles.serviceIconContainer}
-          onPress={() => {
-            navigation.navigate(service.item.screen, {pet: route.params.pet});
-          }}>
-          <Image style={styles.serviceIcon} source={service.item.icon} />
-        </Card>
-        <DefaultText
-          style={styles.serviceNameText}
-          onPress={() => {
-            navigation.navigate(service.item.screen, {pet: route.params.pet});
-          }}>
-          {service.item.serviceName}
-        </DefaultText>
-      </View>
-    );
-  };
+
+  const renderServiceItem = (service) => (
+    <View style={styles.serviceContainer}>
+      <Card
+        activeOpacity={0.8}
+        style={styles.serviceIconContainer}
+        onPress={() => {
+          navigation.navigate(service.item.screen, {pet: route.params.pet});
+        }}>
+        <Image style={styles.serviceIcon} source={service.item.icon} />
+      </Card>
+      <DefaultText
+        style={styles.serviceNameText}
+        onPress={() => {
+          navigation.navigate(service.item.screen, {pet: route.params.pet});
+        }}>
+        {service.item.serviceName}
+      </DefaultText>
+    </View>
+  );
 
   return (
     <DefaultLayout style={styles.container}>
