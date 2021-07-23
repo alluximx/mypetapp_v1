@@ -52,9 +52,9 @@ export default ({navigation}): React.ReactElement => {
   ) : (
     <DefaultLayout>
       <CustomModal
-        labelAccept="Eliminar Vacuna"
-        title="Eliminar Vacuna"
-        text="¿Seguro que quieres eliminar el registro de esta vacuna?"
+        labelAccept="Eliminar Registro"
+        title="Eliminar Registro"
+        text="¿Seguro que quieres eliminar este registro?"
         onAccept={() => {
           console.log('Deleting...');
           setIsModalVisible(false);
