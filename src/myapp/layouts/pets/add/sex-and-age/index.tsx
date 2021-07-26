@@ -87,6 +87,8 @@ export default ({navigation, route}): React.ReactElement => {
           currentValue={form.birthday}
           onSelect={(birthday) => setForm({...form, birthday})}
           placeholder="DD/MM/AAAA"
+          minDate={new Date('Jan 01 1990')}
+          maxDate={new Date()}
         />
         {/* <UserInput
           placeholder="DD/MM/AAAA"
