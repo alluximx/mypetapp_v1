@@ -139,6 +139,8 @@ export default ({navigation, route}): React.ReactElement => {
           currentValue={form.birthday}
           onSelect={(birthday) => setForm({...form, birthday})}
           placeholder="Cumpleaños"
+          minDate={new Date('Jan 01 1990')}
+          maxDate={new Date()}
         />
       </View>
       <DropdownPicker

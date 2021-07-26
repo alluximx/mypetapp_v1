@@ -59,15 +59,10 @@ const localeDateService = new NativeDateService('es', {
 
 const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
 
-const now = new Date();
-const minDate = new Date(
-  now.getFullYear(),
-  now.getMonth(),
-  now.getDate() - 18520,
-);
-
 const DatepickerInput = (props) => {
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
+  const minDate = props.minDate;
+  const maxDate = props.maxDate;
 
   useEffect(() => {
     Animated.timing(focusAnim, {
@@ -116,7 +111,7 @@ const DatepickerInput = (props) => {
         }}
         accessoryRight={CalendarIcon}
         min={minDate}
-        max={now}
+        max={maxDate}
       />
     </View>
   );
