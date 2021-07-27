@@ -7,6 +7,8 @@ import {DropDownIcon} from '../icons';
 // Global Styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+//Types
+import {DatePickerProps} from '../../types/components/inputs';
 
 const i18n = {
   dayNames: {
@@ -59,10 +61,10 @@ const localeDateService = new NativeDateService('es', {
 
 const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
 
-const DatepickerInput = (props) => {
+const DatepickerInput = (props: DatePickerProps) => {
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
-  const minDate = props.minDate;
-  const maxDate = props.maxDate;
+  const minDate = props.minDate ? props.minDate : new Date('Jan 01 1990');
+  const maxDate = props.maxDate ? props.maxDate : new Date('Dec 31 2050');
 
   useEffect(() => {
     Animated.timing(focusAnim, {
