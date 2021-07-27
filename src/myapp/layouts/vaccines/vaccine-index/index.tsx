@@ -1,14 +1,15 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useEffect, useState} from 'react';
 import {Image, Dimensions} from 'react-native';
 //My Components.
 import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
-
 //Global Styles
 import globalColors from '../../../styles/colors';
 //UI Kitten
 import {Layout, Text, StyleService, List} from '@ui-kitten/components';
+// Hook.
+import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
@@ -16,50 +17,29 @@ export default ({navigation, route}): React.ReactElement => {
   /* const vaccines = null;
   const vaccines2 = null; */
 
-  const vaccines = [
-    {
-      name: 'Parainfluenza',
-      validity: '28/02/2021',
-      notification: '2 dias antes',
-      status: 'Vencida',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Parvovirus',
-      validity: 'Única',
-      notification: '1 semana antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Polivalente',
-      validity: '28/02/2022',
-      notification: '2 semanas antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Parainfluenza',
-      validity: '28/02/2021',
-      notification: '2 dias antes',
-      status: 'Vencida',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Bordetella',
-      validity: 'Única',
-      notification: '1 semana antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-  ];
+  const [vaccines, setVaccines] = useState([]);
+  const vaccinesQuery = useGetVaccineIndex(id);
+  //console.log('data');
+  //console.log(vaccinesQuery.data);
+
+  useEffect(() => {
+    if (vaccinesQuery.data) {
+      setVaccines(vaccinesQuery.data.data);
+    }
+  }, [vaccinesQuery.data]);
+
+  console.log('VaccinesData');
+  console.log(vaccines);
 
   const renderServiceItem = (service) => {
+    console.log('Servicio');
+    console.log(service);
     const auxData = {
-      name: service.item.name,
-      validity: service.item.validity,
-      notification: service.item.notification,
-      status: service.item.status,
+      //name: service.item.id,
+      name: 'ParaInfluenza',
+      validity: service.item.vaccine_date,
+      notification: '3 semana antes',
+      status: 'Activa',
       vaccineDates: service.item.vaccineDates,
     };
     return <VaccineCard data={auxData} />;

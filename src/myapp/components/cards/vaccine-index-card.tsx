@@ -14,12 +14,12 @@ const VaccineCard = (props): React.ReactElement => {
   }
 
   const renderItem = ({item, index}) => {
-    /* console.log(item); */
-    /* return <Text>Hola</Text>; */
     return (
       <View style={styles.vaccinesIndividual}>
-        <NotificationIConGreen />
-        <Text style={styles.left}>{item}</Text>
+        <View style={styles.left}>
+          <NotificationIConGreen style={styles.bellIcon} />
+          <Text>{item}</Text>
+        </View>
         <Text style={styles.edit}>Editar</Text>
       </View>
     );
@@ -29,15 +29,17 @@ const VaccineCard = (props): React.ReactElement => {
     <Card style={styles.container}>
       <View style={styles.headerTitle}>
         <Text style={styles.title}>{props.data.name}</Text>
-        <Text style={styles.right}>{props.data.notification}</Text>
-        <TouchableOpacity style={styles.NotificationIcon}>
-          <Image
-            style={styles.ImageIcon}
-            source={require('../assets/IconNotification.png')}
-          />
-        </TouchableOpacity>
+        <View style={styles.right}>
+          <Text style={styles.text}>{props.data.notification}</Text>
+          <TouchableOpacity style={styles.NotificationIcon}>
+            <Image
+              style={styles.ImageIcon}
+              source={require('../assets/IconNotification1.png')}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-      <Text>Vigencia: {props.data.validity}</Text>
+      <Text style={styles.text}>Vigencia: {props.data.validity}</Text>
       <View style={styles.headerTop}>
         {props.data.status == 'Activa' ? (
           <Text style={styles.estausGreen}>{props.data.status}</Text>
@@ -56,7 +58,7 @@ const VaccineCard = (props): React.ReactElement => {
         <View style={styles.vaccinesContainer}>
           <List
             style={styles.listContainer}
-            data={props.data.vaccineDates}
+            data={['28/03/2021', '28/03/2021', '28/03/2021']}
             renderItem={renderItem}
           />
         </View>
@@ -80,45 +82,50 @@ const styles = StyleService.create({
   headerTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 10,
+    paddingBottom: 5,
   },
   vaccinesIndividual: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 25,
+    paddingBottom: 15,
   },
   title: {
     color: globalColors.black,
-    fontSize: 20,
+    fontSize: 16,
     fontFamily: 'Montserrat-Bold',
     marginTop: 4,
+  },
+  text: {
+    color: globalColors.black,
+    fontSize: 14,
   },
   estausGreen: {
     color: globalColors.greenSecondary,
     fontFamily: 'Montserrat-Bold',
     marginTop: 4,
+    fontSize: 14,
   },
   estausRed: {
     color: globalColors.red,
     fontFamily: 'Montserrat-Bold',
     marginTop: 4,
+    fontSize: 14,
   },
   right: {
+    flexDirection: 'row',
     alignContent: 'flex-end',
-    marginTop: 10,
-    marginRight: -30,
+    marginTop: 7,
+    marginRight: -5,
   },
   left: {
+    flexDirection: 'row',
     marginTop: 10,
-    marginLeft: -150,
+    alignContent: 'flex-start',
   },
   arrowIcon: {
     alignContent: 'flex-end',
     top: 0,
-    right: 5,
-  },
-  notificationIcon: {
-    alignContent: 'flex-end',
+    right: -7,
   },
   edit: {
     marginTop: 10,
@@ -127,21 +134,26 @@ const styles = StyleService.create({
     alignContent: 'flex-end',
   },
   NotificationIcon: {
-    minWidth: 35,
-    minHeight: 35,
+    minWidth: 30,
+    minHeight: 30,
     borderRadius: 50,
     backgroundColor: globalColors.greenSecondary,
     alignContent: 'flex-end',
-    marginTop: 5,
-    marginRight: 0,
+    marginTop: -5,
+    marginLeft: 5,
   },
   ImageIcon: {
     alignContent: 'center',
-    marginLeft: 3,
-    marginTop: 2,
+    marginLeft: 5,
+    marginTop: 5,
+    minWidth: 20,
+    minHeight: 20,
   },
   listContainer: {
     backgroundColor: 'transparent',
+  },
+  bellIcon: {
+    top: 0,
   },
 });
 
