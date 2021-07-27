@@ -42,6 +42,10 @@ export default ({navigation, route}): React.ReactElement => {
         },
   );
   const [isLoading, setIsLoading] = useState(true);
+  const [recetaValue, setRecetaValue] = useState(null);
+  const [adicional1, setAdicional1] = useState(null);
+  const [adicional2, setAdicional2] = useState(null);
+  const [adicional3, setAdicional3] = useState(null);
   const useDelete = useDeleteVisit();
   const receta = {name: 'Fotografía receta', nameSeg: 'Receta'};
   const adicional = {name: 'Fotografía adicional', nameSeg: 'Adicional'};
@@ -49,7 +53,14 @@ export default ({navigation, route}): React.ReactElement => {
     ? 'Nueva Visita'
     : 'Editar Visita ';
   const onSave = () => {
-    addVisitMedicalQuery.mutate(form);
+    const newData = {
+      ...form,
+      recetaValue: recetaValue != null ? recetaValue.assets[0] : [],
+      adicional1: adicional1 != null ? adicional1.assets[0] : [],
+      adicional2: adicional2 != null ? adicional2.assets[0] : [],
+      adicional3: adicional3 != null ? adicional3.assets[0] : [],
+    };
+    addVisitMedicalQuery.mutate(newData);
   };
   const onUpdate = () => {
     updateVisitMedicalQuery.mutate(form);
@@ -123,10 +134,30 @@ export default ({navigation, route}): React.ReactElement => {
             }}
           />
         </View>
-        <VisitsImgCard obj={receta} />
-        <VisitsImgCard obj={adicional} />
-        <VisitsImgCard obj={adicional} />
-        <VisitsImgCard obj={adicional} />
+        <VisitsImgCard
+          obj={receta}
+          onChangeText={(value: any) => {
+            setRecetaValue(value);
+          }}
+        />
+        <VisitsImgCard
+          obj={adicional}
+          onChangeText={(value) => {
+            setAdicional1(value);
+          }}
+        />
+        <VisitsImgCard
+          obj={adicional}
+          onChangeText={(value) => {
+            setAdicional2(value);
+          }}
+        />
+        <VisitsImgCard
+          obj={adicional}
+          onChangeText={(value) => {
+            setAdicional3(value);
+          }}
+        />
         {!route.params.isGuardar && (
           <View>
             <Text

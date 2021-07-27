@@ -21,7 +21,8 @@ const VisitsImgCard = (props): React.ReactElement => {
       } else if (response.errorCode) {
         console.log('Error code: ', response.errorCode);
       } else {
-        const img = response.assets[0].uri;
+        const img = response;
+        props.onChangeText(img);
         setImageResponse(img);
         setStatusReceta(false);
       }
@@ -44,7 +45,7 @@ const VisitsImgCard = (props): React.ReactElement => {
             marginLeft: 8,
             marginTop: 10,
           }}
-          source={{uri: imageResponse}}
+          source={{uri: imageResponse.assets[0].uri}}
         />
       )}
       {statusReceta ? (
