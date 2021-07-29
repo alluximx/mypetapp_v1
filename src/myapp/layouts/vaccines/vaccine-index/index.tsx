@@ -104,7 +104,7 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddVaccine', {})}
+          onAdd={() => navigation.navigate('AddVaccine', {petId: id})}
         />
       ),
     });
