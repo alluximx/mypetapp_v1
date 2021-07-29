@@ -70,10 +70,10 @@ export default ({navigation}): React.ReactElement => {
   const renderServiceItem = (service) => (
     <View style={styles.serviceContainer}>
       <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
-        <Image style={styles.serviceIcon} source={service.item.icon} />
+        <Image style={styles.serviceIcon} source={service.icon} />
       </Card>
       <DefaultText style={styles.serviceNameText}>
-        {service.item.serviceName}
+        {service.serviceName}
       </DefaultText>
     </View>
   );
@@ -112,13 +112,11 @@ export default ({navigation}): React.ReactElement => {
           ?
         </TitleHeader>
 
-        <List
-          style={styles.servicesContainer}
-          contentContainerStyle={styles.servicesContentContainer}
-          horizontal={true}
-          data={servicesList}
-          renderItem={renderServiceItem}
-        />
+        <View style={styles.servicesContentContainer}>
+          {servicesList.map((item) => {
+            return renderServiceItem(item);
+          })}
+        </View>
 
         <Card activeOpacity={0.8} style={styles.adoptionBanner}>
           <TitleHeader style={styles.adoptionTitle}>
@@ -182,12 +180,13 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   servicesContentContainer: {
+    paddingHorizontal: 32,
     flexDirection: 'row',
-    paddingBottom: 8,
+    paddingVertical: 16,
     backgroundColor: 'transparent',
+    justifyContent: 'space-between',
   },
   serviceContainer: {
-    marginHorizontal: 33,
     alignItems: 'center',
   },
   serviceIconContainer: {

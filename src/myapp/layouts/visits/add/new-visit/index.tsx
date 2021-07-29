@@ -16,6 +16,8 @@ import useUpdateVisitMedical from '../../../../hooks/visits/useUpdateVisitMedica
 import VisitsImgCard from '../../../../components/cards/visits-img-card';
 import CustomModal from '../../../../components/modals/custom-modal';
 import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
+import {ScrollView} from 'react-native-gesture-handler';
+
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const idVisit = route.params.visit.idVisit;
@@ -87,42 +89,36 @@ export default ({navigation, route}): React.ReactElement => {
   };
   return (
     <DefaultLayout>
-      <CustomModal
-        labelAccept="Entendido"
-        title="Eliminar Registro"
-        text="¿Estás seguro de que quieres eliminar este registro?"
-        onAccept={onDeleteAccept}
-        onCancel={() => setIsModalVisible(false)}
-        showCancel={true}
-        visible={isModalVisible}
-      />
-      <TitleHeader>{titleHeader}</TitleHeader>
-      <Layout style={styles.formLayout}>
-        <View style={styles.formInput}>
-          <DatepickerInput
-            currentValue={form.visit_date}
-            onSelect={(visit_date) => setForm({...form, visit_date})}
-            placeholder="Fecha de visita"
-          />
-        </View>
-        <View style={styles.formInput}>
-          <UserInput
-            placeholder="Motivo"
-            value={form.title}
-            onChangeText={(value: string) => {
-              setForm({...form, title: value});
-            }}
-          />
-        </View>
-        <View>
-          <UserTextArea
-            placeholder="Notas"
-            value={form.details}
-            onChangeText={(value: string) => {
-              setForm({...form, details: value});
-            }}
-          />
-        </View>
+      <ScrollView>
+        <CustomModal
+          labelAccept="Entendido"
+          title="Eliminar Registro"
+          text="¿Estás seguro de que quieres eliminar este registro?"
+          onAccept={onDeleteAccept}
+          onCancel={() => setIsModalVisible(false)}
+          showCancel={true}
+          visible={isModalVisible}
+        />
+        <TitleHeader style={{paddingBottom: 10}}>{titleHeader}</TitleHeader>
+        <DatepickerInput
+          currentValue={form.visit_date}
+          onSelect={(visit_date) => setForm({...form, visit_date})}
+          placeholder="Fecha de visita"
+        />
+        <UserInput
+          placeholder="Motivo"
+          value={form.title}
+          onChangeText={(value: string) => {
+            setForm({...form, title: value});
+          }}
+        />
+        <UserTextArea
+          placeholder="Notas"
+          value={form.details}
+          onChangeText={(value: string) => {
+            setForm({...form, details: value});
+          }}
+        />
         <VisitsImgCard obj={receta} />
         <VisitsImgCard obj={adicional} />
         <VisitsImgCard obj={adicional} />
@@ -136,7 +132,7 @@ export default ({navigation, route}): React.ReactElement => {
             </Text>
           </View>
         )}
-      </Layout>
+      </ScrollView>
     </DefaultLayout>
   );
 };
@@ -219,6 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: globalColors.red,
     textAlign: 'center',
-    marginTop: 10,
+    marginVertical: 16,
   },
 });

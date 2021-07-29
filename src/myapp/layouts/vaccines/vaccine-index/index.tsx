@@ -62,7 +62,7 @@ export default ({navigation, route}): React.ReactElement => {
       status: service.item.status,
       vaccineDates: service.item.vaccineDates,
     };
-    return <VaccineCard data={auxData} />;
+    return <VaccineCard navigation={navigation} data={auxData} />;
   };
 
   useLayoutEffect(() => {
@@ -75,7 +75,7 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddVaccine', {})}
+          onAdd={() => navigation.navigate('AddVaccine', {petId: id})}
         />
       ),
     });

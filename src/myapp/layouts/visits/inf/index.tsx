@@ -111,12 +111,12 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.dogImage}
           source={require('../assets/dog-visit.png')}
         />
-        <Text style={styles.h1}>Visitas Veterinario.</Text>
+        <Text style={styles.h1}>Visitas Veterinario</Text>
         <Text style={styles.textLabel} category="label">
           Aún no has agregado visitas al
         </Text>
         <Text style={styles.textLabel} category="label">
-          veterinario para tu mascota
+          veterinario para tu mascota.
         </Text>
       </Layout>
     </DefaultLayout>

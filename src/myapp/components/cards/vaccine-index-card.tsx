@@ -5,6 +5,7 @@ import {View, TouchableOpacity, Image} from 'react-native';
 import globalColors from '../../styles/colors';
 //My Components
 import {NotificationIConGreen, DropDownIcon, DropUpIcon} from '../icons';
+import AnchorText from '../texts/anchor-text';
 
 const VaccineCard = (props): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,13 @@ const VaccineCard = (props): React.ReactElement => {
       <View style={styles.vaccinesIndividual}>
         <NotificationIConGreen />
         <Text style={styles.left}>{item}</Text>
-        <Text style={styles.edit}>Editar</Text>
+        <AnchorText
+          onPress={() => {
+            props.navigation.navigate('EditVaccine');
+          }}
+          style={styles.edit}>
+          Editar
+        </AnchorText>
       </View>
     );
   };
