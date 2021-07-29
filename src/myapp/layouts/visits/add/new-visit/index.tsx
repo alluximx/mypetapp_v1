@@ -16,7 +16,7 @@ import useUpdateVisitMedical from '../../../../hooks/visits/useUpdateVisitMedica
 import VisitsImgCard from '../../../../components/cards/image-input-card';
 import CustomModal from '../../../../components/modals/custom-modal';
 import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
-import CustomSpinner from '../../../../components/custom-spinner';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
@@ -183,78 +183,40 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout>
-      <CustomModal
-        labelAccept="Entendido"
-        title="Eliminar Registro"
-        text="¿Estás seguro de que quieres eliminar este registro?"
-        onAccept={onDeleteAccept}
-        onCancel={() => setIsModalVisible(false)}
-        showCancel={true}
-        visible={isModalVisible}
-      />
-      <TitleHeader>{titleHeader}</TitleHeader>
-      <Layout style={styles.formLayout}>
-        <View style={styles.formInput}>
-          <DatepickerInput
-            currentValue={form.visit_date}
-            onSelect={(visit_date) => setForm({...form, visit_date})}
-            placeholder="Fecha de visita"
-          />
-        </View>
-        <View>
-          <UserInput
-            placeholder="Motivo"
-            value={form.title}
-            onChangeText={(value: string) => {
-              setForm({...form, title: value});
-            }}
-          />
-        </View>
-        <View>
-          <UserTextArea
-            placeholder="Notas"
-            value={form.details}
-            onChangeText={(value: string) => {
-              setForm({...form, details: value});
-            }}
-          />
-        </View>
-        <VisitsImgCard
-          obj={prescription}
-          value={recetaImg}
-          onChangeText={(value: any) => {
-            setPrescriptionValueValue(value);
-            !route.params.isGuardar && setIsLoading(false);
-          }}
-          onDelete={onRecetaClick}
+      <ScrollView>
+        <CustomModal
+          labelAccept="Entendido"
+          title="Eliminar Registro"
+          text="¿Estás seguro de que quieres eliminar este registro?"
+          onAccept={onDeleteAccept}
+          onCancel={() => setIsModalVisible(false)}
+          showCancel={true}
+          visible={isModalVisible}
         />
-        <VisitsImgCard
-          obj={additional}
-          value={additionalImg1}
-          onChangeText={(value) => {
-            setAdditional1(value);
-            !route.params.isGuardar && setIsLoading(false);
-          }}
-          onDelete={onAdditional1Click}
+        <TitleHeader style={{paddingBottom: 10}}>{titleHeader}</TitleHeader>
+        <DatepickerInput
+          currentValue={form.visit_date}
+          onSelect={(visit_date) => setForm({...form, visit_date})}
+          placeholder="Fecha de visita"
         />
-        <VisitsImgCard
-          obj={additional}
-          value={additionalImg2}
-          onChangeText={(value) => {
-            setAdditional2(value);
-            !route.params.isGuardar && setIsLoading(false);
+        <UserInput
+          placeholder="Motivo"
+          value={form.title}
+          onChangeText={(value: string) => {
+            setForm({...form, title: value});
           }}
-          onDelete={onAdditional2Click}
         />
-        <VisitsImgCard
-          obj={additional}
-          value={additionalImg3}
-          onChangeText={(value) => {
-            setAdditional3(value);
-            !route.params.isGuardar && setIsLoading(false);
+        <UserTextArea
+          placeholder="Notas"
+          value={form.details}
+          onChangeText={(value: string) => {
+            setForm({...form, details: value});
           }}
-          onDelete={onAdditional3Click}
         />
+        <VisitsImgCard obj={receta} />
+        <VisitsImgCard obj={adicional} />
+        <VisitsImgCard obj={adicional} />
+        <VisitsImgCard obj={adicional} />
         {!route.params.isGuardar && (
           <View>
             <Text
@@ -264,7 +226,7 @@ export default ({navigation, route}): React.ReactElement => {
             </Text>
           </View>
         )}
-      </Layout>
+      </ScrollView>
     </DefaultLayout>
   );
 };
