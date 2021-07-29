@@ -17,7 +17,7 @@ import VisitsImgCard from '../../../../components/cards/visits-img-card';
 import CustomModal from '../../../../components/modals/custom-modal';
 import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
 import CustomSpinner from '../../../../components/custom-spinner';
-import AddButton from '../../../../components/buttons/add-button';
+
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const idVisit = route.params.visit.idVisit;
@@ -345,6 +345,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: globalColors.red,
     textAlign: 'center',
-    marginTop: 10,
+    marginVertical: 16,
   },
 });

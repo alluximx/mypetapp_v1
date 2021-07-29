@@ -1,7 +1,18 @@
-export const reminderOptions = [
-  {key: '1', value: '1 día antes'},
-  {key: '2', value: '1 semana antes'},
-  {key: '3', value: '2 semanas antes'},
+import {unitOfTime} from 'moment';
+
+interface ReminderOption {
+  key: string;
+  value: string;
+  delay: {
+    amount: number;
+    unit: unitOfTime.DurationConstructor;
+  };
+}
+
+export const reminderOptions: ReminderOption[] = [
+  {key: '1', value: '1 día antes', delay: {amount: 1, unit: 'days'}},
+  {key: '2', value: '1 semana antes', delay: {amount: 1, unit: 'weeks'}},
+  {key: '3', value: '2 semanas antes', delay: {amount: 2, unit: 'weeks'}},
 ];
 
 export const sexOptions = [

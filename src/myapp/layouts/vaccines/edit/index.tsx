@@ -38,7 +38,7 @@ export default ({navigation}): React.ReactElement => {
             isDisabled={isDisabled}
             onPress={() => {
               setIsLoading(true);
-              navigation.navigate('DetailPet');
+              navigation.navigate('VaccinesIndex');
             }}>
             Guardar
           </AnchorText>
@@ -58,7 +58,7 @@ export default ({navigation}): React.ReactElement => {
         onAccept={() => {
           console.log('Deleting...');
           setIsModalVisible(false);
-          navigation.navigate('DetailPet');
+          navigation.navigate('VaccinesIndex');
         }}
         onCancel={() => setIsModalVisible(false)}
         showCancel={true}
