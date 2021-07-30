@@ -24,7 +24,7 @@ class AppServices {
     });
   };
 
-  delete = async (url: string, id: number) => {
+  delete = async (url: string, id: number | string) => {
     const token = await AsyncStorage.getItem('auth_token');
     const full_url = api_url + url + id + '/';
     return axios.delete(full_url, {

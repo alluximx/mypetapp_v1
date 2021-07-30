@@ -23,7 +23,9 @@ const VaccineCard = (props): React.ReactElement => {
         <Text style={styles.left}>{item}</Text>
         <AnchorText
           onPress={() => {
-            props.navigation.navigate('EditVaccine');
+            props.navigation.navigate('EditVaccine', {
+              vaccineId: props.data.id,
+            });
           }}
           style={styles.edit}>
           Editar

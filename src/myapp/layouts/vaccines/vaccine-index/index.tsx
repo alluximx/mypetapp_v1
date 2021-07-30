@@ -18,44 +18,20 @@ export default ({navigation, route}): React.ReactElement => {
 
   const vaccines = [
     {
+      id: '2a7e01a8-90ef-4677-9f14-c790319df196',
+      petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
       name: 'Parainfluenza',
       validity: '28/02/2021',
       notification: '2 dias antes',
       status: 'Vencida',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Parvovirus',
-      validity: 'Única',
-      notification: '1 semana antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Polivalente',
-      validity: '28/02/2022',
-      notification: '2 semanas antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Parainfluenza',
-      validity: '28/02/2021',
-      notification: '2 dias antes',
-      status: 'Vencida',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Bordetella',
-      validity: 'Única',
-      notification: '1 semana antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
+      vaccineDates: ['28/02/2021'],
     },
   ];
 
   const renderServiceItem = (service) => {
     const auxData = {
+      id: service.item.id,
+      petId: service.item.id,
       name: service.item.name,
       validity: service.item.validity,
       notification: service.item.notification,

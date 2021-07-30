@@ -6,6 +6,7 @@ type HomeNavigatorParamList = {
     isGuest: boolean;
   };
   AddPet: {};
+  DewormingIndex: {};
   AddDeworming: {};
   DetailPet: {};
   EditPet: {};

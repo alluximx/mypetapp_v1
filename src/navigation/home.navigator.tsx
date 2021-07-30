@@ -12,6 +12,7 @@ import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
+import {DewormingIndexScreen} from '../myapp/scenes/deworming/index.component';
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
 import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
 import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
@@ -136,6 +137,11 @@ const Screens = ({navigation, route, style}) => {
           }}
         />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
+        {/* Deworming */}
+        <HomeStack.Screen
+          name="DewormingIndex"
+          component={DewormingIndexScreen}
+        />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
         <HomeStack.Screen
           name="ClinicalHistory"

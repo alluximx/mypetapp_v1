@@ -4,17 +4,15 @@ import api from '../../services/app-services';
 // Hooks.
 // import useSavePetImage from './useSavePetImage';
 
-const postVaccine = (data) => {
-  console.log('Form Data: ', data);
-  return api.post('api/v1/vaccines-history/', data, true);
-};
+const putVaccine = (data, vaccineId) =>
+  api.put(`api/v1/vaccines-history/${vaccineId}/`, data, true);
 
-const useSaveVaccine = () => {
+const useUpdateVaccine = (vaccineId) => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   // const savePetImageQuery = useSavePetImage();
 
-  return useMutation((data: any) => postVaccine(data), {
+  return useMutation((data: any) => putVaccine(data, vaccineId), {
     onSuccess: (response, variables) => {
       // Save Pet image.
       // savePetImageQuery.mutate(
@@ -26,13 +24,13 @@ const useSaveVaccine = () => {
       //     // Only after the pet image has been created...
       //     onSuccess: () => {
       //       navigation.navigate('Home');
-      //       queryClient.invalidateQueries(['my-pets', variables.owner_user]);
       //     },
       //   },
       // );
+      queryClient.invalidateQueries(['vaccine-detail', vaccineId]);
       navigation.goBack();
     },
   });
 };
 
-export default useSaveVaccine;
+export default useUpdateVaccine;
