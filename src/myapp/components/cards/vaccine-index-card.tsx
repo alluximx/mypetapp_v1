@@ -13,12 +13,28 @@ const VaccineCard = (props): React.ReactElement => {
     setIsOpen(!isOpen);
   }
 
+  const reminderEstablish = (days) => {
+    let day = days;
+    let complement: string;
+    if (days % 7 === 0) {
+      if (days / 7 === 1) {
+        complement = 'semana';
+      } else {
+        complement = 'semanas';
+      }
+      day = days / 7;
+    } else {
+      days === 1 ? (complement = 'día') : (complement = 'días');
+    }
+    return day + ` ` + complement + ` antes`;
+  };
+
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.vaccinesIndividual}>
         <View style={styles.left}>
           <NotificationIConGreen style={styles.bellIcon} />
-          <Text>{item}</Text>
+          <Text>{item.date}</Text>
         </View>
         <Text style={styles.edit}>Editar</Text>
       </View>
@@ -28,9 +44,15 @@ const VaccineCard = (props): React.ReactElement => {
   return (
     <Card style={styles.container}>
       <View style={styles.headerTitle}>
-        <Text style={styles.title}>{props.data.name}</Text>
+        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>
+          {props.data.name}
+        </Text>
         <View style={styles.right}>
-          <Text style={styles.text}>{props.data.notification}</Text>
+          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.text}>
+            {props.data.notification
+              ? reminderEstablish(props.data.notification)
+              : ''}
+          </Text>
           <TouchableOpacity style={styles.NotificationIcon}>
             <Image
               style={styles.ImageIcon}
@@ -39,7 +61,12 @@ const VaccineCard = (props): React.ReactElement => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.text}>Vigencia: {props.data.validity}</Text>
+      {props.data.validity === 'Unica' ? (
+        <Text style={styles.text}>{props.data.validity}</Text>
+      ) : (
+        <Text style={styles.text}>Vigencia: {props.data.validity}</Text>
+      )}
+
       <View style={styles.headerTop}>
         {props.data.status == 'Activa' ? (
           <Text style={styles.estausGreen}>{props.data.status}</Text>
@@ -54,15 +81,18 @@ const VaccineCard = (props): React.ReactElement => {
           )}
         </TouchableOpacity>
       </View>
-      {isOpen && (
-        <View style={styles.vaccinesContainer}>
-          <List
-            style={styles.listContainer}
-            data={['28/03/2021', '28/03/2021', '28/03/2021']}
-            renderItem={renderItem}
-          />
-        </View>
-      )}
+      {isOpen &&
+        (props.data.vaccineDates ? (
+          <View style={styles.vaccinesContainer}>
+            <List
+              style={styles.listContainer}
+              data={props.data.vaccineDates}
+              renderItem={renderItem}
+            />
+          </View>
+        ) : (
+          <View style={styles.vaccinesContainer}></View>
+        ))}
     </Card>
   );
 };
@@ -71,6 +101,7 @@ const styles = StyleService.create({
   container: {
     marginTop: 20,
     borderRadius: 18,
+    //width: 400,
   },
   vaccinesContainer: {
     marginTop: 25,
@@ -83,6 +114,7 @@ const styles = StyleService.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: 5,
+    //minWidth: 300,
   },
   vaccinesIndividual: {
     flexDirection: 'row',
@@ -94,6 +126,7 @@ const styles = StyleService.create({
     fontSize: 16,
     fontFamily: 'Montserrat-Bold',
     marginTop: 4,
+    //maxWidth: 100,
   },
   text: {
     color: globalColors.black,
@@ -112,6 +145,7 @@ const styles = StyleService.create({
     fontSize: 14,
   },
   right: {
+    //maxWidth: 90,
     flexDirection: 'row',
     alignContent: 'flex-end',
     marginTop: 7,
