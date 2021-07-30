@@ -34,9 +34,9 @@ export default ({navigation, route}): React.ReactElement => {
     expense.is_prescription && imgRec.push(expense);
   });
   const recetaImg = imgRec.length > 0 ? [imgRec[0]] : [];
-  const adicionalImg1 = imgAdi.length > 0 ? [imgAdi[0]] : [];
-  const adicionalImg2 = imgAdi.length > 1 ? [imgAdi[1]] : [];
-  const adicionalImg3 = imgAdi.length > 2 ? [imgAdi[2]] : [];
+  const additionalImg1 = imgAdi.length > 0 ? [imgAdi[0]] : [];
+  const additionalImg2 = imgAdi.length > 1 ? [imgAdi[1]] : [];
+  const additionalImg3 = imgAdi.length > 2 ? [imgAdi[2]] : [];
   const addVisitMedicalQuery = useAddVisitMedical();
   const updateVisitMedicalQuery = useUpdateVisitMedical();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -57,18 +57,18 @@ export default ({navigation, route}): React.ReactElement => {
         },
   );
   const [isLoading, setIsLoading] = useState(true);
-  const [recetaValue, setRecetaValue] = useState(null);
-  const [adicional1, setAdicional1] = useState(null);
-  const [adicional2, setAdicional2] = useState(null);
-  const [adicional3, setAdicional3] = useState(null);
-  const [recetaEliminar, setRecetaEliminar] = useState([]);
-  const [eliminarAdicional1, setEliminarAdicional1] = useState([]);
-  const [eliminarAdicional2, setEliminarAdicional2] = useState([]);
-  const [eliminarAdicional3, setEliminarAdicional3] = useState([]);
+  const [prescriptionValue, setPrescriptionValueValue] = useState(null); //prescription
+  const [additional1, setAdditional1] = useState(null);
+  const [additional2, setAdditional2] = useState(null);
+  const [additional3, setAdditional3] = useState(null);
+  const [prescriptionEliminar, setPrescriptionEliminar] = useState([]);
+  const [deleteAdditional1, setDeleteAdditional1] = useState([]);
+  const [deleteAdditional2, setDeleteAdditional2] = useState([]);
+  const [deleteAdditional3, setDeleteAdditional3] = useState([]);
   const [isLoad, setIsLoad] = useState(false);
   const useDelete = useDeleteVisit();
-  const receta = {name: 'Fotografía receta', nameSeg: 'Receta'};
-  const adicional = {name: 'Fotografía adicional', nameSeg: 'Adicional'};
+  const prescription = {name: 'Fotografía receta', nameSeg: 'Receta'};
+  const additional = {name: 'Fotografía adicional', nameSeg: 'Adicional'};
   const titleHeader = route.params.isGuardar
     ? 'Nueva Visita'
     : 'Editar Visita ';
@@ -77,10 +77,11 @@ export default ({navigation, route}): React.ReactElement => {
     setIsLoad(true);
     const newData = {
       ...form,
-      recetaValue: recetaValue != null ? recetaValue.assets[0] : [],
-      adicional1: adicional1 != null ? adicional1.assets[0] : [],
-      adicional2: adicional2 != null ? adicional2.assets[0] : [],
-      adicional3: adicional3 != null ? adicional3.assets[0] : [],
+      prescriptionValue:
+        prescriptionValue != null ? prescriptionValue.assets[0] : [],
+      additional1: additional1 != null ? additional1.assets[0] : [],
+      additional2: additional2 != null ? additional2.assets[0] : [],
+      additional3: additional3 != null ? additional3.assets[0] : [],
     };
 
     addVisitMedicalQuery.mutate(newData);
@@ -90,14 +91,15 @@ export default ({navigation, route}): React.ReactElement => {
     setIsLoad(true);
     const newData = {
       ...form,
-      recetaValue: recetaValue != null ? recetaValue.assets[0] : [],
-      adicional1: adicional1 != null ? adicional1.assets[0] : [],
-      adicional2: adicional2 != null ? adicional2.assets[0] : [],
-      adicional3: adicional3 != null ? adicional3.assets[0] : [],
-      recetaEli: recetaEliminar,
-      eliAdicional1: eliminarAdicional1,
-      eliAdicional2: eliminarAdicional2,
-      eliAdicional3: eliminarAdicional3,
+      prescriptionValue:
+        prescriptionValue != null ? prescriptionValue.assets[0] : [],
+      additional1: additional1 != null ? additional1.assets[0] : [],
+      additional2: additional2 != null ? additional2.assets[0] : [],
+      additional3: additional3 != null ? additional3.assets[0] : [],
+      prescriptionEli: prescriptionEliminar,
+      eliAdditional1: deleteAdditional1,
+      eliAdditional2: deleteAdditional2,
+      eliAdditional3: deleteAdditional3,
     };
     updateVisitMedicalQuery.mutate(newData);
   };
@@ -162,19 +164,19 @@ export default ({navigation, route}): React.ReactElement => {
     useDelete.mutate(idVisit);
   };
   const onRecetaClick = (param) => {
-    setRecetaEliminar(param);
+    setPrescriptionEliminar(param);
     !route.params.isGuardar && setIsLoading(false);
   };
-  const onAdicional1Click = (param) => {
-    setEliminarAdicional1(param);
+  const onAdditional1Click = (param) => {
+    setDeleteAdditional1(param);
     !route.params.isGuardar && setIsLoading(false);
   };
-  const onAdicional2Click = (param) => {
-    setEliminarAdicional2(param);
+  const onAdditional2Click = (param) => {
+    setDeleteAdditional2(param);
     !route.params.isGuardar && setIsLoading(false);
   };
-  const onAdicional3Click = (param) => {
-    setEliminarAdicional3(param);
+  const onAdditional3Click = (param) => {
+    setDeleteAdditional3(param);
     !route.params.isGuardar && setIsLoading(false);
   };
   return isLoad ? (
@@ -218,40 +220,40 @@ export default ({navigation, route}): React.ReactElement => {
           />
         </View>
         <VisitsImgCard
-          obj={receta}
+          obj={prescription}
           value={recetaImg}
           onChangeText={(value: any) => {
-            setRecetaValue(value);
+            setPrescriptionValueValue(value);
             !route.params.isGuardar && setIsLoading(false);
           }}
           onDelete={onRecetaClick}
         />
         <VisitsImgCard
-          obj={adicional}
-          value={adicionalImg1}
+          obj={additional}
+          value={additionalImg1}
           onChangeText={(value) => {
-            setAdicional1(value);
+            setAdditional1(value);
             !route.params.isGuardar && setIsLoading(false);
           }}
-          onDelete={onAdicional1Click}
+          onDelete={onAdditional1Click}
         />
         <VisitsImgCard
-          obj={adicional}
-          value={adicionalImg2}
+          obj={additional}
+          value={additionalImg2}
           onChangeText={(value) => {
-            setAdicional2(value);
+            setAdditional2(value);
             !route.params.isGuardar && setIsLoading(false);
           }}
-          onDelete={onAdicional2Click}
+          onDelete={onAdditional2Click}
         />
         <VisitsImgCard
-          obj={adicional}
-          value={adicionalImg3}
+          obj={additional}
+          value={additionalImg3}
           onChangeText={(value) => {
-            setAdicional3(value);
+            setAdditional3(value);
             !route.params.isGuardar && setIsLoading(false);
           }}
-          onDelete={onAdicional3Click}
+          onDelete={onAdditional3Click}
         />
         {!route.params.isGuardar && (
           <View>

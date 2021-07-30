@@ -55,24 +55,7 @@ export default ({navigation, route}): React.ReactElement => {
       ),
     });
   }, [navigation]);
-  const onEdit = (params) => {
-    const formattedDate = moment(params.date).format('YYYY-MM-DD');
-    navigation.navigate('NewVisitMedical', {
-      pet: route.params.pet,
-      visit: {
-        idVisit: params.data.id,
-        title: params.title,
-        details: params.content,
-        date: formattedDate,
-      },
-      isGuardar: false,
-    });
-  };
   const renderServiceItem = (service) => {
-    // const newData = useVisitImage(service.item.id);
-    // console.log(newData);
-
-    //return <GenericCard data={auxData} onClick={onEdit} />;
     return (
       <VisitCardImg data={service.item} navigation={navigation} route={route} />
     );

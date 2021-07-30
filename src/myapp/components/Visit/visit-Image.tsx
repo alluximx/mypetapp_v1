@@ -5,7 +5,6 @@ import moment from 'moment';
 import useVisitImage from '../../hooks/visits/useVisitImage';
 const VisitCardImg = (props): React.ReactElement => {
   const data = useVisitImage(props.data.id);
-  //const [newData, setNewData] = React.useState(props.data);
   const [images, setImages] = React.useState([]);
 
   useEffect(() => {
@@ -13,19 +12,6 @@ const VisitCardImg = (props): React.ReactElement => {
       setImages(data.data.data);
     }
   }, [data.data]);
-  // useEffect(() => {
-  //   const auxData = {
-  //     date: newData.date == null ? null : new Date(newData.date),
-  //     title: newData.title,
-  //     content: newData.content,
-  //     buttonText: 'Editar',
-  //     buttonAlign: 'right',
-  //     images: images,
-  //     styleCard: {},
-  //     data: newData.data,
-  //   };
-  //   setNewData(auxData);
-  // }, [images]);
   const newData = {
     date:
       props.data.visit_date == null ? null : new Date(props.data.visit_date),

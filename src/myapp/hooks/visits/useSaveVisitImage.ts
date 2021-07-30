@@ -4,7 +4,7 @@ import api from '../../services/app-services';
 
 const postVisitImage = (data) => {
   const newData = [
-    {name: 'visit', data: data.idVisita},
+    {name: 'visit', data: data.idVisit},
     {name: 'file', filename: 'visit-img.png', data: data.img},
     {name: 'is_prescription', data: data.flag},
   ];
@@ -15,7 +15,7 @@ const useSaveVisitImage = () => {
   const navigation = useNavigation();
   return useMutation((data: any) => postVisitImage(data), {
     onSuccess: (response, variables) => {
-      queryClient.invalidateQueries(['visits-image', variables.idVisita]);
+      queryClient.invalidateQueries(['visits-image', variables.idVisit]);
       //navigation.goBack();
     },
     onError: (error) => {

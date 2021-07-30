@@ -12,7 +12,7 @@ const useDeleteImages = () => {
   return useMutation((data: any) => deleteImage(data), {
     onSuccess: (response, variables) => {
       queryClient.invalidateQueries('visits-information');
-      queryClient.invalidateQueries(['visits-image', variables.idVisita]);
+      queryClient.invalidateQueries(['visits-image', variables.idVisit]);
       //navigation.goBack();
     },
   });

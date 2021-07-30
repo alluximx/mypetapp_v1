@@ -4,7 +4,6 @@ import {useMutation, useQueryClient} from 'react-query';
 import useSaveVisitImage from './useSaveVisitImage';
 import useUpdateImage from './useUpdateImage';
 import useDeleteImages from './useDeleteImg';
-import useDeleteVisit from './useDeleteVisit';
 const postUpdateVisits = (data) => {
   const newData = {
     user_pet: data.user_pet,
@@ -21,9 +20,9 @@ const useUpdateVisitMedical = () => {
   const useSaveImg = useSaveVisitImage();
   const useUpdateImg = useUpdateImage();
   const useDeleteImg = useDeleteImages();
-  const conditionUpdateImg = (fieldName, fieldEli, data, flag) => {
+  const UpdateImg = (fieldName, fieldEli, data, flag) => {
     const newData = {
-      idVisita: data.id,
+      idVisit: data.id,
       img: data[fieldName]?.base64 ?? {},
       flag: flag,
       id: data[fieldEli][0]?.id ?? [],
@@ -43,10 +42,10 @@ const useUpdateVisitMedical = () => {
   return useMutation((data: any) => postUpdateVisits(data), {
     onSuccess: (response, variables) => {
       // Save Pet image.
-      conditionUpdateImg('recetaValue', 'recetaEli', variables, 'true');
-      conditionUpdateImg('adicional1', 'eliAdicional1', variables, 'false');
-      conditionUpdateImg('adicional2', 'eliAdicional2', variables, 'false');
-      conditionUpdateImg('adicional3', 'eliAdicional3', variables, 'false');
+      UpdateImg('prescriptionValue', 'prescriptionEli', variables, 'true');
+      UpdateImg('additional1', 'eliAdditional1', variables, 'false');
+      UpdateImg('additional2', 'eliAdditional2', variables, 'false');
+      UpdateImg('additional3', 'eliAdditional3', variables, 'false');
       queryClient.invalidateQueries('visits-information');
       queryClient.invalidateQueries(['visits-image', variables.id]);
       navigation.goBack();
