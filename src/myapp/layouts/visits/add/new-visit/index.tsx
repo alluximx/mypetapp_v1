@@ -13,7 +13,7 @@ import globalVars from '../../../../styles/vars';
 import {useEffect} from 'react';
 import useAddVisitMedical from '../../../../hooks/visits/useAddVisitMedical';
 import useUpdateVisitMedical from '../../../../hooks/visits/useUpdateVisitMedical';
-import VisitsImgCard from '../../../../components/cards/visits-img-card';
+import VisitsImgCard from '../../../../components/cards/image-input-card';
 import CustomModal from '../../../../components/modals/custom-modal';
 import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
 import CustomSpinner from '../../../../components/custom-spinner';
