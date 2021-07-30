@@ -30,6 +30,7 @@ const useSaveVaccine = () => {
       //     },
       //   },
       // );
+      navigation.navigate('VaccinesIndex');
     },
   });
 };
