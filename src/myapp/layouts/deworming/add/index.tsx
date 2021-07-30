@@ -14,7 +14,6 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
 import TitleHeader from '../../../components/texts/title-header';
-import VisitsImgCard from '../../../components/cards/image-input-card';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +26,8 @@ export default ({navigation, route}): React.ReactElement => {
   });
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [reminderKey, setReminderKey] = useState('1');
-  const [etiquetteImage, setEtiquetteImage] = useState(null);
 
   const vaccinesQuery = useGetVaccines();
-  const saveVaccineQuery = useSaveVaccine();
   const vaccinesData = vaccinesQuery.isLoading
     ? []
     : vaccinesQuery.data?.data.map((vaccine) => {
@@ -67,7 +64,7 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [isReminderActive, form.next_vaccine_date]);
 
-  const onSavePress = () => saveVaccineQuery.mutate(form);
+  const onSavePress = () => {};
 
   useSetNavigationHeaders({
     isDisabled,
@@ -82,7 +79,7 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout>
-      <TitleHeader style={styles.title}>Nueva Vacuna</TitleHeader>
+      <TitleHeader style={styles.title}>Nueva Desparacitación</TitleHeader>
       <DropdownPicker
         currentValue={form.vaccine_registered}
         data={vaccinesData}
@@ -102,11 +99,6 @@ export default ({navigation, route}): React.ReactElement => {
         onSelect={(next_vaccine_date) => setForm({...form, next_vaccine_date})}
         placeholder="Fecha de expiración"
         minDate={new Date(form.vaccine_date)}
-      />
-      <VisitsImgCard
-        label={'Etiqueta'}
-        image={etiquetteImage}
-        setImage={setEtiquetteImage}
       />
       <ReminderInput
         isActive={isReminderActive}

@@ -86,6 +86,8 @@ export default ({navigation, route}): React.ReactElement => {
     const substrac = next_vaccine_date.getTime() - notification.getTime();
     const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24) + 1);
     const auxData = {
+      id: service.item.id,
+      petId: service.item.id,
       name: service.item.name,
       validity: is_unique ? 'Unica' : service.item.vaccine_date,
       notification: !is_unique ? notificationDays : null,

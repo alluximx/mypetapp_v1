@@ -52,7 +52,8 @@ const VaccineCard = (props): React.ReactElement => {
             props.navigation.navigate(editDestination, {
               vaccineId: props.data.id,
             });
-          }}>
+          }}
+          style={styles.edit}>
           Editar
         </AnchorText>
       </View>

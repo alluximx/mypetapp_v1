@@ -8,10 +8,18 @@ interface SetNavigationHeadersProps {
   isLoading: boolean;
   onRightPress: () => void;
   setIsLoading: (value: boolean) => void;
+  data: any;
 }
 
 const useSetNavigationHeaders = (props: SetNavigationHeadersProps) => {
-  const {navigation, isLoading, isDisabled, onRightPress, setIsLoading} = props;
+  const {
+    navigation,
+    data,
+    isLoading,
+    isDisabled,
+    onRightPress,
+    setIsLoading,
+  } = props;
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
@@ -28,7 +36,7 @@ const useSetNavigationHeaders = (props: SetNavigationHeadersProps) => {
         );
       },
     });
-  }, [navigation, isDisabled, isLoading]);
+  }, [navigation, isDisabled, isLoading, data]);
 };
 
 const styles = StyleSheet.create({

@@ -1,173 +1,171 @@
-import React from 'react';
 import {
-  Button,
-  Input,
   Layout,
   StyleService,
   useStyleSheet,
-} from '@ui-kitten/components';
-
-import {
-  IndexPath,
-  Select,
-  SelectGroup,
-  SelectItem,
   Text,
-  Datepicker,
-  CheckBox,
-  Toggle,
+  List,
+  Spinner,
 } from '@ui-kitten/components';
-import {ScrollView} from 'react-native-gesture-handler';
+import React, {useLayoutEffect} from 'react';
+import {Image, Dimensions, View} from 'react-native';
+import DefaultLayout from '../../components/layouts/default-layout';
+import globalColors from '../../styles/colors';
+import AddButton from '../../components/buttons/add-button';
+import {useEffect} from 'react';
+import moment from 'moment';
+import GenericCard from '../../components/cards/generic-card';
 
-export default ({navigation}): React.ReactElement => {
-  const [userName, setUserName] = React.useState<string>();
-  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  const [date, setDate] = React.useState(new Date());
-  const [checked, setChecked] = React.useState(false);
+export default ({navigation, route}): React.ReactElement => {
+  const [visits, setVisits] = React.useState([]);
 
-  const onCheckedChange = (isChecked) => {
-    setChecked(isChecked);
-  };
-
-  const useCheckboxState = (initialCheck = false) => {
-    const [checked, setChecked] = React.useState(initialCheck);
-    return {checked, onChange: setChecked};
-  };
-  const primaryCheckboxState = useCheckboxState();
-  const useDatepickerState = (initialDate = null) => {
-    const [date, setDate] = React.useState(initialDate);
-    return {date, onSelect: setDate};
-  };
   const styles = useStyleSheet(themedStyles);
-  const filter = (date) => date.getDay() !== 0 && date.getDay() !== 6;
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AddButton
+          style={{backgroundColor: globalColors.backgroundDefault}}
+          iconStyle={{
+            tintColor: globalColors.greenSecondary,
+            height: 35,
+            width: 35,
+          }}
+          onAdd={() =>
+            navigation.navigate('AddDeworming', {
+              pet: route.params.pet,
+            })
+          }
+        />
+      ),
+    });
+  }, [navigation]);
 
-  const data = ['Antirrabica', 'Tetanos', 'Parvovirus'];
-  const displayValue = data[selectedIndex.row];
-  const filterPickerState = useDatepickerState();
-
-  const renderOption = (title) => <SelectItem title={title} />;
-
-  const onAddButtonPress = (): void => {
-    navigation && navigation.goBack();
+  const renderServiceItem = (service) => {
+    const auxData = {
+      date:
+        service.item.visit_date == null
+          ? null
+          : new Date(service.item.visit_date),
+      title: service.item.title,
+      content: service.item.details,
+      buttonText: 'Editar',
+      buttonAlign: 'right',
+      images: [],
+      styleCard: {},
+      data: service.item,
+    };
+    return <GenericCard data={auxData} onClick={() => {}} />;
   };
-
   return (
-    <ScrollView>
-      <Layout style={styles.formContainer} level="1">
-        <Select
-          style={styles.select}
-          placeholder="Default"
-          value={displayValue}
-          selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}>
-          {data.map(renderOption)}
-        </Select>
-      </Layout>
-
-      <Layout style={styles.formContainer} level="1">
-        <Datepicker
-          date={date}
-          onSelect={(nextDate) => setDate(nextDate)}
-          placeholder="Fecha aplicación"
-          filter={filter}
-          {...filterPickerState}
+    <DefaultLayout style={[styles.container, {color: 'black'}]}>
+      <Layout
+        style={[
+          styles.formContainer,
+          {backgroundColor: globalColors.backgroundDefault},
+        ]}>
+        <Image
+          style={styles.dogImage}
+          source={require('./assets/deworming-index.png')}
         />
+        <Text style={styles.h1}>Desparacitaciones</Text>
+        <Text style={styles.textLabel} category="label">
+          Aún no has agregado desparacitaciones
+        </Text>
+        <Text style={styles.textLabel} category="label">
+          para tu mascota.
+        </Text>
       </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Datepicker
-          date={date}
-          onSelect={(nextDate) => setDate(nextDate)}
-          placeholder="Próxima desparacitación"
-          filter={filter}
-          {...filterPickerState}
-        />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Edad"
-          value={userName}
-          onChangeText={setUserName}
-        />
-      </Layout>
-
-      <Layout style={styles.formContainer} level="1">
-        <Toggle checked={checked} onChange={onCheckedChange}>
-          {'Agregar recordatorio'}
-        </Toggle>
-        <Layout style={styles.formContainer} level="2">
-          <CheckBox
-            style={styles.checkbox}
-            status="primary"
-            {...primaryCheckboxState}>
-            1 dia antes
-          </CheckBox>
-          <CheckBox
-            style={styles.checkbox}
-            status="primary"
-            {...primaryCheckboxState}>
-            1 semana antes
-          </CheckBox>
-          <CheckBox
-            style={styles.checkbox}
-            status="primary"
-            {...primaryCheckboxState}>
-            2 semanas antes
-          </CheckBox>
-        </Layout>
-      </Layout>
-    </ScrollView>
+    </DefaultLayout>
   );
 };
-
+const {width, height} = Dimensions.get('window');
 const themedStyles = StyleService.create({
-  container: {},
-  checkbox: {
-    margin: 2,
-  },
-  select: {
+  container: {
     flex: 1,
-    margin: 2,
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
-  },
-  profileAvatar: {
-    width: 116,
-    height: 116,
-    borderRadius: 58,
-    alignSelf: 'center',
-    backgroundColor: 'color-primary-default',
-    tintColor: 'color-primary-default',
-  },
-  editAvatarButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    backgroundColor: globalColors.backgroundDefault,
+    paddingHorizontal: 0,
   },
   formContainer: {
     flex: 1,
+    paddingTop: 0,
+    width: width,
+  },
+  h1: {
+    color: globalColors.black,
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+    alignSelf: 'center',
+  },
+  textLabel: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-Bold',
+    alignSelf: 'center',
+    lineHeight: 24,
+    color: '#707070',
+  },
+  dogImage: {
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    height: 390,
+    maxHeight: 390,
+    marginVertical: 5,
+  },
+  cardSection: {
+    marginTop: 32,
+    borderTopEndRadius: 40,
+    borderTopStartRadius: 40,
     paddingTop: 32,
   },
-  emailInput: {
-    marginTop: 16,
+  headerRight: {
+    color: globalColors.black,
+    marginRight: 12,
   },
-  passwordInput: {
-    marginTop: 16,
+  h1Card: {
+    color: globalColors.black,
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+    marginTop: 4,
   },
-  termsCheckBox: {
+  title: {
+    color: globalColors.black,
+    fontSize: 20,
+    fontFamily: 'Montserrat-Bold',
+    marginLeft: 24,
+  },
+  labelCard: {
+    fontSize: 18,
+    fontFamily: 'Montserrat-Medium',
+    color: '#707070',
+    marginTop: 8,
+  },
+  cardStyle: {
+    marginLeft: 24,
     marginTop: 24,
+    marginRight: 24,
   },
-  termsCheckBoxText: {
-    color: 'text-hint-color',
+  addButton: {
+    height: 40,
+    width: 40,
+    minWidth: 0,
+    minHeight: 0,
+    borderRadius: 40,
+    backgroundColor: globalColors.greenSecondary,
+    borderWidth: 0,
   },
-  signUpButton: {
-    marginHorizontal: 16,
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 10,
+    width: width,
+    marginTop: 10,
   },
-  signInButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
+  servicesContentContainer: {
+    flexDirection: 'row',
+    paddingBottom: 8,
+    backgroundColor: 'transparent',
+    width: width,
+  },
+  viewContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
