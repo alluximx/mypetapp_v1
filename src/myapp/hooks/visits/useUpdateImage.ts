@@ -1,19 +1,20 @@
 import {useNavigation} from '@react-navigation/native';
+import {de} from 'date-fns/locale';
 import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
-
-const postVisitImage = (data) => {
+const postUpdateImag = (data) => {
   const newData = [
     {name: 'visit', data: data.idVisita},
     {name: 'file', filename: 'visit-img.png', data: data.img},
     {name: 'is_prescription', data: data.flag},
   ];
-  return api.post('api/v1/visit-images/', newData, true, true);
+  return api.put('api/v1/visit-images/' + data.id + '/', newData, true, true);
 };
-const useSaveVisitImage = () => {
+
+const useUpdateImage = () => {
   const queryClient = useQueryClient();
   const navigation = useNavigation();
-  return useMutation((data: any) => postVisitImage(data), {
+  return useMutation((data: any) => postUpdateImag(data), {
     onSuccess: (response, variables) => {
       queryClient.invalidateQueries(['visits-image', variables.idVisita]);
       //navigation.goBack();
@@ -23,5 +24,4 @@ const useSaveVisitImage = () => {
     },
   });
 };
-
-export default useSaveVisitImage;
+export default useUpdateImage;

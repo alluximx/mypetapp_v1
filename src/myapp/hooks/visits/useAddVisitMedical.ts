@@ -9,67 +9,26 @@ const useAddVisitMedical = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const useSaveImg = useSaveVisitImage();
-
+  const saveImage = (fieldName, data, flag, id) => {
+    const newData = {
+      idVisita: id,
+      img: data[fieldName]?.base64 ?? {},
+      flag: flag,
+    };
+    console.log(newData);
+    console.log(data);
+    if (data[fieldName]) {
+      useSaveImg.mutate(newData);
+    }
+  };
   return useMutation((data: any) => postAddVisits(data), {
     onSuccess: (response, variables) => {
       // Save Pet image.
-      if (variables.recetaValue) {
-        console.log('verdadero');
-
-        const newData = {
-          idVisita: response.data.id,
-          img: variables.recetaValue.base64,
-        };
-        useSaveImg.mutate(newData, {
-          onSuccess: () => {
-            // queryClient.invalidateQueries(['visits-information']);
-            // navigation.goBack();
-          },
-        });
-      }
-      if (variables.adicional1) {
-        console.log('verdadero');
-
-        const newData = {
-          idVisita: response.data.id,
-          img: variables.adicional1.base64,
-        };
-        useSaveImg.mutate(newData, {
-          onSuccess: () => {
-            // queryClient.invalidateQueries(['visits-information']);
-            // navigation.goBack();
-          },
-        });
-      }
-      if (variables.adicional2) {
-        console.log('verdadero');
-
-        const newData = {
-          idVisita: response.data.id,
-          img: variables.adicional2.base64,
-        };
-        useSaveImg.mutate(newData, {
-          onSuccess: () => {
-            // queryClient.invalidateQueries(['visits-information']);
-            // navigation.goBack();
-          },
-        });
-      }
-      if (variables.adicional3) {
-        console.log('verdadero');
-
-        const newData = {
-          idVisita: response.data.id,
-          img: variables.adicional3.base64,
-        };
-        useSaveImg.mutate(newData, {
-          onSuccess: () => {
-            // queryClient.invalidateQueries(['visits-information']);
-            // navigation.goBack();
-          },
-        });
-      }
-      queryClient.invalidateQueries(['visits-information']);
+      saveImage('recetaValue', variables, 'true', response.data.id);
+      saveImage('adicional1', variables, 'false', response.data.id);
+      saveImage('adicional2', variables, 'false', response.data.id);
+      saveImage('adicional3', variables, 'false', response.data.id);
+      queryClient.invalidateQueries('visits-information');
       navigation.goBack();
       // useSaveImg.mutate(
       //   {

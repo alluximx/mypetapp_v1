@@ -3,8 +3,8 @@ import React, {useRef, useState, useCallback} from 'react';
 import DefaultLayout from '../../../../components/layouts/default-layout';
 import TitleHeader from '../../../../components/texts/title-header';
 import AnchorText from '../../../../components/texts/anchor-text';
-import {StyleSheet, View, Image} from 'react-native';
-import {Layout, Text} from '@ui-kitten/components';
+import {StyleSheet, View} from 'react-native';
+import {Button, Layout, Text, Icon} from '@ui-kitten/components';
 import globalColors from '../../../../styles/colors';
 import DatepickerInput from '../../../../components/inputs/date-picker';
 import UserInput from '../../../../components/inputs/user-input';
@@ -16,12 +16,27 @@ import useUpdateVisitMedical from '../../../../hooks/visits/useUpdateVisitMedica
 import VisitsImgCard from '../../../../components/cards/visits-img-card';
 import CustomModal from '../../../../components/modals/custom-modal';
 import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
+import CustomSpinner from '../../../../components/custom-spinner';
+import AddButton from '../../../../components/buttons/add-button';
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const idVisit = route.params.visit.idVisit;
   const title = route.params.visit.title;
   const details = route.params.visit.details;
   const date = route.params.visit.date;
+  const images = route.params.visit.images;
+  let imgAdi = [];
+  images.map((expense) => {
+    return !expense.is_prescription && imgAdi.push(expense);
+  });
+  let imgRec = [];
+  images.map((expense) => {
+    expense.is_prescription && imgRec.push(expense);
+  });
+  const recetaImg = imgRec.length > 0 ? [imgRec[0]] : [];
+  const adicionalImg1 = imgAdi.length > 0 ? [imgAdi[0]] : [];
+  const adicionalImg2 = imgAdi.length > 1 ? [imgAdi[1]] : [];
+  const adicionalImg3 = imgAdi.length > 2 ? [imgAdi[2]] : [];
   const addVisitMedicalQuery = useAddVisitMedical();
   const updateVisitMedicalQuery = useUpdateVisitMedical();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -46,6 +61,11 @@ export default ({navigation, route}): React.ReactElement => {
   const [adicional1, setAdicional1] = useState(null);
   const [adicional2, setAdicional2] = useState(null);
   const [adicional3, setAdicional3] = useState(null);
+  const [recetaEliminar, setRecetaEliminar] = useState([]);
+  const [eliminarAdicional1, setEliminarAdicional1] = useState([]);
+  const [eliminarAdicional2, setEliminarAdicional2] = useState([]);
+  const [eliminarAdicional3, setEliminarAdicional3] = useState([]);
+  const [isLoad, setIsLoad] = useState(false);
   const useDelete = useDeleteVisit();
   const receta = {name: 'Fotografía receta', nameSeg: 'Receta'};
   const adicional = {name: 'Fotografía adicional', nameSeg: 'Adicional'};
@@ -53,6 +73,8 @@ export default ({navigation, route}): React.ReactElement => {
     ? 'Nueva Visita'
     : 'Editar Visita ';
   const onSave = () => {
+    setIsLoading(true);
+    setIsLoad(true);
     const newData = {
       ...form,
       recetaValue: recetaValue != null ? recetaValue.assets[0] : [],
@@ -60,13 +82,39 @@ export default ({navigation, route}): React.ReactElement => {
       adicional2: adicional2 != null ? adicional2.assets[0] : [],
       adicional3: adicional3 != null ? adicional3.assets[0] : [],
     };
+
     addVisitMedicalQuery.mutate(newData);
   };
   const onUpdate = () => {
-    updateVisitMedicalQuery.mutate(form);
+    setIsLoading(true);
+    setIsLoad(true);
+    const newData = {
+      ...form,
+      recetaValue: recetaValue != null ? recetaValue.assets[0] : [],
+      adicional1: adicional1 != null ? adicional1.assets[0] : [],
+      adicional2: adicional2 != null ? adicional2.assets[0] : [],
+      adicional3: adicional3 != null ? adicional3.assets[0] : [],
+      recetaEli: recetaEliminar,
+      eliAdicional1: eliminarAdicional1,
+      eliAdicional2: eliminarAdicional2,
+      eliAdicional3: eliminarAdicional3,
+    };
+    updateVisitMedicalQuery.mutate(newData);
   };
   route.params.isGuardar
     ? navigation.setOptions({
+        headerLeft: () => (
+          <Icon
+            style={{
+              tintColor: globalColors.greenSecondary,
+              height: 35,
+              width: 35,
+              paddingRight: 0,
+            }}
+            name="close"
+            onPress={() => navigation.goBack()}
+          />
+        ),
         headerRight: () => (
           <AnchorText
             style={styles.headerRight}
@@ -77,26 +125,61 @@ export default ({navigation, route}): React.ReactElement => {
         ),
       })
     : navigation.setOptions({
+        headerLeft: () => (
+          <Icon
+            style={{
+              tintColor: globalColors.greenSecondary,
+              height: 35,
+              width: 35,
+              paddingRight: 0,
+            }}
+            name="close"
+            onPress={() => navigation.goBack()}
+          />
+        ),
         headerRight: () => (
           <AnchorText
             style={styles.headerRight}
             isDisabled={isLoading}
             onPress={onUpdate}>
-            Editar
+            Guardar
           </AnchorText>
         ),
       });
   useEffect(() => {
-    if (form.details && form.title && form.visit_date) {
-      setIsLoading(false);
-    } else {
-      setIsLoading(true);
-    }
+    route.params.isGuardar
+      ? form.details && form.title && form.visit_date
+        ? setIsLoading(false)
+        : setIsLoading(true)
+      : form.details != details ||
+        form.title != title ||
+        form.visit_date != date
+      ? setIsLoading(false)
+      : null;
   }, [navigation, form, isLoading]);
   const onDeleteAccept = () => {
+    setIsLoad(true);
     useDelete.mutate(idVisit);
   };
-  return (
+  const onRecetaClick = (param) => {
+    setRecetaEliminar(param);
+    !route.params.isGuardar && setIsLoading(false);
+  };
+  const onAdicional1Click = (param) => {
+    setEliminarAdicional1(param);
+    !route.params.isGuardar && setIsLoading(false);
+  };
+  const onAdicional2Click = (param) => {
+    setEliminarAdicional2(param);
+    !route.params.isGuardar && setIsLoading(false);
+  };
+  const onAdicional3Click = (param) => {
+    setEliminarAdicional3(param);
+    !route.params.isGuardar && setIsLoading(false);
+  };
+  return isLoad ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout>
       <CustomModal
         labelAccept="Entendido"
@@ -116,7 +199,7 @@ export default ({navigation, route}): React.ReactElement => {
             placeholder="Fecha de visita"
           />
         </View>
-        <View style={styles.formInput}>
+        <View>
           <UserInput
             placeholder="Motivo"
             value={form.title}
@@ -136,27 +219,39 @@ export default ({navigation, route}): React.ReactElement => {
         </View>
         <VisitsImgCard
           obj={receta}
+          value={recetaImg}
           onChangeText={(value: any) => {
             setRecetaValue(value);
+            !route.params.isGuardar && setIsLoading(false);
           }}
+          onDelete={onRecetaClick}
         />
         <VisitsImgCard
           obj={adicional}
+          value={adicionalImg1}
           onChangeText={(value) => {
             setAdicional1(value);
+            !route.params.isGuardar && setIsLoading(false);
           }}
+          onDelete={onAdicional1Click}
         />
         <VisitsImgCard
           obj={adicional}
+          value={adicionalImg2}
           onChangeText={(value) => {
             setAdicional2(value);
+            !route.params.isGuardar && setIsLoading(false);
           }}
+          onDelete={onAdicional2Click}
         />
         <VisitsImgCard
           obj={adicional}
+          value={adicionalImg3}
           onChangeText={(value) => {
             setAdicional3(value);
+            !route.params.isGuardar && setIsLoading(false);
           }}
+          onDelete={onAdicional3Click}
         />
         {!route.params.isGuardar && (
           <View>
@@ -176,13 +271,11 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   formLayout: {
-    marginLeft: 8,
-    marginRight: 8,
     marginTop: 22,
     backgroundColor: globalColors.backgroundDefault,
   },
   formInput: {
-    marginBottom: 16,
+    marginBottom: 8,
   },
   input: {
     backgroundColor: globalColors.lightGreen,

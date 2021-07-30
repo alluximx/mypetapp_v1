@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     height: 140,
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   inputLabel: {
     position: 'absolute',
