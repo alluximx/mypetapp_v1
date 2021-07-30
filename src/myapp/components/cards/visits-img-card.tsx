@@ -12,6 +12,10 @@ const options: CameraOptions = {
   includeBase64: true,
 };
 const VisitsImgCard = (props): React.ReactElement => {
+  const [flag, setFlag] = useState(props.value.length ? false : true);
+  const [images, setImages] = useState(
+    props.value.length ? props.value[0] : null,
+  );
   const [statusReceta, setStatusReceta] = useState(true);
   const [imageResponse, setImageResponse] = useState<any>(null);
   const onPress = useCallback(() => {
@@ -21,7 +25,8 @@ const VisitsImgCard = (props): React.ReactElement => {
       } else if (response.errorCode) {
         console.log('Error code: ', response.errorCode);
       } else {
-        const img = response.assets[0].uri;
+        const img = response;
+        props.onChangeText(img);
         setImageResponse(img);
         setStatusReceta(false);
       }
@@ -30,10 +35,34 @@ const VisitsImgCard = (props): React.ReactElement => {
   const onDelete = () => {
     setImageResponse(null);
     setStatusReceta(true);
+    props.onChangeText(null);
+  };
+  const onDeleteUpdate = () => {
+    setImageResponse(null);
+    setStatusReceta(true);
+    props.onChangeText(null);
+    setImages(null);
+    props.onDelete([{id: images.id}]);
+    setFlag(true);
   };
   return (
     <View style={styles.card}>
-      {imageResponse == null ? (
+      {flag ? (
+        imageResponse == null ? (
+          <Text></Text>
+        ) : (
+          <Image
+            style={{
+              width: 38,
+              height: 38,
+              marginRight: 4,
+              marginLeft: 8,
+              marginTop: 10,
+            }}
+            source={{uri: imageResponse.assets[0].uri}}
+          />
+        )
+      ) : images == null ? (
         <Text></Text>
       ) : (
         <Image
@@ -44,20 +73,36 @@ const VisitsImgCard = (props): React.ReactElement => {
             marginLeft: 8,
             marginTop: 10,
           }}
-          source={{uri: imageResponse}}
+          source={{uri: images.file}}
         />
       )}
-      {statusReceta ? (
+      {flag ? (
+        statusReceta ? (
+          <Text style={styles.addtext}>{props.obj.name}</Text>
+        ) : (
+          <Text style={styles.addtext2}>{props.obj.nameSeg}</Text>
+        )
+      ) : images == null ? (
         <Text style={styles.addtext}>{props.obj.name}</Text>
       ) : (
         <Text style={styles.addtext2}>{props.obj.nameSeg}</Text>
       )}
-      {statusReceta ? (
+      {flag ? (
+        statusReceta ? (
+          <Text style={styles.addImg} onPress={onPress}>
+            Agregar
+          </Text>
+        ) : (
+          <Text style={styles.addImg2} onPress={onDelete}>
+            Eliminar
+          </Text>
+        )
+      ) : images == null ? (
         <Text style={styles.addImg} onPress={onPress}>
           Agregar
         </Text>
       ) : (
-        <Text style={styles.addImg2} onPress={onDelete}>
+        <Text style={styles.addImg2} onPress={onDeleteUpdate}>
           Eliminar
         </Text>
       )}

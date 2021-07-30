@@ -23,10 +23,12 @@ export const HomeDrawer = (props): DrawerElement => {
   const navigateToScreen = (urlKey: string, params: {}) => {
     props.navigation.navigate(urlKey, params);
   };
-  const navigateBreed = ()=>{
-    props.navigation.navigate('Breed', {})
-  }
-
+  const navigateBreed = () => {
+    props.navigation.navigate('Breed', {});
+  };
+  const navigateAdoption = () => {
+    props.navigation.navigate('AdoptionFilter', {});
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerView}>
@@ -66,7 +68,7 @@ export const HomeDrawer = (props): DrawerElement => {
           <DrawerItem
             urlKey="Home"
             params={{}}
-            onPressOption={navigateToScreen}
+            onPressOption={navigateAdoption}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Adopciones"

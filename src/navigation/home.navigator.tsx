@@ -34,7 +34,8 @@ import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.compone
 //Breed
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
-
+//Adoption
+import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
@@ -118,6 +119,9 @@ const Screens = ({navigation, route, style}) => {
             headerStyle: {backgroundColor: 'transparent'},
           }}
         />
+        {/*Adoption */}
+        <HomeStack.Screen name="AdoptionFilter" component={AdoptionScreen} />
+
         <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />

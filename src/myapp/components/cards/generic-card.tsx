@@ -23,8 +23,8 @@ const GenericCard = (props): React.ReactElement => {
   const renderServiceItem = (service) => {
     return (
       <Image
-        style={{height: 50, width: 50, marginTop: 2}}
-        source={require('../../layouts/visits/assets/dog-visit.png')}
+        style={{height: 40, width: 40, marginTop: 2, marginRight: 8}}
+        source={{uri: service.item.file}}
       />
     );
   };

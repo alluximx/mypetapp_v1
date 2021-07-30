@@ -15,6 +15,8 @@ import GenericCard from '../../../components/cards/generic-card';
 import useVisitsInformation from '../../../hooks/visits/useVisitsInformation';
 import {useEffect} from 'react';
 import moment from 'moment';
+import useVisitImage from '../../../hooks/visits/useVisitImage';
+import VisitCardImg from '../../../components/Visit/visit-Image';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
@@ -24,7 +26,7 @@ export default ({navigation, route}): React.ReactElement => {
     if (data.data) {
       setVisits(data.data.data);
     }
-  }, [data.data]);
+  }, [data.data, data.isFetched]);
   const styles = useStyleSheet(themedStyles);
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,6 +46,7 @@ export default ({navigation, route}): React.ReactElement => {
                 title: '',
                 details: '',
                 date: '',
+                images: [],
               },
               isGuardar: true,
             })
@@ -52,34 +55,10 @@ export default ({navigation, route}): React.ReactElement => {
       ),
     });
   }, [navigation]);
-  const onEdit = (params) => {
-    const formattedDate = moment(params.date).format('YYYY-MM-DD');
-    navigation.navigate('NewVisitMedical', {
-      pet: route.params.pet,
-      visit: {
-        idVisit: params.data.id,
-        title: params.title,
-        details: params.content,
-        date: formattedDate,
-      },
-      isGuardar: false,
-    });
-  };
   const renderServiceItem = (service) => {
-    const auxData = {
-      date:
-        service.item.visit_date == null
-          ? null
-          : new Date(service.item.visit_date),
-      title: service.item.title,
-      content: service.item.details,
-      buttonText: 'Editar',
-      buttonAlign: 'right',
-      images: [],
-      styleCard: {},
-      data: service.item,
-    };
-    return <GenericCard data={auxData} onClick={onEdit} />;
+    return (
+      <VisitCardImg data={service.item} navigation={navigation} route={route} />
+    );
   };
   return data.isLoading ? (
     <View style={styles.viewContainer}>
