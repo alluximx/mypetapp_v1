@@ -28,3 +28,11 @@ export interface DropdownPickerProps {
   setCurrentValue: (key: string) => void;
   style?: {};
 }
+
+export interface DatePickerProps {
+  currentValue: string;
+  onSelect: (value: string) => void;
+  placeholder: string;
+  minDate?: Date;
+  maxDate?: Date;
+}

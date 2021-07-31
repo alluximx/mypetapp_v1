@@ -1,66 +1,94 @@
-import React, {useLayoutEffect} from 'react';
+import React, {useLayoutEffect, useEffect, useState} from 'react';
 import {Image, Dimensions} from 'react-native';
 //My Components.
 import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
-
 //Global Styles
 import globalColors from '../../../styles/colors';
 //UI Kitten
 import {Layout, Text, StyleService, List} from '@ui-kitten/components';
+// Hook.
+import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
 
-  /* const vaccines = null;
-  const vaccines2 = null; */
+  const [vaccines, setVaccines] = useState([]);
+  const vaccinesQuery = useGetVaccineIndex(id);
 
-  const vaccines = [
-    {
-      name: 'Parainfluenza',
-      validity: '28/02/2021',
-      notification: '2 dias antes',
-      status: 'Vencida',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Parvovirus',
-      validity: 'Única',
-      notification: '1 semana antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Polivalente',
-      validity: '28/02/2022',
-      notification: '2 semanas antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Parainfluenza',
-      validity: '28/02/2021',
-      notification: '2 dias antes',
-      status: 'Vencida',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-    {
-      name: 'Bordetella',
-      validity: 'Única',
-      notification: '1 semana antes',
-      status: 'Activa',
-      vaccineDates: ['28/02/2021', '28/02/2021', '28/02/2021'],
-    },
-  ];
+  useEffect(() => {
+    if (vaccinesQuery.data) {
+      function sortByDate(a, b) {
+        var Item1 = a.vaccine_date;
+        var Item2 = b.vaccine_date;
+        if (Item1 < Item2) {
+          return 1;
+        }
+        if (Item1 > Item2) {
+          return -1;
+        }
+        return 0;
+      }
+      vaccinesQuery.data.data.sort(sortByDate);
+      const groupVaccines = vaccinesQuery.data.data.reduce((acc, obj) => {
+        const id = obj.vaccine_registered.id;
+        const formatedVaccine = {id: obj.id, date: obj.vaccine_date};
+        if (!acc[id]) {
+          acc[id] = {
+            id_vaccine: id,
+            id_record: obj.id,
+            name: obj.vaccine_registered.vaccine_name,
+            reminder: obj.reminder,
+            is_unique: obj.vaccine_registered.is_unique,
+            next_vaccine_date: obj.next_vaccine_date,
+            vaccine_date: obj.vaccine_date,
+            vaccines: [formatedVaccine],
+          };
+        } else {
+          acc[id].vaccines.push(formatedVaccine);
+        }
+        return acc;
+      }, {});
+
+      const formatedArray: any = [];
+      const claves = Object.keys(groupVaccines);
+
+      claves.forEach((element) => {
+        formatedArray.push(groupVaccines[element]);
+      });
+
+      setVaccines(formatedArray);
+    }
+  }, [vaccinesQuery.data]);
+
+  function customSort(a, b) {
+    var Item1 = a.name;
+    var Item2 = b.name;
+    if (Item1 > Item2) {
+      return 1;
+    }
+    if (Item1 < Item2) {
+      return -1;
+    }
+    return 0;
+  }
+
+  vaccines.sort(customSort);
 
   const renderServiceItem = (service) => {
+    const is_unique = service.item.is_unique;
+    const next_vaccine_date = new Date(service.item.next_vaccine_date);
+    const notification = new Date(service.item.reminder);
+    const substrac = next_vaccine_date.getTime() - notification.getTime();
+    const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24) + 1);
     const auxData = {
       name: service.item.name,
-      validity: service.item.validity,
-      notification: service.item.notification,
-      status: service.item.status,
-      vaccineDates: service.item.vaccineDates,
+      validity: is_unique ? 'Unica' : service.item.vaccine_date,
+      notification: !is_unique ? notificationDays : null,
+      status:
+        is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
+      vaccineDates: service.item.vaccines,
     };
     return <VaccineCard data={auxData} />;
   };
@@ -81,7 +109,7 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
-  return vaccines !== null ? (
+  return vaccines.length > 0 ? (
     <DefaultLayout>
       <Text style={styles.titleh1}>Vacunas</Text>
       <List
