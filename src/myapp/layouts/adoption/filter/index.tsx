@@ -1,22 +1,90 @@
-import React from 'react';
-import {Layout, StyleService, Text, useStyleSheet} from '@ui-kitten/components';
+import React, {useEffect, useState} from 'react';
+import {
+  Button,
+  Layout,
+  StyleService,
+  Text,
+  useStyleSheet,
+} from '@ui-kitten/components';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import {Dimensions, Image} from 'react-native';
 import globalColors from '../../../styles/colors';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import useStates from '../../../hooks/util/useState';
+import MunicipalityDrop from '../../../components/adoption/municipality-drop';
+import CustomButton from '../../../components/buttons/custom-button';
+import TitleHeader from '../../../components/texts/title-header';
+import DefaultText from '../../../components/texts/default-text';
 
 export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
+  const [status, setStatus] = useState(true);
+  const [statusBtn, setStatusBtn] = useState(true);
+  const [stateList, setStateList] = useState([]);
+  const dataStates = useStates();
+  useEffect(() => {
+    if (dataStates.data) {
+      let aux = [];
+      dataStates.data.data.forEach((element) => {
+        aux.push({
+          value: element.id,
+          label: element.name,
+        });
+      });
+      setStateList(aux);
+    }
+  }, [dataStates.data, dataStates.isFetched]);
+  const [form, setForm] = useState({
+    state: '',
+    town: '',
+  });
+  const changeMunicipality = (valor) => {
+    valor == '' ? setStatusBtn(true) : setStatusBtn(false);
+    valor == ''
+      ? setForm({...form, town: ''})
+      : setForm({...form, town: valor});
+  };
+  const onFind = () => {
+    console.log(form);
+  };
   return (
-    <DefaultLayout style={[styles.container, {color: 'black'}]}>
+    <DefaultLayout
+      statusBarStyle={'light-content'}
+      style={[styles.container, {color: 'black'}]}>
       <Image
         style={styles.imagePort}
         source={require('../assets/adoprion.png')}
       />
       <Layout style={styles.layoutPort}>
-        <Text style={styles.textTitle}>Adopciones</Text>
-        <Text style={styles.textContent}>
+        <TitleHeader>Adopciones</TitleHeader>
+        <DefaultText>
           Haz un nuevo amigo y dale un hogar a quién más lo necesita.
-        </Text>
+        </DefaultText>
+        <DropdownPicker
+          style={{marginTop: 24}}
+          data={stateList}
+          currentValue={form.state}
+          placeholder="Estado"
+          setCurrentValue={(stateId) => {
+            setForm({...form, state: stateId});
+            stateId != '' ? setStatus(false) : setStatus(true);
+          }}
+        />
+        <MunicipalityDrop
+          status={status}
+          id={form.state}
+          change={changeMunicipality}
+        />
+        <CustomButton
+          style={
+            statusBtn
+              ? {backgroundColor: globalColors.lightGray, marginTop: 14}
+              : {marginTop: 14}
+          }
+          isDisabled={statusBtn}
+          onPress={onFind}>
+          Buscar
+        </CustomButton>
       </Layout>
     </DefaultLayout>
   );

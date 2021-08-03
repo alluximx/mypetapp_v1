@@ -1,3 +1,5 @@
+import {PickerStyle} from 'react-native-picker-select';
+
 export interface UserInputProps {
   autoCapitalize?: boolean;
   error?: string;
@@ -27,4 +29,5 @@ export interface DropdownPickerProps {
   placeholder?: string;
   setCurrentValue: (key: string) => void;
   style?: {};
+  disabled?: boolean;
 }
