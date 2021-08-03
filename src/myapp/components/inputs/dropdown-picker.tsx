@@ -132,14 +132,4 @@ const selectorStylesDisebled = {
   },
 };
 
-const selectorStylesDisabled = {
-  inputAndroid: {
-    ...selectorStyles.inputAndroid,
-    backgroundColor: globalColors.lightGray,
-  },
-  placeholder: {
-    color: 'transparent',
-  },
-};
-
 export default DropdownPicker;
