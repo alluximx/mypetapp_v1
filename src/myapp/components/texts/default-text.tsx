@@ -5,11 +5,23 @@ import {Text} from '@ui-kitten/components';
 import globalColors from '../../styles/colors';
 
 const DefaultText = (props): React.ReactElement => {
-  return (
-    <Text style={[styles.defaultText, props.style]} category="s1">
-      {props.children}
-    </Text>
-  );
+  if (props.wrapText) {
+    return (
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={[styles.defaultText, props.style]}
+        category="s1">
+        {props.children}
+      </Text>
+    );
+  } else {
+    return (
+      <Text style={[styles.defaultText, props.style]} category="s1">
+        {props.children}
+      </Text>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

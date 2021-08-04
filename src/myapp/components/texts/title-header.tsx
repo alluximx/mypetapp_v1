@@ -6,11 +6,23 @@ import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
 
 const TitleHeader = (props): React.ReactElement => {
-  return (
-    <Text style={[styles.titleHeader, props.style]} category="h1">
-      {props.children}
-    </Text>
-  );
+  if (props.wrapText) {
+    return (
+      <Text
+        ellipsizeMode="tail"
+        numberOfLines={1}
+        style={[styles.titleHeader, props.style]}
+        category="h1">
+        {props.children}
+      </Text>
+    );
+  } else {
+    return (
+      <Text style={[styles.titleHeader, props.style]} category="h1">
+        {props.children}
+      </Text>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

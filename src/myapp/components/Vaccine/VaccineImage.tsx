@@ -1,0 +1,63 @@
+import React, {useEffect, useState} from 'react';
+import {Image, TouchableOpacity} from 'react-native';
+//Global Styles
+import globalColors from '../../styles/colors';
+//UI-kitten
+import {StyleService} from '@ui-kitten/components';
+//My components
+import CustomSpinner from '../../components/custom-spinner';
+
+import {NotificationIConGreen} from '../icons';
+//Hook
+import useGetVaccineImage from '../../hooks/vaccines/useGetVaccineImage';
+
+const VaccineImage = (props): React.ReactElement => {
+  const [vaccineImage, setVaccineImage] = useState([]);
+  const vaccinesImageQuery = useGetVaccineImage(props.id);
+
+  useEffect(() => {
+    if (vaccinesImageQuery.data) {
+      const data = vaccinesImageQuery.data.data.map((obj: any) => {
+        return {img: obj.file};
+      });
+      setVaccineImage(data);
+    }
+  }, [vaccinesImageQuery.data]);
+
+  return vaccinesImageQuery.isLoading ? (
+    <CustomSpinner />
+  ) : vaccineImage.length > 0 ? (
+    <Image style={styles.imgStyle} source={{uri: vaccineImage[0].img}} />
+  ) : (
+    <TouchableOpacity style={styles.NotificationIcon}>
+      <Image
+        style={styles.bellIcon}
+        source={require('../assets/IconVaccine.png')}
+      />
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleService.create({
+  bellIcon: {
+    top: 0,
+    marginLeft: 10,
+  },
+  imgStyle: {
+    width: 38,
+    height: 30,
+    marginRight: 10,
+    marginLeft: -5,
+  },
+  NotificationIcon: {
+    Width: 30,
+    Height: 30,
+    borderRadius: 10,
+    backgroundColor: globalColors.white,
+    marginTop: -5,
+    marginLeft: -15,
+    marginRight: 6,
+  },
+});
+
+export default VaccineImage;
