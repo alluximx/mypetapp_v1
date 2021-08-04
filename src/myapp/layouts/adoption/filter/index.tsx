@@ -16,7 +16,7 @@ import CustomButton from '../../../components/buttons/custom-button';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 
-export default ({navigation}): React.ReactElement => {
+export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
   const [status, setStatus] = useState(true);
   const [statusBtn, setStatusBtn] = useState(true);
@@ -36,16 +36,20 @@ export default ({navigation}): React.ReactElement => {
   }, [dataStates.data, dataStates.isFetched]);
   const [form, setForm] = useState({
     state: '',
+    stateName: '',
     town: '',
+    townName: '',
   });
-  const changeMunicipality = (valor) => {
+  const changeMunicipality = (valor, name) => {
     valor == '' ? setStatusBtn(true) : setStatusBtn(false);
     valor == ''
-      ? setForm({...form, town: ''})
-      : setForm({...form, town: valor});
+      ? setForm({...form, townName: '', town: ''})
+      : setForm({...form, townName: name, town: valor});
   };
   const onFind = () => {
-    console.log(form);
+    navigation.navigate('AdoptionResult', {
+      filter: form,
+    });
   };
   return (
     <DefaultLayout
@@ -68,6 +72,15 @@ export default ({navigation}): React.ReactElement => {
           setCurrentValue={(stateId) => {
             setForm({...form, state: stateId});
             stateId != '' ? setStatus(false) : setStatus(true);
+            stateId != '' &&
+              stateList.map((stateItem) => {
+                stateItem.value == stateId &&
+                  setForm({
+                    ...form,
+                    stateName: stateItem.label,
+                    state: stateId,
+                  });
+              });
           }}
         />
         <MunicipalityDrop

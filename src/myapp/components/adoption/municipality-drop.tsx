@@ -27,7 +27,11 @@ const MunicipalityDrop = (props): React.ReactElement => {
       placeholder="Municipio/Delegación"
       setCurrentValue={(towId) => {
         setTown(towId);
-        props.change(towId);
+        let aux = '';
+        townList.map((item) => {
+          item.value == towId && (aux = item.label);
+        });
+        props.change(towId, aux);
       }}
       disabled={props.status}
     />
