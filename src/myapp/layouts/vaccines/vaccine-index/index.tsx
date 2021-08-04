@@ -4,6 +4,7 @@ import {Image, Dimensions} from 'react-native';
 import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
+import CustomSpinner from '../../../components/custom-spinner';
 //Global Styles
 import globalColors from '../../../styles/colors';
 //UI Kitten
@@ -90,7 +91,7 @@ export default ({navigation, route}): React.ReactElement => {
         is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
       vaccineDates: service.item.vaccines,
     };
-    return <VaccineCard data={auxData} />;
+    return <VaccineCard navigation={navigation} data={auxData} />;
   };
 
   useLayoutEffect(() => {
@@ -109,7 +110,9 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
-  return vaccines.length > 0 ? (
+  return vaccinesQuery.isLoading ? (
+    <CustomSpinner />
+  ) : vaccines.length > 0 ? (
     <DefaultLayout>
       <Text style={styles.titleh1}>Vacunas</Text>
       <List

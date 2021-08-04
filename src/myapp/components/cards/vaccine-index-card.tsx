@@ -1,10 +1,15 @@
 import React, {useState} from 'react';
-import {Card, Text, StyleService, List} from '@ui-kitten/components';
+import {Card, StyleService, List} from '@ui-kitten/components';
 import {View, TouchableOpacity, Image} from 'react-native';
+import moment from 'moment';
 //Global Styles
 import globalColors from '../../styles/colors';
 //My Components
-import {NotificationIConGreen, DropDownIcon, DropUpIcon} from '../icons';
+import {DropDownIcon, DropUpIcon} from '../icons';
+import AnchorText from '../texts/anchor-text';
+import DefaultText from '../../components/texts/default-text';
+import TitleHeader from '../../components/texts/title-header';
+import VaccineImage from '../Vaccine/VaccineImage';
 
 const VaccineCard = (props): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,14 +34,26 @@ const VaccineCard = (props): React.ReactElement => {
     return day + ` ` + complement + ` antes`;
   };
 
+  const formattedDate = (date) => moment(date).format('DD/MM/YYYY');
+
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.vaccinesIndividual}>
         <View style={styles.left}>
-          <NotificationIConGreen style={styles.bellIcon} />
-          <Text>{item.date}</Text>
+          <VaccineImage id={item.id} />
+          <DefaultText style={styles.text}>
+            {formattedDate(item.date)}
+          </DefaultText>
         </View>
-        <Text style={styles.edit}>Editar</Text>
+        <AnchorText
+          onPress={() => {
+            props.navigation.navigate('EditVaccine', {
+              vaccineId: props.data.id,
+            });
+          }}
+          style={styles.edit}>
+          Editar
+        </AnchorText>
       </View>
     );
   };
@@ -44,15 +61,15 @@ const VaccineCard = (props): React.ReactElement => {
   return (
     <Card style={styles.container}>
       <View style={styles.headerTitle}>
-        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.title}>
+        <TitleHeader wrapText={true} style={styles.title}>
           {props.data.name}
-        </Text>
+        </TitleHeader>
         <View style={styles.right}>
-          <Text ellipsizeMode="tail" numberOfLines={1} style={styles.text}>
+          <DefaultText wrapText={true} style={styles.text}>
             {props.data.notification
               ? reminderEstablish(props.data.notification)
               : ''}
-          </Text>
+          </DefaultText>
           <TouchableOpacity style={styles.NotificationIcon}>
             <Image
               style={styles.ImageIcon}
@@ -62,16 +79,22 @@ const VaccineCard = (props): React.ReactElement => {
         </View>
       </View>
       {props.data.validity === 'Unica' ? (
-        <Text style={styles.text}>{props.data.validity}</Text>
+        <DefaultText style={styles.text}>{props.data.validity}</DefaultText>
       ) : (
-        <Text style={styles.text}>Vigencia: {props.data.validity}</Text>
+        <DefaultText style={styles.text}>
+          Vigencia: {formattedDate(props.data.validity)}
+        </DefaultText>
       )}
 
       <View style={styles.headerTop}>
         {props.data.status == 'Activa' ? (
-          <Text style={styles.estausGreen}>{props.data.status}</Text>
+          <DefaultText style={styles.estausGreen}>
+            {props.data.status}
+          </DefaultText>
         ) : (
-          <Text style={styles.estausRed}>{props.data.status}</Text>
+          <DefaultText style={styles.estausRed}>
+            {props.data.status}
+          </DefaultText>
         )}
         <TouchableOpacity onPress={handleIConPress}>
           {!isOpen ? (
@@ -101,10 +124,9 @@ const styles = StyleService.create({
   container: {
     marginTop: 20,
     borderRadius: 18,
-    //width: 400,
   },
   vaccinesContainer: {
-    marginTop: 25,
+    marginTop: 20,
   },
   headerTop: {
     flexDirection: 'row',
@@ -114,7 +136,6 @@ const styles = StyleService.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: 5,
-    //minWidth: 300,
   },
   vaccinesIndividual: {
     flexDirection: 'row',
@@ -122,14 +143,14 @@ const styles = StyleService.create({
     paddingBottom: 15,
   },
   title: {
-    color: globalColors.black,
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold',
-    marginTop: 4,
-    //maxWidth: 100,
+    marginBottom: 0,
+    marginTop: 8,
+    flexBasis: 'auto',
+    flexGrow: 0,
+    flexShrink: 1,
   },
   text: {
-    color: globalColors.black,
     fontSize: 14,
   },
   estausGreen: {
@@ -145,9 +166,11 @@ const styles = StyleService.create({
     fontSize: 14,
   },
   right: {
-    //maxWidth: 90,
+    flexBasis: 'auto',
+    flexGrow: 1,
+    flexShrink: 0,
     flexDirection: 'row',
-    alignContent: 'flex-end',
+    justifyContent: 'flex-end',
     marginTop: 7,
     marginRight: -5,
   },
@@ -173,7 +196,7 @@ const styles = StyleService.create({
     borderRadius: 50,
     backgroundColor: globalColors.greenSecondary,
     alignContent: 'flex-end',
-    marginTop: -5,
+    marginTop: -1,
     marginLeft: 5,
   },
   ImageIcon: {
@@ -185,9 +208,6 @@ const styles = StyleService.create({
   },
   listContainer: {
     backgroundColor: 'transparent',
-  },
-  bellIcon: {
-    top: 0,
   },
 });
 
