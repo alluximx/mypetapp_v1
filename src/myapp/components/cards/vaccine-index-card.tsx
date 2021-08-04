@@ -124,7 +124,6 @@ const styles = StyleService.create({
   container: {
     marginTop: 20,
     borderRadius: 18,
-    //width: 240,
   },
   vaccinesContainer: {
     marginTop: 20,
