@@ -5,10 +5,12 @@ import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
 import CustomSpinner from '../../../components/custom-spinner';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
 //Global Styles
 import globalColors from '../../../styles/colors';
 //UI Kitten
-import {Layout, Text, StyleService, List} from '@ui-kitten/components';
+import {Layout, StyleService, List} from '@ui-kitten/components';
 // Hook.
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
@@ -91,7 +93,9 @@ export default ({navigation, route}): React.ReactElement => {
         is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
       vaccineDates: service.item.vaccines,
     };
-    return <VaccineCard navigation={navigation} data={auxData} />;
+    return (
+      <VaccineCard navigation={navigation} vaccine={true} data={auxData} />
+    );
   };
 
   useLayoutEffect(() => {
@@ -114,7 +118,7 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : vaccines.length > 0 ? (
     <DefaultLayout>
-      <Text style={styles.titleh1}>Vacunas</Text>
+      <TitleHeader children="Vacunas" />
       <List
         style={styles.servicesContainer}
         data={vaccines}
@@ -132,13 +136,15 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.dogImage}
           source={require('../assets/pet-vaccine.png')}
         />
-        <Text style={styles.h1}>Vacunas</Text>
-        <Text style={styles.textLabel} category="label">
-          Aún no has agregado vacunas para tu
-        </Text>
-        <Text style={styles.textLabel} category="label">
-          mascota.
-        </Text>
+        <TitleHeader children="Vacunas" style={styles.center} />
+        <DefaultText
+          children="Aún no has agregado vacunas para tu"
+          style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
+        />
+        <DefaultText
+          children="mascota."
+          style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
+        />
       </Layout>
     </DefaultLayout>
   );
@@ -163,17 +169,7 @@ const styles = StyleService.create({
     maxHeight: 390,
     marginVertical: 5,
   },
-  textLabel: {
-    fontSize: 16,
-    fontFamily: 'Montserrat-Bold',
-    alignSelf: 'center',
-    lineHeight: 24,
-    color: '#707070',
-  },
-  h1: {
-    color: globalColors.black,
-    fontSize: 20,
-    fontFamily: 'Montserrat-Bold',
+  center: {
     alignSelf: 'center',
   },
   titleh1: {
