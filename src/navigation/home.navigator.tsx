@@ -31,6 +31,8 @@ import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 //Vaccines
 import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
+//Deworming
+import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
 //Breed
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
@@ -98,6 +100,11 @@ const Screens = ({navigation, route, style}) => {
         <HomeStack.Screen name="NewVisitMedical" component={newVisitScreen} />
         {/* Services Vaccines */}
         <HomeStack.Screen name="VaccinesIndex" component={VaccineIndexScreen} />
+        {/* Services Deworming */}
+        <HomeStack.Screen
+          name="DewormingHistory"
+          component={DewormingHistoryScreen}
+        />
         {/* Breed */}
         <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
         <HomeStack.Screen

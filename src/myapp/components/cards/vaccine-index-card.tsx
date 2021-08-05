@@ -34,20 +34,22 @@ const VaccineCard = (props): React.ReactElement => {
     return day + ` ` + complement + ` antes`;
   };
 
+  const editDestination = props.vaccine ? 'EditVaccine' : 'EditDeworming';
+
   const formattedDate = (date) => moment(date).format('DD/MM/YYYY');
 
   const renderItem = ({item, index}) => {
     return (
       <View style={styles.vaccinesIndividual}>
         <View style={styles.left}>
-          <VaccineImage id={item.id} />
+          {props.vaccine && <VaccineImage id={item.id} />}
           <DefaultText style={styles.text}>
             {formattedDate(item.date)}
           </DefaultText>
         </View>
         <AnchorText
           onPress={() => {
-            props.navigation.navigate('EditVaccine', {
+            props.navigation.navigate(editDestination, {
               vaccineId: props.data.id,
             });
           }}
