@@ -1,13 +1,18 @@
 import {useMutation, useQueryClient} from 'react-query';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/app-services';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const putPetImage = (data) => {
   const newData = [
     {name: 'pet_image', data: data.pet_image},
-    {name: 'file', filename: 'pet-image.png', data: data.file.base64},
+    {
+      name: 'file',
+      filename: data.file.fileName,
+      type: data.file.type,
+      data: RNFetchBlob.wrap(data.file.uri),
+    },
   ];
-  console.log('api/v1/pets_images/' + data.id);
   return api.put(`api/v1/pets_images/${data.id}/`, newData, true, true);
 };
 

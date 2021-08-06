@@ -1,10 +1,16 @@
 import {useMutation} from 'react-query';
+import RNFetchBlob from 'rn-fetch-blob';
 import api from '../../services/app-services';
 
 const postPetImage = (data) => {
   const newData = [
     {name: 'pet_image', data: data.pet_image},
-    {name: 'file', filename: 'pet-image.png', data: data.file.base64},
+    {
+      name: 'file',
+      filename: data.file.fileName,
+      type: data.file.type,
+      data: RNFetchBlob.wrap(data.file.uri),
+    },
   ];
   return api.post('api/v1/pets_images/', newData, true, true);
 };
