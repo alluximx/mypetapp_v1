@@ -9,7 +9,8 @@ import {
 const options: CameraOptions = {
   mediaType: 'photo',
   maxWidth: 500,
-  maxHeight: 900,
+  maxHeight: 500,
+  quality: 0.5,
 };
 
 const useLaunchCamera = (setImage: (image: ImageSourcePropType) => void) => {
