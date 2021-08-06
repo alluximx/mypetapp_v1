@@ -15,17 +15,17 @@ import TitleHeader from '../../../components/texts/title-header';
 const servicesList = [
   {
     serviceName: 'Visitas',
-    icon: require('../../../assets/images/menu/vets.png'),
+    icon: require('../../../assets/images/menu/visits-detail.png'),
     screen: 'ServicesDoc',
   },
   {
     serviceName: 'Vacunas',
-    icon: require('../../../assets/images/menu/pet-stylists.png'),
+    icon: require('../../../assets/images/menu/vaccines.png'),
     screen: 'VaccinesIndex',
   },
   {
     serviceName: 'Desparaci...',
-    icon: require('../../../assets/images/menu/products.png'),
+    icon: require('../../../assets/images/menu/deworming.png'),
     screen: 'DewormingHistory',
   },
 ];
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   serviceIcon: {
-    height: 55,
-    width: 55,
+    height: 40,
+    width: 40,
   },
   serviceNameText: {
     color: globalColors.black,
