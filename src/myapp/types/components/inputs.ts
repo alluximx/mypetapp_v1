@@ -7,12 +7,22 @@ export interface DatasGeneric {
   images?: string[];
 }
 
-export interface ReminderInputProps {
-  isActive: boolean;
-  setIsActive: (isActive: boolean) => void;
-  setValue: (key: string) => void;
+export interface DatePickerProps {
+  currentValue: string;
+  disabled?: boolean;
+  maxDate?: Date;
+  minDate?: Date;
+  onSelect: (value: string) => void;
+  placeholder: string;
+}
+
+export interface DropdownPickerProps {
+  currentValue: string;
+  data: any[];
+  placeholder?: string;
+  setCurrentValue: (key: string) => void;
   style?: {};
-  value: string;
+  disabled?: boolean;
 }
 
 export interface Option {
@@ -21,12 +31,20 @@ export interface Option {
 }
 
 export interface OptionSelectProps {
-  currentValue: string;
+  currentValue: string | number;
   data: any[];
   horizontal?: boolean;
   optionStyle?: {};
-  setCurrentValue: (key: string) => void;
+  setCurrentValue: (key: string | number) => void;
   style?: {};
+}
+
+export interface ReminderInputProps {
+  isActive: boolean;
+  setIsActive: (isActive: boolean) => void;
+  setValue: (key: number) => void;
+  style?: {};
+  value: number;
 }
 
 export interface UserInputProps {
@@ -36,12 +54,4 @@ export interface UserInputProps {
   onChangeText: (value: string) => void;
   placeholder: string;
   value: string;
-}
-
-export interface DatePickerProps {
-  currentValue: string;
-  onSelect: (value: string) => void;
-  placeholder: string;
-  minDate?: Date;
-  maxDate?: Date;
 }

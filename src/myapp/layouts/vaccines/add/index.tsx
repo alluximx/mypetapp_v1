@@ -26,15 +26,20 @@ export default ({navigation, route}): React.ReactElement => {
     reminder: null,
   });
   const [isReminderActive, setIsReminderActive] = useState(false);
-  const [reminderKey, setReminderKey] = useState('1');
+  const [reminderKey, setReminderKey] = useState(1);
   const [etiquetteImage, setEtiquetteImage] = useState(null);
+  const [isUnique, setIsUnique] = useState(true);
 
   const vaccinesQuery = useGetVaccines();
   const saveVaccineQuery = useSaveVaccine();
   const vaccinesData = vaccinesQuery.isLoading
     ? []
     : vaccinesQuery.data?.data.map((vaccine) => {
-        return {value: vaccine.id, label: vaccine.vaccine_name};
+        return {
+          value: vaccine.id,
+          label: vaccine.vaccine_name,
+          isUnique: vaccine.is_unique,
+        };
       });
 
   const isDisabled =
@@ -43,7 +48,7 @@ export default ({navigation, route}): React.ReactElement => {
     form.next_vaccine_date === '' ||
     isLoading;
 
-  const onSelectReminder = (reminderKey: string) => {
+  const onSelectReminder = (reminderKey: number) => {
     setReminderKey(reminderKey);
 
     if (form.next_vaccine_date !== '') {
@@ -59,6 +64,8 @@ export default ({navigation, route}): React.ReactElement => {
     }
   };
 
+  const onSavePress = () => saveVaccineQuery.mutate({...form, etiquetteImage});
+
   useEffect(() => {
     if (!isReminderActive) {
       setForm({...form, reminder: null});
@@ -67,7 +74,13 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [isReminderActive, form.next_vaccine_date]);
 
-  const onSavePress = () => saveVaccineQuery.mutate(form);
+  useEffect(() => {
+    const isUnique = vaccinesData.find(
+      (vaccine) => vaccine.value === form.vaccine_registered,
+    )?.isUnique;
+
+    setIsUnique(isUnique ?? false);
+  }, [form.vaccine_registered]);
 
   useSetNavigationHeaders({
     isDisabled,
@@ -75,7 +88,7 @@ export default ({navigation, route}): React.ReactElement => {
     navigation,
     setIsLoading,
     onRightPress: onSavePress,
-    data: form,
+    data: {...form, etiquetteImage},
   });
 
   return isLoading ? (
@@ -93,27 +106,34 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <DatepickerInput
         currentValue={form.vaccine_date}
+        minDate={new Date()}
         onSelect={(vaccine_date) => setForm({...form, vaccine_date})}
         placeholder="Fecha de aplicación"
-        minDate={new Date()}
       />
-      <DatepickerInput
-        currentValue={form.next_vaccine_date}
-        onSelect={(next_vaccine_date) => setForm({...form, next_vaccine_date})}
-        placeholder="Fecha de expiración"
-        minDate={new Date(form.vaccine_date)}
-      />
+      {!isUnique && (
+        <DatepickerInput
+          currentValue={form.next_vaccine_date}
+          disabled={form.vaccine_date === '' ? true : false}
+          minDate={new Date(form.vaccine_date)}
+          onSelect={(next_vaccine_date) =>
+            setForm({...form, next_vaccine_date})
+          }
+          placeholder="Fecha de expiración"
+        />
+      )}
       <VisitsImgCard
         label={'Etiqueta'}
         image={etiquetteImage}
         setImage={setEtiquetteImage}
       />
-      <ReminderInput
-        isActive={isReminderActive}
-        setIsActive={setIsReminderActive}
-        setValue={onSelectReminder}
-        value={reminderKey}
-      />
+      {!isUnique && (
+        <ReminderInput
+          isActive={isReminderActive}
+          setIsActive={setIsReminderActive}
+          setValue={onSelectReminder}
+          value={reminderKey}
+        />
+      )}
     </DefaultLayout>
   );
 };

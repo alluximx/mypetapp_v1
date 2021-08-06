@@ -50,7 +50,7 @@ const VaccineCard = (props): React.ReactElement => {
         <AnchorText
           onPress={() => {
             props.navigation.navigate(editDestination, {
-              vaccineId: props.data.id,
+              vaccineId: item.id,
             });
           }}
           style={styles.edit}>
@@ -66,19 +66,19 @@ const VaccineCard = (props): React.ReactElement => {
         <TitleHeader wrapText={true} style={styles.title}>
           {props.data.name}
         </TitleHeader>
-        <View style={styles.right}>
-          <DefaultText wrapText={true} style={styles.text}>
-            {props.data.notification
-              ? reminderEstablish(props.data.notification)
-              : ''}
-          </DefaultText>
-          <TouchableOpacity style={styles.NotificationIcon}>
-            <Image
-              style={styles.ImageIcon}
-              source={require('../assets/IconNotification1.png')}
-            />
-          </TouchableOpacity>
-        </View>
+        {props.data.notification && (
+          <View style={styles.right}>
+            <DefaultText wrapText={true} style={styles.text}>
+              {reminderEstablish(props.data.notification)}
+            </DefaultText>
+            <TouchableOpacity style={styles.notificationIcon}>
+              <Image
+                style={styles.imageIcon}
+                source={require('../assets/IconNotification1.png')}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       {props.data.validity === 'Unica' ? (
         <DefaultText style={styles.text}>{props.data.validity}</DefaultText>
@@ -90,11 +90,11 @@ const VaccineCard = (props): React.ReactElement => {
 
       <View style={styles.headerTop}>
         {props.data.status == 'Activa' ? (
-          <DefaultText style={styles.estausGreen}>
+          <DefaultText style={styles.statusGreen}>
             {props.data.status}
           </DefaultText>
         ) : (
-          <DefaultText style={styles.estausRed}>
+          <DefaultText style={styles.statusRed}>
             {props.data.status}
           </DefaultText>
         )}
@@ -155,13 +155,13 @@ const styles = StyleService.create({
   text: {
     fontSize: 14,
   },
-  estausGreen: {
+  statusGreen: {
     color: globalColors.greenSecondary,
     fontFamily: 'Montserrat-Bold',
     marginTop: 4,
     fontSize: 14,
   },
-  estausRed: {
+  statusRed: {
     color: globalColors.red,
     fontFamily: 'Montserrat-Bold',
     marginTop: 4,
@@ -192,7 +192,7 @@ const styles = StyleService.create({
     fontFamily: 'Montserrat-Bold',
     alignContent: 'flex-end',
   },
-  NotificationIcon: {
+  notificationIcon: {
     minWidth: 30,
     minHeight: 30,
     borderRadius: 50,
@@ -201,7 +201,7 @@ const styles = StyleService.create({
     marginTop: -1,
     marginLeft: 5,
   },
-  ImageIcon: {
+  imageIcon: {
     alignContent: 'center',
     marginLeft: 5,
     marginTop: 5,

@@ -37,11 +37,12 @@ const ReminderInput = (props: ReminderInputProps): React.ReactElement => {
   );
 };
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    marginVertical: 16,
+  },
   cardContainer: {
     borderRadius: 8,
     height: 56,
-    marginVertical: 16,
   },
   rowContainer: {
     flexDirection: 'row',
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   toggleInput: {
     height: 26,
   },
-  option: {marginBottom: 16},
+  option: {marginTop: 16},
 });
 
 export default ReminderInput;

@@ -2,35 +2,45 @@ import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
 // Hooks.
-// import useSavePetImage from './useSavePetImage';
+import useSaveVaccineImage from './useSaveVaccineImage';
 
 const postVaccine = (data) => {
-  console.log('Form Data: ', data);
   return api.post('api/v1/vaccines-history/', data, true);
 };
 
 const useSaveVaccine = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  // const savePetImageQuery = useSavePetImage();
+  const saveVaccineImageQuery = useSaveVaccineImage();
 
   return useMutation((data: any) => postVaccine(data), {
     onSuccess: (response, variables) => {
-      // Save Pet image.
-      // savePetImageQuery.mutate(
-      //   {
-      //     pet_image: response.data.id,
-      //     file: variables.image,
-      //   },
-      //   {
-      //     // Only after the pet image has been created...
-      //     onSuccess: () => {
-      //       navigation.navigate('Home');
-      //       queryClient.invalidateQueries(['my-pets', variables.owner_user]);
-      //     },
-      //   },
-      // );
-      navigation.goBack();
+      if (variables.etiquetteImage) {
+        // Save vaccine image.
+        saveVaccineImageQuery.mutate(
+          {
+            vaccine: response.data.id,
+            file: variables.etiquetteImage,
+          },
+          {
+            // Only after the pet image has been created...
+            onSuccess: () => {
+              queryClient.invalidateQueries([
+                'use-vaccine-image',
+                response.data.id,
+              ]);
+              queryClient.invalidateQueries([
+                'pet-vaccines',
+                variables.user_pet,
+              ]);
+              navigation.goBack();
+            },
+          },
+        );
+      } else {
+        queryClient.invalidateQueries(['pet-vaccines', variables.user_pet]);
+        navigation.goBack();
+      }
     },
   });
 };

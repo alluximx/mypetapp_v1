@@ -1,47 +1,21 @@
-import React, {useState, useCallback} from 'react';
-import {
-  launchCamera,
-  CameraOptions,
-  ImagePickerResponse,
-} from 'react-native-image-picker';
-import {StyleSheet, View, Image, ImageSourcePropType} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, Image} from 'react-native';
 // Global styles.
 import globalColors from '../../styles/colors';
+// Hooks.
+import useLaunchCamera from '../../hooks/images/useLaunchCamera';
 // My Components.
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
-
-const options: CameraOptions = {
-  mediaType: 'photo',
-  includeBase64: true,
-};
-
-interface ImageInputCardProps {
-  image: ImageSourcePropType;
-  label: string;
-  setImage: (image: ImageSourcePropType) => void;
-}
+// Types.
+import {ImageInputCardProps} from '../../types/components/cards';
 
 const ImageInputCard = ({
   label,
   image,
   setImage,
 }: ImageInputCardProps): React.ReactElement => {
-  const onPress = useCallback(() => {
-    launchCamera(options, (response: ImagePickerResponse) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('Error code: ', response.errorCode);
-      } else {
-        setImage(response.assets[0]);
-      }
-    });
-  }, []);
-
-  const onDelete = () => {
-    setImage(null);
-  };
+  const [onPress, onDelete] = useLaunchCamera(setImage);
 
   return (
     <View style={styles.card}>

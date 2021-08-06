@@ -25,7 +25,7 @@ export default ({navigation, route}): React.ReactElement => {
     reminder: null,
   });
   const [isReminderActive, setIsReminderActive] = useState(false);
-  const [reminderKey, setReminderKey] = useState('1');
+  const [reminderKey, setReminderKey] = useState(1);
 
   const vaccinesQuery = useGetVaccines();
   const vaccinesData = vaccinesQuery.isLoading
@@ -40,7 +40,7 @@ export default ({navigation, route}): React.ReactElement => {
     form.next_vaccine_date === '' ||
     isLoading;
 
-  const onSelectReminder = (reminderKey: string) => {
+  const onSelectReminder = (reminderKey: number) => {
     setReminderKey(reminderKey);
 
     if (form.next_vaccine_date !== '') {

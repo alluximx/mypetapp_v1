@@ -1,14 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Image, TouchableOpacity} from 'react-native';
-//Global Styles
+// Global Styles
 import globalColors from '../../styles/colors';
-//UI-kitten
+// UI-kitten
 import {StyleService} from '@ui-kitten/components';
-//My components
-import CustomSpinner from '../../components/custom-spinner';
-
-import {NotificationIConGreen} from '../icons';
-//Hook
+// Hook
 import useGetVaccineImage from '../../hooks/vaccines/useGetVaccineImage';
 
 const VaccineImage = (props): React.ReactElement => {
@@ -24,12 +20,10 @@ const VaccineImage = (props): React.ReactElement => {
     }
   }, [vaccinesImageQuery.data]);
 
-  return vaccinesImageQuery.isLoading ? (
-    <CustomSpinner />
-  ) : vaccineImage.length > 0 ? (
+  return vaccinesImageQuery.isLoading ? null : vaccineImage.length > 0 ? (
     <Image style={styles.imgStyle} source={{uri: vaccineImage[0].img}} />
   ) : (
-    <TouchableOpacity style={styles.NotificationIcon}>
+    <TouchableOpacity style={styles.notificationIcon}>
       <Image
         style={styles.bellIcon}
         source={require('../assets/IconVaccine.png')}
@@ -49,7 +43,7 @@ const styles = StyleService.create({
     marginRight: 10,
     marginLeft: -5,
   },
-  NotificationIcon: {
+  notificationIcon: {
     Width: 30,
     Height: 30,
     borderRadius: 10,

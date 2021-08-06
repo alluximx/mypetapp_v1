@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import api from '../../services/app-services';
 
 const deleteVaccine = (data) => {
-  return api.delete(`api/v1/vaccines-history/`, data);
+  return api.delete(`api/v1/vaccines-history/`, data.vaccineId);
 };
 
 const useDeleteVaccine = () => {
@@ -13,7 +13,7 @@ const useDeleteVaccine = () => {
 
   return useMutation((data: any) => deleteVaccine(data), {
     onSuccess: (response, variables) => {
-      // queryClient.invalidateQueries(['my-pets', variables.owner_user]);
+      queryClient.invalidateQueries(['pet-vaccines', variables.petId]);
       navigation.goBack();
     },
   });

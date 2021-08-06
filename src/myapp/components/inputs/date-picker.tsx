@@ -1,7 +1,9 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, StyleSheet, View, Text} from 'react-native';
-import {Datepicker, NativeDateService} from '@ui-kitten/components';
+import {Datepicker} from '@ui-kitten/components';
 import moment from 'moment';
+// Constants.
+import {localeDateService} from '../../constants';
 // My Components.
 import {DropDownIcon} from '../icons';
 // Global Styles.
@@ -9,55 +11,6 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 //Types
 import {DatePickerProps} from '../../types/components/inputs';
-
-const i18n = {
-  dayNames: {
-    short: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-    long: [
-      'Domingo',
-      'Lunes',
-      'Martes',
-      'Miercoles',
-      'Jueves',
-      'Viernes',
-      'Sabado',
-    ],
-  },
-  monthNames: {
-    short: [
-      'Ene',
-      'Feb',
-      'Mar',
-      'Abr',
-      'May',
-      'Jun',
-      'Jul',
-      'Ago',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dic',
-    ],
-    long: [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
-    ],
-  },
-};
-const localeDateService = new NativeDateService('es', {
-  i18n,
-  startDayOfWeek: 1,
-});
 
 const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
 
@@ -98,26 +51,28 @@ const DatepickerInput = (props: DatePickerProps) => {
         {props.placeholder}
       </Animated.Text>
       <Datepicker
+        accessoryRight={CalendarIcon}
         controlStyle={styles.container}
-        size="large"
+        date={props.currentValue !== '' ? new Date(props.currentValue) : null}
+        dateService={localeDateService}
+        disabled={props.disabled}
+        max={maxDate}
+        min={minDate}
         placeholder={(props) => (
           <Text {...props} style={[props.style, styles.placeholder]}>
             props.placeholder
           </Text>
         )}
-        dateService={localeDateService}
-        date={props.currentValue !== '' ? new Date(props.currentValue) : null}
         onSelect={(date) => {
           const formattedDate = moment(date).format('YYYY-MM-DD');
           props.onSelect(formattedDate);
         }}
-        accessoryRight={CalendarIcon}
-        min={minDate}
-        max={maxDate}
+        size="large"
       />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     height: 56,
@@ -141,4 +96,5 @@ const styles = StyleSheet.create({
     color: 'transparent',
   },
 });
+
 export default DatepickerInput;

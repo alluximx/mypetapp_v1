@@ -2,7 +2,7 @@ import {useMutation} from 'react-query';
 import RNFetchBlob from 'rn-fetch-blob';
 import api from '../../services/app-services';
 
-const postVaccineImage = (data) => {
+const putVaccineImage = (data) => {
   const newData = [
     {name: 'vaccine', data: data.vaccine},
     {
@@ -12,10 +12,15 @@ const postVaccineImage = (data) => {
       data: RNFetchBlob.wrap(data.file.uri),
     },
   ];
-  return api.post('api/v1/vaccine-images/', newData, true, true);
+  return api.put(
+    `api/v1/vaccine-images/${data.vaccine_image_id}`,
+    newData,
+    true,
+    true,
+  );
 };
 
-const useSaveVaccineImage = () =>
-  useMutation((data: any) => postVaccineImage(data));
+const useUpdateVaccineImage = () =>
+  useMutation((data: any) => putVaccineImage(data));
 
-export default useSaveVaccineImage;
+export default useUpdateVaccineImage;
