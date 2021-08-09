@@ -12,14 +12,16 @@ interface DefaultLayoutProps {
   children: React.ReactFragment;
   statusBarBackgroundColor?: string;
   statusBarStyle?: StatusBarStyle;
-  statusBarTranslucent?: boolean
+  statusBarTranslucent?: boolean;
 }
 
 const DefaultLayout = (props: DefaultLayoutProps): React.ReactElement => {
   const barStyle = props.statusBarStyle ?? 'dark-content';
   const backgroundColor =
     props.statusBarBackgroundColor ?? globalColors.backgroundDefault;
-    const translucent =  props.statusBarTranslucent? props.statusBarTranslucent :  false;
+  const translucent = props.statusBarTranslucent
+    ? props.statusBarTranslucent
+    : false;
   return (
     <Layout style={[style.defaultLayout, props.style]} level="1">
       <FocusAwareStatusBar
