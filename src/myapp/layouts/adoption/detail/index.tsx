@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Image,
@@ -7,6 +7,7 @@ import {
   Text,
   View,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
@@ -16,10 +17,45 @@ import TitleHeader from '../../../components/texts/title-header';
 import {Icon, Layout, List, Button, StyleService} from '@ui-kitten/components';
 import DefaultText from '../../../components/texts/default-text';
 import CustomButton from '../../../components/buttons/custom-button';
+import Carousel from 'react-native-anchor-carousel';
+import SimplePaginationDot from './SimplePaginationDot';
+import {FlatList} from 'react-native-gesture-handler';
+
+const data = [
+  {
+    uri: 'https://i.imgur.com/GImvG4q.jpg',
+    title: 'Lorem ipsum dolor sit amet',
+    content:
+      'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  },
+  {
+    uri: 'https://i.imgur.com/Pz2WYAc.jpg',
+    title: 'Lorem ipsum ',
+    content: 'Neque porro quisquam est qui dolorem ipsum ',
+  },
+  {
+    uri: 'https://i.imgur.com/IGRuEAa.jpg',
+    title: 'Lorem ipsum dolor',
+    content:
+      'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...',
+  },
+  {
+    uri: 'https://i.imgur.com/fRGHItn.jpg',
+    title: 'Lorem ipsum dolor',
+    content: 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet',
+  },
+  {
+    uri: 'https://i.imgur.com/WmenvXr.jpg',
+    title: 'Lorem ipsum ',
+    content: 'Neque porro quisquam est qui dolorem ipsum quia dolor ',
+  },
+];
+const INITIAL_INDEX = 0;
 export default ({navigation, route}): React.ReactElement => {
   let isImg = false;
   let img = '';
   let dataImg = [];
+
   route.params.adoption.images.forEach((element) => {
     dataImg.push({
       uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element[0],
@@ -31,9 +67,33 @@ export default ({navigation, route}): React.ReactElement => {
       img = 'https://mpa-stage.s3.amazonaws.com/media/' + element[0];
     }
   });
+  const carouselRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
+
+  function handleCarouselScrollEnd(item, index) {
+    setCurrentIndex(index);
+  }
+
+  function renderItem({item, index}) {
+    const {uri, title, content} = item;
+    return (
+      <TouchableOpacity
+        activeOpacity={1}
+        style={styles.item}
+        onPress={() => {
+          carouselRef.current.scrollToIndex(index);
+        }}>
+        <ImageBackground source={{uri: uri}} style={styles.imageBackground}>
+          <View style={styles.rightTextContainer}>
+            <Text style={styles.rightText}>{route.params.adoption.name}</Text>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  }
   return (
     <>
-      {isImg ? (
+      {/* {isImg ? (
         <ImageBackground
           source={{uri: img}}
           resizeMode="cover"
@@ -45,14 +105,61 @@ export default ({navigation, route}): React.ReactElement => {
           resizeMode="cover"
           style={styles.petImageContainer}
         />
-      )}
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'flex-start',
-          position: 'relative',
-          marginTop: 88,
-        }}></View>
+      )} */}
+      {/* <View style={styles.container2}>
+        <Carousel
+          style={styles.carousel}
+          data={dataImg}
+          renderItem={renderItem}
+          itemWidth={0.7 * width}
+          inActiveOpacity={0.3}
+          containerWidth={width}
+          onScrollEnd={handleCarouselScrollEnd}
+          ref={carouselRef}
+        />
+        <SimplePaginationDot
+          currentIndex={currentIndex}
+          length={dataImg.length}
+        />
+      </View> */}
+      <View style={styles.container2}>
+        <FlatList
+          data={dataImg}
+          horizontal
+          pagingEnabled
+          ref={carouselRef}
+          onScroll={(e) => {
+            let offset = e.nativeEvent.contentOffset.x;
+            let index = parseInt(offset / 300); // your cell height
+            setCurrentIndex(index);
+          }}
+          renderItem={({item}) => {
+            const {uri} = item;
+            return (
+              <View>
+                <Image
+                  source={{uri: uri}}
+                  style={{
+                    width: width - 100,
+                    height: 250,
+                    resizeMode: 'cover',
+                    alignSelf: 'center',
+                    marginTop: 10,
+                    marginLeft: 30,
+                    marginRight: 30,
+                  }}
+                />
+              </View>
+            );
+          }}
+          keyExtractor={(_, item) => item.toString()}
+        />
+        <SimplePaginationDot
+          currentIndex={currentIndex}
+          length={dataImg.length}
+        />
+      </View>
+
       <View
         style={{
           borderRadius: 40,
@@ -144,7 +251,7 @@ export default ({navigation, route}): React.ReactElement => {
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    marginTop: height / 2 - 100,
+    marginTop: 35,
     paddingTop: 32,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
@@ -194,7 +301,51 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingTop: 32,
     position: 'absolute',
-    top: height / 2 - 135,
+    marginTop: 0,
     width: '100%',
+  },
+  container2: {
+    backgroundColor: 'transparent',
+    paddingVertical: 20,
+    marginLeft: 10,
+    marginRight: 20,
+  },
+  carousel: {
+    backgroundColor: 'transparent',
+    aspectRatio: 1.5,
+    flexGrow: 0,
+    marginBottom: 20,
+  },
+  item: {
+    flex: 1,
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  imageBackground: {
+    flex: 1,
+    width: 250,
+    backgroundColor: '#EBEBEB',
+  },
+  rightTextContainer: {
+    marginLeft: 'auto',
+    marginRight: -2,
+    backgroundColor: 'rgba(49, 49, 51,0.5)',
+    padding: 3,
+    marginTop: 3,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+  },
+  rightText: {color: 'white'},
+  lowerContainer: {
+    flex: 1,
+    margin: 10,
+  },
+  titleText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  contentText: {
+    marginTop: 10,
+    fontSize: 12,
   },
 });
