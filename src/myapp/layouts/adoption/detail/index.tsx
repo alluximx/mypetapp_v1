@@ -55,6 +55,7 @@ export default ({navigation, route}): React.ReactElement => {
   let isImg = false;
   let img = '';
   let dataImg = [];
+
   route.params.adoption.images.forEach((element) => {
     dataImg.push({
       uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element[0],
