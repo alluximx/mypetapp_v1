@@ -13,6 +13,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
   const {currentValue, data, placeholder, setCurrentValue} = props;
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const disableDrop = props.disabled ? true : false;
 
   useEffect(() => {
     Animated.timing(focusAnim, {
@@ -39,14 +40,20 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
             }),
             color: focusAnim.interpolate({
               inputRange: [0, 1],
-              outputRange: [globalColors.darkGray, globalColors.lightGray],
+              outputRange: !disableDrop
+                ? [globalColors.darkGray, globalColors.lightGray]
+                : [globalColors.darkGray, globalColors.darkGray],
             }),
           },
         ]}>
         {props.placeholder}
       </Animated.Text>
       <RNPickerSelect
-        Icon={() => <DropDownIcon />}
+        Icon={() => (
+          <DropDownIcon
+            style={disableDrop && {tintColor: globalColors.darkGray}}
+          />
+        )}
         items={data}
         onValueChange={setCurrentValue}
         pickerProps={{
@@ -60,7 +67,9 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
         }}
         style={
           !isDropdownOpen
-            ? selectorStyles
+            ? !disableDrop
+              ? selectorStyles
+              : selectorStylesDisebled
             : {
                 inputAndroid: {
                   ...selectorStyles.inputAndroid,
@@ -71,6 +80,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
         }
         useNativeAndroidPickerStyle={false}
         value={currentValue}
+        disabled={disableDrop}
       />
     </View>
   );
@@ -100,6 +110,15 @@ const selectorStyles = {
     height: 56,
     padding: 15,
     paddingBottom: -20,
+  },
+  placeholder: {
+    color: 'transparent',
+  },
+};
+const selectorStylesDisebled = {
+  inputAndroid: {
+    ...selectorStyles.inputAndroid,
+    backgroundColor: globalColors.lightGray,
   },
   placeholder: {
     color: 'transparent',
