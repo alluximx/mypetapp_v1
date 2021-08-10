@@ -29,3 +29,11 @@ export interface Pet {
   };
   size: Size;
 }
+
+export interface VisitImage {
+  created: string;
+  file: string;
+  id: string;
+  is_prescription: boolean;
+  visit: string;
+}

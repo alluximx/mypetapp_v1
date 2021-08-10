@@ -12,6 +12,7 @@ import {ImageInputCardProps} from '../../types/components/cards';
 
 const ImageInputCard = ({
   label,
+  filledLabel,
   image,
   setImage,
 }: ImageInputCardProps): React.ReactElement => {
@@ -22,7 +23,7 @@ const ImageInputCard = ({
       <View style={styles.imageAndLabelContainer}>
         {image && <Image style={styles.image} source={image} />}
         <DefaultText style={[styles.label, image && {paddingLeft: 8}]}>
-          {!image && 'Fotografía de'} {label}
+          {!image ? label ?? `Fotografía de ${label}` : filledLabel}
         </DefaultText>
       </View>
       <AnchorText

@@ -1,7 +1,8 @@
-import {ImageSourcePropType} from 'react-native';
+import {ImageURISource} from 'react-native';
 
 export interface ImageInputCardProps {
-  image: ImageSourcePropType;
+  image: ImageURISource;
   label: string;
-  setImage: (image: ImageSourcePropType) => void;
+  filledLabel?: string;
+  setImage: (image: ImageURISource) => void;
 }

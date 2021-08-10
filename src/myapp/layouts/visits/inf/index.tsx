@@ -48,7 +48,7 @@ export default ({navigation, route}): React.ReactElement => {
                 date: '',
                 images: [],
               },
-              isGuardar: true,
+              isEdit: false,
             })
           }
         />

@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {Icon, Text} from '@ui-kitten/components';
-import {ImageSourcePropType, ScrollView, StyleSheet, View} from 'react-native';
+import {Text} from '@ui-kitten/components';
+import {ImageURISource, ScrollView, StyleSheet, View} from 'react-native';
 // Global Styles.
 import globalColors from '../../../../styles/colors';
 import globalVars from '../../../../styles/vars';
 // Hooks.
-import useAddVisitMedical from '../../../../hooks/visits/useAddVisitMedical';
-import useDeleteVisit from '../../../../hooks/visits/useDeleteVisit';
-import useUpdateVisitMedical from '../../../../hooks/visits/useUpdateVisitMedical';
+import useAddMedicalVisit from '../../../../hooks/visits/useAddVisitMedical';
+import useDeleteMedicalVisit from '../../../../hooks/visits/useDeleteVisit';
+import useSetNavigationHeaders from '../../../../hooks/navigation/useSetNavigationHeaders';
+import useUpdateMedicalVisit from '../../../../hooks/visits/useUpdateVisitMedical';
+// Models.
+import {VisitImage} from '../../../../types/models';
 // My Components
-import AnchorText from '../../../../components/texts/anchor-text';
 import CustomModal from '../../../../components/modals/custom-modal';
 import CustomSpinner from '../../../../components/custom-spinner';
 import DatepickerInput from '../../../../components/inputs/date-picker';
@@ -17,171 +19,160 @@ import DefaultLayout from '../../../../components/layouts/default-layout';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';
 import UserTextArea from '../../../../components/inputs/user-textAtea';
-import VisitsImgCard from '../../../../components/cards/image-input-card';
+import ImageInputCard from '../../../../components/cards/image-input-card';
 
 export default ({navigation, route}): React.ReactElement => {
   const {date, details, idVisit, images, title} = route.params.visit;
-  const [prescription, setPrescription] = useState<ImageSourcePropType>(null);
-  // const [additional1, setAdditional] = useState<ImageSourcePropType>(null);
-  // const [prescription, setPrescription] = useState<ImageSourcePropType>(null);
-  // const [prescription, setPrescription] = useState<ImageSourcePropType>(null);
 
-  let imgAdi = [];
+  const prescriptionImage = images.find(
+    (image: VisitImage) => image.is_prescription,
+  );
+  const [prescription, setPrescription] = useState<ImageURISource>(
+    prescriptionImage ? {uri: prescriptionImage.file} : null,
+  );
 
-  images.map((expense) => {
-    return !expense.is_prescription && imgAdi.push(expense);
+  // Order additional images.
+  const additionalImages = images.filter((image: VisitImage) => {
+    return !image.is_prescription;
   });
 
-  let imgRec = [];
+  const [additional1, setAdditional1] = useState<ImageURISource>(
+    additionalImages[0] ? {uri: additionalImages[0].file} : null,
+  );
+  const [additional2, setAdditional2] = useState<ImageURISource>(
+    additionalImages[1] ? {uri: additionalImages[1].file} : null,
+  );
+  const [additional3, setAdditional3] = useState<ImageURISource>(
+    additionalImages[2] ? {uri: additionalImages[2].file} : null,
+  );
 
-  images.map((expense) => {
-    expense.is_prescription && imgRec.push(expense);
-  });
-
-  const addVisitMedicalQuery = useAddVisitMedical();
-  const updateVisitMedicalQuery = useUpdateVisitMedical();
+  const addQuery = useAddMedicalVisit();
+  const updateQuery = useUpdateMedicalVisit();
+  const deleteQuery = useDeleteMedicalVisit();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [form, setForm] = useState(
-    route.params.isGuardar
-      ? {
-          user_pet: route.params.pet.id,
-          visit_date: date,
-          title: title,
-          details: details,
-        }
-      : {
-          id: idVisit,
-          user_pet: route.params.pet.id,
-          visit_date: date,
-          title: title,
-          details: details,
-        },
-  );
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [additional1, setAdditional1] = useState(null);
-  const [additional2, setAdditional2] = useState(null);
-  const [additional3, setAdditional3] = useState(null);
-  const [prescriptionEliminar, setPrescriptionEliminar] = useState([]);
-  const [deleteAdditional1, setDeleteAdditional1] = useState([]);
-  const [deleteAdditional2, setDeleteAdditional2] = useState([]);
-  const [deleteAdditional3, setDeleteAdditional3] = useState([]);
-  const [isLoad, setIsLoad] = useState(false);
-  const useDelete = useDeleteVisit();
-  // const prescription = {name: 'Fotografía receta', nameSeg: 'Receta'};
-  const additional = {name: 'Fotografía adicional', nameSeg: 'Adicional'};
-  const titleHeader = route.params.isGuardar
-    ? 'Nueva Visita'
-    : 'Editar Visita ';
-  const onSave = () => {
+  const [form, setForm] = useState({
+    id: idVisit,
+    user_pet: route.params.pet.id,
+    visit_date: date,
+    title: title,
+    details: details,
+  });
+
+  const formattedSubmission = () => {
     setIsLoading(true);
-    setIsLoad(true);
+    // Add images to form request.
     const newData = {
       ...form,
-      // prescriptionValue:
-      //   prescriptionValue != null ? prescriptionValue.assets[0] : [],
-      additional1: additional1 != null ? additional1.assets[0] : [],
-      additional2: additional2 != null ? additional2.assets[0] : [],
-      additional3: additional3 != null ? additional3.assets[0] : [],
+      prescription,
+      additional1,
+      additional2,
+      additional3,
+      imagesChanges,
     };
+    return newData;
+  };
 
-    addVisitMedicalQuery.mutate(newData);
+  const onSave = () => addQuery.mutate(formattedSubmission());
+  const onUpdate = () => updateQuery.mutate(formattedSubmission());
+  const onDeleteAccept = () => deleteQuery.mutate(idVisit);
+
+  const [imagesChanges, setImagesChanges] = useState({
+    prescriptionChange: {type: null, id: prescriptionImage?.id},
+    additional1Change: {type: null, id: additionalImages[0]?.id},
+    additional2Change: {type: null, id: additionalImages[1]?.id},
+    additional3Change: {type: null, id: additionalImages[2]?.id},
+  });
+
+  const checkIfChanged = (variable, original) => {
+    return variable?.uri !== original?.file ? true : false;
   };
-  const onUpdate = () => {
-    setIsLoading(true);
-    setIsLoad(true);
-    const newData = {
-      ...form,
-      // prescriptionValue:
-      //   prescriptionValue != null ? prescriptionValue.assets[0] : [],
-      additional1: additional1 != null ? additional1.assets[0] : [],
-      additional2: additional2 != null ? additional2.assets[0] : [],
-      additional3: additional3 != null ? additional3.assets[0] : [],
-      prescriptionEli: prescriptionEliminar,
-      eliAdditional1: deleteAdditional1,
-      eliAdditional2: deleteAdditional2,
-      eliAdditional3: deleteAdditional3,
-    };
-    updateVisitMedicalQuery.mutate(newData);
-  };
-  route.params.isGuardar
-    ? navigation.setOptions({
-        headerLeft: () => (
-          <Icon
-            style={{
-              tintColor: globalColors.greenSecondary,
-              height: 35,
-              width: 35,
-              paddingRight: 0,
-            }}
-            name="close"
-            onPress={() => navigation.goBack()}
-          />
-        ),
-        headerRight: () => (
-          <AnchorText
-            style={styles.headerRight}
-            isDisabled={isLoading}
-            onPress={onSave}>
-            Guardar
-          </AnchorText>
-        ),
-      })
-    : navigation.setOptions({
-        headerLeft: () => (
-          <Icon
-            style={{
-              tintColor: globalColors.greenSecondary,
-              height: 35,
-              width: 35,
-              paddingRight: 0,
-            }}
-            name="close"
-            onPress={() => navigation.goBack()}
-          />
-        ),
-        headerRight: () => (
-          <AnchorText
-            style={styles.headerRight}
-            isDisabled={isLoading}
-            onPress={onUpdate}>
-            Guardar
-          </AnchorText>
-        ),
-      });
-  useEffect(() => {
-    route.params.isGuardar
-      ? form.details && form.title && form.visit_date
-        ? setIsLoading(false)
-        : setIsLoading(true)
-      : form.details != details ||
-        form.title != title ||
-        form.visit_date != date
-      ? setIsLoading(false)
+
+  const getChangeType = (variable, original, changed) => {
+    // If changed and is not null...
+    return changed
+      ? variable
+        ? // If original was null...
+          !original
+          ? 'created'
+          : 'updated'
+        : 'deleted'
       : null;
-  }, [navigation, form, isLoading]);
-  const onDeleteAccept = () => {
-    setIsLoad(true);
-    useDelete.mutate(idVisit);
   };
-  const onRecetaClick = (param) => {
-    setPrescriptionEliminar(param);
-    !route.params.isGuardar && setIsLoading(false);
-  };
-  const onAdditional1Click = (param) => {
-    setDeleteAdditional1(param);
-    !route.params.isGuardar && setIsLoading(false);
-  };
-  const onAdditional2Click = (param) => {
-    setDeleteAdditional2(param);
-    !route.params.isGuardar && setIsLoading(false);
-  };
-  const onAdditional3Click = (param) => {
-    setDeleteAdditional3(param);
-    !route.params.isGuardar && setIsLoading(false);
-  };
-  return isLoad ? (
+
+  console.log(form.visit_date, '||||', date, '||||', form.visit_date === date);
+  console.log(form.title, title);
+  console.log(form.details, details);
+
+  const isDisabled =
+    (!form.visit_date || form.visit_date === date) &&
+    (!form.title || form.title === title) &&
+    (!form.details || form.details === details) &&
+    !Object.values(imagesChanges).some(
+      (image: {type: string | null; id: string}) => {
+        return image.type !== null;
+      },
+    );
+
+  useSetNavigationHeaders({
+    isDisabled,
+    isLoading,
+    navigation,
+    onRightPress: !route.params.isEdit ? onSave : onUpdate,
+    setIsLoading,
+    data: {...form, prescription, additional1, additional2, additional3},
+  });
+
+  useEffect(() => {
+    const prescriptionChanged = checkIfChanged(prescription, prescriptionImage);
+    const additional1Changed = checkIfChanged(additional1, additionalImages[0]);
+    const additional2Changed = checkIfChanged(additional2, additionalImages[1]);
+    const additional3Changed = checkIfChanged(additional3, additionalImages[2]);
+
+    const prescriptionChangeType = getChangeType(
+      prescription,
+      prescriptionImage,
+      prescriptionChanged,
+    );
+    const additional1ChangeType = getChangeType(
+      additional1,
+      additionalImages[0],
+      additional1Changed,
+    );
+    const additional2ChangeType = getChangeType(
+      additional2,
+      additionalImages[1],
+      additional2Changed,
+    );
+    const additional3ChangeType = getChangeType(
+      additional3,
+      additionalImages[2],
+      additional3Changed,
+    );
+
+    setImagesChanges({
+      prescriptionChange: {
+        ...imagesChanges.prescriptionChange,
+        type: prescriptionChangeType,
+      },
+      additional1Change: {
+        ...imagesChanges.additional1Change,
+        type: additional1ChangeType,
+      },
+      additional2Change: {
+        ...imagesChanges.additional2Change,
+        type: additional2ChangeType,
+      },
+      additional3Change: {
+        ...imagesChanges.additional3Change,
+        type: additional3ChangeType,
+      },
+    });
+  }, [prescription, additional1, additional2, additional3]);
+
+  return isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout>
@@ -195,7 +186,9 @@ export default ({navigation, route}): React.ReactElement => {
           showCancel={true}
           visible={isModalVisible}
         />
-        <TitleHeader style={styles.titleHeader}>{titleHeader}</TitleHeader>
+        <TitleHeader style={styles.titleHeader}>
+          {!route.params.isEdit ? 'Nueva Visita' : 'Editar Visita '}
+        </TitleHeader>
         <DatepickerInput
           currentValue={form.visit_date}
           onSelect={(visit_date) => setForm({...form, visit_date})}
@@ -215,19 +208,34 @@ export default ({navigation, route}): React.ReactElement => {
             setForm({...form, details: value});
           }}
         />
-        <VisitsImgCard
+        <ImageInputCard
           image={prescription}
-          label="Receta"
+          label="Fotografía receta"
+          filledLabel="Receta"
           setImage={setPrescription}
         />
-        {/* <VisitsImgCard obj={receta} />
-        <VisitsImgCard obj={adicional} />
-        <VisitsImgCard obj={adicional} />
-        <VisitsImgCard obj={adicional} /> */}
-        {!route.params.isGuardar && (
+        <ImageInputCard
+          image={additional1}
+          label="Fotografía adicional"
+          filledLabel="Adicional"
+          setImage={setAdditional1}
+        />
+        <ImageInputCard
+          image={additional2}
+          label="Fotografía adicional"
+          filledLabel="Adicional"
+          setImage={setAdditional2}
+        />
+        <ImageInputCard
+          image={additional3}
+          label="Fotografía adicional"
+          filledLabel="Adicional"
+          setImage={setAdditional3}
+        />
+        {route.params.isEdit && (
           <View>
             <Text
-              style={styles.eliminar}
+              style={styles.deleteButton}
               onPress={() => setIsModalVisible(true)}>
               Eliminar
             </Text>
@@ -239,81 +247,18 @@ export default ({navigation, route}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
+  closeIcon: {
+    tintColor: globalColors.greenSecondary,
+    height: 35,
+    width: 35,
+    paddingRight: 0,
+  },
   titleHeader: {paddingBottom: 10},
   headerRight: {
     marginRight: 12,
   },
-  formLayout: {
-    marginTop: 22,
-    backgroundColor: globalColors.backgroundDefault,
-  },
-  formInput: {
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: globalColors.lightGreen,
-    borderRadius: 10,
-    minHeight: 130,
-    fontSize: 18,
-  },
-  textAreaContainer: {
-    borderRadius: 10,
-    padding: 5,
-    backgroundColor: globalColors.lightGreen,
-  },
-  textArea: {
-    height: 150,
-    justifyContent: 'flex-start',
-    fontSize: 18,
-    textAlignVertical: 'top',
-  },
-  inputLabel: {
-    position: 'absolute',
-    left: 16,
-    color: globalColors.darkGray,
-    fontSize: 14,
-    fontFamily: globalVars.fontRegular,
-  },
-  card: {
-    height: 56,
-    borderRadius: 10,
-    marginTop: 16,
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-  },
-  addImg: {
-    textAlign: 'right',
-    color: globalColors.greenSecondary,
-    fontFamily: 'Montserrat-Bold',
-    fontSize: 16,
-    width: '28%',
-    paddingTop: 14,
-  },
-  addtext: {
-    textAlign: 'left',
-    fontFamily: 'Montserrat-Medium',
-    fontSize: 16,
-    width: '70%',
-    paddingTop: 14,
-  },
-  addImg2: {
-    textAlign: 'right',
-    color: globalColors.red,
-    fontFamily: 'Montserrat-Bold',
-    fontSize: 16,
-    width: '29%',
-    paddingTop: 14,
-  },
-  addtext2: {
-    textAlign: 'left',
-    fontFamily: 'Montserrat-Medium',
-    fontSize: 16,
-    width: '55%',
-    paddingTop: 14,
-  },
-  eliminar: {
-    fontFamily: 'Montserrat-Bold',
-    fontSize: 16,
+  deleteButton: {
+    fontFamily: globalVars.fontBold,
     color: globalColors.red,
     textAlign: 'center',
     marginVertical: 16,
