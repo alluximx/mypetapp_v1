@@ -234,7 +234,8 @@ export default ({navigation, route}): React.ReactElement => {
           />
         )}
         <VisitsImgCard
-          label={'Etiqueta'}
+          label="Fotografía Etiqueta"
+          filledLabel="Etiqueta"
           image={etiquetteImage}
           setImage={setEtiquetteImage}
         />

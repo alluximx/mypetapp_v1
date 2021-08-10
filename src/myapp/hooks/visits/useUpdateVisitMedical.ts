@@ -39,8 +39,6 @@ const useUpdateMedicalVisit = () => {
       if (fieldChange.type === 'created') {
         saveImgQuery.mutate(newData);
       } else if (fieldChange.type === 'updated') {
-        console.log('updated');
-        console.log(newData);
         updateImgQuery.mutate(newData);
       } else {
         deleteImgQuery.mutate(newData);

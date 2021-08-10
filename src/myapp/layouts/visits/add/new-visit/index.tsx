@@ -102,10 +102,6 @@ export default ({navigation, route}): React.ReactElement => {
       : null;
   };
 
-  console.log(form.visit_date, '||||', date, '||||', form.visit_date === date);
-  console.log(form.title, title);
-  console.log(form.details, details);
-
   const isDisabled =
     (!form.visit_date || form.visit_date === date) &&
     (!form.title || form.title === title) &&

@@ -25,6 +25,7 @@ export default ({navigation, route}): React.ReactElement => {
     next_vaccine_date: '',
     reminder: null,
   });
+
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [reminderKey, setReminderKey] = useState(1);
   const [etiquetteImage, setEtiquetteImage] = useState(null);
@@ -122,7 +123,8 @@ export default ({navigation, route}): React.ReactElement => {
         />
       )}
       <VisitsImgCard
-        label={'Etiqueta'}
+        label={'Fotografía Etiqueta'}
+        filledLabel={'Etiqueta'}
         image={etiquetteImage}
         setImage={setEtiquetteImage}
       />

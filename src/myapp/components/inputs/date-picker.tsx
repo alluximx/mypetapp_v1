@@ -16,8 +16,8 @@ const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
 
 const DatepickerInput = (props: DatePickerProps) => {
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
-  const minDate = props.minDate ? props.minDate : new Date('Jan 01 1990');
-  const maxDate = props.maxDate ? props.maxDate : new Date('Dec 31 2050');
+  const minDate = props.minDate ?? new Date('Jan 01 1990');
+  const maxDate = props.maxDate ?? new Date('Dec 31 2050');
 
   useEffect(() => {
     Animated.timing(focusAnim, {
@@ -60,7 +60,7 @@ const DatepickerInput = (props: DatePickerProps) => {
         min={minDate}
         placeholder={(props) => (
           <Text {...props} style={[props.style, styles.placeholder]}>
-            props.placeholder
+            Selecciona una fecha
           </Text>
         )}
         onSelect={(date) => {
