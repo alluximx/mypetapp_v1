@@ -36,22 +36,23 @@ export default ({navigation, route}): React.ReactElement => {
       vaccinesQuery.data.data.sort(sortByDate);
 
       const groupVaccines = vaccinesQuery.data.data.reduce((acc, obj) => {
-        const id = obj.vaccine_registered.id;
-        const formatedVaccine = {id: obj.id, date: obj.vaccine_date};
-
-        if (!acc[id]) {
-          acc[id] = {
-            id_vaccine: id,
-            id_record: obj.id,
-            name: obj.vaccine_registered.vaccine_name,
-            reminder: obj.reminder,
-            is_unique: obj.vaccine_registered.is_unique,
-            next_vaccine_date: obj.next_vaccine_date,
-            vaccine_date: obj.vaccine_date,
-            vaccines: [formatedVaccine],
-          };
-        } else {
-          acc[id].vaccines.push(formatedVaccine);
+        if (obj.is_vaccine) {
+          const id = obj.vaccine_registered.id;
+          const formatedVaccine = {id: obj.id, date: obj.vaccine_date};
+          if (!acc[id]) {
+            acc[id] = {
+              id_vaccine: id,
+              id_record: obj.id,
+              name: obj.vaccine_registered.vaccine_name,
+              reminder: obj.reminder,
+              is_unique: obj.vaccine_registered.is_unique,
+              next_vaccine_date: obj.next_vaccine_date,
+              vaccine_date: obj.vaccine_date,
+              vaccines: [formatedVaccine],
+            };
+          } else {
+            acc[id].vaccines.push(formatedVaccine);
+          }
         }
 
         return acc;
