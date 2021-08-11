@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import {Text} from '@ui-kitten/components';
 import GenericCard from '../cards/generic-card';
 import moment from 'moment';
 import useVisitImage from '../../hooks/visits/useVisitImage';
+
 const VisitCardImg = (props): React.ReactElement => {
   const data = useVisitImage(props.data.id);
   const [images, setImages] = React.useState([]);
@@ -12,6 +12,7 @@ const VisitCardImg = (props): React.ReactElement => {
       setImages(data.data.data);
     }
   }, [data.data]);
+
   const newData = {
     date:
       props.data.visit_date == null ? null : new Date(props.data.visit_date),
@@ -23,6 +24,7 @@ const VisitCardImg = (props): React.ReactElement => {
     styleCard: {},
     data: props.data,
   };
+
   const onEdit = (params) => {
     const formattedDate = moment(params.date).format('YYYY-MM-DD');
     props.navigation.navigate('NewVisitMedical', {
@@ -34,9 +36,11 @@ const VisitCardImg = (props): React.ReactElement => {
         date: formattedDate,
         images: params.images,
       },
-      isGuardar: false,
+      isEdit: true,
     });
   };
+
   return !data.isLoading && <GenericCard data={newData} onClick={onEdit} />;
 };
+
 export default VisitCardImg;

@@ -19,13 +19,13 @@ const PawBreed = (props: PawBreedProps): React.ReactElement => {
       //<Button style={{ margin: 2 }} appearance='ghost' status='success' accessoryLeft={StarIcon} />
       <Image
         style={styles.pawPrint}
-        source={require('../../assets/images/pawColor.png')}
+        source={require('../../assets/images/paw-rating/pawColor.png')}
       />
     ) : (
       //<Button style={{ margin: 2 }} appearance='ghost' status='basic'  accessoryLeft={StarIcon} />
       <Image
         style={styles.pawPrint}
-        source={require('../../assets/images/paw.png')}
+        source={require('../../assets/images/paw-rating/pawEmpty.png')}
       />
     );
   };

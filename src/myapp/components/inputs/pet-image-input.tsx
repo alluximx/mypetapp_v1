@@ -17,7 +17,9 @@ import AddButton from '../buttons/add-button';
 
 const options: CameraOptions = {
   mediaType: 'photo',
-  includeBase64: true,
+  maxWidth: 500,
+  maxHeight: 500,
+  quality: 0.5,
 };
 
 interface PetImageInputProps {

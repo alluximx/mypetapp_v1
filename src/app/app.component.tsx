@@ -1,23 +1,31 @@
 import React from 'react';
 import {AppearanceProvider} from 'react-native-appearance';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {AppIconsPack} from './app-icons-pack';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
-import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {AppLoading} from './app-loading.component';
 import {appMappings, appThemes} from './app-theming';
-import {AppIconsPack} from './app-icons-pack';
-import {MyAppNavigator} from '../navigation/myapp.navigator';
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {Mapping, Theme, Theming} from '../services/theme.service';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+// Navigators.
+import {MyAppNavigator} from '../navigation/myapp.navigator';
 // Screens
 import {SplashScreen} from '../myapp/scenes/splash/splash.component';
 
 import * as eva from '@eva-design/eva';
 import {default as customTheme} from '../theme/custom-theme.json';
+import {YellowBox} from 'react-native';
 
 const defaultConfig: {mapping: Mapping; theme: Theme} = {
   mapping: 'eva',
   theme: 'light',
 };
+
+console.disableYellowBox = true;
+YellowBox.ignoreWarnings([
+  'Require cycle:',
+  'Setting a timer for a long period of time',
+]);
 
 const App = ({mapping, theme}): React.ReactElement => {
   const [mappingContext, currentMapping] = Theming.useMapping(

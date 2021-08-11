@@ -12,8 +12,8 @@ import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
+import {DewormingIndexScreen} from '../myapp/scenes/deworming/index.component';
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
-import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {AddVisitScreen} from '../myapp/scenes/visits/add.component';
 import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
@@ -24,6 +24,9 @@ import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
 import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
+// Vaccines.
+import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
+import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 //visits
@@ -129,8 +132,27 @@ const Screens = ({navigation, route, style}) => {
         {/*Adoption */}
         <HomeStack.Screen name="AdoptionFilter" component={AdoptionScreen} />
 
-        <HomeStack.Screen name="AddVaccine" component={AddVaccineScreen} />
+        {/* Vaccines */}
+        <HomeStack.Screen
+          name="AddVaccine"
+          component={AddVaccineScreen}
+          options={{
+            headerLeft: closeButton,
+          }}
+        />
+        <HomeStack.Screen
+          name="EditVaccine"
+          component={EditVaccineScreen}
+          options={{
+            headerLeft: closeButton,
+          }}
+        />
         <HomeStack.Screen name="AddVisit" component={AddVisitScreen} />
+        {/* Deworming */}
+        <HomeStack.Screen
+          name="DewormingIndex"
+          component={DewormingIndexScreen}
+        />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
         <HomeStack.Screen
           name="ClinicalHistory"

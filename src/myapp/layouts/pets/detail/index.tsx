@@ -15,17 +15,17 @@ import TitleHeader from '../../../components/texts/title-header';
 const servicesList = [
   {
     serviceName: 'Visitas',
-    icon: require('../../../assets/images/menu/vets.png'),
+    icon: require('../../../assets/images/menu/visits-detail.png'),
     screen: 'ServicesDoc',
   },
   {
     serviceName: 'Vacunas',
-    icon: require('../../../assets/images/menu/pet-stylists.png'),
+    icon: require('../../../assets/images/menu/vaccines.png'),
     screen: 'VaccinesIndex',
   },
   {
     serviceName: 'Desparaci...',
-    icon: require('../../../assets/images/menu/products.png'),
+    icon: require('../../../assets/images/menu/deworming.png'),
     screen: 'DewormingHistory',
   },
 ];
@@ -73,27 +73,26 @@ export default ({navigation, route}): React.ReactElement => {
       ),
     });
   }, [navigation, image]);
-  const renderServiceItem = (service) => {
-    return (
-      <View style={styles.serviceContainer}>
-        <Card
-          activeOpacity={0.8}
-          style={styles.serviceIconContainer}
-          onPress={() => {
-            navigation.navigate(service.item.screen, {pet: route.params.pet});
-          }}>
-          <Image style={styles.serviceIcon} source={service.item.icon} />
-        </Card>
-        <DefaultText
-          style={styles.serviceNameText}
-          onPress={() => {
-            navigation.navigate(service.item.screen, {pet: route.params.pet});
-          }}>
-          {service.item.serviceName}
-        </DefaultText>
-      </View>
-    );
-  };
+
+  const renderServiceItem = (service) => (
+    <View style={styles.serviceContainer}>
+      <Card
+        activeOpacity={0.8}
+        style={styles.serviceIconContainer}
+        onPress={() => {
+          navigation.navigate(service.item.screen, {pet: route.params.pet});
+        }}>
+        <Image style={styles.serviceIcon} source={service.item.icon} />
+      </Card>
+      <DefaultText
+        style={styles.serviceNameText}
+        onPress={() => {
+          navigation.navigate(service.item.screen, {pet: route.params.pet});
+        }}>
+        {service.item.serviceName}
+      </DefaultText>
+    </View>
+  );
 
   return (
     <DefaultLayout style={styles.container}>
@@ -189,8 +188,8 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   serviceIcon: {
-    height: 55,
-    width: 55,
+    height: 40,
+    width: 40,
   },
   serviceNameText: {
     color: globalColors.black,

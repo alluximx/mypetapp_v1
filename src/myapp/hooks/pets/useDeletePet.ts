@@ -8,7 +8,7 @@ const deletePet = (data) => {
   return api.delete(`api/v1/pets/`, data.id);
 };
 
-const useSavePet = () => {
+const useDeletePet = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
 
@@ -20,4 +20,4 @@ const useSavePet = () => {
   });
 };
 
-export default useSavePet;
+export default useDeletePet;

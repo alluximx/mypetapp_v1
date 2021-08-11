@@ -6,7 +6,7 @@ import api from '../../services/app-services';
 const deleteVisit = (id) => {
   return api.delete(`api/v1/vetvisits/`, id);
 };
-const useDeleteVisit = () => {
+const useDeleteMedicalVisit = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   return useMutation((data: any) => deleteVisit(data), {
@@ -16,4 +16,4 @@ const useDeleteVisit = () => {
     },
   });
 };
-export default useDeleteVisit;
+export default useDeleteMedicalVisit;

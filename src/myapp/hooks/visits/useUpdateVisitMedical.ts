@@ -14,46 +14,65 @@ const postUpdateVisits = (data) => {
   return api.put('api/v1/vetvisits/' + data.id + '/', data, true);
 };
 
-const useUpdateVisitMedical = () => {
+const useUpdateMedicalVisit = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  const useSaveImg = useSaveVisitImage();
-  const useUpdateImg = useUpdateImage();
-  const useDeleteImg = useDeleteImages();
-  const UpdateImg = (fieldName, fieldEli, data, flag) => {
+  const saveImgQuery = useSaveVisitImage();
+  const updateImgQuery = useUpdateImage();
+  const deleteImgQuery = useDeleteImages();
+
+  const updateVisitImg = (
+    fieldName: string,
+    fieldChange: {id: string; type: string | null},
+    data: {id: string},
+    isPrescription: 'true' | 'false',
+  ) => {
     const newData = {
       idVisit: data.id,
-      img: data[fieldName]?.base64 ?? {},
-      flag: flag,
-      id: data[fieldEli][0]?.id ?? [],
+      file: data[fieldName],
+      isPrescription: isPrescription,
+      id: fieldChange.type === 'created' ? null : fieldChange.id,
     };
-    if (
-      Object.entries(data[fieldName]).length > 0 &&
-      data[fieldEli].length > 0
-    ) {
-      useUpdateImg.mutate(newData);
-    } else if (Object.entries(data[fieldName]).length > 0) {
-      useSaveImg.mutate(newData);
-    } else if (data[fieldEli].length > 0) {
-      useDeleteImg.mutate(newData);
+
+    // If image changed...
+    if (fieldChange.type) {
+      if (fieldChange.type === 'created') {
+        saveImgQuery.mutate(newData);
+      } else if (fieldChange.type === 'updated') {
+        updateImgQuery.mutate(newData);
+      } else {
+        deleteImgQuery.mutate(newData);
+      }
     }
-    return null;
   };
+
   return useMutation((data: any) => postUpdateVisits(data), {
     onSuccess: (response, variables) => {
-      // Save Pet image.
-      UpdateImg('prescriptionValue', 'prescriptionEli', variables, 'true');
-      UpdateImg('additional1', 'eliAdditional1', variables, 'false');
-      UpdateImg('additional2', 'eliAdditional2', variables, 'false');
-      UpdateImg('additional3', 'eliAdditional3', variables, 'false');
+      // if any visit image changed...
+      const imagesChanged = Object.values(variables.imagesChanges).some(
+        (image: {type: string | null}) => {
+          return image.type !== null;
+        },
+      );
+
+      if (imagesChanged) {
+        const {
+          prescriptionChange,
+          additional1Change,
+          additional2Change,
+          additional3Change,
+        } = variables.imagesChanges;
+
+        updateVisitImg('prescription', prescriptionChange, variables, 'true');
+        updateVisitImg('additional1', additional1Change, variables, 'false');
+        updateVisitImg('additional2', additional2Change, variables, 'false');
+        updateVisitImg('additional3', additional3Change, variables, 'false');
+        queryClient.invalidateQueries(['visits-image', variables.id]);
+      }
       queryClient.invalidateQueries('visits-information');
-      queryClient.invalidateQueries(['visits-image', variables.id]);
       navigation.goBack();
-    },
-    onError: (error) => {
-      console.log(error);
     },
   });
 };
 
-export default useUpdateVisitMedical;
+export default useUpdateMedicalVisit;

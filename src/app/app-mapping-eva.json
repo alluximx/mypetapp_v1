@@ -114,6 +114,39 @@
           }
         }
       }
+    },
+    "Toggle": {
+      "appearances": {
+        "default": {
+          "mapping": {
+            "borderWidth": 1.5,
+            "height": 31,
+            "iconWidth": 0,
+            "iconHeight": 0
+          },
+          "variantGroups": {
+            "status": {
+              "success": {
+                "borderColor": "rgb(229,229,229)",
+                "state": {
+                  "disabled": {
+                    "backgroundColor": "transparent"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Card": {
+      "appearances": {
+        "outline": {
+          "mapping": {
+            "bodyPaddingHorizontal": 16
+          }
+        }
+      }
     }
   }
 }

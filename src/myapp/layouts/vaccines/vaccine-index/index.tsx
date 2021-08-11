@@ -1,5 +1,5 @@
 import React, {useLayoutEffect, useEffect, useState} from 'react';
-import {Image, Dimensions} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 //My Components.
 import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -9,16 +9,15 @@ import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 //Global Styles
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 //UI Kitten
-import {Layout, StyleService, List} from '@ui-kitten/components';
+import {List} from '@ui-kitten/components';
 // Hook.
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {id, breed, name, pet_age, sex} = route.params.pet;
-
   const [vaccines, setVaccines] = useState([]);
-  const vaccinesQuery = useGetVaccineIndex(id);
+  const vaccinesQuery = useGetVaccineIndex(route.params.pet.id);
 
   useEffect(() => {
     if (vaccinesQuery.data) {
@@ -33,10 +32,13 @@ export default ({navigation, route}): React.ReactElement => {
         }
         return 0;
       }
+
       vaccinesQuery.data.data.sort(sortByDate);
+
       const groupVaccines = vaccinesQuery.data.data.reduce((acc, obj) => {
         const id = obj.vaccine_registered.id;
         const formatedVaccine = {id: obj.id, date: obj.vaccine_date};
+
         if (!acc[id]) {
           acc[id] = {
             id_vaccine: id,
@@ -51,6 +53,7 @@ export default ({navigation, route}): React.ReactElement => {
         } else {
           acc[id].vaccines.push(formatedVaccine);
         }
+
         return acc;
       }, {});
 
@@ -86,9 +89,12 @@ export default ({navigation, route}): React.ReactElement => {
     const substrac = next_vaccine_date.getTime() - notification.getTime();
     const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24) + 1);
     const auxData = {
+      id: service.item.id_record,
+      petId: route.params.pet.id,
       name: service.item.name,
-      validity: is_unique ? 'Unica' : service.item.vaccine_date,
-      notification: !is_unique ? notificationDays : null,
+      validity: is_unique ? 'Única' : service.item.vaccine_date,
+      notification:
+        !is_unique && service.item.reminder ? notificationDays : null,
       status:
         is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
       vaccineDates: service.item.vaccines,
@@ -108,7 +114,9 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddVaccine', {})}
+          onAdd={() =>
+            navigation.navigate('AddVaccine', {petId: route.params.pet.id})
+          }
         />
       ),
     });
@@ -126,41 +134,23 @@ export default ({navigation, route}): React.ReactElement => {
       />
     </DefaultLayout>
   ) : (
-    <DefaultLayout style={[styles.container, {color: 'black'}]}>
-      <Layout
-        style={[
-          styles.formContainer,
-          {backgroundColor: globalColors.backgroundDefault},
-        ]}>
-        <Image
-          style={styles.dogImage}
-          source={require('../assets/pet-vaccine.png')}
-        />
-        <TitleHeader children="Vacunas" style={styles.center} />
-        <DefaultText
-          children="Aún no has agregado vacunas para tu"
-          style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
-        />
-        <DefaultText
-          children="mascota."
-          style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
-        />
-      </Layout>
+    <DefaultLayout style={styles.container}>
+      <Image
+        style={styles.dogImage}
+        source={require('../assets/pet-vaccine.png')}
+      />
+      <TitleHeader children="Vacunas" style={styles.center} />
+      <DefaultText style={[styles.center, styles.subtitle]}>
+        Aún no has agregado vacunas para tu {'\n'}mascota.
+      </DefaultText>
     </DefaultLayout>
   );
 };
 
-const {width, height} = Dimensions.get('window');
-const styles = StyleService.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: globalColors.backgroundDefault,
     paddingHorizontal: 0,
-  },
-  formContainer: {
-    flex: 1,
-    paddingTop: 0,
-    width: width,
   },
   dogImage: {
     alignSelf: 'center',
@@ -170,13 +160,10 @@ const styles = StyleService.create({
     marginVertical: 5,
   },
   center: {
-    alignSelf: 'center',
+    textAlign: 'center',
   },
-  titleh1: {
-    color: globalColors.black,
-    fontSize: 22,
-    fontFamily: 'Montserrat-Bold',
-    paddingBottom: 10,
+  subtitle: {
+    fontFamily: globalVars.fontBold,
   },
   servicesContainer: {
     backgroundColor: 'transparent',

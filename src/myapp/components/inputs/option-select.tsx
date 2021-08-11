@@ -57,10 +57,10 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         offset: LIST_ITEM_HEIGHT * index,
         index,
       })}
-      horizontal={props.horizontal}
+      horizontal={props.horizontal ?? false}
       renderItem={renderOption}
       onScroll={(e) => {
-        console.log(e);
+        // console.log(e);
       }}
       scrollEnabled={props.horizontal ? false : true}
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: globalColors.white,
     borderRadius: 8,
+    height: 56,
   },
   optionSelected: {
     backgroundColor: globalColors.greenSecondary,
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     fontFamily: globalVars.fontRegular,
+    color: globalColors.darkerGray,
   },
   optionTextSelected: {
     color: globalColors.white,

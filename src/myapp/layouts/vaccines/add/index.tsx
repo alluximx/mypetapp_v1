@@ -1,163 +1,145 @@
-import React from 'react';
-import {
-  Button,
-  Input,
-  Layout,
-  StyleService,
-  useStyleSheet,
-} from '@ui-kitten/components';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import moment from 'moment';
+// Constants.
+import {reminderOptions} from '../../../constants';
+// Hooks.
+import useSaveVaccine from '../../../hooks/vaccines/useSaveVaccine';
+import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
+import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+// My Components.
+import CustomSpinner from '../../../components/custom-spinner';
+import DatepickerInput from '../../../components/inputs/date-picker';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import ReminderInput from '../../../components/inputs/reminder-input';
+import TitleHeader from '../../../components/texts/title-header';
+import VisitsImgCard from '../../../components/cards/image-input-card';
 
-import {
-  IndexPath,
-  Select,
-  SelectGroup,
-  SelectItem,
-  Text,
-  Datepicker,
-  CheckBox,
-  Toggle,
-} from '@ui-kitten/components';
-import {ScrollView} from 'react-native-gesture-handler';
+export default ({navigation, route}): React.ReactElement => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [form, setForm] = useState({
+    user_pet: route.params.petId,
+    vaccine_registered: '',
+    vaccine_date: '',
+    next_vaccine_date: '',
+    reminder: null,
+  });
 
-export default ({navigation}): React.ReactElement => {
-  const [userName, setUserName] = React.useState<string>();
-  const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
-  const [date, setDate] = React.useState(new Date());
-  const [checked, setChecked] = React.useState(false);
+  const [isReminderActive, setIsReminderActive] = useState(false);
+  const [reminderKey, setReminderKey] = useState(1);
+  const [etiquetteImage, setEtiquetteImage] = useState(null);
+  const [isUnique, setIsUnique] = useState(true);
 
-  const onCheckedChange = (isChecked) => {
-    setChecked(isChecked);
+  const vaccinesQuery = useGetVaccines();
+  const saveVaccineQuery = useSaveVaccine();
+  const vaccinesData = vaccinesQuery.isLoading
+    ? []
+    : vaccinesQuery.data?.data.map((vaccine) => {
+        return {
+          value: vaccine.id,
+          label: vaccine.vaccine_name,
+          isUnique: vaccine.is_unique,
+        };
+      });
+
+  const isDisabled =
+    form.vaccine_registered === '' ||
+    form.vaccine_date === '' ||
+    form.next_vaccine_date === '' ||
+    isLoading;
+
+  const onSelectReminder = (reminderKey: number) => {
+    setReminderKey(reminderKey);
+
+    if (form.next_vaccine_date !== '') {
+      const reminderOption = reminderOptions.find(
+        (option) => option.key == reminderKey,
+      );
+
+      const dateToRemind = moment(form.next_vaccine_date)
+        .subtract(reminderOption.delay.amount, reminderOption.delay.unit)
+        .format('YYYY-MM-DD 09:00:00');
+
+      setForm({...form, reminder: dateToRemind});
+    }
   };
 
-  const useCheckboxState = (initialCheck = false) => {
-    const [checked, setChecked] = React.useState(initialCheck);
-    return {checked, onChange: setChecked};
-  };
-  const primaryCheckboxState = useCheckboxState();
+  const onSavePress = () => saveVaccineQuery.mutate({...form, etiquetteImage});
 
-  const styles = useStyleSheet(themedStyles);
+  useEffect(() => {
+    if (!isReminderActive) {
+      setForm({...form, reminder: null});
+    } else {
+      onSelectReminder(reminderKey);
+    }
+  }, [isReminderActive, form.next_vaccine_date]);
 
-  const data = ['Antirrabica', 'Tetanos', 'Parvovirus'];
-  const displayValue = data[selectedIndex.row];
+  useEffect(() => {
+    const isUnique = vaccinesData.find(
+      (vaccine) => vaccine.value === form.vaccine_registered,
+    )?.isUnique;
 
-  const renderOption = (title) => <SelectItem title={title} />;
+    setIsUnique(isUnique ?? false);
+  }, [form.vaccine_registered]);
 
-  const onAddButtonPress = (): void => {
-    navigation && navigation.goBack();
-  };
+  useSetNavigationHeaders({
+    isDisabled,
+    isLoading,
+    navigation,
+    setIsLoading,
+    onRightPress: onSavePress,
+    data: {...form, etiquetteImage},
+  });
 
-  return (
-    <ScrollView style={styles.container}>
-      <Layout style={styles.formContainer}  level="1">
-        <Select
-          style={styles.select}
-          placeholder="Default"
-          value={displayValue}
-          selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}>
-          {data.map(renderOption)}
-        </Select>
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Datepicker date={date} onSelect={(nextDate) => setDate(nextDate)} />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Text category="h6">Fotografía de la etiqueta</Text>
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Datepicker date={date} onSelect={(nextDate) => setDate(nextDate)} />
-      </Layout>
-      <Layout style={styles.formContainer} level="1">
-        <Input
-          autoCapitalize="none"
-          placeholder="Edad"
-          value={userName}
-          onChangeText={setUserName}
+  return isLoading ? (
+    <CustomSpinner />
+  ) : (
+    <DefaultLayout>
+      <TitleHeader style={styles.title}>Nueva Vacuna</TitleHeader>
+      <DropdownPicker
+        currentValue={form.vaccine_registered}
+        data={vaccinesData}
+        placeholder="Tipo de vacuna"
+        setCurrentValue={(vaccine_registered) =>
+          setForm({...form, vaccine_registered})
+        }
+      />
+      <DatepickerInput
+        currentValue={form.vaccine_date}
+        minDate={new Date()}
+        onSelect={(vaccine_date) => setForm({...form, vaccine_date})}
+        placeholder="Fecha de aplicación"
+      />
+      {!isUnique && (
+        <DatepickerInput
+          currentValue={form.next_vaccine_date}
+          disabled={form.vaccine_date === '' ? true : false}
+          minDate={new Date(form.vaccine_date)}
+          onSelect={(next_vaccine_date) =>
+            setForm({...form, next_vaccine_date})
+          }
+          placeholder="Fecha de expiración"
         />
-      </Layout>
-
-      <Layout style={styles.formContainer} level="1">
-        <Toggle checked={checked} onChange={onCheckedChange}>
-          {'Agregar recordatorio'}
-        </Toggle>
-        <Layout style={styles.formContainer} level="2">
-          <CheckBox
-            style={styles.checkbox}
-            status="primary"
-            {...primaryCheckboxState}>
-            1 dia antes
-          </CheckBox>
-          <CheckBox
-            style={styles.checkbox}
-            status="primary"
-            {...primaryCheckboxState}>
-            1 semana antes
-          </CheckBox>
-          <CheckBox
-            style={styles.checkbox}
-            status="primary"
-            {...primaryCheckboxState}>
-            2 semanas antes
-          </CheckBox>
-        </Layout>
-      </Layout>
-
-    </ScrollView>
+      )}
+      <VisitsImgCard
+        label={'Fotografía Etiqueta'}
+        filledLabel={'Etiqueta'}
+        image={etiquetteImage}
+        setImage={setEtiquetteImage}
+      />
+      {!isUnique && (
+        <ReminderInput
+          isActive={isReminderActive}
+          setIsActive={setIsReminderActive}
+          setValue={onSelectReminder}
+          value={reminderKey}
+        />
+      )}
+    </DefaultLayout>
   );
 };
 
-const themedStyles = StyleService.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'background-basic-color-1',
-  },
-  checkbox: {
-    margin: 2,
-  },
-  select: {
-    flex: 1,
-    margin: 2,
-  },
-  headerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: 216,
-  },
-  profileAvatar: {
-    width: 116,
-    height: 116,
-    borderRadius: 58,
-    alignSelf: 'center',
-    backgroundColor: 'color-primary-default',
-    tintColor: 'color-primary-default',
-  },
-  editAvatarButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  formContainer: {
-    flex: 1,
-    paddingTop: 32,
-    paddingHorizontal: 16,
-  },
-  emailInput: {
-    marginTop: 16,
-  },
-  passwordInput: {
-    marginTop: 16,
-  },
-  termsCheckBox: {
-    marginTop: 24,
-  },
-  termsCheckBoxText: {
-    color: 'text-hint-color',
-  },
-  signUpButton: {
-    marginHorizontal: 16,
-  },
-  signInButton: {
-    marginVertical: 12,
-    marginHorizontal: 16,
-  },
+const styles = StyleSheet.create({
+  title: {marginBottom: 24},
 });

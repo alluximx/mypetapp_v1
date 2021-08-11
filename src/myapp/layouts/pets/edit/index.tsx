@@ -2,6 +2,8 @@ import React, {useLayoutEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 // Constants.
 import {sexOptions} from '../../../constants';
+// Global styles.
+import globalColors from '../../../styles/colors';
 // Hooks.
 import useGetBreeds from '../../../hooks/useGetBreeds';
 import useSizes from '../../../hooks/pets/useSizes';
@@ -127,13 +129,6 @@ export default ({navigation, route}): React.ReactElement => {
           setForm({...form, sex});
         }}
       />
-      {/* <UserInput
-        placeholder="Cumpleaños"
-        value={form.birthday}
-        onChangeText={(value: string) => {
-          setForm({...form, birthday: value});
-        }}
-      /> */}
       <View style={{marginVertical: 8}}>
         <DatepickerInput
           currentValue={form.birthday}
@@ -171,6 +166,7 @@ const styles = StyleSheet.create({
   },
   dropdownContainer: {marginBottom: 14},
   deleteText: {
+    color: globalColors.red,
     textAlign: 'center',
     marginTop: 16,
     marginBottom: 32,
