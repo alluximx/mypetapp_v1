@@ -143,6 +143,7 @@ const Screens = ({navigation, route, style}) => {
           component={ProductDetailScreen}
         />
         <HomeStack.Screen name="Cart" component={CartScreen} />
+        {/*Product*/}
       </HomeStack.Navigator>
     </Animated.View>
   );

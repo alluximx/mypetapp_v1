@@ -11,6 +11,7 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import PetDataCard from '../../../components/cards/pet-data-card';
 import TitleHeader from '../../../components/texts/title-header';
+import ReminderArea from '../../../components/reminder-area';
 
 const servicesList = [
   {
@@ -112,14 +113,23 @@ export default ({navigation, route}): React.ReactElement => {
         statusBarBackgroundColor={globalColors.greenSecondary}
         statusBarStyle="light-content"
         style={styles.cardSection}>
-        <TitleHeader style={styles.bottomSpace}>Historial Clínico</TitleHeader>
-        <List
-          style={styles.servicesContainer}
-          contentContainerStyle={styles.servicesContentContainer}
-          horizontal={true}
-          data={servicesList}
-          renderItem={renderServiceItem}
-        />
+        <View>
+          <TitleHeader style={styles.bottomSpace}>
+            Historial Clínico
+          </TitleHeader>
+          <List
+            style={styles.servicesContainer}
+            contentContainerStyle={styles.servicesContentContainer}
+            horizontal={true}
+            data={servicesList}
+            renderItem={renderServiceItem}
+          />
+        </View>
+
+        <View style={{}}>
+          <ReminderArea />
+          <ReminderArea />
+        </View>
       </DefaultLayout>
     </DefaultLayout>
   );
@@ -172,7 +182,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   servicesContentContainer: {
-    flexDirection: 'row',
     paddingBottom: 8,
     backgroundColor: 'transparent',
   },

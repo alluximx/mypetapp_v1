@@ -1,6 +1,7 @@
 import React, {useLayoutEffect, useEffect, useState} from 'react';
 import {Image, Dimensions} from 'react-native';
 //My Components.
+import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
 import CustomSpinner from '../../../components/custom-spinner';
@@ -10,45 +11,75 @@ import TitleHeader from '../../../components/texts/title-header';
 import {Layout, StyleService, List} from '@ui-kitten/components';
 //Global Styles
 import globalColors from '../../../styles/colors';
+// Hook.
+import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
 
-  //const dewormingQuery = [];
-  const dewormingQuery = [
-    {
-      id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-      petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
-      name: 'Interna',
-      deworming_date: '2021-02-28',
-      next_deworming_date: '2021-08-28',
-      is_unique: false,
-      reminder: '2021-08-26T11:15:00-05:00',
-      status: 'Activa',
-      dewormings: [
-        {
-          id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-          date: '2021-02-28',
-        },
-      ],
-    },
-    {
-      id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-      petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
-      name: 'Externa',
-      deworming_date: '2021-04-12',
-      next_deworming_date: '2021-07-30',
-      is_unique: false,
-      reminder: '2021-07-28T11:15:00-05:00',
-      status: 'Vencida',
-      dewormings: [
-        {
-          id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-          date: '2021-04-12',
-        },
-      ],
-    },
-  ];
+  const [dewormings, setDewormings] = useState([]);
+  const dewormingQuery = useGetVaccineIndex(id);
+
+  useEffect(() => {
+    if (dewormingQuery.data) {
+      function sortByDate(a, b) {
+        var Item1 = a.vaccine_date;
+        var Item2 = b.vaccine_date;
+        if (Item1 < Item2) {
+          return 1;
+        }
+        if (Item1 > Item2) {
+          return -1;
+        }
+        return 0;
+      }
+      dewormingQuery.data.data.sort(sortByDate);
+      const groupVaccines = dewormingQuery.data.data.reduce((acc, obj) => {
+        if (!obj.is_vaccine) {
+          const id = obj.vaccine_registered.id;
+          const formatedDeworming = {id: obj.id, date: obj.vaccine_date};
+          if (!acc[id]) {
+            acc[id] = {
+              id_deworming: id,
+              id_record: obj.id,
+              name: obj.vaccine_registered.vaccine_name,
+              reminder: obj.reminder,
+              is_unique: obj.vaccine_registered.is_unique,
+              next_deworming_date: obj.next_vaccine_date,
+              deworming_date: obj.vaccine_date,
+              dewormings: [formatedDeworming],
+            };
+          } else {
+            acc[id].dewormings.push(formatedDeworming);
+          }
+        }
+        return acc;
+      }, {});
+
+      const formatedArray: any = [];
+      const claves = Object.keys(groupVaccines);
+
+      claves.forEach((element) => {
+        formatedArray.push(groupVaccines[element]);
+      });
+
+      setDewormings(formatedArray);
+    }
+  }, [dewormingQuery.data]);
+
+  function customSort(a, b) {
+    var Item1 = a.name;
+    var Item2 = b.name;
+    if (Item1 > Item2) {
+      return 1;
+    }
+    if (Item1 < Item2) {
+      return -1;
+    }
+    return 0;
+  }
+
+  dewormings.sort(customSort);
 
   const renderServiceItem = (service) => {
     const is_unique = service.item.is_unique;
@@ -69,12 +100,30 @@ export default ({navigation, route}): React.ReactElement => {
     );
   };
 
-  return dewormingQuery.length > 0 ? (
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AddButton
+          style={{backgroundColor: globalColors.backgroundDefault}}
+          iconStyle={{
+            tintColor: globalColors.greenSecondary,
+            height: 35,
+            width: 35,
+          }}
+          onAdd={() => navigation.navigate('AddDeworming', {})}
+        />
+      ),
+    });
+  }, [navigation]);
+
+  return dewormingQuery.isLoading ? (
+    <CustomSpinner />
+  ) : dewormings.length > 0 ? (
     <DefaultLayout>
       <TitleHeader children="Desparacitaciones" />
       <List
         style={styles.servicesContainer}
-        data={dewormingQuery}
+        data={dewormings}
         renderItem={renderServiceItem}
       />
     </DefaultLayout>
