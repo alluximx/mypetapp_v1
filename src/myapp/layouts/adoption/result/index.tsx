@@ -22,35 +22,54 @@ export default ({navigation, route}): React.ReactElement => {
   const town = route.params.filter.town;
   const townName = route.params.filter.townName;
   const styles = useStyleSheet(themedStyles);
-  const data = useAdoptionSerch({stateId: state, municipalityId: town});
-  const [listAdoption, setListAdoption] = useState([]);
-  const [numResult, setNumResult] = useState(0);
-  useEffect(() => {
-    if (data.data) {
-      let cont = 1;
-      let auxData = [];
-      let aux = [];
-      let num = 0;
-      data.data.data.forEach((element) => {
-        if (element.status == 'PUBLICADO') {
-          aux.push(element);
-          if (cont == 2) {
-            cont = 0;
-            auxData.push(aux);
-            aux = [];
-          }
-          cont = cont + 1;
-          num = num + 1;
-        }
-      });
-      aux.length > 0 && auxData.push(aux);
-      setListAdoption(auxData);
-      setNumResult(num);
+  // const data = useAdoptionSerch({
+  //   stateId: state,
+  //   municipalityId: town,
+  //   query: query,
+  // });
+  let cont = 1;
+  let auxData = [];
+  let aux = [];
+  let num = 0;
+  route.params.data.forEach((element) => {
+    if (element.status == 'PUBLICADO') {
+      aux.push(element);
+      if (cont == 2) {
+        cont = 0;
+        auxData.push(aux);
+        aux = [];
+      }
+      cont = cont + 1;
+      num = num + 1;
     }
-  }, [data.data, data.isFetched]);
+  });
+  aux.length > 0 && auxData.push(aux);
+  const listAdoption = auxData;
+  const numResult = num;
   navigation.setOptions({
     headerRight: () => (
-      <AnchorText style={styles.headerRight} onPress={() => {}}>
+      <AnchorText
+        style={styles.headerRight}
+        onPress={() => {
+          navigation.navigate('AdoptionAdvanceFilter', {
+            adoption: {
+              num: numResult,
+              state: state,
+              stateName: stateName,
+              town: town,
+              townName: townName,
+            },
+            filters: {
+              male: route.params.filters.male,
+              feminine: route.params.filters.feminine,
+              onetosix: route.params.filters.onetosix,
+              sixtotwelve: route.params.filters.sixtotwelve,
+              onetothree: route.params.filters.onetothree,
+              threetofive: route.params.filters.threetofive,
+              fiveormore: route.params.filters.fiveormore,
+            },
+          });
+        }}>
         Filtrar
       </AnchorText>
     ),
@@ -68,10 +87,11 @@ export default ({navigation, route}): React.ReactElement => {
   const renderCard = (services) => {
     let img = './../assets/abue.jpg';
     services.item.images.forEach((images) => {
-      if (images[1]) {
-        img = images[0];
+      if (images.is_cover) {
+        img = images.image;
       }
     });
+
     const auximg = 'https://mpa-stage.s3.amazonaws.com/media/' + img;
     return (
       <Card
@@ -106,9 +126,7 @@ export default ({navigation, route}): React.ReactElement => {
       adoption: adoption,
     });
   };
-  return data.isLoading ? (
-    <CustomSpinner />
-  ) : (
+  return (
     <DefaultLayout
       statusBarStyle={'light-content'}
       style={[styles.container, {color: 'black'}]}>

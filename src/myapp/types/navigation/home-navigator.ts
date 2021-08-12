@@ -28,6 +28,7 @@ type HomeNavigatorParamList = {
   ProductIndex: {};
   AdoptionResult: {};
   AdoptionDetail: {};
+  AdoptionAdvanceFilter: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

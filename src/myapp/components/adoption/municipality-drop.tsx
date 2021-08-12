@@ -17,7 +17,7 @@ const MunicipalityDrop = (props): React.ReactElement => {
       props.status && setTown('');
     }
   }, [dataMunicipality.data, dataMunicipality.isFetched]);
-  const [town, setTown] = useState('');
+  const [town, setTown] = useState(props.idTown);
 
   return (
     <DropdownPicker

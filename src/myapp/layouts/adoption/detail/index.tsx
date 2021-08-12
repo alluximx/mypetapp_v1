@@ -58,7 +58,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   route.params.adoption.images.forEach((element) => {
     dataImg.push({
-      uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element[0],
+      uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element.image,
     });
   });
   route.params.adoption.images.forEach((element) => {
@@ -70,58 +70,8 @@ export default ({navigation, route}): React.ReactElement => {
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
 
-  function handleCarouselScrollEnd(item, index) {
-    setCurrentIndex(index);
-  }
-
-  function renderItem({item, index}) {
-    const {uri, title, content} = item;
-    return (
-      <TouchableOpacity
-        activeOpacity={1}
-        style={styles.item}
-        onPress={() => {
-          carouselRef.current.scrollToIndex(index);
-        }}>
-        <ImageBackground source={{uri: uri}} style={styles.imageBackground}>
-          <View style={styles.rightTextContainer}>
-            <Text style={styles.rightText}>{route.params.adoption.name}</Text>
-          </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }
   return (
     <>
-      {/* {isImg ? (
-        <ImageBackground
-          source={{uri: img}}
-          resizeMode="cover"
-          style={styles.petImageContainer}
-        />
-      ) : (
-        <ImageBackground
-          source={require('./../assets/coverPage.jpg')}
-          resizeMode="cover"
-          style={styles.petImageContainer}
-        />
-      )} */}
-      {/* <View style={styles.container2}>
-        <Carousel
-          style={styles.carousel}
-          data={dataImg}
-          renderItem={renderItem}
-          itemWidth={0.7 * width}
-          inActiveOpacity={0.3}
-          containerWidth={width}
-          onScrollEnd={handleCarouselScrollEnd}
-          ref={carouselRef}
-        />
-        <SimplePaginationDot
-          currentIndex={currentIndex}
-          length={dataImg.length}
-        />
-      </View> */}
       <View style={styles.container2}>
         <FlatList
           data={dataImg}
