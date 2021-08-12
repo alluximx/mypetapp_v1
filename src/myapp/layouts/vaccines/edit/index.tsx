@@ -57,7 +57,7 @@ export default ({navigation, route}): React.ReactElement => {
     isLoading ||
     formHasChanged;
 
-  const vaccinesQuery = useGetVaccines();
+  const vaccinesQuery = useGetVaccines(true);
   const vaccinesData = vaccinesQuery.isLoading
     ? []
     : vaccinesQuery.data?.data.map((vaccine) => {

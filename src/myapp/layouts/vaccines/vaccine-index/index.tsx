@@ -83,7 +83,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   vaccines.sort(customSort);
 
-  const renderServiceItem = (service) => {
+  const renderVaccine = (service) => {
     const is_unique = service.item.is_unique;
     const next_vaccine_date = new Date(service.item.next_vaccine_date);
     const notification = new Date(service.item.reminder);
@@ -100,6 +100,7 @@ export default ({navigation, route}): React.ReactElement => {
         is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
       vaccineDates: service.item.vaccines,
     };
+
     return (
       <VaccineCard navigation={navigation} vaccine={true} data={auxData} />
     );
@@ -127,11 +128,11 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : vaccines.length > 0 ? (
     <DefaultLayout>
-      <TitleHeader children="Vacunas" />
+      <TitleHeader style={styles.listTitle}>Vacunas</TitleHeader>
       <List
         style={styles.servicesContainer}
         data={vaccines}
-        renderItem={renderServiceItem}
+        renderItem={renderVaccine}
       />
     </DefaultLayout>
   ) : (
@@ -140,7 +141,7 @@ export default ({navigation, route}): React.ReactElement => {
         style={styles.dogImage}
         source={require('../assets/pet-vaccine.png')}
       />
-      <TitleHeader children="Vacunas" style={styles.center} />
+      <TitleHeader style={styles.center}>Vacunas</TitleHeader>
       <DefaultText style={[styles.center, styles.subtitle]}>
         Aún no has agregado vacunas para tu {'\n'}mascota.
       </DefaultText>
@@ -159,6 +160,9 @@ const styles = StyleSheet.create({
     height: 390,
     maxHeight: 390,
     marginVertical: 5,
+  },
+  listTitle: {
+    marginBottom: 8,
   },
   center: {
     textAlign: 'center',

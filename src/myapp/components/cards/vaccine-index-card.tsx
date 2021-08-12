@@ -38,7 +38,7 @@ const VaccineCard = (props): React.ReactElement => {
 
   const formattedDate = (date) => moment(date).format('DD/MM/YYYY');
 
-  const renderItem = ({item, index}) => {
+  const renderItem = ({item}) => {
     return (
       <View style={styles.vaccinesIndividual}>
         <View style={styles.left}>
@@ -106,29 +106,26 @@ const VaccineCard = (props): React.ReactElement => {
           )}
         </TouchableOpacity>
       </View>
-      {isOpen &&
-        (props.data.vaccineDates ? (
-          <View style={styles.vaccinesContainer}>
-            <List
-              style={styles.listContainer}
-              data={props.data.vaccineDates}
-              renderItem={renderItem}
-            />
-          </View>
-        ) : (
-          <View style={styles.vaccinesContainer}></View>
-        ))}
+      {isOpen && props.data.vaccineDates && (
+        <View style={styles.vaccinesContainer}>
+          <List
+            style={styles.listContainer}
+            data={props.data.vaccineDates}
+            renderItem={renderItem}
+          />
+        </View>
+      )}
     </Card>
   );
 };
 
 const styles = StyleService.create({
   container: {
-    marginTop: 20,
+    marginTop: 16,
     borderRadius: 18,
   },
   vaccinesContainer: {
-    marginTop: 20,
+    marginTop: 16,
   },
   headerTop: {
     flexDirection: 'row',
@@ -142,12 +139,11 @@ const styles = StyleService.create({
   vaccinesIndividual: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 15,
+    paddingBottom: 8,
   },
   title: {
     fontSize: 16,
     marginBottom: 0,
-    marginTop: 8,
     flexBasis: 'auto',
     flexGrow: 0,
     flexShrink: 1,
@@ -157,13 +153,11 @@ const styles = StyleService.create({
   },
   statusGreen: {
     color: globalColors.greenSecondary,
-    fontFamily: 'Montserrat-Bold',
     marginTop: 4,
     fontSize: 14,
   },
   statusRed: {
     color: globalColors.red,
-    fontFamily: 'Montserrat-Bold',
     marginTop: 4,
     fontSize: 14,
   },
@@ -173,23 +167,18 @@ const styles = StyleService.create({
     flexShrink: 0,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 7,
     marginRight: -5,
   },
   left: {
     flexDirection: 'row',
-    marginTop: 10,
     alignContent: 'flex-start',
   },
   arrowIcon: {
     alignContent: 'flex-end',
     top: 0,
-    right: -7,
+    right: 0,
   },
   edit: {
-    marginTop: 10,
-    color: globalColors.greenSecondary,
-    fontFamily: 'Montserrat-Bold',
     alignContent: 'flex-end',
   },
   notificationIcon: {
@@ -198,8 +187,9 @@ const styles = StyleService.create({
     borderRadius: 50,
     backgroundColor: globalColors.greenSecondary,
     alignContent: 'flex-end',
+    marginRight: 5,
+    marginLeft: 10,
     marginTop: -1,
-    marginLeft: 5,
   },
   imageIcon: {
     alignContent: 'center',
