@@ -27,7 +27,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [reminderKey, setReminderKey] = useState(1);
 
-  const vaccinesQuery = useGetVaccines();
+  const vaccinesQuery = useGetVaccines(false);
   const vaccinesData = vaccinesQuery.isLoading
     ? []
     : vaccinesQuery.data?.data.map((vaccine) => {
