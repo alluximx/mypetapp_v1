@@ -2,11 +2,11 @@ import React, {useLayoutEffect, useEffect, useState} from 'react';
 import {Image, Dimensions} from 'react-native';
 //My Components.
 import AddButton from '../../../components/buttons/add-button';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import VaccineCard from '../../../components/cards/vaccine-index-card';
 import CustomSpinner from '../../../components/custom-spinner';
+import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
+import VaccineCard from '../../../components/cards/vaccine-index-card';
 //UI kitten
 import {Layout, StyleService, List} from '@ui-kitten/components';
 //Global Styles
@@ -152,7 +152,7 @@ export default ({navigation, route}): React.ReactElement => {
   );
 };
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const styles = StyleService.create({
   container: {
     flex: 1,

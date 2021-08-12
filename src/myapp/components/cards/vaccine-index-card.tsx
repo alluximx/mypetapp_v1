@@ -139,7 +139,7 @@ const styles = StyleService.create({
   vaccinesIndividual: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 8,
+    paddingBottom: 16,
   },
   title: {
     fontSize: 16,
