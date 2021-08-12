@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, Dimensions} from 'react-native';
+import moment from 'moment';
 //UI Kitten
 import {StyleService} from '@ui-kitten/components';
 //Global Styles
@@ -9,14 +10,21 @@ import globalVars from '../styles/vars';
 import DefaultText from './texts/default-text';
 import TitleHeader from './texts/title-header';
 
-interface reminderAreaProps {
-  title: string;
-  date: string;
-}
-
 const ReminderArea = (props): React.ReactElement => {
+  const date = moment(props.data.date).format('DD/MM/YYYY');
+
+  const editDestination = props.data.is_vaccine
+    ? 'EditVaccine'
+    : 'EditDeworming';
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => {
+        props.navigation.navigate(editDestination, {
+          vaccineId: props.data.id_record,
+        });
+      }}>
       <View style={styles.ViewContainer}>
         <TouchableOpacity style={styles.NotificationIcon}>
           <Image
@@ -25,8 +33,8 @@ const ReminderArea = (props): React.ReactElement => {
           />
         </TouchableOpacity>
         <View style={{marginLeft: 20}}>
-          <TitleHeader style={styles.tiltleText}>{'Parainfluenza'}</TitleHeader>
-          <DefaultText style={styles.defaultText} children="21/02/2021" />
+          <TitleHeader style={styles.tiltleText}>{props.data.name}</TitleHeader>
+          <DefaultText style={styles.defaultText} children={date} />
         </View>
       </View>
     </TouchableOpacity>
@@ -38,7 +46,7 @@ export default ReminderArea;
 const {width} = Dimensions.get('window');
 const styles = StyleService.create({
   container: {
-    width: width - globalVars.outsidePadding - 15,
+    width: width - globalVars.outsidePadding - 22,
     height: 90,
     borderRadius: 18,
     backgroundColor: globalColors.greenPrimary,
