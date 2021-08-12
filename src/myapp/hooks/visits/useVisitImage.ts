@@ -1,9 +1,9 @@
 import {useQuery} from 'react-query';
 import api from '../../services/app-services';
 
-const useVisitImage = (data) => {
-  return useQuery(['visits-image', data], () =>
-    api.get('api/v1/visit-images/?visit=' + data, true),
+const useVisitImage = (visitId: string) => {
+  return useQuery(['visits-image', visitId], () =>
+    api.get('api/v1/visit-images/?visit=' + visitId, true),
   );
 };
 export default useVisitImage;

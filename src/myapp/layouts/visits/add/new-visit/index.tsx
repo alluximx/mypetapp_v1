@@ -22,7 +22,7 @@ import UserTextArea from '../../../../components/inputs/user-textAtea';
 import ImageInputCard from '../../../../components/cards/image-input-card';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {date, details, idVisit, images, title} = route.params.visit;
+  const {date, details, idVisit, images, title, user_pet} = route.params.visit;
 
   const prescriptionImage = images.find(
     (image: VisitImage) => image.is_prescription,
@@ -47,8 +47,8 @@ export default ({navigation, route}): React.ReactElement => {
   );
 
   const addQuery = useAddMedicalVisit();
-  const updateQuery = useUpdateMedicalVisit();
-  const deleteQuery = useDeleteMedicalVisit();
+  const updateQuery = useUpdateMedicalVisit(idVisit);
+  const deleteQuery = useDeleteMedicalVisit(user_pet);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
