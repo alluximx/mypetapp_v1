@@ -15,13 +15,29 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import CustomButton from '../../../components/buttons/custom-button';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
+import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
 
 export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
+  const [form, setForm] = useState({
+    state: '',
+    stateName: '',
+    town: '',
+    townName: '',
+    query: null,
+  });
   const [status, setStatus] = useState(true);
   const [statusBtn, setStatusBtn] = useState(true);
   const [stateList, setStateList] = useState([]);
+  const [statusData, setStatusData] = useState(false);
+  const [isLoding, setIsLoding] = useState(false);
   const dataStates = useStates();
+  const data = useAdoptionSerch({
+    stateId: form.state,
+    municipalityId: form.town,
+    query: form.query,
+    status: statusData,
+  });
   useEffect(() => {
     if (dataStates.data) {
       let aux = [];
@@ -33,23 +49,31 @@ export default ({navigation, route}): React.ReactElement => {
       });
       setStateList(aux);
     }
-  }, [dataStates.data, dataStates.isFetched]);
-  const [form, setForm] = useState({
-    state: '',
-    stateName: '',
-    town: '',
-    townName: '',
-  });
+    if (data.data) {
+      if (statusData) {
+        navigation.navigate('AdoptionResult', {
+          filter: form,
+          data: data.data.data,
+          filters: {
+            male: false,
+            feminine: false,
+            onetosix: false,
+            sixtotwelve: false,
+            onetothree: false,
+            threetofive: false,
+            fiveormore: false,
+          },
+        });
+        setIsLoding(false);
+        setStatusData(false);
+      }
+    }
+  }, [dataStates.data, dataStates.isFetched, data.data, statusData]);
   const changeMunicipality = (valor, name) => {
     valor == '' ? setStatusBtn(true) : setStatusBtn(false);
     valor == ''
-      ? setForm({...form, townName: '', town: ''})
-      : setForm({...form, townName: name, town: valor});
-  };
-  const onFind = () => {
-    navigation.navigate('AdoptionResult', {
-      filter: form,
-    });
+      ? setForm({...form, townName: '', town: '', query: ''})
+      : setForm({...form, townName: name, town: valor, query: ''});
   };
   return (
     <DefaultLayout
@@ -87,6 +111,7 @@ export default ({navigation, route}): React.ReactElement => {
           status={status}
           id={form.state}
           change={changeMunicipality}
+          idTown={form.town}
         />
         <CustomButton
           style={
@@ -95,7 +120,11 @@ export default ({navigation, route}): React.ReactElement => {
               : {marginTop: 14}
           }
           isDisabled={statusBtn}
-          onPress={onFind}>
+          isLoading={isLoding}
+          onPress={() => {
+            setIsLoding(true);
+            setStatusData(true);
+          }}>
           Buscar
         </CustomButton>
       </Layout>

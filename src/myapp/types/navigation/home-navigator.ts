@@ -25,6 +25,7 @@ type HomeNavigatorParamList = {
   DewormingHistory: {};
   AdoptionResult: {};
   AdoptionDetail: {};
+  AdoptionAdvanceFilter: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;
