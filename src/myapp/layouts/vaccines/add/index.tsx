@@ -31,7 +31,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [etiquetteImage, setEtiquetteImage] = useState(null);
   const [isUnique, setIsUnique] = useState(true);
 
-  const vaccinesQuery = useGetVaccines();
+  const vaccinesQuery = useGetVaccines(true);
   const saveVaccineQuery = useSaveVaccine();
   const vaccinesData = vaccinesQuery.isLoading
     ? []
