@@ -1,46 +1,62 @@
 import React, {useEffect} from 'react';
-import GenericCard from '../cards/generic-card';
 import moment from 'moment';
+// Hooks.
 import useVisitImage from '../../hooks/visits/useVisitImage';
+// My Components.
+import GenericCard from '../cards/generic-card';
 
-const VisitCardImg = (props): React.ReactElement => {
-  const data = useVisitImage(props.data.id);
+interface VisitCardImgProps {
+  data: any;
+  navigation: any;
+  route: any;
+  visit?: any;
+}
+
+const VisitCardImg = ({
+  data,
+  navigation,
+  route,
+  visit,
+}: VisitCardImgProps): React.ReactElement => {
+  const {details, id, title, user_pet, visit_date} = data;
+  const {data: visitData, isLoading} = useVisitImage(id);
   const [images, setImages] = React.useState([]);
 
   useEffect(() => {
-    if (data.data) {
-      setImages(data.data.data);
+    if (visitData) {
+      setImages(visitData.data);
     }
-  }, [data.data]);
+  }, [visitData]);
 
   const newData = {
-    date:
-      props.data.visit_date == null ? null : new Date(props.data.visit_date),
-    title: props.data.title,
-    content: props.data.details,
-    buttonText: 'Editar',
+    date: visit_date == null ? null : new Date(visit_date),
     buttonAlign: 'right',
-    images: images,
+    buttonText: 'Editar',
+    content: details,
+    data: visit,
+    images,
     styleCard: {},
-    data: props.data,
+    title,
   };
 
-  const onEdit = (params) => {
-    const formattedDate = moment(params.date).format('YYYY-MM-DD');
-    props.navigation.navigate('NewVisitMedical', {
-      pet: props.route.params.pet,
-      visit: {
-        idVisit: params.data.id,
-        title: params.title,
-        details: params.content,
-        date: formattedDate,
-        images: params.images,
-      },
+  const onEdit = () => {
+    const date = moment(data.date).format('YYYY-MM-DD');
+
+    navigation.navigate('NewVisitMedical', {
       isEdit: true,
+      pet: route.params.pet,
+      visit: {
+        date,
+        details,
+        idVisit: data.id,
+        images,
+        title,
+        user_pet,
+      },
     });
   };
 
-  return !data.isLoading && <GenericCard data={newData} onClick={onEdit} />;
+  return !isLoading && <GenericCard data={newData} onClick={onEdit} />;
 };
 
 export default VisitCardImg;

@@ -55,6 +55,7 @@ export default ({navigation, route}): React.ReactElement => {
     };
     return <GenericCard data={auxData} onClick={() => {}} />;
   };
+
   return (
     <DefaultLayout style={[styles.container, {color: 'black'}]}>
       <Layout

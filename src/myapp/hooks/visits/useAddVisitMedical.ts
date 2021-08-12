@@ -3,7 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import useSaveVisitImage from './useSaveVisitImage';
 
-const postMedicalVisit = (data) => api.post('api/v1/vetvisits/', data, true);
+const postMedicalVisit = (data: any) => api.post('api/v1/vetvisits/', data, true);
 
 const useAddMedicalVisit = () => {
   const navigation = useNavigation();
@@ -32,7 +32,7 @@ const useAddMedicalVisit = () => {
       saveImage('additional1', variables, 'false', response.data.id);
       saveImage('additional2', variables, 'false', response.data.id);
       saveImage('additional3', variables, 'false', response.data.id);
-      queryClient.invalidateQueries('visits-information');
+      queryClient.invalidateQueries(['visits-information', variables.user_pet]);
       navigation.goBack();
     },
   });

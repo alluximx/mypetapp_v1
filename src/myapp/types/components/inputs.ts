@@ -1,21 +1,3 @@
-export interface DatasGeneric {
-  date?: Date | null;
-  title: string;
-  content: string;
-  buttonText: string;
-  buttonAlign: string;
-  images?: string[];
-}
-
-export interface DatePickerProps {
-  currentValue: string;
-  disabled?: boolean;
-  maxDate?: Date;
-  minDate?: Date;
-  onSelect: (value: string) => void;
-  placeholder: string;
-}
-
 export interface DropdownPickerProps {
   currentValue: string;
   data: any[];
