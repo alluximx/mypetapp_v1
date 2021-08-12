@@ -30,6 +30,14 @@ export interface Pet {
   size: Size;
 }
 
+export interface Visit {
+  id: string;
+  user_pet: string;
+  visit_date: string;
+  title: string;
+  details: string;
+}
+
 export interface VisitImage {
   created: string;
   file: string;

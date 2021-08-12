@@ -2,7 +2,7 @@ import {useMutation, useQueryClient} from 'react-query';
 import RNFetchBlob from 'rn-fetch-blob';
 import api from '../../services/app-services';
 
-const putImage = (data) => {
+const putImage = (data: any) => {
   const newData = [
     {name: 'visit', data: data.idVisit},
     {
@@ -13,6 +13,7 @@ const putImage = (data) => {
     },
     {name: 'is_prescription', data: data.isPrescription},
   ];
+  
   return api.put('api/v1/visit-images/' + data.id + '/', newData, true, true);
 };
 

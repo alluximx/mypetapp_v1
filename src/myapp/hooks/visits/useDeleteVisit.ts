@@ -3,15 +3,15 @@ import {useNavigation} from '@react-navigation/native';
 // Services.
 import api from '../../services/app-services';
 
-const deleteVisit = (id) => {
-  return api.delete(`api/v1/vetvisits/`, id);
+const deleteVisit = (visitId: string) => {
+  return api.delete(`api/v1/vetvisits/`, visitId);
 };
-const useDeleteMedicalVisit = () => {
+const useDeleteMedicalVisit = (petId: string) => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-  return useMutation((data: any) => deleteVisit(data), {
-    onSuccess: (response, variables) => {
-      queryClient.invalidateQueries(['visits-information']);
+  return useMutation((visitId: string) => deleteVisit(visitId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['visits-information', petId]);
       navigation.goBack();
     },
   });
