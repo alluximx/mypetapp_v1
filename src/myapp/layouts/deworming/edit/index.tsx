@@ -143,11 +143,11 @@ export default ({navigation, route}): React.ReactElement => {
         showCancel={true}
         visible={isModalVisible}
       />
-      <TitleHeader style={styles.title}>Editar Desparacitación</TitleHeader>
+      <TitleHeader style={styles.title}>Editar Desparasitación</TitleHeader>
       <DropdownPicker
         currentValue={form.vaccine_registered}
         data={vaccinesData}
-        placeholder="Tipo de vacuna"
+        placeholder="Tipo de desparasitación"
         setCurrentValue={(vaccine_registered) =>
           setForm({...form, vaccine_registered})
         }

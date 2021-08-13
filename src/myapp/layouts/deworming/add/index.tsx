@@ -64,11 +64,11 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout>
-      <TitleHeader style={styles.title}>Nueva Desparacitación</TitleHeader>
+      <TitleHeader style={styles.title}>Nueva Desparasitación</TitleHeader>
       <DropdownPicker
         currentValue={form.vaccine_registered}
         data={vaccinesData}
-        placeholder="Tipo de vacuna"
+        placeholder="Tipo de desparasitación"
         setCurrentValue={(vaccine_registered) =>
           setForm({...form, vaccine_registered})
         }

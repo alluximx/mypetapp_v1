@@ -27,7 +27,7 @@ const servicesList = [
     screen: 'VaccinesIndex',
   },
   {
-    serviceName: 'Desparacitaciones',
+    serviceName: 'Desparasitaciones',
     icon: require('../../../assets/images/menu/deworming.png'),
     screen: 'DewormingHistory',
   },

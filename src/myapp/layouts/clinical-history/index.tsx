@@ -26,7 +26,7 @@ export default ({navigation}): React.ReactElement => {
         style={[styles.image, {tintColor: null}]}
         source={require('../home/assets/image-pet-1.jpg')}
       />
-      <View style={styles.detailsContainer}>
+      <View>
         <Text category="s1">Entrega estimada:</Text>
         <Text category="s1">{`${item.date} ${index + 1}`}</Text>
         <Text appearance="hint" category="p2">
@@ -47,9 +47,9 @@ export default ({navigation}): React.ReactElement => {
             <List data={data} renderItem={renderItem} />
           </Layout>
         </Tab>
-        <Tab title="Desparacitaciones">
+        <Tab title="Desparasitaciones">
           <Layout style={styles.tabContainer}>
-            <Text category="h5">Desparacitaciones</Text>
+            <Text category="h5">Desparasitaciones</Text>
             <List data={data} renderItem={renderItem} />
           </Layout>
         </Tab>
