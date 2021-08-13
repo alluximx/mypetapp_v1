@@ -1,15 +1,14 @@
-import React, {useLayoutEffect, useEffect, useState} from 'react';
+import React, {useLayoutEffect} from 'react';
 import {Image, Dimensions} from 'react-native';
-//My Components.
+// My Components.
 import AddButton from '../../../components/buttons/add-button';
-import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
-//UI kitten
+// UI kitten
 import {Layout, StyleService, List} from '@ui-kitten/components';
-//Global Styles
+// Global Styles
 import globalColors from '../../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
@@ -33,41 +32,6 @@ export default ({navigation, route}): React.ReactElement => {
       ],
     },
   ];
-  // const dewormingQuery = [];
-  // const dewormingQuery = [
-  //   {
-  //     id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-  //     petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
-  //     name: 'Interna',
-  //     deworming_date: '2021-02-28',
-  //     next_deworming_date: '2021-08-28',
-  //     is_unique: false,
-  //     reminder: '2021-08-26T11:15:00-05:00',
-  //     status: 'Activa',
-  //     dewormings: [
-  //       {
-  //         id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-  //         date: '2021-02-28',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-  //     petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
-  //     name: 'Externa',
-  //     deworming_date: '2021-04-12',
-  //     next_deworming_date: '2021-07-30',
-  //     is_unique: false,
-  //     reminder: '2021-07-28T11:15:00-05:00',
-  //     status: 'Vencida',
-  //     dewormings: [
-  //       {
-  //         id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-  //         date: '2021-04-12',
-  //       },
-  //     ],
-  //   },
-  // ];
 
   const renderServiceItem = (service) => {
     const is_unique = service.item.is_unique;

@@ -13,7 +13,6 @@ const putImage = (data: any) => {
     },
     {name: 'is_prescription', data: data.isPrescription},
   ];
-  
   return api.put('api/v1/visit-images/' + data.id + '/', newData, true, true);
 };
 

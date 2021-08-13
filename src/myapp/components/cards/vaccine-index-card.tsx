@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {Card, StyleService, List} from '@ui-kitten/components';
 import {View, TouchableOpacity, Image} from 'react-native';
 import moment from 'moment';
-//Global Styles
+// Global Styles
 import globalColors from '../../styles/colors';
-//My Components
+// My Components
 import {DropDownIcon, DropUpIcon} from '../icons';
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../../components/texts/default-text';
@@ -89,7 +89,7 @@ const VaccineCard = (props): React.ReactElement => {
       )}
 
       <View style={styles.headerTop}>
-        {props.data.status == 'Activa' ? (
+        {props.data.status === 'Activa' ? (
           <DefaultText style={styles.statusGreen}>
             {props.data.status}
           </DefaultText>

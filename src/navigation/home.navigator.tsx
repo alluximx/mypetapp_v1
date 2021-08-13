@@ -26,19 +26,19 @@ import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
-//visits
+// visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
-//Vaccines
+// Vaccines
 import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
-//Deworming
+// Deworming
 import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
 import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
-//Breed
+// Breed
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
-//Adoption
+// Adoption
 import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();

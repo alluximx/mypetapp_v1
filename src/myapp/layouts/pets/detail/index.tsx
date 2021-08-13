@@ -42,8 +42,8 @@ export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const {years, months} = pet_age;
   // Format age.
-  const monthsMessage = `${months} ${months == 1 ? 'Mes' : 'Meses'}`;
-  const yearsMessage = `${years} ${years == 1 ? 'Año' : 'Años'}`;
+  const monthsMessage = `${months} ${months === 1 ? 'Mes' : 'Meses'}`;
+  const yearsMessage = `${years} ${years === 1 ? 'Año' : 'Años'}`;
   const formattedAge =
     years > 0 ? `${yearsMessage} ${monthsMessage}` : monthsMessage;
 

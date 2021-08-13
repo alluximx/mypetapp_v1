@@ -1,3 +1,12 @@
+export interface DatePickerProps {
+  currentValue: string;
+  disabled?: boolean;
+  maxDate?: Date;
+  minDate?: Date;
+  onSelect: (date: string) => void;
+  placeholder?: string;
+}
+
 export interface DropdownPickerProps {
   currentValue: string;
   data: any[];

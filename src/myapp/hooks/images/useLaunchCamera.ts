@@ -16,11 +16,7 @@ const options: CameraOptions = {
 const useLaunchCamera = (setImage: (image: ImageSourcePropType) => void) => {
   const onPress = useCallback(() => {
     launchCamera(options, (response: ImagePickerResponse) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('Error code: ', response.errorCode);
-      } else {
+      if (!response.didCancel && !response.errorCode) {
         setImage(response.assets[0]);
       }
     });
