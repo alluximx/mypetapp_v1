@@ -15,41 +15,59 @@ import globalColors from '../../../styles/colors';
 export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
 
-  //const dewormingQuery = [];
   const dewormingQuery = [
     {
-      id: '2a7e01a8-90ef-4677-9f14-c790319df196',
+      id: '987e3a64-818b-4e46-8985-cf3b3297a27b',
       petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
       name: 'Interna',
-      deworming_date: '2021-02-28',
-      next_deworming_date: '2021-08-28',
+      deworming_date: '2021-08-27',
+      next_deworming_date: '2022-04-30',
       is_unique: false,
-      reminder: '2021-08-26T11:15:00-05:00',
+      reminder: '2022-04-23T09:00:00-05:00',
       status: 'Activa',
       dewormings: [
         {
-          id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-          date: '2021-02-28',
-        },
-      ],
-    },
-    {
-      id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-      petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
-      name: 'Externa',
-      deworming_date: '2021-04-12',
-      next_deworming_date: '2021-07-30',
-      is_unique: false,
-      reminder: '2021-07-28T11:15:00-05:00',
-      status: 'Vencida',
-      dewormings: [
-        {
-          id: '2a7e01a8-90ef-4677-9f14-c790319df196',
-          date: '2021-04-12',
+          id: '987e3a64-818b-4e46-8985-cf3b3297a27b',
+          date: '2021-08-27',
         },
       ],
     },
   ];
+  // const dewormingQuery = [];
+  // const dewormingQuery = [
+  //   {
+  //     id: '2a7e01a8-90ef-4677-9f14-c790319df196',
+  //     petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
+  //     name: 'Interna',
+  //     deworming_date: '2021-02-28',
+  //     next_deworming_date: '2021-08-28',
+  //     is_unique: false,
+  //     reminder: '2021-08-26T11:15:00-05:00',
+  //     status: 'Activa',
+  //     dewormings: [
+  //       {
+  //         id: '2a7e01a8-90ef-4677-9f14-c790319df196',
+  //         date: '2021-02-28',
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     id: '2a7e01a8-90ef-4677-9f14-c790319df196',
+  //     petId: '44e99a4c-eba2-4e9c-b763-0976857908ac',
+  //     name: 'Externa',
+  //     deworming_date: '2021-04-12',
+  //     next_deworming_date: '2021-07-30',
+  //     is_unique: false,
+  //     reminder: '2021-07-28T11:15:00-05:00',
+  //     status: 'Vencida',
+  //     dewormings: [
+  //       {
+  //         id: '2a7e01a8-90ef-4677-9f14-c790319df196',
+  //         date: '2021-04-12',
+  //       },
+  //     ],
+  //   },
+  // ];
 
   const renderServiceItem = (service) => {
     const is_unique = service.item.is_unique;
@@ -81,7 +99,7 @@ export default ({navigation, route}): React.ReactElement => {
             width: 35,
           }}
           onAdd={() =>
-            navigation.navigate('AddVaccine', {petId: route.params.pet.id})
+            navigation.navigate('AddDeworming', {petId: route.params.pet.id})
           }
         />
       ),

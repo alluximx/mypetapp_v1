@@ -34,6 +34,7 @@ import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.compone
 //Deworming
 import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
+import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
 //Breed
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
@@ -69,6 +70,7 @@ const Screens = ({navigation, route, style}) => {
             isGuest: route.params.isGuest,
           }}
         />
+
         {/* PETS */}
         <HomeStack.Screen
           name="AddPet"
@@ -96,9 +98,11 @@ const Screens = ({navigation, route, style}) => {
             headerLeft: closeButton,
           }}
         />
+
         {/* Services visits */}
         <HomeStack.Screen name="ServicesDoc" component={InfVisitinScreen} />
         <HomeStack.Screen name="NewVisitMedical" component={newVisitScreen} />
+
         {/* Vaccines */}
         <HomeStack.Screen name="VaccinesIndex" component={VaccineIndexScreen} />
         <HomeStack.Screen
@@ -115,12 +119,17 @@ const Screens = ({navigation, route, style}) => {
             headerLeft: closeButton,
           }}
         />
+
         {/* Deworming */}
         <HomeStack.Screen
           name="DewormingHistory"
           component={DewormingHistoryScreen}
         />
         <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
+        <HomeStack.Screen
+          name="EditDeworming"
+          component={EditDewormingScreen}
+        />
 
         {/* Breed */}
         <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
@@ -143,6 +152,7 @@ const Screens = ({navigation, route, style}) => {
             headerStyle: {backgroundColor: 'transparent'},
           }}
         />
+
         {/*Adoption */}
         <HomeStack.Screen name="AdoptionFilter" component={AdoptionScreen} />
 
