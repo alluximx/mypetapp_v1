@@ -17,7 +17,7 @@ import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
   const [vaccines, setVaccines] = useState([]);
-  const vaccinesQuery = useGetVaccineIndex(route.params.pet.id);
+  const vaccinesQuery = useGetVaccineIndex(route.params.pet.id, 'true');
 
   useEffect(() => {
     if (vaccinesQuery.data) {

@@ -7,7 +7,7 @@ export interface DatasGeneric {
     buttonText: string;
     content: string;
     date?: Date | null;
-    images?: string[];
+    images?: {file: string}[];
     title: string;
   };
   onClick: (data?: any) => void;

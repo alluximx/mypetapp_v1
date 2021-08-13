@@ -12,8 +12,9 @@ const putVaccineImage = (data) => {
       data: RNFetchBlob.wrap(data.file.uri),
     },
   ];
+
   return api.put(
-    `api/v1/vaccine-images/${data.vaccine_image_id}`,
+    `api/v1/vaccine-images/${data.vaccine_image_id}/`,
     newData,
     true,
     true,

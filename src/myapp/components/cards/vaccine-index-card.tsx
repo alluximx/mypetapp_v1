@@ -61,7 +61,7 @@ const VaccineCard = (props): React.ReactElement => {
   };
 
   return (
-    <Card style={styles.container}>
+    <Card style={styles.container} disabled={true}>
       <View style={styles.headerTitle}>
         <TitleHeader wrapText={true} style={styles.title}>
           {props.data.name}

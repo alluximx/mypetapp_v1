@@ -6,6 +6,7 @@ import globalColors from '../../styles/colors';
 import {StyleService} from '@ui-kitten/components';
 // Hook
 import useGetVaccineImage from '../../hooks/vaccines/useGetVaccineImage';
+import PreviewableImage from '../modals/previewable-image';
 
 const VaccineImage = (props): React.ReactElement => {
   const [vaccineImage, setVaccineImage] = useState([]);
@@ -21,7 +22,10 @@ const VaccineImage = (props): React.ReactElement => {
   }, [vaccinesImageQuery.data]);
 
   return vaccinesImageQuery.isLoading ? null : vaccineImage.length > 0 ? (
-    <Image style={styles.imgStyle} source={{uri: vaccineImage[0].img}} />
+    <PreviewableImage
+      style={styles.imgStyle}
+      source={{uri: vaccineImage[0].img}}
+    />
   ) : (
     <TouchableOpacity style={styles.notificationIcon}>
       <Image
