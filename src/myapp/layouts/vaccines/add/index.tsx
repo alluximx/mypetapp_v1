@@ -24,6 +24,7 @@ export default ({navigation, route}): React.ReactElement => {
     vaccine_date: '',
     next_vaccine_date: '',
     reminder: null,
+    is_vaccine: true,
   });
 
   const [isReminderActive, setIsReminderActive] = useState(false);

@@ -22,7 +22,6 @@ import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
 import TitleHeader from '../../../components/texts/title-header';
 import VisitsImgCard from '../../../components/cards/image-input-card';
-import useUpdateVaccineImage from 'src/myapp/hooks/vaccines/useUpdateVaccineImage';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +47,7 @@ export default ({navigation, route}): React.ReactElement => {
     reminder: vaccineData.data?.data.reminder ?? null,
     vaccine_registered: vaccineData.data?.data.vaccine_registered.id ?? '',
     vaccine_image_id: '',
+    is_vaccine: true,
   });
 
   const isDisabled =
