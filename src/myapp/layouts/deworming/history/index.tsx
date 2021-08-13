@@ -120,7 +120,7 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : dewormings.length > 0 ? (
     <DefaultLayout>
-      <TitleHeader children="Desparacitaciones" />
+      <TitleHeader children="Desparasitaciones" />
       <List
         style={styles.servicesContainer}
         data={dewormings}
@@ -138,9 +138,9 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.dogImage}
           source={require('../../../assets/images/pets/deworminPetImage.png')}
         />
-        <TitleHeader children="Desparacitaciones" style={styles.center} />
+        <TitleHeader children="Desparasitaciones" style={styles.center} />
         <DefaultText
-          children="Aún no has agregado desparacitaciones"
+          children="Aún no has agregado desparasitaciones"
           style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
         />
         <DefaultText
