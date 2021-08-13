@@ -1,15 +1,13 @@
-import {Card, List, StyleService, useStyleSheet} from '@ui-kitten/components';
+import {Card, StyleService, useStyleSheet} from '@ui-kitten/components';
 import React from 'react';
-import {Image, Dimensions} from 'react-native';
 import moment from 'moment';
-// Global Styles.
-import globalColors from '../../styles/colors';
 // My Components.
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {DatasGeneric} from '../../types/components/cards';
+import PreviewableImageList from '../modals/previewable-image-list';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {buttonAlign, buttonText, content, date, images, title} = props.data;
@@ -17,14 +15,14 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
   const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
 
-  const renderServiceItem = (service) => {
-    return (
-      <Image style={styles.imageStyles} source={{uri: service.item.file}} />
-    );
-  };
+  const imageList = images.map((image) => {
+    return {
+      uri: image.file,
+    };
+  });
 
   return (
-    <Card style={[styles.cardStyle, props.styleCard]}>
+    <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
       {date && (
         <DefaultText style={styles.labelDate}>{formattedDate}</DefaultText>
       )}
@@ -32,15 +30,8 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
       <DefaultText style={styles.labelCard} numberOfLines={5} wrapText>
         {content}
       </DefaultText>
-      {images.length > 0 && (
-        <List
-          data={images}
-          horizontal={true}
-          renderItem={renderServiceItem}
-          style={styles.servicesContainer}
-        />
-      )}
-      <AnchorText onPress={() => props.onClick()} style={stylesCart.header}>
+      {images.length > 0 && <PreviewableImageList sources={imageList} />}
+      <AnchorText onPress={props.onClick} style={stylesCart.header}>
         {buttonText}
       </AnchorText>
     </Card>
@@ -55,12 +46,6 @@ const themedStyles = StyleService.create({
   labelCard: {
     marginTop: 4,
   },
-  imageStyles: {
-    height: 40,
-    width: 40,
-    marginTop: 16,
-    marginRight: 16,
-  },
   labelDate: {
     fontSize: 14,
   },
@@ -68,11 +53,6 @@ const themedStyles = StyleService.create({
     marginHorizontal: 24,
     marginBottom: 16,
     borderRadius: 18,
-  },
-  servicesContainer: {
-    backgroundColor: 'transparent',
-    paddingBottom: 8,
-    paddingTop: 5,
   },
 });
 
