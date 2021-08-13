@@ -5,12 +5,14 @@ import {Card, List} from '@ui-kitten/components';
 import globalColors from '../../../styles/colors';
 // Hooks.
 import useMyPetImage from '../../../hooks/pets/useMyPetImage';
+import useGetVaccineReminder from '../../../hooks/vaccines/useGetVaccineReminder';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import PetDataCard from '../../../components/cards/pet-data-card';
 import TitleHeader from '../../../components/texts/title-header';
+import ReminderArea from '../../../components/reminder-area';
 
 const servicesList = [
   {
@@ -45,8 +47,10 @@ export default ({navigation, route}): React.ReactElement => {
     years > 0 ? `${yearsMessage} ${monthsMessage}` : monthsMessage;
 
   const [image, setImage] = useState<ImageSourcePropType>(null);
+  const [reminders, setReminders] = useState([]);
 
   const {data: petImage} = useMyPetImage(id);
+  const reminderDate = useGetVaccineReminder(id);
 
   useEffect(() => {
     if (petImage) {
@@ -55,6 +59,12 @@ export default ({navigation, route}): React.ReactElement => {
       });
     }
   }, [petImage]);
+
+  useEffect(() => {
+    if (reminderDate.data) {
+      setReminders(reminderDate.data.data);
+    }
+  }, [reminderDate.data]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -94,6 +104,30 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
+  const renderServiceReminderItem = (service) => {
+    const auxData = {
+      id_record: service.item.id,
+      date: service.item.reminder,
+      name: service.item.vaccine_registered.vaccine_name,
+      is_vaccine: service.item.is_vaccine,
+    };
+    return <ReminderArea navigation={navigation} data={auxData} />;
+  };
+
+  function customSort(a, b) {
+    var Item1 = a.reminder;
+    var Item2 = b.reminder;
+    if (Item1 > Item2) {
+      return 1;
+    }
+    if (Item1 < Item2) {
+      return -1;
+    }
+    return 0;
+  }
+
+  reminders.sort(customSort);
+
   return (
     <DefaultLayout style={styles.container}>
       <View style={styles.petImageContainer}>
@@ -111,13 +145,22 @@ export default ({navigation, route}): React.ReactElement => {
         statusBarBackgroundColor={globalColors.greenSecondary}
         statusBarStyle="light-content"
         style={styles.cardSection}>
-        <TitleHeader style={styles.bottomSpace}>Historial Clínico</TitleHeader>
+        <View>
+          <TitleHeader style={styles.bottomSpace}>
+            Historial Clínico
+          </TitleHeader>
+          <List
+            style={styles.servicesContainer}
+            contentContainerStyle={styles.servicesContentContainer}
+            horizontal={true}
+            data={servicesList}
+            renderItem={renderServiceItem}
+          />
+        </View>
         <List
           style={styles.servicesContainer}
-          contentContainerStyle={styles.servicesContentContainer}
-          horizontal={true}
-          data={servicesList}
-          renderItem={renderServiceItem}
+          data={reminders}
+          renderItem={renderServiceReminderItem}
         />
       </DefaultLayout>
     </DefaultLayout>
@@ -171,7 +214,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   servicesContentContainer: {
-    flexDirection: 'row',
     paddingBottom: 8,
     backgroundColor: 'transparent',
   },
