@@ -1,15 +1,15 @@
-import React, {useLayoutEffect, useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Image, Dimensions} from 'react-native';
-//My Components.
+// My Components.
 import AddButton from '../../../components/buttons/add-button';
 import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
-//UI kitten
+// UI kitten
 import {Layout, StyleService, List} from '@ui-kitten/components';
-//Global Styles
+// Global Styles
 import globalColors from '../../../styles/colors';
 // Hook.
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
@@ -18,7 +18,7 @@ export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
 
   const [dewormings, setDewormings] = useState([]);
-  const dewormingQuery = useGetVaccineIndex(id);
+  const dewormingQuery = useGetVaccineIndex(id, false);
 
   useEffect(() => {
     if (dewormingQuery.data) {

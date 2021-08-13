@@ -9,7 +9,7 @@ import {DropDownIcon} from '../icons';
 // Global Styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
-//Types
+// Types
 import {DatePickerProps} from '../../types/components/inputs';
 
 const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
@@ -58,8 +58,10 @@ const DatepickerInput = (props: DatePickerProps) => {
         disabled={props.disabled}
         max={maxDate}
         min={minDate}
-        placeholder={(props) => (
-          <Text {...props} style={[props.style, styles.placeholder]}>
+        placeholder={(placeholderProps) => (
+          <Text
+            {...placeholderProps}
+            style={[placeholderProps.style, styles.placeholder]}>
             Selecciona una fecha
           </Text>
         )}

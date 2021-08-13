@@ -1,6 +1,6 @@
 import {RouteProp} from '@react-navigation/native';
 
-type AuthStackParamList = {
+type AuthStackParamList {
   Start: {};
   SignIn: {};
   SignUp: {};
@@ -10,7 +10,7 @@ type AuthStackParamList = {
     userId: number | null;
   };
   RecoveryKey: {};
-};
+}
 
 export type ForgotPasswordRouteParams = RouteProp<
   AuthStackParamList,

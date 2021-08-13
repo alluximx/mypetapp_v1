@@ -1,16 +1,16 @@
 import React, {useLayoutEffect, useEffect, useState} from 'react';
 import {Image, StyleSheet} from 'react-native';
-//My Components.
+// My Components.
 import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import VaccineCard from '../../../components/cards/vaccine-index-card';
 import CustomSpinner from '../../../components/custom-spinner';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
-//Global Styles
+// Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
-//UI Kitten
+// UI Kitten
 import {List} from '@ui-kitten/components';
 // Hook.
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
@@ -22,8 +22,8 @@ export default ({navigation, route}): React.ReactElement => {
   useEffect(() => {
     if (vaccinesQuery.data) {
       function sortByDate(a, b) {
-        var Item1 = a.vaccine_date;
-        var Item2 = b.vaccine_date;
+        const Item1 = a.vaccine_date;
+        const Item2 = b.vaccine_date;
         if (Item1 < Item2) {
           return 1;
         }
@@ -70,8 +70,8 @@ export default ({navigation, route}): React.ReactElement => {
   }, [vaccinesQuery.data]);
 
   function customSort(a, b) {
-    var Item1 = a.name;
-    var Item2 = b.name;
+    const Item1 = a.name;
+    const Item2 = b.name;
     if (Item1 > Item2) {
       return 1;
     }

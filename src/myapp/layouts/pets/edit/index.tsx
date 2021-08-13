@@ -125,14 +125,14 @@ export default ({navigation, route}): React.ReactElement => {
         })}
         currentValue={form.sex}
         placeholder="Sexo"
-        setCurrentValue={(sex: string) => {
-          setForm({...form, sex});
+        setCurrentValue={(petSex: string) => {
+          setForm({...form, sex: petSex});
         }}
       />
       <View style={{marginVertical: 8}}>
         <DatepickerInput
           currentValue={form.birthday}
-          onSelect={(birthday) => setForm({...form, birthday})}
+          onSelect={(petBirthday) => setForm({...form, birthday: petBirthday})}
           placeholder="Cumpleaños"
           minDate={new Date('Jan 01 1990')}
           maxDate={new Date()}
@@ -142,7 +142,7 @@ export default ({navigation, route}): React.ReactElement => {
         data={sizesList}
         currentValue={form.size}
         placeholder="Tamaño"
-        setCurrentValue={(size) => setForm({...form, size})}
+        setCurrentValue={(petSize) => setForm({...form, size: petSize})}
       />
       <AnchorText
         style={styles.deleteText}

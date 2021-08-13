@@ -12,12 +12,12 @@ const useVaccineReminder = (
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [reminderKey, setReminderKey] = useState(1);
 
-  const onSelectReminder = (reminderKey: number) => {
-    setReminderKey(reminderKey);
+  const onSelectReminder = (key: number) => {
+    setReminderKey(key);
 
     if (form.next_vaccine_date !== '') {
       const reminderOption = reminderOptions.find(
-        (option) => option.key == reminderKey,
+        (option) => option.key === key,
       );
 
       const dateToRemind = moment(form.next_vaccine_date)

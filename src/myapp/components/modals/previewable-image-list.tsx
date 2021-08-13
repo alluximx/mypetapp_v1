@@ -38,8 +38,8 @@ const PreviewableImageList = (props: PreviewableImageListProps) => {
     <>
       <EnhancedImageViewing
         animationType="slide"
-        FooterComponent={({imageIndex}) => (
-          <ImageFooter currentIndex={imageIndex} />
+        FooterComponent={({imageIndex: index}: {imageIndex: number}) => (
+          <ImageFooter currentIndex={index} />
         )}
         imageIndex={imageIndex}
         images={props.sources}

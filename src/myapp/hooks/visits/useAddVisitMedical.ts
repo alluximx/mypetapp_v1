@@ -3,7 +3,8 @@ import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import useSaveVisitImage from './useSaveVisitImage';
 
-const postMedicalVisit = (data: any) => api.post('api/v1/vetvisits/', data, true);
+const postMedicalVisit = (data: any) =>
+  api.post('api/v1/vetvisits/', data, true);
 
 const useAddMedicalVisit = () => {
   const navigation = useNavigation();
@@ -22,7 +23,9 @@ const useAddMedicalVisit = () => {
       isPrescription: isPrescription,
     };
 
-    if (data[fieldName]) useSaveImg.mutate(newData);
+    if (data[fieldName]) {
+      useSaveImg.mutate(newData);
+    }
   };
 
   return useMutation((data: any) => postMedicalVisit(data), {

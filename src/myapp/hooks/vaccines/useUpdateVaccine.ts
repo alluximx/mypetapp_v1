@@ -70,9 +70,8 @@ const useUpdateVaccine = (vaccineId) => {
               },
             );
           }
-        }
-        // if was deleted...
-        else {
+        } else {
+          // if was deleted...
           deleteVaccineImageQuery.mutate(variables.vaccine_image_id);
           queryClient.invalidateQueries(['pet-vaccines', variables.user_pet]);
         }

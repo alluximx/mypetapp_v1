@@ -3,10 +3,7 @@ import {useNavigation} from '@react-navigation/native';
 // Services.
 import api from '../../services/app-services';
 
-const deletePet = (data) => {
-  console.log(data);
-  return api.delete(`api/v1/pets/`, data.id);
-};
+const deletePet = (data) => api.delete(`api/v1/pets/`, data.id);
 
 const useDeletePet = () => {
   const navigation = useNavigation();

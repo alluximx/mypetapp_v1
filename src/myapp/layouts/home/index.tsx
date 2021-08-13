@@ -36,7 +36,7 @@ const servicesList = [
 export default ({navigation}): React.ReactElement => {
   const route = useRoute<HomeRouteParams>();
   const data = useMyNameAndPets();
-  const hasPets = data.pets.length != 0;
+  const hasPets = data.pets.length !== 0;
 
   const onAddPetButtonPress = (pet) =>
     navigation && navigation.navigate('AddPet', {pet: pet});

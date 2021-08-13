@@ -41,7 +41,9 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     // Update form after retrieving the user ID.
-    if (user) setForm({...form, owner_user: user.data.id});
+    if (user) {
+      setForm({...form, owner_user: user.data.id});
+    }
   }, [user]);
 
   useLayoutEffect(() => {

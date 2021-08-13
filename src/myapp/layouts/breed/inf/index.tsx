@@ -30,15 +30,14 @@ const InfBreedScreen = ({navigation}): React.ReactElement => {
     }
   }, [data.data]);
   const onFilter = async (event: string) => {
-    let aux = list.filter((breed) => {
+    const aux = list.filter((breed) => {
       return (
         breed.breed.name
           .toLocaleUpperCase()
           .indexOf(event.toLocaleUpperCase()) >= 0
       );
     });
-    if (event == '') {
-      //aux.push(data.refetch());
+    if (event === '') {
       data.refetch();
     }
     setBreeds(aux);
