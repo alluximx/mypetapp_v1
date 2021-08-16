@@ -12,7 +12,7 @@ const useAdoptionSerch = (data) => {
     ],
     () =>
       api.get(
-        'api/v1/addoption_publications/?state=' +
+        'api/v1/adoption_publications/?state=' +
           data.stateId +
           '&municipality=' +
           data.municipalityId +

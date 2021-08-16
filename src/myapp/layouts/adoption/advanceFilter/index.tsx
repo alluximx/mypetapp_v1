@@ -58,6 +58,8 @@ export default ({navigation, route}): React.ReactElement => {
       setNum(data.data.data.length);
       setList(data.data.data);
       setAuxList(data.data.data);
+    }
+    if (list.length > 0) {
       filters(
         form.feminine,
         form.male,
@@ -68,7 +70,7 @@ export default ({navigation, route}): React.ReactElement => {
         form.fiveormore,
       );
     }
-  }, [dataStates.data, dataStates.isFetched, data.data]);
+  }, [dataStates.data, dataStates.isFetched, data.data, list]);
   const changeMunicipality = (valor, name) => {
     setForm({...form, townId: valor, townName: name});
     setTown(valor);

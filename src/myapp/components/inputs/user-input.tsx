@@ -66,6 +66,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         accessoryRight={props.isPassword ? renderIcon : null}
         autoCapitalize={props.autoCapitalize ? 'words' : 'none'}
         onBlur={() => setIsFocused(false)}
+        keyboardType={props.isNumeric ? 'numeric' : 'default'}
         onChangeText={(value) => {
           props.onChangeText(value);
         }}
