@@ -7,6 +7,7 @@ export interface UserInputProps {
   onChangeText: (value: string) => void;
   placeholder: string;
   value: string;
+  isNumeric?: boolean;
 }
 
 export interface Option {

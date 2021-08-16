@@ -41,6 +41,8 @@ import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
 import {ResultScreen} from '../myapp/scenes/adoption/result.component';
 import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
 import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
+import {RequestScreen} from '../myapp/scenes/adoption/request.component';
+
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
@@ -151,6 +153,8 @@ const Screens = ({navigation, route, style}) => {
             headerStyle: {backgroundColor: 'transparent'},
           }}
         />
+        <HomeStack.Screen name="AdoptionRequest" component={RequestScreen} />
+
         <HomeStack.Screen
           name="AdoptionAdvanceFilter"
           component={FilterScreen}

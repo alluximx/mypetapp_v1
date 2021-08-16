@@ -5,28 +5,20 @@ import {
   List,
   Card,
 } from '@ui-kitten/components';
-import React, {useEffect} from 'react';
-import {Dimensions, Image} from 'react-native';
+import React from 'react';
+import {Dimensions, Image, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import globalColors from '../../../styles/colors';
 import AnchorText from '../../../components/texts/anchor-text';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
-import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
-import CustomSpinner from '../../../components/custom-spinner';
-import {useState} from 'react';
 export default ({navigation, route}): React.ReactElement => {
   const state = route.params.filter.state;
   const stateName = route.params.filter.stateName;
   const town = route.params.filter.town;
   const townName = route.params.filter.townName;
   const styles = useStyleSheet(themedStyles);
-  // const data = useAdoptionSerch({
-  //   stateId: state,
-  //   municipalityId: town,
-  //   query: query,
-  // });
   let cont = 1;
   let auxData = [];
   let aux = [];
@@ -34,17 +26,11 @@ export default ({navigation, route}): React.ReactElement => {
   route.params.data.forEach((element) => {
     if (element.status == 'PUBLICADO') {
       aux.push(element);
-      if (cont == 2) {
-        cont = 0;
-        auxData.push(aux);
-        aux = [];
-      }
-      cont = cont + 1;
       num = num + 1;
     }
   });
   aux.length > 0 && auxData.push(aux);
-  const listAdoption = auxData;
+  const listAdoption = aux;
   const numResult = num;
   navigation.setOptions({
     headerRight: () => (
@@ -75,14 +61,46 @@ export default ({navigation, route}): React.ReactElement => {
     ),
   });
   const renderServiceItem = (services) => {
+    let img = './../assets/abue.jpg';
+    services.item.images.forEach((images) => {
+      if (images.is_cover) {
+        img = images.image;
+      }
+    });
+
+    const auximg = 'https://mpa-stage.s3.amazonaws.com/media/' + img;
     return (
-      <List
-        style={styles.servicesContainer}
-        horizontal={true}
-        data={services.item}
-        renderItem={renderCard}
-      />
+      <Card
+        style={styles.cardStyle}
+        onPress={() => {
+          details(services.item);
+        }}>
+        <Image style={styles.cardImg} source={{uri: auximg}} />
+        <View>
+          <TitleHeader style={{marginTop: 8}}>{services.item.name}</TitleHeader>
+          <DefaultText style={{alignItems: 'center'}}>
+            {parseInt(services.item.ageNumber)}
+            {parseInt(services.item.ageNumber) > 1
+              ? services.item.ageType == 'Y'
+                ? '  Años'
+                : ' Meses'
+              : services.item.ageType == 'Y'
+              ? ' Año'
+              : ' Mes'}{' '}
+          </DefaultText>
+          <Text
+            style={{color: globalColors.greenPrimary, fontSize: 14}}
+            onPress={() => {
+              details(services.item);
+            }}>
+            Mi nuevo hogar
+          </Text>
+        </View>
+      </Card>
     );
+    // return (
+    //   // <List horizontal={true} data={services.item} renderItem={renderCard} />
+    // );
   };
   const renderCard = (services) => {
     let img = './../assets/abue.jpg';
@@ -100,7 +118,7 @@ export default ({navigation, route}): React.ReactElement => {
           details(services.item);
         }}>
         <Image style={styles.cardImg} source={{uri: auximg}} />
-        <TitleHeader style={{marginTop: 16}}>{services.item.name}</TitleHeader>
+        <TitleHeader style={{marginTop: 8}}>{services.item.name}</TitleHeader>
         <DefaultText style={{alignItems: 'center'}}>
           {parseInt(services.item.ageNumber)}
           {parseInt(services.item.ageNumber) > 1
@@ -131,7 +149,7 @@ export default ({navigation, route}): React.ReactElement => {
       statusBarStyle={'light-content'}
       style={[styles.container, {color: 'black'}]}>
       {listAdoption.length > 0 ? (
-        <Layout style={styles.layoutPort}>
+        <>
           <TitleHeader>{numResult} Resultados</TitleHeader>
           <DefaultText>
             {townName}, {stateName}.
@@ -141,8 +159,9 @@ export default ({navigation, route}): React.ReactElement => {
             horizontal={false}
             data={listAdoption}
             renderItem={renderServiceItem}
+            numColumns={2}
           />
-        </Layout>
+        </>
       ) : (
         <Layout style={{backgroundColor: globalColors.backgroundDefault}}>
           <Image
@@ -166,7 +185,6 @@ const themedStyles = StyleService.create({
   container: {
     flex: 1,
     backgroundColor: globalColors.backgroundDefault,
-    paddingHorizontal: 0,
   },
   layoutPort: {
     marginLeft: 24,
@@ -188,21 +206,21 @@ const themedStyles = StyleService.create({
     backgroundColor: 'transparent',
     marginBottom: 15,
     marginTop: 10,
-    width: width,
   },
   cardStyle: {
     borderRadius: 18,
-    backgroundColor: globalColors.lightGreen,
-    width: 175,
+    backgroundColor: globalColors.white,
+    width: '47%',
     height: 205,
-    flex: 1,
-    marginRight: 23,
+    marginRight: 10,
+    marginBottom: 10,
   },
   cardImg: {
-    width: 170,
-    height: 90,
-    marginLeft: -23,
+    width: '140%',
+    height: '57%',
     marginTop: -16,
-    borderRadius: 18,
+    marginLeft: -24,
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
   },
 });
