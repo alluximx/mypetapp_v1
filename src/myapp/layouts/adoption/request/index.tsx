@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleService} from '@ui-kitten/components';
 import globalColors from '../../../styles/colors';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -11,6 +11,10 @@ import {Dimensions, View, ScrollView} from 'react-native';
 import OptionSelect from '../../../components/inputs/option-select';
 import CustomModal from '../../../components/modals/custom-modal';
 import UserTextArea from '../../../components/inputs/user-textAtea';
+import useAdoption from '../../../hooks/adoption/useAdoption';
+import useStates from '../../../hooks/util/useState';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 export default ({navigation, route}): React.ReactElement => {
   const [form, setForm] = useState({
     name: '',
@@ -24,7 +28,9 @@ export default ({navigation, route}): React.ReactElement => {
     number: '',
     cp: '',
     cologne: '',
+    city: '',
     municipality: '',
+    state: '',
     qpet: '',
     qact: '',
     reason: '',
@@ -34,27 +40,187 @@ export default ({navigation, route}): React.ReactElement => {
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [statusBtn, setStatusBtn] = useState(true);
-  const [statusName, setStatusName] = useState(false);
-  const [statusEmail, setStatusEmail] = useState(false);
-  const [statusCel, setStatusCel] = useState(false);
+  const [stateList, setStateList] = useState([]);
+  const useAddQuery = useAdoption();
+  const dataStates = useStates();
+  useEffect(() => {
+    if (dataStates.data) {
+      let aux = [];
+      dataStates.data.data.forEach((element) => {
+        aux.push({
+          value: element.id,
+          label: element.name,
+        });
+      });
+      setStateList(aux);
+    }
+  }, [dataStates.data, dataStates.isFetched]);
   const sexOptions = [
     {key: 'M', value: 'Hombre'},
     {key: 'H', value: 'Mujer'},
-    {key: 'O', value: 'Otro'},
   ];
   const optionsRes = [
     {key: 'S', value: 'Si'},
     {key: 'N', value: 'No'},
   ];
-  const onChange = (name, email, cel) => {
-    if (name && email && cel) {
-      setStatusBtn(false);
+  const onAdoption = () => {
+    const request = {
+      adoption_publication: route.params.adoption.id,
+      profile_data: {
+        age: form.age,
+        occupation: form.occupation,
+        mobile: form.cel,
+        phone_number: form.tel,
+      },
+      questionnaire: [
+        {
+          question: '¿Has tenido alguna mascota?',
+          answer: form.qpet == 'S' ? 'Si' : 'No',
+        },
+        {
+          question: '¿Actualmente tienes alguna mascota?',
+          answer: form.qact == 'S' ? 'Si' : 'No',
+        },
+        {
+          question: '¿Qué te motivó a adoptar?',
+          answer: form.reason,
+        },
+        {
+          question:
+            '¿Las personas que viven en tu casa están de acuerdo en adoptar?',
+          answer: form.qcount == 'S' ? 'Si' : 'No',
+        },
+        {
+          question: '¿Tú o alguien en el hogar son alérgicos a los perros?',
+          answer: form.qallirgic == 'S' ? 'Si' : 'No',
+        },
+        {
+          question:
+            '¿Consideras que tienes los recursos suficientes para cubrir los gastos necesarios de tu mascota?',
+          answer: form.qresource == 'S' ? 'Si' : 'No',
+        },
+      ],
+      address: {
+        street: form.street,
+        number: form.number,
+        colony: form.cologne,
+        city: form.city,
+        zipcode: form.cp,
+        state: form.state,
+        municipality: form.municipality,
+      },
+    };
+    useAddQuery.mutate(request);
+  };
+  const validation = (
+    name,
+    email,
+    cel,
+    sex,
+    age,
+    tel,
+    occupation,
+    street,
+    number,
+    cp,
+    cologne,
+    city,
+    qpet,
+    qact,
+    reason,
+    qcount,
+    qallirgic,
+    qresource,
+    state,
+    municipality,
+  ) => {
+    if (name.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (email.length > 0) {
+      const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
+      if (!emailRegex.test(email)) {
+        setStatusBtn(true);
+        return;
+      }
     } else {
       setStatusBtn(true);
+      return;
     }
-  };
-  const onAdoption = () => {
-    navigation.goBack();
+    if (age.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (sex.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (occupation.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (street.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (number.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (cp.length <= 4) {
+      setStatusBtn(true);
+      return;
+    }
+    if (cologne.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (city.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (state.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (municipality.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (cel.length != 10) {
+      setStatusBtn(true);
+      return;
+    }
+    if (tel.length <= 6 || tel.length > 10) {
+      setStatusBtn(true);
+      return;
+    }
+    if (qpet.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (qact.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (reason.length <= 20 || reason > 100) {
+      setStatusBtn(true);
+      return;
+    }
+    if (qcount.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (qallirgic.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    if (qresource.length <= 0) {
+      setStatusBtn(true);
+      return;
+    }
+    setStatusBtn(false);
   };
   return (
     <DefaultLayout>
@@ -80,13 +246,28 @@ export default ({navigation, route}): React.ReactElement => {
           value={form.name}
           onChangeText={(value: string) => {
             setForm({...form, name: value});
-            if (value.length > 0) {
-              setStatusName(true);
-              onChange(true, statusEmail, statusCel);
-            } else {
-              setStatusName(false);
-              onChange(false, statusEmail, statusCel);
-            }
+            validation(
+              value,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
@@ -95,13 +276,59 @@ export default ({navigation, route}): React.ReactElement => {
           isNumeric={true}
           onChangeText={(value: string) => {
             setForm({...form, age: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              value,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <TitleHeader>Género</TitleHeader>
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.sex}
-            setCurrentValue={(sex) => setForm({...form, sex})}
+            setCurrentValue={(sex) => {
+              setForm({...form, sex});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                form.qpet,
+                form.qact,
+                form.reason,
+                form.qcount,
+                form.qallirgic,
+                form.qresource,
+                form.state,
+                form.municipality,
+              );
+            }}
             horizontal={true}
             data={sexOptions}
           />
@@ -111,6 +338,28 @@ export default ({navigation, route}): React.ReactElement => {
           value={form.occupation}
           onChangeText={(value: string) => {
             setForm({...form, occupation: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              value,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
@@ -118,19 +367,28 @@ export default ({navigation, route}): React.ReactElement => {
           value={form.email}
           onChangeText={(value: string) => {
             setForm({...form, email: value});
-            if (value.length > 0) {
-              const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
-              if (emailRegex.test(value)) {
-                setStatusEmail(true);
-                onChange(statusName, true, statusCel);
-              } else {
-                setStatusEmail(false);
-                onChange(statusName, false, statusCel);
-              }
-            } else {
-              setStatusEmail(false);
-              onChange(statusName, false, statusCel);
-            }
+            validation(
+              form.name,
+              value,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <TitleHeader>Dirección</TitleHeader>
@@ -139,6 +397,28 @@ export default ({navigation, route}): React.ReactElement => {
           value={form.street}
           onChangeText={(value: string) => {
             setForm({...form, street: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              value,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
@@ -147,6 +427,28 @@ export default ({navigation, route}): React.ReactElement => {
           isNumeric={true}
           onChangeText={(value: string) => {
             setForm({...form, number: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              value,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
@@ -155,6 +457,28 @@ export default ({navigation, route}): React.ReactElement => {
           value={form.cp}
           onChangeText={(value: string) => {
             setForm({...form, cp: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              value,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
@@ -162,13 +486,119 @@ export default ({navigation, route}): React.ReactElement => {
           value={form.cologne}
           onChangeText={(value: string) => {
             setForm({...form, cologne: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              value,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
-          placeholder="Alcaldía/Municipio"
-          value={form.municipality}
+          placeholder="ciudad"
+          value={form.city}
           onChangeText={(value: string) => {
-            setForm({...form, municipality: value});
+            setForm({...form, city: value});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              value,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
+          }}
+        />
+        <DropdownPicker
+          data={stateList}
+          currentValue={form.state}
+          placeholder="Estado"
+          setCurrentValue={(stateId) => {
+            setForm({...form, state: stateId});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              stateId,
+              form.municipality,
+            );
+          }}
+        />
+        <MunicipalityDrop
+          status={false}
+          id={form.state}
+          change={(valor, name) => {
+            setForm({...form, municipality: valor});
+            valor == ''
+              ? setForm({...form, municipality: ''})
+              : setForm({...form, municipality: valor});
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              valor,
+            );
           }}
         />
         <UserInput
@@ -177,6 +607,28 @@ export default ({navigation, route}): React.ReactElement => {
           isNumeric={true}
           onChangeText={(value: string) => {
             setForm({...form, cel: value});
+            validation(
+              form.name,
+              form.email,
+              value,
+              form.sex,
+              form.age,
+              form.tel,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <UserInput
@@ -185,25 +637,59 @@ export default ({navigation, route}): React.ReactElement => {
           isNumeric={true}
           onChangeText={(value: string) => {
             setForm({...form, tel: value});
-            if (value.length > 0) {
-              if (value.length == 10) {
-                setStatusCel(true);
-                onChange(statusName, statusEmail, true);
-              } else {
-                setStatusCel(false);
-                onChange(statusName, statusEmail, false);
-              }
-            } else {
-              setStatusCel(false);
-              onChange(statusName, statusEmail, false);
-            }
+            validation(
+              form.name,
+              form.email,
+              form.cel,
+              form.sex,
+              form.age,
+              value,
+              form.occupation,
+              form.street,
+              form.number,
+              form.cp,
+              form.cologne,
+              form.city,
+              form.qpet,
+              form.qact,
+              form.reason,
+              form.qcount,
+              form.qallirgic,
+              form.qresource,
+              form.state,
+              form.municipality,
+            );
           }}
         />
         <TitleHeader>¿Has tenido alguna mascota?</TitleHeader>
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qpet}
-            setCurrentValue={(qpet) => setForm({...form, qpet})}
+            setCurrentValue={(qpet) => {
+              setForm({...form, qpet});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                form.sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                qpet,
+                form.qact,
+                form.reason,
+                form.qcount,
+                form.qallirgic,
+                form.qresource,
+                form.state,
+                form.municipality,
+              );
+            }}
             horizontal={true}
             data={optionsRes}
           />
@@ -212,7 +698,31 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qact}
-            setCurrentValue={(qact) => setForm({...form, qact})}
+            setCurrentValue={(qact) => {
+              setForm({...form, qact});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                form.sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                form.qpet,
+                qact,
+                form.reason,
+                form.qcount,
+                form.qallirgic,
+                form.qresource,
+                form.state,
+                form.municipality,
+              );
+            }}
             horizontal={true}
             data={optionsRes}
           />
@@ -224,6 +734,28 @@ export default ({navigation, route}): React.ReactElement => {
             value={form.reason}
             onChangeText={(value: string) => {
               setForm({...form, reason: value});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                form.sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                form.qpet,
+                form.qact,
+                value,
+                form.qcount,
+                form.qallirgic,
+                form.qresource,
+                form.state,
+                form.municipality,
+              );
             }}
           />
         </View>
@@ -233,7 +765,31 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qcount}
-            setCurrentValue={(qcount) => setForm({...form, qcount})}
+            setCurrentValue={(qcount) => {
+              setForm({...form, qcount});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                form.sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                form.qpet,
+                form.qact,
+                form.reason,
+                qcount,
+                form.qallirgic,
+                form.qresource,
+                form.state,
+                form.municipality,
+              );
+            }}
             horizontal={true}
             data={optionsRes}
           />
@@ -244,7 +800,31 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qallirgic}
-            setCurrentValue={(qallirgic) => setForm({...form, qallirgic})}
+            setCurrentValue={(qallirgic) => {
+              setForm({...form, qallirgic});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                form.sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                form.qpet,
+                form.qact,
+                form.reason,
+                form.qcount,
+                qallirgic,
+                form.qresource,
+                form.state,
+                form.municipality,
+              );
+            }}
             horizontal={true}
             data={optionsRes}
           />
@@ -256,7 +836,31 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qresource}
-            setCurrentValue={(qresource) => setForm({...form, qresource})}
+            setCurrentValue={(qresource) => {
+              setForm({...form, qresource});
+              validation(
+                form.name,
+                form.email,
+                form.cel,
+                form.sex,
+                form.age,
+                form.tel,
+                form.occupation,
+                form.street,
+                form.number,
+                form.cp,
+                form.cologne,
+                form.city,
+                form.qpet,
+                form.qact,
+                form.reason,
+                form.qcount,
+                form.qallirgic,
+                qresource,
+                form.state,
+                form.municipality,
+              );
+            }}
             horizontal={true}
             data={optionsRes}
           />
@@ -270,8 +874,10 @@ export default ({navigation, route}): React.ReactElement => {
                 }
               : {marginTop: 50, marginBottom: 20}
           }
-          isDisabled={false}
-          onPress={() => setIsModalVisible(true)}>
+          isDisabled={statusBtn}
+          onPress={() => {
+            setIsModalVisible(true);
+          }}>
           Solicitar Adopción
         </CustomButton>
       </ScrollView>

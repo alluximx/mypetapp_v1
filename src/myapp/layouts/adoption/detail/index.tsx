@@ -14,7 +14,7 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import CustomButton from '../../../components/buttons/custom-button';
-import SimplePaginationDot from './SimplePaginationDot';
+import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
 import {FlatList} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 
