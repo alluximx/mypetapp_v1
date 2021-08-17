@@ -20,18 +20,12 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const INITIAL_INDEX = 0;
 export default ({navigation, route}): React.ReactElement => {
-  let dataImg = [];
+  const dataImg = [];
 
   route.params.adoption.images.forEach((element) => {
     dataImg.push({
       uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element.image,
     });
-  });
-  route.params.adoption.images.forEach((element) => {
-    if (element[1]) {
-      isImg = true;
-      img = 'https://mpa-stage.s3.amazonaws.com/media/' + element[0];
-    }
   });
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
