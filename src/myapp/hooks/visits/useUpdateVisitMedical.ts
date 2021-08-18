@@ -3,23 +3,17 @@ import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import useSaveVisitImage from './useSaveVisitImage';
 import useUpdateImage from './useUpdateImage';
-import useDeleteImages from './useDeleteImg';
-const postUpdateVisits = (data) => {
-  const newData = {
-    user_pet: data.user_pet,
-    visit_date: data.visit_date,
-    title: data.title,
-    details: data.details,
-  };
-  return api.put('api/v1/vetvisits/' + data.id + '/', data, true);
-};
+import useDeleteImage from './useDeleteImage';
 
-const useUpdateMedicalVisit = () => {
+const postUpdateVisits = (data) =>
+  api.put('api/v1/vetvisits/' + data.id + '/', data, true);
+
+const useUpdateMedicalVisit = (visitId) => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const saveImgQuery = useSaveVisitImage();
   const updateImgQuery = useUpdateImage();
-  const deleteImgQuery = useDeleteImages();
+  const deleteImgQuery = useDeleteImage(visitId);
 
   const updateVisitImg = (
     fieldName: string,
@@ -69,7 +63,7 @@ const useUpdateMedicalVisit = () => {
         updateVisitImg('additional3', additional3Change, variables, 'false');
         queryClient.invalidateQueries(['visits-image', variables.id]);
       }
-      queryClient.invalidateQueries('visits-information');
+      queryClient.invalidateQueries(['visits-information', variables.user_pet]);
       navigation.goBack();
     },
   });

@@ -24,6 +24,7 @@ export default ({navigation, route}): React.ReactElement => {
     vaccine_date: '',
     next_vaccine_date: '',
     reminder: null,
+    is_vaccine: true,
   });
 
   const [isReminderActive, setIsReminderActive] = useState(false);
@@ -31,7 +32,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [etiquetteImage, setEtiquetteImage] = useState(null);
   const [isUnique, setIsUnique] = useState(true);
 
-  const vaccinesQuery = useGetVaccines();
+  const vaccinesQuery = useGetVaccines(true);
   const saveVaccineQuery = useSaveVaccine();
   const vaccinesData = vaccinesQuery.isLoading
     ? []
@@ -49,12 +50,12 @@ export default ({navigation, route}): React.ReactElement => {
     form.next_vaccine_date === '' ||
     isLoading;
 
-  const onSelectReminder = (reminderKey: number) => {
-    setReminderKey(reminderKey);
+  const onSelectReminder = (key: number) => {
+    setReminderKey(key);
 
     if (form.next_vaccine_date !== '') {
       const reminderOption = reminderOptions.find(
-        (option) => option.key == reminderKey,
+        (option) => option.key === key,
       );
 
       const dateToRemind = moment(form.next_vaccine_date)
@@ -76,11 +77,11 @@ export default ({navigation, route}): React.ReactElement => {
   }, [isReminderActive, form.next_vaccine_date]);
 
   useEffect(() => {
-    const isUnique = vaccinesData.find(
+    const unique = vaccinesData.find(
       (vaccine) => vaccine.value === form.vaccine_registered,
     )?.isUnique;
 
-    setIsUnique(isUnique ?? false);
+    setIsUnique(unique ?? false);
   }, [form.vaccine_registered]);
 
   useSetNavigationHeaders({

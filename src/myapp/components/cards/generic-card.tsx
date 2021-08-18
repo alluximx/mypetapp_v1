@@ -1,113 +1,67 @@
-import {
-  StyleService,
-  useStyleSheet,
-  Text,
-  Card,
-  List,
-} from '@ui-kitten/components';
+import {Card, StyleService, useStyleSheet} from '@ui-kitten/components';
 import React from 'react';
-import {Image, Dimensions} from 'react-native';
-import globalColors from '../../styles/colors';
-export interface DatasGeneric {
-  date?: Date | null;
-  title: string;
-  content: string;
-  buttonText: string;
-  buttonAlign: string;
-  images?: string[];
-  click: any;
-}
-const GenericCard = (props): React.ReactElement => {
+import moment from 'moment';
+// My Components.
+import AnchorText from '../texts/anchor-text';
+import DefaultText from '../texts/default-text';
+import TitleHeader from '../texts/title-header';
+// Types.
+import {DatasGeneric} from '../../types/components/cards';
+import PreviewableImageList from '../modals/previewable-image-list';
+
+const GenericCard = (props: DatasGeneric): React.ReactElement => {
+  const {buttonAlign, buttonText, content, date, images, title} = props.data;
+  const formattedDate = moment(date).format('DD/MM/YYYY');
   const styles = useStyleSheet(themedStyles);
-  const stylesCart = useStyleSheet(defaultStyle(props.data.buttonAlign));
-  const renderServiceItem = (service) => {
-    return (
-      <Image
-        style={{height: 40, width: 40, marginTop: 2, marginRight: 8}}
-        source={{uri: service.item.file}}
-      />
-    );
-  };
+  const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
+
+  const imageList = images.map((image) => {
+    return {
+      uri: image.file,
+    };
+  });
+
   return (
-    <Card style={[styles.cardStyle, props.styleCard]}>
-      {props.data.date ? (
-        <Text style={styles.labelDate}>
-          {props.data.date.getDate()}/{props.data.date.getMonth() + 1}/
-          {props.data.date.getFullYear()}
-        </Text>
-      ) : (
-        <Text></Text>
+    <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
+      {date && (
+        <DefaultText style={styles.labelDate}>{formattedDate}</DefaultText>
       )}
-      <Text style={styles.h1Card}>{props.data.title}</Text>
-      <Text style={styles.labelCard}>{props.data.content}</Text>
-      {props.data.images.length > 0 ? (
-        <List
-          style={styles.servicesContainer}
-          horizontal={true}
-          data={props.data.images}
-          renderItem={renderServiceItem}
-        />
-      ) : (
-        <Text></Text>
-      )}
-      <Text
-        style={stylesCart.header}
-        onPress={() => {
-          props.onClick(props.data);
-        }}>
-        {props.data.buttonText}
-      </Text>
+      <TitleHeader style={styles.title}>{title}</TitleHeader>
+      <DefaultText style={styles.labelCard} numberOfLines={5} wrapText>
+        {content}
+      </DefaultText>
+      {images.length > 0 && <PreviewableImageList sources={imageList} />}
+      <AnchorText onPress={props.onClick} style={stylesCart.header}>
+        {buttonText}
+      </AnchorText>
     </Card>
   );
 };
-const {width, height} = Dimensions.get('window');
+
 const themedStyles = StyleService.create({
-  h1Card: {
-    color: globalColors.black,
-    fontSize: 20,
-    fontFamily: 'Montserrat-Bold',
-    marginTop: 4,
-  },
   title: {
-    color: globalColors.black,
-    fontSize: 18,
-    fontFamily: 'Montserrat-Bold',
-    marginLeft: 24,
+    fontSize: 16,
+    marginBottom: 4,
   },
   labelCard: {
-    fontSize: 18,
-    fontFamily: 'Montserrat-Medium',
-    color: '#707070',
-    marginTop: 8,
-    lineHeight: 24,
+    marginTop: 4,
   },
   labelDate: {
-    fontSize: 16,
-    fontFamily: 'Montserrat-Medium',
-    color: '#707070',
-    marginTop: 8,
+    fontSize: 14,
   },
   cardStyle: {
-    marginLeft: 24,
+    marginHorizontal: 24,
     marginBottom: 16,
-    marginRight: 24,
     borderRadius: 18,
   },
-  servicesContainer: {
-    backgroundColor: 'transparent',
-    paddingBottom: 8,
-    width: width,
-    paddingTop: 5,
-  },
 });
+
 const defaultStyle = (type) =>
   StyleService.create({
     header: {
-      fontSize: 20,
-      fontFamily: 'Montserrat-Bold',
       textAlign: type,
-      color: globalColors.greenSecondary,
       marginTop: 16,
     },
   });
+
 export default GenericCard;

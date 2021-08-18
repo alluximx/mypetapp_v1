@@ -21,7 +21,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         key={key}
         style={[
           styles.option,
-          props.currentValue == key && styles.optionSelected,
+          props.currentValue === key && styles.optionSelected,
           props.horizontal && {
             marginRight: OPTION_GAP,
             width:
@@ -37,7 +37,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         <Text
           style={[
             styles.optionText,
-            props.currentValue == key && styles.optionTextSelected,
+            props.currentValue === key && styles.optionTextSelected,
           ]}>
           {value}
         </Text>

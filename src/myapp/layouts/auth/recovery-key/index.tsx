@@ -47,9 +47,6 @@ export default ({navigation}): React.ReactElement => {
     if (response.data.status) {
       // Show modal.
       setIsModalVisible(true);
-    } else {
-      // Show Error.
-      console.log('error');
     }
 
     // Hide spinner

@@ -19,6 +19,11 @@ const useUpdateVaccine = (vaccineId) => {
   return useMutation((data: any) => putVaccine(data, vaccineId), {
     onSuccess: (response, variables) => {
       queryClient.invalidateQueries(['vaccine-detail', vaccineId]);
+      queryClient.invalidateQueries([
+        'pet-vaccines-reminder',
+        variables.user_pet,
+      ]);
+
       if (variables.imageHasChanged) {
         // if image changed...
         if (variables.etiquetteImage) {
@@ -70,9 +75,8 @@ const useUpdateVaccine = (vaccineId) => {
               },
             );
           }
-        }
-        // if was deleted...
-        else {
+        } else {
+          // if was deleted...
           deleteVaccineImageQuery.mutate(variables.vaccine_image_id);
           queryClient.invalidateQueries(['pet-vaccines', variables.user_pet]);
         }

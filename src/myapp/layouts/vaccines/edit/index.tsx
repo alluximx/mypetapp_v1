@@ -22,7 +22,6 @@ import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
 import TitleHeader from '../../../components/texts/title-header';
 import VisitsImgCard from '../../../components/cards/image-input-card';
-import useUpdateVaccineImage from 'src/myapp/hooks/vaccines/useUpdateVaccineImage';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +47,7 @@ export default ({navigation, route}): React.ReactElement => {
     reminder: vaccineData.data?.data.reminder ?? null,
     vaccine_registered: vaccineData.data?.data.vaccine_registered.id ?? '',
     vaccine_image_id: '',
+    is_vaccine: true,
   });
 
   const isDisabled =
@@ -57,7 +57,7 @@ export default ({navigation, route}): React.ReactElement => {
     isLoading ||
     formHasChanged;
 
-  const vaccinesQuery = useGetVaccines();
+  const vaccinesQuery = useGetVaccines(true);
   const vaccinesData = vaccinesQuery.isLoading
     ? []
     : vaccinesQuery.data?.data.map((vaccine) => {
@@ -72,12 +72,12 @@ export default ({navigation, route}): React.ReactElement => {
       petId: form.user_pet,
     });
 
-  const onSelectReminder = (reminderKey: number) => {
-    setReminderKey(reminderKey);
+  const onSelectReminder = (key: number) => {
+    setReminderKey(key);
 
     if (form.next_vaccine_date !== '') {
       const reminderOption = reminderOptions.find(
-        (option) => option.key == reminderKey,
+        (option) => option.key === key,
       );
 
       const dateToRemind = moment(form.next_vaccine_date)
@@ -168,11 +168,11 @@ export default ({navigation, route}): React.ReactElement => {
   }, [isReminderActive, form.next_vaccine_date]);
 
   useEffect(() => {
-    const isUnique = vaccinesData.find(
+    const unique = vaccinesData.find(
       (vaccine) => vaccine.value === form.vaccine_registered,
     )?.isUnique;
 
-    setIsUnique(isUnique ?? false);
+    setIsUnique(unique ?? false);
   }, [form.vaccine_registered]);
 
   useEffect(() => {

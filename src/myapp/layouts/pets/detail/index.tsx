@@ -1,8 +1,10 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Image, ImageSourcePropType, StyleSheet, View} from 'react-native';
+import {Image, ImageURISource, StyleSheet, View} from 'react-native';
 import {Card, List} from '@ui-kitten/components';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 // Global Styles.
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 // Hooks.
 import useMyPetImage from '../../../hooks/pets/useMyPetImage';
 import useGetVaccineReminder from '../../../hooks/vaccines/useGetVaccineReminder';
@@ -11,6 +13,7 @@ import AnchorText from '../../../components/texts/anchor-text';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import PetDataCard from '../../../components/cards/pet-data-card';
+import PreviewableImage from '../../../components/modals/previewable-image';
 import TitleHeader from '../../../components/texts/title-header';
 import ReminderArea from '../../../components/reminder-area';
 
@@ -26,7 +29,7 @@ const servicesList = [
     screen: 'VaccinesIndex',
   },
   {
-    serviceName: 'Desparaci...',
+    serviceName: 'Desparasitaciones',
     icon: require('../../../assets/images/menu/deworming.png'),
     screen: 'DewormingHistory',
   },
@@ -41,12 +44,12 @@ export default ({navigation, route}): React.ReactElement => {
   const {id, breed, name, pet_age, sex} = route.params.pet;
   const {years, months} = pet_age;
   // Format age.
-  const monthsMessage = `${months} ${months == 1 ? 'Mes' : 'Meses'}`;
-  const yearsMessage = `${years} ${years == 1 ? 'Año' : 'Años'}`;
+  const monthsMessage = `${months} ${months === 1 ? 'Mes' : 'Meses'}`;
+  const yearsMessage = `${years} ${years === 1 ? 'Año' : 'Años'}`;
   const formattedAge =
     years > 0 ? `${yearsMessage} ${monthsMessage}` : monthsMessage;
 
-  const [image, setImage] = useState<ImageSourcePropType>(null);
+  const [image, setImage] = useState<ImageURISource>(null);
   const [reminders, setReminders] = useState([]);
 
   const {data: petImage} = useMyPetImage(id);
@@ -85,23 +88,19 @@ export default ({navigation, route}): React.ReactElement => {
   }, [navigation, image]);
 
   const renderServiceItem = (service) => (
-    <View style={styles.serviceContainer}>
-      <Card
-        activeOpacity={0.8}
-        style={styles.serviceIconContainer}
-        onPress={() => {
-          navigation.navigate(service.item.screen, {pet: route.params.pet});
-        }}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => {
+        navigation.navigate(service.item.screen, {pet: route.params.pet});
+      }}
+      style={styles.serviceContainer}>
+      <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
         <Image style={styles.serviceIcon} source={service.item.icon} />
       </Card>
-      <DefaultText
-        style={styles.serviceNameText}
-        onPress={() => {
-          navigation.navigate(service.item.screen, {pet: route.params.pet});
-        }}>
+      <DefaultText style={styles.serviceNameText} wrapText>
         {service.item.serviceName}
       </DefaultText>
-    </View>
+    </TouchableOpacity>
   );
 
   const renderServiceReminderItem = (service) => {
@@ -115,8 +114,8 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   function customSort(a, b) {
-    var Item1 = a.reminder;
-    var Item2 = b.reminder;
+    const Item1 = a.reminder;
+    const Item2 = b.reminder;
     if (Item1 > Item2) {
       return 1;
     }
@@ -131,7 +130,7 @@ export default ({navigation, route}): React.ReactElement => {
   return (
     <DefaultLayout style={styles.container}>
       <View style={styles.petImageContainer}>
-        <Image style={styles.petImage} source={image} />
+        <PreviewableImage source={image} style={styles.petImage} />
         <View style={styles.petDataContainer}>
           <TitleHeader style={styles.whiteText}>{name}</TitleHeader>
           <DefaultText style={styles.whiteText}>{breed.name}</DefaultText>
@@ -236,6 +235,8 @@ const styles = StyleSheet.create({
   serviceNameText: {
     color: globalColors.black,
     fontSize: 14,
+    fontFamily: globalVars.fontRegular,
     textAlign: 'center',
+    maxWidth: 80,
   },
 });

@@ -11,7 +11,6 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import UserInput from '../../../components/inputs/user-input';
 import globalColors from '../../../styles/colors';
 import AnchorText from '../../../components/texts/anchor-text';
-import {useQueryClient} from 'react-query';
 import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
 
 export default ({navigation, route}): React.ReactElement => {
@@ -45,7 +44,7 @@ export default ({navigation, route}): React.ReactElement => {
   const dataStates = useStates();
   useEffect(() => {
     if (dataStates.data) {
-      let aux = [];
+      const aux = [];
       dataStates.data.data.forEach((element) => {
         aux.push({
           value: element.id,
@@ -80,14 +79,13 @@ export default ({navigation, route}): React.ReactElement => {
       <AnchorText
         style={styles.headerRight}
         onPress={() => {
-          let query = '';
           navigation.navigate('AdoptionResult', {
             filter: {
               state: form.stateId,
               town: form.townId,
               stateName: form.stateName,
               townName: form.townName,
-              query: query,
+              query: '',
             },
             data: auxList,
             filters: {
@@ -114,21 +112,21 @@ export default ({navigation, route}): React.ReactElement => {
     threetofive,
     fiveormore,
   ) => {
-    let aux = [];
+    const aux = [];
     if ((feminine && male) || (!feminine && !male)) {
       list.map((adoption) => {
         aux.push(adoption);
       });
     } else if (feminine) {
       list.map((adoption) => {
-        adoption.sex == 'H' && aux.push(adoption);
+        adoption.sex === 'H' && aux.push(adoption);
       });
     } else if (male) {
       list.map((adoption) => {
-        adoption.sex == 'M' && aux.push(adoption);
+        adoption.sex === 'M' && aux.push(adoption);
       });
     }
-    let auxFin = [];
+    const auxFin = [];
     if (
       (onetosix && sixtotwelve && onetothree && threetofive && fiveormore) ||
       (!onetosix && !sixtotwelve && !onetothree && !threetofive && !fiveormore)
@@ -139,7 +137,7 @@ export default ({navigation, route}): React.ReactElement => {
         aux.map((adoption) => {
           adoption.ageNumber >= 1 &&
             adoption.ageNumber <= 6 &&
-            adoption.ageType == 'M' &&
+            adoption.ageType === 'M' &&
             auxFin.push(adoption);
         });
       }
@@ -147,7 +145,7 @@ export default ({navigation, route}): React.ReactElement => {
         aux.map((adoption) => {
           adoption.ageNumber >= 6 &&
             adoption.ageNumber <= 12 &&
-            adoption.ageType == 'M' &&
+            adoption.ageType === 'M' &&
             auxFin.push(adoption);
         });
       }
@@ -155,7 +153,7 @@ export default ({navigation, route}): React.ReactElement => {
         aux.map((adoption) => {
           adoption.ageNumber >= 1 &&
             adoption.ageNumber <= 3 &&
-            adoption.ageType == 'Y' &&
+            adoption.ageType === 'Y' &&
             auxFin.push(adoption);
         });
       }
@@ -163,14 +161,14 @@ export default ({navigation, route}): React.ReactElement => {
         aux.map((adoption) => {
           adoption.ageNumber >= 3 &&
             adoption.ageNumber <= 5 &&
-            adoption.ageType == 'Y' &&
+            adoption.ageType === 'Y' &&
             auxFin.push(adoption);
         });
       }
       if (fiveormore) {
         aux.map((adoption) => {
           adoption.ageNumber >= 5 &&
-            adoption.ageType == 'Y' &&
+            adoption.ageType === 'Y' &&
             auxFin.push(adoption);
         });
       }

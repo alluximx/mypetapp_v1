@@ -30,6 +30,31 @@ export interface Pet {
   size: Size;
 }
 
+export interface Vaccine {
+  id?: string;
+  vaccine_name: string;
+  is_unique: boolean;
+  is_vaccine: boolean;
+}
+
+export interface VaccineHistory {
+  id?: string;
+  user_pet: string;
+  vaccine_registered: string;
+  vaccine_date: string;
+  next_vaccine_date: string;
+  reminder: string;
+  is_vaccine: boolean;
+}
+
+export interface Visit {
+  id: string;
+  user_pet: string;
+  visit_date: string;
+  title: string;
+  details: string;
+}
+
 export interface VisitImage {
   created: string;
   file: string;

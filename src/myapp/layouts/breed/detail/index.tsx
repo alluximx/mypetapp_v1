@@ -42,27 +42,27 @@ export default ({navigation, route}): React.ReactElement => {
         <Text style={styles.subtitulo}>Nivel energético</Text>
         <PawBreed
           numberTteam={5}
-          number={parseInt(service.item.energy_level)}
+          number={parseInt(service.item.energy_level, 2)}
         />
         <Text style={styles.subtitulo}>Tendencia a babear</Text>
         <PawBreed
           numberTteam={5}
-          number={parseInt(service.item.slobber_level)}
+          number={parseInt(service.item.slobber_level, 2)}
         />
         <Text style={styles.subtitulo}>Tendencia a roncar</Text>
         <PawBreed
           numberTteam={5}
-          number={parseInt(service.item.snoring_level)}
+          number={parseInt(service.item.snoring_level, 2)}
         />
         <Text style={styles.subtitulo}>Tendencia a ladrar</Text>
         <PawBreed
           numberTteam={5}
-          number={parseInt(service.item.barking_level)}
+          number={parseInt(service.item.barking_level, 2)}
         />
         <Text style={styles.subtitulo}>Necesidad de atención</Text>
         <PawBreed
           numberTteam={5}
-          number={parseInt(service.item.attention_level)}
+          number={parseInt(service.item.attention_level, 2)}
         />
       </View>
     );

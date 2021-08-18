@@ -19,12 +19,11 @@ export default ({navigation, route}): React.ReactElement => {
   const town = route.params.filter.town;
   const townName = route.params.filter.townName;
   const styles = useStyleSheet(themedStyles);
-  let cont = 1;
-  let auxData = [];
-  let aux = [];
+  const auxData = [];
+  const aux = [];
   let num = 0;
   route.params.data.forEach((element) => {
-    if (element.status == 'PUBLICADO') {
+    if (element.status === 'PUBLICADO') {
       aux.push(element);
       num = num + 1;
     }
@@ -79,12 +78,12 @@ export default ({navigation, route}): React.ReactElement => {
         <View>
           <TitleHeader style={{marginTop: 8}}>{services.item.name}</TitleHeader>
           <DefaultText style={{alignItems: 'center'}}>
-            {parseInt(services.item.ageNumber)}
-            {parseInt(services.item.ageNumber) > 1
-              ? services.item.ageType == 'Y'
+            {parseInt(services.item.ageNumber, 2)}
+            {parseInt(services.item.ageNumber, 2) > 1
+              ? services.item.ageType === 'Y'
                 ? '  Años'
                 : ' Meses'
-              : services.item.ageType == 'Y'
+              : services.item.ageType === 'Y'
               ? ' Año'
               : ' Mes'}{' '}
           </DefaultText>
@@ -120,12 +119,12 @@ export default ({navigation, route}): React.ReactElement => {
         <Image style={styles.cardImg} source={{uri: auximg}} />
         <TitleHeader style={{marginTop: 8}}>{services.item.name}</TitleHeader>
         <DefaultText style={{alignItems: 'center'}}>
-          {parseInt(services.item.ageNumber)}
-          {parseInt(services.item.ageNumber) > 1
-            ? services.item.ageType == 'Y'
+          {parseInt(services.item.ageNumber, 2)}
+          {parseInt(services.item.ageNumber, 2) > 1
+            ? services.item.ageType === 'Y'
               ? '  Años'
               : ' Meses'
-            : services.item.ageType == 'Y'
+            : services.item.ageType === 'Y'
             ? ' Año'
             : ' Mes'}{' '}
         </DefaultText>

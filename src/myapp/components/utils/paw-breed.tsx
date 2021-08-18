@@ -8,21 +8,19 @@ interface PawBreedProps {
 }
 const PawBreed = (props: PawBreedProps): React.ReactElement => {
   const nivel = (number) => {
-    let aux = [];
+    const aux = [];
     for (let index = 0; index < props.numberTteam; index++) {
       index <= number - 1 ? aux.push({num: 1}) : aux.push({num: 0});
     }
     return aux;
   };
   const renderpawPrintItem = (service) => {
-    return service.item.num == 1 ? (
-      //<Button style={{ margin: 2 }} appearance='ghost' status='success' accessoryLeft={StarIcon} />
+    return service.item.num === 1 ? (
       <Image
         style={styles.pawPrint}
         source={require('../../assets/images/paw-rating/pawColor.png')}
       />
     ) : (
-      //<Button style={{ margin: 2 }} appearance='ghost' status='basic'  accessoryLeft={StarIcon} />
       <Image
         style={styles.pawPrint}
         source={require('../../assets/images/paw-rating/pawEmpty.png')}

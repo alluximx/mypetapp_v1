@@ -23,7 +23,7 @@ interface DrawerItemProps {
 const DrawerItem = (props: DrawerItemProps) => {
   // If active, change color.
   const color =
-    props.currentTab == props.title ? 'white' : globalColors.greenSecondary;
+    props.currentTab === props.title ? 'white' : globalColors.greenSecondary;
 
   return (
     <TouchableOpacity

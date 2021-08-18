@@ -1,19 +1,10 @@
-export interface DatasGeneric {
-  date?: Date | null;
-  title: string;
-  content: string;
-  buttonText: string;
-  buttonAlign: string;
-  images?: string[];
-}
-
 export interface DatePickerProps {
   currentValue: string;
   disabled?: boolean;
   maxDate?: Date;
   minDate?: Date;
-  onSelect: (value: string) => void;
-  placeholder: string;
+  onSelect: (date: string) => void;
+  placeholder?: string;
 }
 
 export interface DropdownPickerProps {
@@ -50,6 +41,7 @@ export interface ReminderInputProps {
 export interface UserInputProps {
   autoCapitalize?: boolean;
   error?: string;
+  isNumeric?: boolean;
   isPassword?: boolean;
   onChangeText: (value: string) => void;
   placeholder: string;

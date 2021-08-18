@@ -1,30 +1,28 @@
-import React, {useLayoutEffect, useEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Image, Dimensions} from 'react-native';
-//My Components.
+// My Components.
 import AddButton from '../../../components/buttons/add-button';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import VaccineCard from '../../../components/cards/vaccine-index-card';
 import CustomSpinner from '../../../components/custom-spinner';
+import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
-//UI kitten
+import VaccineCard from '../../../components/cards/vaccine-index-card';
+// UI kitten
 import {Layout, StyleService, List} from '@ui-kitten/components';
-//Global Styles
+// Global Styles
 import globalColors from '../../../styles/colors';
 // Hook.
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {id, breed, name, pet_age, sex} = route.params.pet;
-
   const [dewormings, setDewormings] = useState([]);
-  const dewormingQuery = useGetVaccineIndex(id);
+  const dewormingQuery = useGetVaccineIndex(route.params.pet.id, false);
 
   useEffect(() => {
     if (dewormingQuery.data) {
       function sortByDate(a, b) {
-        var Item1 = a.vaccine_date;
-        var Item2 = b.vaccine_date;
+        const Item1 = a.vaccine_date;
+        const Item2 = b.vaccine_date;
         if (Item1 < Item2) {
           return 1;
         }
@@ -68,8 +66,8 @@ export default ({navigation, route}): React.ReactElement => {
   }, [dewormingQuery.data]);
 
   function customSort(a, b) {
-    var Item1 = a.name;
-    var Item2 = b.name;
+    const Item1 = a.name;
+    const Item2 = b.name;
     if (Item1 > Item2) {
       return 1;
     }
@@ -110,7 +108,9 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddDeworming', {})}
+          onAdd={() =>
+            navigation.navigate('AddDeworming', {petId: route.params.pet.id})
+          }
         />
       ),
     });
@@ -120,7 +120,7 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : dewormings.length > 0 ? (
     <DefaultLayout>
-      <TitleHeader children="Desparacitaciones" />
+      <TitleHeader children="Desparasitaciones" />
       <List
         style={styles.servicesContainer}
         data={dewormings}
@@ -138,9 +138,9 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.dogImage}
           source={require('../../../assets/images/pets/deworminPetImage.png')}
         />
-        <TitleHeader children="Desparacitaciones" style={styles.center} />
+        <TitleHeader children="Desparasitaciones" style={styles.center} />
         <DefaultText
-          children="Aún no has agregado desparacitaciones"
+          children="Aún no has agregado desparasitaciones"
           style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
         />
         <DefaultText
@@ -152,7 +152,7 @@ export default ({navigation, route}): React.ReactElement => {
   );
 };
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const styles = StyleService.create({
   container: {
     flex: 1,

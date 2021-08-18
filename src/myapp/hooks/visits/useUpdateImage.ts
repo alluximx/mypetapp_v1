@@ -2,7 +2,7 @@ import {useMutation, useQueryClient} from 'react-query';
 import RNFetchBlob from 'rn-fetch-blob';
 import api from '../../services/app-services';
 
-const putImage = (data) => {
+const putImage = (data: any) => {
   const newData = [
     {name: 'visit', data: data.idVisit},
     {

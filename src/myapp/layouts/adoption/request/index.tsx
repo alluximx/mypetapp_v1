@@ -1,13 +1,11 @@
 import React, {useEffect} from 'react';
-import {StyleService} from '@ui-kitten/components';
-import globalColors from '../../../styles/colors';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import UserInput from '../../../components/inputs/user-input';
 import {useState} from 'react';
 import CustomButton from '../../../components/buttons/custom-button';
-import {Dimensions, View, ScrollView} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import OptionSelect from '../../../components/inputs/option-select';
 import CustomModal from '../../../components/modals/custom-modal';
 import UserTextArea from '../../../components/inputs/user-textAtea';
@@ -15,7 +13,8 @@ import useAdoption from '../../../hooks/adoption/useAdoption';
 import useStates from '../../../hooks/util/useState';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import MunicipalityDrop from '../../../components/adoption/municipality-drop';
-export default ({navigation, route}): React.ReactElement => {
+
+export default ({route}): React.ReactElement => {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -43,9 +42,10 @@ export default ({navigation, route}): React.ReactElement => {
   const [stateList, setStateList] = useState([]);
   const useAddQuery = useAdoption();
   const dataStates = useStates();
+
   useEffect(() => {
     if (dataStates.data) {
-      let aux = [];
+      const aux = [];
       dataStates.data.data.forEach((element) => {
         aux.push({
           value: element.id,
@@ -55,6 +55,7 @@ export default ({navigation, route}): React.ReactElement => {
       setStateList(aux);
     }
   }, [dataStates.data, dataStates.isFetched]);
+
   const sexOptions = [
     {key: 'M', value: 'Hombre'},
     {key: 'H', value: 'Mujer'},
@@ -75,11 +76,11 @@ export default ({navigation, route}): React.ReactElement => {
       questionnaire: [
         {
           question: '¿Has tenido alguna mascota?',
-          answer: form.qpet == 'S' ? 'Si' : 'No',
+          answer: form.qpet === 'S' ? 'Si' : 'No',
         },
         {
           question: '¿Actualmente tienes alguna mascota?',
-          answer: form.qact == 'S' ? 'Si' : 'No',
+          answer: form.qact === 'S' ? 'Si' : 'No',
         },
         {
           question: '¿Qué te motivó a adoptar?',
@@ -88,16 +89,16 @@ export default ({navigation, route}): React.ReactElement => {
         {
           question:
             '¿Las personas que viven en tu casa están de acuerdo en adoptar?',
-          answer: form.qcount == 'S' ? 'Si' : 'No',
+          answer: form.qcount === 'S' ? 'Si' : 'No',
         },
         {
           question: '¿Tú o alguien en el hogar son alérgicos a los perros?',
-          answer: form.qallirgic == 'S' ? 'Si' : 'No',
+          answer: form.qallirgic === 'S' ? 'Si' : 'No',
         },
         {
           question:
             '¿Consideras que tienes los recursos suficientes para cubrir los gastos necesarios de tu mascota?',
-          answer: form.qresource == 'S' ? 'Si' : 'No',
+          answer: form.qresource === 'S' ? 'Si' : 'No',
         },
       ],
       address: {
@@ -112,6 +113,7 @@ export default ({navigation, route}): React.ReactElement => {
     };
     useAddQuery.mutate(request);
   };
+
   const validation = (
     name,
     email,
@@ -188,7 +190,7 @@ export default ({navigation, route}): React.ReactElement => {
       setStatusBtn(true);
       return;
     }
-    if (cel.length != 10) {
+    if (cel.length !== 10) {
       setStatusBtn(true);
       return;
     }
@@ -222,6 +224,7 @@ export default ({navigation, route}): React.ReactElement => {
     }
     setStatusBtn(false);
   };
+
   return (
     <DefaultLayout>
       <CustomModal
@@ -304,7 +307,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.sex}
-            setCurrentValue={(sex) => {
+            setCurrentValue={(sex: string) => {
               setForm({...form, sex});
               validation(
                 form.name,
@@ -574,7 +577,7 @@ export default ({navigation, route}): React.ReactElement => {
           id={form.state}
           change={(valor, name) => {
             setForm({...form, municipality: valor});
-            valor == ''
+            valor === ''
               ? setForm({...form, municipality: ''})
               : setForm({...form, municipality: valor});
             validation(
@@ -665,7 +668,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qpet}
-            setCurrentValue={(qpet) => {
+            setCurrentValue={(qpet: string) => {
               setForm({...form, qpet});
               validation(
                 form.name,
@@ -698,7 +701,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qact}
-            setCurrentValue={(qact) => {
+            setCurrentValue={(qact: string) => {
               setForm({...form, qact});
               validation(
                 form.name,
@@ -765,7 +768,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qcount}
-            setCurrentValue={(qcount) => {
+            setCurrentValue={(qcount: string) => {
               setForm({...form, qcount});
               validation(
                 form.name,
@@ -800,7 +803,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qallirgic}
-            setCurrentValue={(qallirgic) => {
+            setCurrentValue={(qallirgic: string) => {
               setForm({...form, qallirgic});
               validation(
                 form.name,
@@ -836,7 +839,7 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{height: 90}}>
           <OptionSelect
             currentValue={form.qresource}
-            setCurrentValue={(qresource) => {
+            setCurrentValue={(qresource: string) => {
               setForm({...form, qresource});
               validation(
                 form.name,
@@ -884,11 +887,3 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   );
 };
-const {width, height} = Dimensions.get('window');
-const themedStyles = StyleService.create({
-  container: {
-    flex: 1,
-    backgroundColor: globalColors.backgroundDefault,
-    paddingHorizontal: 0,
-  },
-});

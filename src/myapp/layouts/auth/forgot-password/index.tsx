@@ -74,12 +74,12 @@ export default ({navigation}): React.ReactElement => {
       });
 
       if (response.data.status) {
-        const userId = response.data.user.id;
-        setUserId(userId);
+        const idUser = response.data.user.id;
+        setUserId(idUser);
         navigation &&
           navigation.navigate('RecoveryKey', {
             email: form.email,
-            userId: userId,
+            userId: idUser,
           });
       } else {
         setErrors({

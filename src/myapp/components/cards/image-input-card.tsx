@@ -7,6 +7,7 @@ import useLaunchCamera from '../../hooks/images/useLaunchCamera';
 // My Components.
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
+import PreviewableImage from '../modals/previewable-image';
 // Types.
 import {ImageInputCardProps} from '../../types/components/cards';
 
@@ -21,7 +22,7 @@ const ImageInputCard = ({
   return (
     <View style={styles.card}>
       <View style={styles.imageAndLabelContainer}>
-        {image && <Image style={styles.image} source={image} />}
+        {image && <PreviewableImage style={styles.image} source={image} />}
         <DefaultText style={[styles.label, image && {paddingLeft: 8}]}>
           {!image ? label ?? `Fotografía de ${label}` : filledLabel}
         </DefaultText>

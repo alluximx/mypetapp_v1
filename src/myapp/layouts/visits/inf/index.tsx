@@ -1,33 +1,36 @@
-import {
-  Layout,
-  StyleService,
-  useStyleSheet,
-  Text,
-  List,
-  Spinner,
-} from '@ui-kitten/components';
-import React, {useLayoutEffect} from 'react';
-import {Image, Dimensions, View} from 'react-native';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import globalColors from '../../../styles/colors';
-import AddButton from '../../../components/buttons/add-button';
-import GenericCard from '../../../components/cards/generic-card';
-import useVisitsInformation from '../../../hooks/visits/useVisitsInformation';
 import {useEffect} from 'react';
-import moment from 'moment';
-import useVisitImage from '../../../hooks/visits/useVisitImage';
+import React, {useLayoutEffect} from 'react';
+import {Image, Dimensions, View, StyleSheet} from 'react-native';
+import {List} from '@ui-kitten/components';
+// Global Styles.
+import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
+// Hooks.
+import useVisitsInformation from '../../../hooks/visits/useVisitsInformation';
+// Models.
+import {Visit} from 'src/myapp/types/models';
+// My components.
+import AddButton from '../../../components/buttons/add-button';
+import CustomSpinner from '../../../components/custom-spinner';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
 import VisitCardImg from '../../../components/Visit/visit-Image';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {id, breed, name, pet_age, sex} = route.params.pet;
-  const data = useVisitsInformation();
+  const {id} = route.params.pet;
+  const {data: visitsData, isLoading, isFetched} = useVisitsInformation(id);
   const [visits, setVisits] = React.useState([]);
+
   useEffect(() => {
-    if (data.data) {
-      setVisits(data.data.data);
+    if (visitsData) {
+      const sortedData = visitsData.data.sort((a: Visit, b: Visit) =>
+        a.visit_date < b.visit_date ? 1 : -1,
+      );
+      setVisits(sortedData);
     }
-  }, [data.data, data.isFetched]);
-  const styles = useStyleSheet(themedStyles);
+  }, [visitsData, isFetched]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -55,33 +58,31 @@ export default ({navigation, route}): React.ReactElement => {
       ),
     });
   }, [navigation]);
-  const renderServiceItem = (service) => {
-    return (
-      <VisitCardImg data={service.item} navigation={navigation} route={route} />
-    );
-  };
-  return data.isLoading ? (
-    <View style={styles.viewContainer}>
-      <Spinner size="large" status="success" />
-    </View>
+
+  const renderServiceItem = (service) => (
+    <VisitCardImg data={service.item} navigation={navigation} route={route} />
+  );
+
+  return isLoading ? (
+    <CustomSpinner />
   ) : visits.length > 0 ? (
     <DefaultLayout style={[styles.container, {color: 'black'}]}>
-      <Layout
+      <View
         style={[
           styles.formContainer,
           {backgroundColor: globalColors.backgroundDefault},
         ]}>
-        <Text style={styles.title}>Visitas Veterinario</Text>
+        <TitleHeader style={styles.title}>Visitas Veterinario</TitleHeader>
         <List
           style={styles.servicesContainer}
           data={visits}
           renderItem={renderServiceItem}
         />
-      </Layout>
+      </View>
     </DefaultLayout>
   ) : (
     <DefaultLayout style={[styles.container, {color: 'black'}]}>
-      <Layout
+      <View
         style={[
           styles.formContainer,
           {backgroundColor: globalColors.backgroundDefault},
@@ -90,19 +91,17 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.dogImage}
           source={require('../assets/dog-visit.png')}
         />
-        <Text style={styles.h1}>Visitas Veterinario</Text>
-        <Text style={styles.textLabel} category="label">
-          Aún no has agregado visitas al
-        </Text>
-        <Text style={styles.textLabel} category="label">
+        <TitleHeader style={styles.h1}>Visitas Veterinario</TitleHeader>
+        <DefaultText style={styles.textLabel}>
+          Aún no has agregado visitas al {'\n'}
           veterinario para tu mascota.
-        </Text>
-      </Layout>
+        </DefaultText>
+      </View>
     </DefaultLayout>
   );
 };
-const {width, height} = Dimensions.get('window');
-const themedStyles = StyleService.create({
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: globalColors.backgroundDefault,
@@ -111,20 +110,13 @@ const themedStyles = StyleService.create({
   formContainer: {
     flex: 1,
     paddingTop: 0,
-    width: width,
   },
   h1: {
-    color: globalColors.black,
-    fontSize: 20,
-    fontFamily: 'Montserrat-Bold',
-    alignSelf: 'center',
+    textAlign: 'center',
   },
   textLabel: {
-    fontSize: 16,
-    fontFamily: 'Montserrat-Bold',
-    alignSelf: 'center',
-    lineHeight: 24,
-    color: '#707070',
+    fontFamily: globalVars.fontBold,
+    textAlign: 'center',
   },
   dogImage: {
     alignSelf: 'center',
@@ -133,59 +125,13 @@ const themedStyles = StyleService.create({
     maxHeight: 390,
     marginVertical: 5,
   },
-  cardSection: {
-    marginTop: 32,
-    borderTopEndRadius: 40,
-    borderTopStartRadius: 40,
-    paddingTop: 32,
-  },
-  headerRight: {
-    color: globalColors.black,
-    marginRight: 12,
-  },
-  h1Card: {
-    color: globalColors.black,
-    fontSize: 20,
-    fontFamily: 'Montserrat-Bold',
-    marginTop: 4,
-  },
   title: {
-    color: globalColors.black,
-    fontSize: 20,
-    fontFamily: 'Montserrat-Bold',
     marginLeft: 24,
-  },
-  labelCard: {
-    fontSize: 18,
-    fontFamily: 'Montserrat-Medium',
-    color: '#707070',
-    marginTop: 8,
-  },
-  cardStyle: {
-    marginLeft: 24,
-    marginTop: 24,
-    marginRight: 24,
-  },
-  addButton: {
-    height: 40,
-    width: 40,
-    minWidth: 0,
-    minHeight: 0,
-    borderRadius: 40,
-    backgroundColor: globalColors.greenSecondary,
-    borderWidth: 0,
   },
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
-    width: width,
     marginTop: 10,
-  },
-  servicesContentContainer: {
-    flexDirection: 'row',
-    paddingBottom: 8,
-    backgroundColor: 'transparent',
-    width: width,
   },
   viewContainer: {
     flex: 1,

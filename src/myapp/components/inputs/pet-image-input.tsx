@@ -37,11 +37,7 @@ const PetImageInput = ({
 
   const onPress = useCallback(() => {
     launchCamera(options, (response: ImagePickerResponse) => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('Error code: ', response.errorCode);
-      } else {
+      if (!response.didCancel && !response.errorCode) {
         setImageResponse(response);
         setImage(response.assets[0]);
       }
@@ -57,14 +53,12 @@ const PetImageInput = ({
     if (image && !imageResponse) {
       source = image;
       additionalStyles = styles.takenPictureStyles;
-    }
-    // Or an image has been taken...
-    else if (imageResponse) {
+    } else if (imageResponse) {
+      // Or an image has been taken...
       source = {uri: imageResponse.assets[0].uri};
       additionalStyles = styles.takenPictureStyles;
-    }
-    // Otherwise show default image.
-    else {
+    } else {
+      // Otherwise show default image.
       source = require('../../assets/images/pets/add-pet-image.png');
     }
 

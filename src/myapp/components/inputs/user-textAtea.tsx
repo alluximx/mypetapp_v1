@@ -65,6 +65,7 @@ const UserTextArea = (props: UserInputProps): React.ReactElement => {
       <Input
         accessoryRight={props.isPassword ? renderIcon : null}
         autoCapitalize={props.autoCapitalize ? 'words' : 'none'}
+        autoCorrect={false}
         onBlur={() => setIsFocused(false)}
         onChangeText={(value) => {
           props.onChangeText(value);

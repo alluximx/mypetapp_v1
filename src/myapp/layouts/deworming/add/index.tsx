@@ -1,12 +1,12 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import moment from 'moment';
-// Constants.
-import {reminderOptions} from '../../../constants';
 // Hooks.
-import useSaveVaccine from '../../../hooks/vaccines/useSaveVaccine';
 import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
+import useSaveVaccine from '../../../hooks/vaccines/useSaveVaccine';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+import useVaccineReminder from '../../../hooks/inputs/useVaccineReminder';
+// Models.
+import {Vaccine} from '../../../types/models';
 // My Components.
 import CustomSpinner from '../../../components/custom-spinner';
 import DatepickerInput from '../../../components/inputs/date-picker';
@@ -17,20 +17,29 @@ import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
+
   const [form, setForm] = useState({
     user_pet: route.params.petId,
     vaccine_registered: '',
     vaccine_date: '',
     next_vaccine_date: '',
     reminder: null,
+    is_vaccine: false,
   });
-  const [isReminderActive, setIsReminderActive] = useState(false);
-  const [reminderKey, setReminderKey] = useState(1);
 
-  const vaccinesQuery = useGetVaccines();
+  const [
+    isReminderActive,
+    setIsReminderActive,
+    reminderKey,
+    onSelectReminder,
+  ] = useVaccineReminder(form, setForm);
+
+  const saveDewormingQuery = useSaveVaccine();
+  const vaccinesQuery = useGetVaccines(false);
+
   const vaccinesData = vaccinesQuery.isLoading
     ? []
-    : vaccinesQuery.data?.data.map((vaccine) => {
+    : vaccinesQuery.data?.data.map((vaccine: Vaccine) => {
         return {value: vaccine.id, label: vaccine.vaccine_name};
       });
 
@@ -40,31 +49,7 @@ export default ({navigation, route}): React.ReactElement => {
     form.next_vaccine_date === '' ||
     isLoading;
 
-  const onSelectReminder = (reminderKey: number) => {
-    setReminderKey(reminderKey);
-
-    if (form.next_vaccine_date !== '') {
-      const reminderOption = reminderOptions.find(
-        (option) => option.key == reminderKey,
-      );
-
-      const dateToRemind = moment(form.next_vaccine_date)
-        .subtract(reminderOption.delay.amount, reminderOption.delay.unit)
-        .format('YYYY-MM-DD 09:00:00');
-
-      setForm({...form, reminder: dateToRemind});
-    }
-  };
-
-  useEffect(() => {
-    if (!isReminderActive) {
-      setForm({...form, reminder: null});
-    } else {
-      onSelectReminder(reminderKey);
-    }
-  }, [isReminderActive, form.next_vaccine_date]);
-
-  const onSavePress = () => {};
+  const onSavePress = () => saveDewormingQuery.mutate(form);
 
   useSetNavigationHeaders({
     isDisabled,
@@ -79,11 +64,11 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout>
-      <TitleHeader style={styles.title}>Nueva Desparacitación</TitleHeader>
+      <TitleHeader style={styles.title}>Nueva Desparasitación</TitleHeader>
       <DropdownPicker
         currentValue={form.vaccine_registered}
         data={vaccinesData}
-        placeholder="Tipo de vacuna"
+        placeholder="Tipo de desparasitación"
         setCurrentValue={(vaccine_registered) =>
           setForm({...form, vaccine_registered})
         }
@@ -96,9 +81,10 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <DatepickerInput
         currentValue={form.next_vaccine_date}
+        disabled={form.vaccine_date === '' ? true : false}
+        minDate={new Date(form.vaccine_date)}
         onSelect={(next_vaccine_date) => setForm({...form, next_vaccine_date})}
         placeholder="Fecha de expiración"
-        minDate={new Date(form.vaccine_date)}
       />
       <ReminderInput
         isActive={isReminderActive}

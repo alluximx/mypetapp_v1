@@ -4,12 +4,19 @@ import {Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 
-const DefaultText = (props): React.ReactElement => {
+interface DefaultTextProps {
+  children: any;
+  numberOfLines?: number;
+  style?: any;
+  wrapText?: boolean;
+}
+
+const DefaultText = (props: DefaultTextProps): React.ReactElement => {
   if (props.wrapText) {
     return (
       <Text
         ellipsizeMode="tail"
-        numberOfLines={1}
+        numberOfLines={props.numberOfLines ?? 1}
         style={[styles.defaultText, props.style]}
         category="s1">
         {props.children}

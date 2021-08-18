@@ -6,7 +6,7 @@ const MunicipalityDrop = (props): React.ReactElement => {
   const dataMunicipality = useMunicipality(props.id);
   useEffect(() => {
     if (dataMunicipality.data) {
-      let aux = [];
+      const aux = [];
       dataMunicipality.data.data.forEach((element) => {
         aux.push({
           value: element.id,
@@ -25,13 +25,13 @@ const MunicipalityDrop = (props): React.ReactElement => {
       data={townList}
       currentValue={town}
       placeholder="Municipio/Delegación"
-      setCurrentValue={(towId) => {
-        setTown(towId);
+      setCurrentValue={(townId) => {
+        setTown(townId);
         let aux = '';
         townList.map((item) => {
-          item.value == towId && (aux = item.label);
+          item.value === townId && (aux = item.label);
         });
-        props.change(towId, aux);
+        props.change(townId, aux);
       }}
       disabled={props.status}
     />

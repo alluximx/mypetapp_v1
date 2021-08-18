@@ -40,7 +40,7 @@ export default ({navigation, route}): React.ReactElement => {
   });
   useEffect(() => {
     if (dataStates.data) {
-      let aux = [];
+      const aux = [];
       dataStates.data.data.forEach((element) => {
         aux.push({
           value: element.id,
@@ -70,8 +70,8 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [dataStates.data, dataStates.isFetched, data.data, statusData]);
   const changeMunicipality = (valor, name) => {
-    valor == '' ? setStatusBtn(true) : setStatusBtn(false);
-    valor == ''
+    valor === '' ? setStatusBtn(true) : setStatusBtn(false);
+    valor === ''
       ? setForm({...form, townName: '', town: '', query: ''})
       : setForm({...form, townName: name, town: valor, query: ''});
   };
@@ -95,10 +95,10 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Estado"
           setCurrentValue={(stateId) => {
             setForm({...form, state: stateId});
-            stateId != '' ? setStatus(false) : setStatus(true);
-            stateId != '' &&
+            stateId !== '' ? setStatus(false) : setStatus(true);
+            stateId !== '' &&
               stateList.map((stateItem) => {
-                stateItem.value == stateId &&
+                stateItem.value === stateId &&
                   setForm({
                     ...form,
                     stateName: stateItem.label,
