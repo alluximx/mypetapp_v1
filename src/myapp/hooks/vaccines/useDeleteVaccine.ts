@@ -14,6 +14,7 @@ const useDeleteVaccine = () => {
   return useMutation((data: any) => deleteVaccine(data), {
     onSuccess: (response, variables) => {
       queryClient.invalidateQueries(['pet-vaccines', variables.petId]);
+      queryClient.invalidateQueries(['pet-vaccines-reminder', variables.petId]);
       navigation.goBack();
     },
   });

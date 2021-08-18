@@ -4,9 +4,7 @@ import api from '../../services/app-services';
 // Hooks.
 import useSaveVaccineImage from './useSaveVaccineImage';
 
-const postVaccine = (data) => {
-  return api.post('api/v1/vaccines-history/', data, true);
-};
+const postVaccine = (data) => api.post('api/v1/vaccines-history/', data, true);
 
 const useSaveVaccine = () => {
   const navigation = useNavigation();
@@ -33,12 +31,20 @@ const useSaveVaccine = () => {
                 'pet-vaccines',
                 variables.user_pet,
               ]);
+              queryClient.invalidateQueries([
+                'pet-vaccines-reminder',
+                variables.user_pet,
+              ]);
               navigation.goBack();
             },
           },
         );
       } else {
         queryClient.invalidateQueries(['pet-vaccines', variables.user_pet]);
+        queryClient.invalidateQueries([
+          'pet-vaccines-reminder',
+          variables.user_pet,
+        ]);
         navigation.goBack();
       }
     },

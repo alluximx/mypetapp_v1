@@ -15,10 +15,8 @@ import globalColors from '../../../styles/colors';
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {id, breed, name, pet_age, sex} = route.params.pet;
-
   const [dewormings, setDewormings] = useState([]);
-  const dewormingQuery = useGetVaccineIndex(id, false);
+  const dewormingQuery = useGetVaccineIndex(route.params.pet.id, false);
 
   useEffect(() => {
     if (dewormingQuery.data) {
@@ -110,7 +108,9 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddDeworming', {})}
+          onAdd={() =>
+            navigation.navigate('AddDeworming', {petId: route.params.pet.id})
+          }
         />
       ),
     });
