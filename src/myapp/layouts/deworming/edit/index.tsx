@@ -156,12 +156,10 @@ export default ({navigation, route}): React.ReactElement => {
         currentValue={form.vaccine_date}
         onSelect={(vaccine_date) => setForm({...form, vaccine_date})}
         placeholder="Fecha de aplicación"
-        minDate={new Date()}
       />
       <DatepickerInput
         currentValue={form.next_vaccine_date}
         disabled={form.vaccine_date === '' ? true : false}
-        minDate={new Date(form.vaccine_date)}
         onSelect={(next_vaccine_date) => setForm({...form, next_vaccine_date})}
         placeholder="Fecha de expiración"
       />

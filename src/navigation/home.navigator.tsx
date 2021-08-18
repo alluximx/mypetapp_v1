@@ -106,7 +106,11 @@ const Screens = ({navigation, route, style}) => {
 
         {/* Services visits */}
         <HomeStack.Screen name="ServicesDoc" component={InfVisitinScreen} />
-        <HomeStack.Screen name="NewVisitMedical" component={newVisitScreen} />
+        <HomeStack.Screen
+          name="NewVisitMedical"
+          component={newVisitScreen}
+          options={{headerLeft: closeButton}}
+        />
 
         {/* Vaccines */}
         <HomeStack.Screen name="VaccinesIndex" component={VaccineIndexScreen} />
