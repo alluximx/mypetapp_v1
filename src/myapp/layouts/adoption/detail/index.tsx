@@ -39,8 +39,8 @@ export default ({navigation, route}): React.ReactElement => {
           pagingEnabled
           ref={carouselRef}
           onScroll={(e) => {
-            let offset = e.nativeEvent.contentOffset.x;
-            let index = parseInt(offset / 400); // your cell height
+            const offset = e.nativeEvent.contentOffset.x;
+            const index = offset / 400; // your cell height
             setCurrentIndex(index);
           }}
           renderItem={({item}) => {
@@ -90,19 +90,19 @@ export default ({navigation, route}): React.ReactElement => {
             <View style={{flex: 1, alignSelf: 'stretch', flexDirection: 'row'}}>
               <View style={{flex: 1, alignSelf: 'stretch', width: '33%'}}>
                 <Text style={styles.subTitle}>
-                  {route.params.adoption.sex == 'H'
+                  {route.params.adoption.sex === 'H'
                     ? 'Hembra'
-                    : route.params.adoption.sex == 'M' && 'Macho'}
+                    : route.params.adoption.sex === 'M' && 'Macho'}
                 </Text>
               </View>
               <View style={{flex: 1, alignSelf: 'stretch', width: '34%'}}>
                 <Text style={styles.subTitle}>
-                  {parseInt(route.params.adoption.ageNumber)}
-                  {parseInt(route.params.adoption.ageNumber) > 1
-                    ? route.params.adoption.ageType == 'Y'
+                  {parseInt(route.params.adoption.ageNumber, 2)}
+                  {parseInt(route.params.adoption.ageNumber, 2) > 1
+                    ? route.params.adoption.ageType === 'Y'
                       ? '  Años'
                       : ' Meses'
-                    : route.params.adoption.ageType == 'Y'
+                    : route.params.adoption.ageType === 'Y'
                     ? ' Año'
                     : ' Mes'}{' '}
                 </Text>

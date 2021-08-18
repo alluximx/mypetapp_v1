@@ -41,6 +41,7 @@ export interface ReminderInputProps {
 export interface UserInputProps {
   autoCapitalize?: boolean;
   error?: string;
+  isNumeric?: boolean;
   isPassword?: boolean;
   onChangeText: (value: string) => void;
   placeholder: string;

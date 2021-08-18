@@ -21,8 +21,8 @@ export default ({navigation, route}): React.ReactElement => {
   useEffect(() => {
     if (dewormingQuery.data) {
       function sortByDate(a, b) {
-        var Item1 = a.vaccine_date;
-        var Item2 = b.vaccine_date;
+        const Item1 = a.vaccine_date;
+        const Item2 = b.vaccine_date;
         if (Item1 < Item2) {
           return 1;
         }
@@ -66,8 +66,8 @@ export default ({navigation, route}): React.ReactElement => {
   }, [dewormingQuery.data]);
 
   function customSort(a, b) {
-    var Item1 = a.name;
-    var Item2 = b.name;
+    const Item1 = a.name;
+    const Item2 = b.name;
     if (Item1 > Item2) {
       return 1;
     }

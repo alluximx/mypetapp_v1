@@ -114,8 +114,8 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   function customSort(a, b) {
-    var Item1 = a.reminder;
-    var Item2 = b.reminder;
+    const Item1 = a.reminder;
+    const Item2 = b.reminder;
     if (Item1 > Item2) {
       return 1;
     }

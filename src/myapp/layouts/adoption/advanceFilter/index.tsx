@@ -11,7 +11,6 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import UserInput from '../../../components/inputs/user-input';
 import globalColors from '../../../styles/colors';
 import AnchorText from '../../../components/texts/anchor-text';
-import {useQueryClient} from 'react-query';
 import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
 
 export default ({navigation, route}): React.ReactElement => {
@@ -45,7 +44,7 @@ export default ({navigation, route}): React.ReactElement => {
   const dataStates = useStates();
   useEffect(() => {
     if (dataStates.data) {
-      let aux = [];
+      const aux = [];
       dataStates.data.data.forEach((element) => {
         aux.push({
           value: element.id,
@@ -80,14 +79,13 @@ export default ({navigation, route}): React.ReactElement => {
       <AnchorText
         style={styles.headerRight}
         onPress={() => {
-          let query = '';
           navigation.navigate('AdoptionResult', {
             filter: {
               state: form.stateId,
               town: form.townId,
               stateName: form.stateName,
               townName: form.townName,
-              query: query,
+              query: '',
             },
             data: auxList,
             filters: {

@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, TouchableOpacity, Image, Dimensions} from 'react-native';
 import moment from 'moment';
-//UI Kitten
+// UI Kitten
 import {StyleService} from '@ui-kitten/components';
-//Global Styles
+// Global Styles
 import globalColors from '../styles/colors';
 import globalVars from '../styles/vars';
-//My components
+// My components
 import DefaultText from './texts/default-text';
 import TitleHeader from './texts/title-header';
 
