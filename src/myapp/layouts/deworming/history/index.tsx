@@ -96,7 +96,7 @@ export default ({navigation, route}): React.ReactElement => {
           style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
         />
         <DefaultText
-          children="para tumascota."
+          children="para tu mascota."
           style={[styles.center, {fontFamily: 'Montserrat-Bold'}]}
         />
       </Layout>

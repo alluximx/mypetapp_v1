@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     height: 390,
     maxHeight: 390,
     marginVertical: 5,
+    padding: 10,
   },
   listTitle: {
     marginBottom: 8,

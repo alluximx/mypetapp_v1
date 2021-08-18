@@ -117,7 +117,7 @@ export default ({navigation}): React.ReactElement => {
         />
         <View>
           <TitleHeader style={isSettingPassword && styles.setPasswordSpace}>
-            Restablecer Contraseña
+            Recuperar Contraseña
           </TitleHeader>
           {isSettingPassword ? (
             <UserInput
