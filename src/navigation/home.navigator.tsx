@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {Dimensions, StyleSheet} from 'react-native';
@@ -44,14 +44,17 @@ import {ResultScreen} from '../myapp/scenes/adoption/result.component';
 import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
 import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
 import {RequestScreen} from '../myapp/scenes/adoption/request.component';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
 
-const Screens = ({navigation, route, style}) => {
+const Screens = ({navigation, route, style, setRouteName}) => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
+  const routeNames = getFocusedRouteNameFromRoute(route) ?? 'Home';
+  setRouteName(routeNames);
 
   return (
     <Animated.View style={[styles.stack, style]}>
@@ -181,7 +184,6 @@ const Screens = ({navigation, route, style}) => {
           }}
         />
         <HomeStack.Screen name="AdoptionRequest" component={RequestScreen} />
-
         <HomeStack.Screen
           name="AdoptionAdvanceFilter"
           component={FilterScreen}
@@ -222,7 +224,7 @@ export const HomeNavigator = ({route}): React.ReactElement => {
   });
 
   const animatedStyle = {transform: [{scale}, {translateX}], borderRadius};
-
+  const [routeName, setRouteName] = useState('Home');
   return (
     <Drawer.Navigator
       overlayColor="transparent"
@@ -235,10 +237,16 @@ export const HomeNavigator = ({route}): React.ReactElement => {
       sceneContainerStyle={styles.background}
       drawerContent={(props) => {
         setProgress(props.progress);
-        return <HomeDrawer {...props} />;
+        return <HomeDrawer {...props} routeName={routeName} />;
       }}>
       <Drawer.Screen name="Screens" initialParams={route.params}>
-        {(props) => <Screens {...props} style={animatedStyle} />}
+        {(props) => (
+          <Screens
+            {...props}
+            style={animatedStyle}
+            setRouteName={setRouteName}
+          />
+        )}
       </Drawer.Screen>
     </Drawer.Navigator>
   );

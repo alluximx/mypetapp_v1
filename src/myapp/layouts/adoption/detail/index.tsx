@@ -17,11 +17,43 @@ import CustomButton from '../../../components/buttons/custom-button';
 import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
 import {FlatList} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
+import useAdoptionRequestAll from '../../../hooks/adoption/useAdoptionRquestAll';
+import useAdoptionRequest from '../../../hooks/adoption/useAdoptionRequest';
+import {useEffect} from 'react';
 
 const INITIAL_INDEX = 0;
 export default ({navigation, route}): React.ReactElement => {
   const dataImg = [];
-
+  const dataAllowed = useAdoptionRequest(route.params.adoption.id);
+  const data = useAdoptionRequestAll(route.params.adoption.association.id);
+  const [isDisable, setIsDisable] = useState(false);
+  const [totalAllowed, setTotalAllowed] = useState(0);
+  const [associationAllowed, setAssociationAllowed] = useState(0);
+  const nameAss = route.params.adoption.association.name;
+  useEffect(() => {
+    if (data.data) {
+      const request = data.data.data;
+      if (request.total_allowed_request > request.total_requests) {
+        if (
+          request.association_allowed_requests >
+          request.association_total_request
+        ) {
+          setIsDisable(false);
+        } else {
+          setIsDisable(true);
+        }
+      } else {
+        setIsDisable(true);
+      }
+      setTotalAllowed(request.total_allowed_request);
+      setAssociationAllowed(request.association_allowed_requests);
+    }
+    if (dataAllowed.data) {
+      if (dataAllowed.data.data) {
+        setIsDisable(true);
+      }
+    }
+  }, [data.data, dataAllowed.data]);
   route.params.adoption.images.forEach((element) => {
     dataImg.push({
       uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element.image,
@@ -40,8 +72,8 @@ export default ({navigation, route}): React.ReactElement => {
           ref={carouselRef}
           onScroll={(e) => {
             const offset = e.nativeEvent.contentOffset.x;
-            const index = offset / 400; // your cell height
-            setCurrentIndex(index);
+            const index = offset / 300; // your cell height
+            setCurrentIndex(parseInt(index));
           }}
           renderItem={({item}) => {
             const {uri} = item;
@@ -72,12 +104,12 @@ export default ({navigation, route}): React.ReactElement => {
           />
         </LinearGradient>
       </View>
-      <ScrollView stickyHeaderIndices={[0]}>
-        <View style={styles.titleCard}>
-          <TitleHeader style={styles.bottomSpace}>
-            {route.params.adoption.name}
-          </TitleHeader>
-        </View>
+      <View style={styles.titleCard}>
+        <TitleHeader style={styles.bottomSpace}>
+          {route.params.adoption.name}
+        </TitleHeader>
+      </View>
+      <ScrollView>
         <DefaultLayout
           statusBarTranslucent
           statusBarStyle={'light-content'}
@@ -97,8 +129,8 @@ export default ({navigation, route}): React.ReactElement => {
               </View>
               <View style={{flex: 1, alignSelf: 'stretch', width: '34%'}}>
                 <Text style={styles.subTitle}>
-                  {parseInt(route.params.adoption.ageNumber, 2)}
-                  {parseInt(route.params.adoption.ageNumber, 2) > 1
+                  {route.params.adoption.ageNumber}
+                  {route.params.adoption.ageNumber > 1
                     ? route.params.adoption.ageType === 'Y'
                       ? '  Años'
                       : ' Meses'
@@ -127,7 +159,7 @@ export default ({navigation, route}): React.ReactElement => {
               </View>
             </View>
           </View>
-          <Text style={[styles.subTitle, {marginTop: 25}]}>Mi nuevo hogar</Text>
+          <Text style={[styles.subTitle, {marginTop: 25}]}>{nameAss}</Text>
           <Text style={[styles.lugarText, {marginBottom: 16}]}>
             {route.params.adoption.municipality.name},{' '}
             {route.params.adoption.state.name}
@@ -135,6 +167,7 @@ export default ({navigation, route}): React.ReactElement => {
           <DefaultText>{route.params.adoption.description}</DefaultText>
           <CustomButton
             style={{marginTop: 24, marginBottom: 22}}
+            isDisabled={isDisable}
             onPress={() => {
               navigation.navigate('AdoptionRequest', {
                 adoption: route.params.adoption,
@@ -142,9 +175,10 @@ export default ({navigation, route}): React.ReactElement => {
             }}>
             Quiero Adoptar
           </CustomButton>
-          <Text style={styles.lugarText}>
-            Esta asociación solo permite 2 solicitudes pendientes por usuario y
-            en total no puedes tener más de 4 solicitudes pendientes.
+          <Text style={styles.finalText}>
+            Esta asociación solo permite {associationAllowed} solicitudes
+            pendientes por usuario y en total no puedes tener más de{' '}
+            {totalAllowed} solicitudes pendientes.
           </Text>
         </DefaultLayout>
       </ScrollView>
@@ -154,24 +188,10 @@ export default ({navigation, route}): React.ReactElement => {
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    marginTop: 35,
-    paddingTop: 32,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    marginBottom: 60,
-    height: height,
-  },
-  petImageContainer: {
-    width: width,
-    flex: 1,
-    height: height / 2 - 25,
-    resizeMode: 'cover',
-    position: 'absolute',
+    height: '50%',
   },
   bottomSpace: {
     marginBottom: 5,
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
   },
   subTitle: {
     fontFamily: 'Montserrat-Bold',
@@ -197,14 +217,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: globalColors.darkGray,
   },
+  finalText: {
+    fontFamily: 'Montserrat-Medium',
+    fontSize: 14,
+    color: globalColors.darkGray,
+    marginBottom: 10,
+  },
   titleCard: {
     backgroundColor: globalColors.backgroundDefault,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     paddingLeft: 24,
     paddingTop: 32,
-    position: 'absolute',
-    marginTop: 0,
     width: '100%',
   },
   container2: {
@@ -218,38 +242,6 @@ const styles = StyleSheet.create({
     aspectRatio: 1.5,
     flexGrow: 0,
     marginBottom: 20,
-  },
-  item: {
-    flex: 1,
-    alignItems: 'center',
-    borderRadius: 5,
-  },
-  imageBackground: {
-    flex: 1,
-    width: 250,
-    backgroundColor: '#EBEBEB',
-  },
-  rightTextContainer: {
-    marginLeft: 'auto',
-    marginRight: -2,
-    backgroundColor: 'rgba(49, 49, 51,0.5)',
-    padding: 3,
-    marginTop: 3,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
-  },
-  rightText: {color: 'white'},
-  lowerContainer: {
-    flex: 1,
-    margin: 10,
-  },
-  titleText: {
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  contentText: {
-    marginTop: 10,
-    fontSize: 12,
   },
   linearGradient: {
     height: 150,

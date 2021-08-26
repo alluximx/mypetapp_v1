@@ -13,6 +13,7 @@ import globalColors from '../../../styles/colors';
 import AnchorText from '../../../components/texts/anchor-text';
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 export default ({navigation, route}): React.ReactElement => {
   const state = route.params.filter.state;
   const stateName = route.params.filter.stateName;
@@ -68,74 +69,46 @@ export default ({navigation, route}): React.ReactElement => {
     });
 
     const auximg = 'https://mpa-stage.s3.amazonaws.com/media/' + img;
+    const age = services.item.ageNumber;
+    const auxName = services.item.association.name;
+    let nameAss =
+      auxName.length >= 20 ? auxName.substr(0, 15) + '...' : auxName;
     return (
-      <Card
-        style={styles.cardStyle}
-        onPress={() => {
-          details(services.item);
-        }}>
-        <Image style={styles.cardImg} source={{uri: auximg}} />
-        <View>
-          <TitleHeader style={{marginTop: 8}}>{services.item.name}</TitleHeader>
-          <DefaultText style={{alignItems: 'center'}}>
-            {parseInt(services.item.ageNumber, 2)}
-            {parseInt(services.item.ageNumber, 2) > 1
-              ? services.item.ageType === 'Y'
-                ? '  Años'
-                : ' Meses'
-              : services.item.ageType === 'Y'
-              ? ' Año'
-              : ' Mes'}{' '}
-          </DefaultText>
-          <Text
-            style={{color: globalColors.greenPrimary, fontSize: 14}}
-            onPress={() => {
-              details(services.item);
-            }}>
-            Mi nuevo hogar
-          </Text>
-        </View>
-      </Card>
-    );
-    // return (
-    //   // <List horizontal={true} data={services.item} renderItem={renderCard} />
-    // );
-  };
-  const renderCard = (services) => {
-    let img = './../assets/abue.jpg';
-    services.item.images.forEach((images) => {
-      if (images.is_cover) {
-        img = images.image;
-      }
-    });
-
-    const auximg = 'https://mpa-stage.s3.amazonaws.com/media/' + img;
-    return (
-      <Card
-        style={styles.cardStyle}
-        onPress={() => {
-          details(services.item);
-        }}>
-        <Image style={styles.cardImg} source={{uri: auximg}} />
-        <TitleHeader style={{marginTop: 8}}>{services.item.name}</TitleHeader>
-        <DefaultText style={{alignItems: 'center'}}>
-          {parseInt(services.item.ageNumber, 2)}
-          {parseInt(services.item.ageNumber, 2) > 1
-            ? services.item.ageType === 'Y'
-              ? '  Años'
-              : ' Meses'
-            : services.item.ageType === 'Y'
-            ? ' Año'
-            : ' Mes'}{' '}
-        </DefaultText>
-        <Text
-          style={{color: globalColors.greenPrimary, fontSize: 14}}
+      <View style={styles.cardStyle}>
+        <TouchableOpacity
           onPress={() => {
             details(services.item);
           }}>
-          Mi nuevo hogar
-        </Text>
-      </Card>
+          <Image style={styles.cardImg} source={{uri: auximg}} />
+          <View>
+            <TitleHeader style={{marginTop: 6, marginLeft: 8}}>
+              {services.item.name}
+            </TitleHeader>
+            <DefaultText style={{alignItems: 'center', marginLeft: 8}}>
+              {age}
+              {age > 1
+                ? services.item.ageType === 'Y'
+                  ? '  Años'
+                  : ' Meses'
+                : services.item.ageType === 'Y'
+                ? ' Año'
+                : ' Mes'}{' '}
+            </DefaultText>
+            <Text
+              style={{
+                color: globalColors.greenPrimary,
+                fontSize: 14,
+                marginLeft: 8,
+                marginTop: 4,
+              }}
+              onPress={() => {
+                details(services.item);
+              }}>
+              {nameAss}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   };
   const details = (adoption) => {
@@ -143,6 +116,7 @@ export default ({navigation, route}): React.ReactElement => {
       adoption: adoption,
     });
   };
+
   return (
     <DefaultLayout
       statusBarStyle={'light-content'}
@@ -210,16 +184,14 @@ const themedStyles = StyleService.create({
     borderRadius: 18,
     backgroundColor: globalColors.white,
     width: '48%',
-    height: 205,
-    marginRight: 10,
+    height: 215,
+    marginRight: 15,
     marginBottom: 10,
-    padding: 5,
+    marginTop: 20,
   },
   cardImg: {
-    width: '150%',
-    height: '55%',
-    marginTop: -20,
-    marginLeft: -28,
+    width: '100%',
+    height: '52%',
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
   },

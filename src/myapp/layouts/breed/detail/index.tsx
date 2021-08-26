@@ -87,7 +87,7 @@ export default ({navigation, route}): React.ReactElement => {
           flex: 1,
           justifyContent: 'flex-start',
           position: 'relative',
-          marginTop: 88,
+          marginTop: 92,
         }}></View>
       <View style={{marginBottom: 50, borderRadius: 40, overflow: 'hidden'}}>
         <ScrollView stickyHeaderIndices={[0]}>
