@@ -11,12 +11,10 @@
     "url": "https://github.com/alluximx/mypetapp_v1/issues"
   },
   "main": "./index.js",
-  "workspaces": {
-    "nohoist": [
-      "*",
-      "*/**"
-    ]
-  },
+  "workspaces": [
+    "*",
+    "*/**"
+  ],
   "scripts": {
     "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --assets-dest='./ios' --dev=false --platform='ios'",
     "android": "react-native run-android",
