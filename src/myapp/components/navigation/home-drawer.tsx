@@ -15,10 +15,22 @@ import DrawerItem from './drawer-item';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+import {useNavigationState} from '@react-navigation/native';
+import {useEffect} from 'react';
 
 export const HomeDrawer = (props): DrawerElement => {
   const authContext = useContext(AuthContext);
   const [currentTab, setCurrentTab] = useState<string>('Mis Mascotas');
+  const list = [
+    {name: 'Mis Mascotas', ruta: 'Home'},
+    {name: 'Info. de Razas', ruta: 'Breed'},
+    {name: 'Adopciones', ruta: 'AdoptionFilter'},
+  ];
+  useEffect(() => {
+    list.map((route) => {
+      route.ruta === props.routeName && setCurrentTab(route.name);
+    });
+  }, [props.routeName]);
 
   const navigateToScreen = (urlKey: string, params: {}) => {
     props.navigation.navigate(urlKey, params);
@@ -66,7 +78,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/coming-services.png')}
           />
           <DrawerItem
-            urlKey="Home"
+            urlKey="AdoptionFilter"
             params={{}}
             onPressOption={navigateAdoption}
             currentTab={currentTab}
@@ -102,7 +114,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/vets.png')}
           />
           <DrawerItem
-            urlKey="Home"
+            urlKey="Breed"
             params={{}}
             onPressOption={navigateBreed}
             currentTab={currentTab}

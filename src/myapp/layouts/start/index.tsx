@@ -53,7 +53,7 @@ export default ({navigation}): React.ReactElement => {
       <AnchorText
         style={styles.signInAsInvited}
         onPress={authContext.goHomeAsGuest}>
-        Ingresar como invitado
+        {/* Ingresar como invitado */}
       </AnchorText>
     </DefaultLayout>
   );

@@ -12,6 +12,7 @@ import UserInput from '../../../components/inputs/user-input';
 import globalColors from '../../../styles/colors';
 import AnchorText from '../../../components/texts/anchor-text';
 import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
+import CloseButton from '../../../components/buttons/close-button';
 
 export default ({navigation, route}): React.ReactElement => {
   const [state, setState] = useState(route.params.adoption.state);
@@ -102,6 +103,7 @@ export default ({navigation, route}): React.ReactElement => {
         Aplicar
       </AnchorText>
     ),
+    headerLeft: () => <CloseButton navigation={navigation} />,
   });
   const filters = (
     feminine,
