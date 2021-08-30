@@ -1,55 +1,55 @@
 import React from 'react';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {Dimensions, StyleSheet} from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { Dimensions, StyleSheet } from 'react-native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
 // My Components.
-import {HomeDrawer} from '../myapp/components/navigation/home-drawer';
+import { HomeDrawer } from '../myapp/components/navigation/home-drawer';
 import BackButton from '../myapp/components/buttons/back-button';
 import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
-import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
-import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
+import { CartScreen } from '../myapp/scenes/cart/shopping-cart.component';
+import { ClinicalHistoryScreen } from '../myapp/scenes/clinical-history/clinical-history.component';
 // Pets
-import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
-import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
-import {HomeScreen} from '../myapp/scenes/home/home.component';
-import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
-import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
-import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
+import { DetailPetScreen } from '../myapp/scenes/pets/detail.component';
+import { EditPetScreen } from '../myapp/scenes/pets/edit.component';
+import { HomeScreen } from '../myapp/scenes/home/home.component';
+import { OrdersScreen } from '../myapp/scenes/orders/orders.component';
+import { ProductDetailScreen } from '../myapp/scenes/cart/product-detail.component';
+import { ProductListScreen } from '../myapp/scenes/cart/product-list.component';
 // Vaccines.
-import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
-import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
+import { AddVaccineScreen } from '../myapp/scenes/vaccines/add.component';
+import { EditVaccineScreen } from '../myapp/scenes/vaccines/edit.component';
 // Types
 import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 // visits
-import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
-import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
+import { InfVisitinScreen } from '../myapp/scenes/visits/Inf.component';
+import { newVisitScreen } from '../myapp/scenes/visits/new-visit.component';
 // Vaccines
-import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
+import { VaccineIndexScreen } from '../myapp/scenes/vaccines/vaccine-index.component';
 // Deworming
-import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
-import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
-import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
+import { DewormingHistoryScreen } from '../myapp/scenes/deworming/deworming-history.component';
+import { AddDewormingScreen } from '../myapp/scenes/deworming/add.component';
+import { EditDewormingScreen } from '../myapp/scenes/deworming/edit.component';
 // Breed
-import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
-import {DetailBreed} from '../myapp/scenes/breed/detail.component';
+import { InfoBreedScreen } from '../myapp/scenes/breed/Inf.component';
+import { DetailBreed } from '../myapp/scenes/breed/detail.component';
 // Adoption
-import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
-import {ResultScreen} from '../myapp/scenes/adoption/result.component';
-import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
-import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
-import {RequestScreen} from '../myapp/scenes/adoption/request.component';
+import { AdoptionScreen } from '../myapp/scenes/adoption/adoption.component';
+import { ResultScreen } from '../myapp/scenes/adoption/result.component';
+import { adoptionDetailScreen } from '../myapp/scenes/adoption/details.component';
+import { FilterScreen } from '../myapp/scenes/adoption/filter.component';
+import { RequestScreen } from '../myapp/scenes/adoption/request.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
 const width = Dimensions.get('window').width;
 
-const Screens = ({navigation, route, style}) => {
+const Screens = ({ navigation, route, style }) => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
 
@@ -63,6 +63,7 @@ const Screens = ({navigation, route, style}) => {
           headerStyle: styles.header,
           headerTopInsetEnabled: false,
           stackAnimation: 'slide_from_right',
+          headerTitle: null
         }}>
         {/* HOME */}
         <HomeStack.Screen
@@ -114,6 +115,7 @@ const Screens = ({navigation, route, style}) => {
           name="AddVaccine"
           component={AddVaccineScreen}
           options={{
+            title: '',
             headerLeft: closeButton,
           }}
         />
@@ -154,7 +156,7 @@ const Screens = ({navigation, route, style}) => {
             ),
             headerTopInsetEnabled: true,
             headerTranslucent: true,
-            headerStyle: {backgroundColor: 'transparent'},
+            headerStyle: { backgroundColor: 'transparent' },
           }}
         />
 
@@ -177,7 +179,7 @@ const Screens = ({navigation, route, style}) => {
             ),
             headerTopInsetEnabled: true,
             headerTranslucent: true,
-            headerStyle: {backgroundColor: 'transparent'},
+            headerStyle: { backgroundColor: 'transparent' },
           }}
         />
         <HomeStack.Screen name="AdoptionRequest" component={RequestScreen} />
@@ -204,7 +206,7 @@ const Screens = ({navigation, route, style}) => {
   );
 };
 
-export const HomeNavigator = ({route}): React.ReactElement => {
+export const HomeNavigator = ({ route }): React.ReactElement => {
   const [progress, setProgress] = React.useState<Animated.Node<number>>(
     new Animated.Value(0),
   );
@@ -221,7 +223,7 @@ export const HomeNavigator = ({route}): React.ReactElement => {
     outputRange: [0, 20],
   });
 
-  const animatedStyle = {transform: [{scale}, {translateX}], borderRadius};
+  const animatedStyle = { transform: [{ scale }, { translateX }], borderRadius };
 
   return (
     <Drawer.Navigator

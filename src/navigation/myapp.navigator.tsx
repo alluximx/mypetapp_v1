@@ -1,28 +1,28 @@
-import React, {useEffect, useMemo, useReducer, useRef} from 'react';
+import React, { useEffect, useMemo, useReducer, useRef } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   NavigationContainer,
   NavigationContainerRef,
 } from '@react-navigation/native';
-import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {StyleSheet} from 'react-native';
-import {QueryClient, QueryClientProvider} from 'react-query';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { StyleSheet } from 'react-native';
+import { QueryClient, QueryClientProvider } from 'react-query';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
 // My Components
 import BackButton from '../myapp/components/buttons/back-button';
 // Navigators.
-import {AuthNavigator} from '../myapp/navigation/auth/auth.navigator';
-import {HomeNavigator} from './home.navigator';
+import { AuthNavigator } from '../myapp/navigation/auth/auth.navigator';
+import { HomeNavigator } from './home.navigator';
 // Context
-import {AuthContext, AuthContextType} from '../myapp/context/AuthContext';
+import { AuthContext, AuthContextType } from '../myapp/context/AuthContext';
 // Services
 import AuthService from '../myapp/services/auth-service';
 // Reducer
-import {reducer, initialState} from '../../src/reducer';
+import { reducer, initialState } from '../../src/reducer';
 import RootStackParamList from '../myapp/types/navigation/root-stack';
 // Native screens.
-import {enableScreens} from 'react-native-screens';
+import { enableScreens } from 'react-native-screens';
 enableScreens(true);
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -38,7 +38,7 @@ export const MyAppNavigator = (): React.ReactElement => {
 
       try {
         userToken = await AsyncStorage.getItem('auth_token');
-        dispatch({type: 'RESTORE_TOKEN', token: userToken});
+        dispatch({ type: 'RESTORE_TOKEN', token: userToken });
       } catch (e) {
         // Restoring token failed
       }
@@ -50,30 +50,30 @@ export const MyAppNavigator = (): React.ReactElement => {
     (): AuthContextType => ({
       isGuest: state.userToken == null ? true : false,
       goHomeAsGuest: () => {
-        dispatch({type: 'GUEST_SIGN_IN'});
+        dispatch({ type: 'GUEST_SIGN_IN' });
       },
       signIn: async (data) => {
         try {
           const response = await AuthService.PostLogin(data);
           await AsyncStorage.setItem('auth_token', response.data.token);
-          dispatch({type: 'SIGN_IN', token: response.data.token});
-          return {status: true, data: response.data};
+          dispatch({ type: 'SIGN_IN', token: response.data.token });
+          return { status: true, data: response.data };
         } catch (error) {
-          return {status: false, data: error.response.data};
+          return { status: false, data: error.response.data };
         }
       },
       signUp: async (data) => {
         try {
           const response = await AuthService.PostSignup(data);
-          return {status: true, data: response.data};
+          return { status: true, data: response.data };
         } catch (error) {
-          return {status: false, data: error.response.data};
+          return { status: false, data: error.response.data };
         }
       },
       signOut: async () => {
         await AsyncStorage.removeItem('auth_token');
         queryClient.clear();
-        dispatch({type: 'SIGN_OUT'});
+        dispatch({ type: 'SIGN_OUT' });
       },
     }),
     [state.userToken],
