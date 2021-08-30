@@ -63,7 +63,7 @@ const Screens = ({ navigation, route, style }) => {
           headerStyle: styles.header,
           headerTopInsetEnabled: false,
           stackAnimation: 'slide_from_right',
-          headerTitle: null
+          headerTitle: null,
         }}>
         {/* HOME */}
         <HomeStack.Screen
