@@ -9,6 +9,7 @@ import useGetBreeds from '../../../hooks/useGetBreeds';
 import useSizes from '../../../hooks/pets/useSizes';
 import useUpdatePet from '../../../hooks/pets/useUpdatePet';
 import useDeletePet from '../../../hooks/pets/useDeletePet';
+import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
@@ -24,6 +25,7 @@ export default ({navigation, route}): React.ReactElement => {
   const {birthday, breed, id, name, owner_user, sex, size} = route.params.pet;
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [formHasChanged, setFormHasChanged] = useState(false);
   const {data: breeds} = useGetBreeds();
   const {data: sizes} = useSizes();
 
@@ -60,21 +62,23 @@ export default ({navigation, route}): React.ReactElement => {
     birthday: birthday,
   });
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <AnchorText
-          style={styles.headerRight}
-          isDisabled={isLoading}
-          onPress={() => {
-            setIsLoading(true);
-            updatePetQuery.mutate(form);
-          }}>
-          Guardar
-        </AnchorText>
-      ),
-    });
-  }, [navigation, form, isLoading]);
+  const onUpdate = () => updatePetQuery.mutate(form);
+
+  const isDisabled =
+    (!form.name || form.name === name) &&
+    (!form.birthday || form.birthday === birthday) &&
+    (!form.breed || form.breed === breed.id) &&
+    (!form.sex || form.sex === sex) &&
+    (!form.size || form.size === size.id);
+
+  useSetNavigationHeaders({
+    isDisabled,
+    isLoading,
+    navigation,
+    onRightPress: onUpdate,
+    setIsLoading,
+    data: form,
+  });
 
   const onDeleteAccept = () => {
     setIsLoading(true);
