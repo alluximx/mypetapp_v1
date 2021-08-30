@@ -1,15 +1,15 @@
 import React from 'react';
-import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {StyleSheet} from 'react-native';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+import { StyleSheet } from 'react-native';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // AUTH SCREENS
-import {SignInScreen} from '../../scenes/auth/sign-in.component';
-import {SignUpScreen} from '../../scenes/auth/sign-up.component';
-import {ForgotPasswordScreen} from '../../scenes/auth/forgot-password.component';
-import {RecoveryKeyScreen} from '../../scenes/auth/recovery-key.component';
-import {StartScreen} from '../../scenes/start/start.component';
-import {TermsScreen} from '../../scenes/auth/terms.component';
+import { SignInScreen } from '../../scenes/auth/sign-in.component';
+import { SignUpScreen } from '../../scenes/auth/sign-up.component';
+import { ForgotPasswordScreen } from '../../scenes/auth/forgot-password.component';
+import { RecoveryKeyScreen } from '../../scenes/auth/recovery-key.component';
+import { StartScreen } from '../../scenes/start/start.component';
+import { TermsScreen } from '../../scenes/auth/terms.component';
 // My Components
 import CloseButton from '../../components/buttons/close-button';
 import BackButton from '../../components/buttons/back-button';
@@ -18,7 +18,7 @@ import AuthStackParamList from '../../types/navigation/auth-stack';
 
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
-export const AuthNavigator = ({navigation}): React.ReactElement => {
+export const AuthNavigator = ({ navigation }): React.ReactElement => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
 
@@ -31,6 +31,7 @@ export const AuthNavigator = ({navigation}): React.ReactElement => {
         headerStyle: styles.header,
         headerTopInsetEnabled: false,
         stackAnimation: 'slide_from_right',
+        headerTitle: null
       }}>
       {/* AUTH */}
       <AuthStack.Screen

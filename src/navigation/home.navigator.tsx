@@ -66,6 +66,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           headerStyle: styles.header,
           headerTopInsetEnabled: false,
           stackAnimation: 'slide_from_right',
+          headerTitle: null,
         }}>
         {/* HOME */}
         <HomeStack.Screen
@@ -121,6 +122,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="AddVaccine"
           component={AddVaccineScreen}
           options={{
+            title: '',
             headerLeft: closeButton,
           }}
         />
