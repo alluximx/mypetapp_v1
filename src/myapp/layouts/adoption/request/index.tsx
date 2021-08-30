@@ -41,24 +41,24 @@ export default ({navigation, route}): React.ReactElement => {
   const useAddQuery = useAdoption();
   const dataStates = useStates();
   const isDisable =
-    form.age != '' &&
-    form.sex != '' &&
-    form.occupation != '' &&
-    form.street != '' &&
-    form.number != '' &&
+    form.age !== '' &&
+    form.sex !== '' &&
+    form.occupation !== '' &&
+    form.street !== '' &&
+    form.number !== '' &&
     form.cp.length === 5 &&
     form.cel.length === 10 &&
     form.tel.length === 10 &&
-    form.cologne != '' &&
-    form.city != '' &&
-    form.municipality != '' &&
-    form.state != '' &&
-    form.qpet != '' &&
-    form.qact != '' &&
+    form.cologne !== '' &&
+    form.city !== '' &&
+    form.municipality !== '' &&
+    form.state !== '' &&
+    form.qpet !== '' &&
+    form.qact !== '' &&
     form.reason.length >= 20 &&
-    form.qcount != '' &&
-    form.qallirgic != '' &&
-    form.qresource != '';
+    form.qcount !== '' &&
+    form.qallirgic !== '' &&
+    form.qresource !== '';
 
   useEffect(() => {
     if (dataStates.data) {

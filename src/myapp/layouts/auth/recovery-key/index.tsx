@@ -15,6 +15,7 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import RecoveryCodeInput from '../../../components/inputs/recovery-code-input';
+import CustomButton from '../../../components/buttons/custom-button';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalStyles from '../../../styles/style';
@@ -79,6 +80,8 @@ export default ({navigation}): React.ReactElement => {
 
     setLoading(false);
   };
+
+  const hasCompletedForm = code.length === NUMBER_OF_DIGITS;
 
   const codeDigitsArray = new Array<number>(NUMBER_OF_DIGITS).fill(0);
   const toDigitInput = (_value: number, idx: number): React.ReactElement => {
@@ -145,6 +148,13 @@ export default ({navigation}): React.ReactElement => {
                   </DefaultText>
                 )}
               </View>
+              <CustomButton
+                style={styles.signInButton}
+                onPress={onSubmitCode}
+                isDisabled={!hasCompletedForm}
+                isLoading={loading}>
+                Enviar código
+              </CustomButton>
               <View style={globalStyles.mixedTextContainer}>
                 <DefaultText>¿No recibiste el código?</DefaultText>
                 <AnchorText
@@ -207,5 +217,8 @@ const styles = StyleSheet.create({
     color: globalColors.greenPrimary,
     textAlign: 'center',
     fontSize: 14,
+  },
+  signInButton: {
+    marginTop: 40,
   },
 });

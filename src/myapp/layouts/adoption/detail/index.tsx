@@ -73,7 +73,7 @@ export default ({navigation, route}): React.ReactElement => {
           onScroll={(e) => {
             const offset = e.nativeEvent.contentOffset.x;
             const index = offset / 300; // your cell height
-            setCurrentIndex(parseInt(index));
+            setCurrentIndex(parseInt(index, 2));
           }}
           renderItem={({item}) => {
             const {uri} = item;

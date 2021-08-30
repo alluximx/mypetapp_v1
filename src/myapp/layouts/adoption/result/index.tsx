@@ -71,7 +71,7 @@ export default ({navigation, route}): React.ReactElement => {
     const auximg = 'https://mpa-stage.s3.amazonaws.com/media/' + img;
     const age = services.item.ageNumber;
     const auxName = services.item.association.name;
-    let nameAss =
+    const nameAss =
       auxName.length >= 20 ? auxName.substr(0, 15) + '...' : auxName;
     return (
       <View style={styles.cardStyle}>
