@@ -31,7 +31,7 @@ export const AuthNavigator = ({ navigation }): React.ReactElement => {
         headerStyle: styles.header,
         headerTopInsetEnabled: false,
         stackAnimation: 'slide_from_right',
-        headerTitle: null
+        headerTitle: null,
       }}>
       {/* AUTH */}
       <AuthStack.Screen
