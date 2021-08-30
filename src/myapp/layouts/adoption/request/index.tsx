@@ -51,7 +51,7 @@ export default ({navigation, route}): React.ReactElement => {
     form.tel.length === 10 &&
     form.cologne !== '' &&
     form.city !== '' &&
-    form.municipality != '' &&
+    form.municipality !== '' &&
     form.state !== '' &&
     form.qpet !== '' &&
     form.qact !== '' &&
