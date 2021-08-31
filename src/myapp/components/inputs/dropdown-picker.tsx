@@ -1,13 +1,13 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import {Animated, StyleSheet, View} from 'react-native';
+import { Animated, StyleSheet, View } from 'react-native';
 // Global Styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // My Components.
-import {DropDownIcon} from '../icons';
+import { DropDownIcon } from '../icons';
 // Types.
-import {DropdownPickerProps} from '../../types/components/inputs';
+import { DropdownPickerProps } from '../../types/components/inputs';
 
 const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
   const {
@@ -58,7 +58,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
       <RNPickerSelect
         Icon={() => (
           <DropDownIcon
-            style={disableDrop && {tintColor: globalColors.darkGray}}
+            style={disableDrop && { tintColor: globalColors.darkGray }}
           />
         )}
         items={data}
@@ -78,12 +78,17 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
               ? selectorStyles
               : selectorStylesDisebled
             : {
-                inputAndroid: {
-                  ...selectorStyles.inputAndroid,
-                  borderWidth: 1,
-                  borderColor: globalColors.greenSecondary,
-                },
+              inputAndroid: {
+                ...selectorStyles.inputAndroid,
+                borderWidth: 1,
+                borderColor: globalColors.greenSecondary,
+              },
+              inputIOS: {
+                ...selectorStyles.inputIOS,
+                borderWidth: 1,
+                borderColor: globalColors.greenSecondary,
               }
+            }
         }
         useNativeAndroidPickerStyle={false}
         value={currentValue}
@@ -96,6 +101,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 14,
+    height: 56,
   },
   inputLabel: {
     color: globalColors.darkGray,
@@ -108,6 +114,16 @@ const styles = StyleSheet.create({
 });
 
 const selectorStyles = {
+  inputIOS: {
+    backgroundColor: globalColors.lightGreen,
+    borderRadius: 10,
+    color: globalColors.black,
+    fontFamily: globalVars.fontRegular,
+    fontSize: 16,
+    height: 56,
+    padding: 15,
+    paddingBottom: -20,
+  },
   inputAndroid: {
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
@@ -126,6 +142,10 @@ const selectorStylesDisebled = {
   inputAndroid: {
     ...selectorStyles.inputAndroid,
     backgroundColor: globalColors.lightGray,
+  },
+  inputIOS: {
+    ...selectorStyles.inputIOS,
+    ackgroundColor: globalColors.lightGray,
   },
   placeholder: {
     color: 'transparent',
