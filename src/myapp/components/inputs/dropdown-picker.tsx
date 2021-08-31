@@ -29,6 +29,9 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
     }).start();
   }, [props.currentValue]);
 
+  console.log('band')
+  console.log(isDropdownOpen);
+
   return (
     <View style={[styles.container, props.style]}>
       <Animated.Text
@@ -68,6 +71,8 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
           onBlur: () => setIsDropdownOpen(false),
           onFocus: () => setIsDropdownOpen(true),
         }}
+        onOpen={() => setIsDropdownOpen(true)}
+        onClose={() => setIsDropdownOpen(false)}
         placeholder={{
           value: '',
           label: placeholder ?? 'Seleccione una opción...',
@@ -95,6 +100,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
         disabled={disableDrop}
       />
     </View>
+
   );
 };
 
@@ -145,7 +151,7 @@ const selectorStylesDisebled = {
   },
   inputIOS: {
     ...selectorStyles.inputIOS,
-    ackgroundColor: globalColors.lightGray,
+    backgroundColor: globalColors.lightGray,
   },
   placeholder: {
     color: 'transparent',
