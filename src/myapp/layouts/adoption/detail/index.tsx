@@ -6,6 +6,7 @@ import {
   Text,
   View,
   ScrollView,
+  Platform,
 } from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
