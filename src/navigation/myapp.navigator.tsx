@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useReducer, useRef} from 'react';
+import React, {useEffect, useMemo, useReducer, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   NavigationContainer,
@@ -23,6 +23,7 @@ import {reducer, initialState} from '../../src/reducer';
 import RootStackParamList from '../myapp/types/navigation/root-stack';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
+import CustomSpinner from '../myapp/components/custom-spinner';
 enableScreens(true);
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -31,9 +32,11 @@ const queryClient = new QueryClient();
 export const MyAppNavigator = (): React.ReactElement => {
   const navigationRef = useRef<NavigationContainerRef>();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const bootstrapAsync = async () => {
+      setLoading(true);
       let userToken: string;
 
       try {
@@ -42,6 +45,8 @@ export const MyAppNavigator = (): React.ReactElement => {
       } catch (e) {
         // Restoring token failed
       }
+
+      setLoading(false);
     };
     bootstrapAsync();
   }, []);
@@ -94,12 +99,21 @@ export const MyAppNavigator = (): React.ReactElement => {
               headerTopInsetEnabled: false,
               stackAnimation: 'slide_from_right',
             }}>
-            {state.userToken || state.isGuest ? (
+            {loading ? (
+              <RootStack.Screen
+                name="Loading"
+                component={() => <CustomSpinner />}
+                options={{
+                  headerShown: false,
+                }}
+              />
+            ) : state.userToken || state.isGuest ? (
               <RootStack.Screen
                 name="HomeNavigator"
                 component={HomeNavigator}
                 options={{
                   headerShown: false,
+                  stackAnimation: 'slide_from_right',
                 }}
                 initialParams={{
                   isGuest: state.isGuest,

@@ -1,4 +1,5 @@
 type RootStackParamList = {
+  Loading: {};
   AuthNavigator: {};
   HomeNavigator: {};
 };
