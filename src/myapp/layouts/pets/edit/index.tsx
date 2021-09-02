@@ -25,7 +25,6 @@ export default ({navigation, route}): React.ReactElement => {
   const {birthday, breed, id, name, owner_user, sex, size} = route.params.pet;
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [formHasChanged, setFormHasChanged] = useState(false);
   const {data: breeds} = useGetBreeds();
   const {data: sizes} = useSizes();
 
@@ -69,7 +68,8 @@ export default ({navigation, route}): React.ReactElement => {
     (!form.birthday || form.birthday === birthday) &&
     (!form.breed || form.breed === breed.id) &&
     (!form.sex || form.sex === sex) &&
-    (!form.size || form.size === size.id);
+    (!form.size || form.size === size.id) &&
+    !form.imageChanged;
 
   useSetNavigationHeaders({
     isDisabled,

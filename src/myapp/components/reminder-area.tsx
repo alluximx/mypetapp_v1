@@ -47,14 +47,14 @@ const {width} = Dimensions.get('window');
 const styles = StyleService.create({
   container: {
     width: width - globalVars.outsidePadding - 22,
-    height: 90,
+    height: 80,
     borderRadius: 18,
     backgroundColor: globalColors.greenPrimary,
-    marginBottom: 8,
+    marginBottom: 14,
   },
   ViewContainer: {
     marginLeft: 20,
-    marginTop: 20,
+    marginTop: 15,
     flexDirection: 'row',
   },
   tiltleText: {

@@ -53,7 +53,11 @@ const DatepickerInput = (props: DatePickerProps) => {
       <Datepicker
         accessoryRight={CalendarIcon}
         controlStyle={styles.container}
-        date={props.currentValue !== '' ? new Date(props.currentValue) : null}
+        date={
+          props.currentValue !== ''
+            ? moment(props.currentValue).utc().toDate()
+            : ''
+        }
         dateService={localeDateService}
         disabled={props.disabled}
         max={maxDate}
@@ -65,10 +69,7 @@ const DatepickerInput = (props: DatePickerProps) => {
             Selecciona una fecha
           </Text>
         )}
-        onSelect={(date) => {
-          const formattedDate = moment(date).format('YYYY-MM-DD');
-          props.onSelect(formattedDate);
-        }}
+        onSelect={(date: Date) => props.onSelect(date)}
         size="large"
       />
     </View>
