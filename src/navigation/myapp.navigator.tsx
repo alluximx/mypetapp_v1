@@ -113,7 +113,7 @@ export const MyAppNavigator = (): React.ReactElement => {
                 component={HomeNavigator}
                 options={{
                   headerShown: false,
-                  stackAnimation: 'fade',
+                  stackAnimation: 'slide_from_right',
                 }}
                 initialParams={{
                   isGuest: state.isGuest,

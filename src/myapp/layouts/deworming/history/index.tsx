@@ -88,7 +88,8 @@ export default ({navigation, route}): React.ReactElement => {
     const auxData = {
       name: service.item.name,
       validity: is_unique ? 'Unica' : service.item.deworming_date,
-      notification: !is_unique ? notificationDays : null,
+      notification:
+        !is_unique && service.item.reminder ? notificationDays : null,
       status:
         is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
       vaccineDates: service.item.dewormings,
