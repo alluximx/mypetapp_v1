@@ -6,6 +6,7 @@ import {
   Text,
   View,
   ScrollView,
+  Platform,
 } from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
@@ -244,7 +245,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   titleText: {
-    fontWeight: 'bold',
+    fontWeight: Platform.OS == 'ios' ? 'bold' : 'normal',
     fontSize: 18,
   },
   contentText: {
