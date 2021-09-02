@@ -41,9 +41,6 @@ const PetImageInput = ({
       if (!response.didCancel && !response.errorCode) {
         setImageResponse(response);
         setImage(response.assets[0]);
-      } else {
-        console.log('Error');
-        console.log(response.errorMessage);
       }
     });
   }, []);
