@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import RNPickerSelect from 'react-native-picker-select';
-import { Animated, StyleSheet, View } from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 // Global Styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // My Components.
-import { DropDownIcon } from '../icons';
+import {DropDownIcon} from '../icons';
 // Types.
-import { DropdownPickerProps } from '../../types/components/inputs';
+import {DropdownPickerProps} from '../../types/components/inputs';
 
 const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
   const {
@@ -58,7 +58,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
       <RNPickerSelect
         Icon={() => (
           <DropDownIcon
-            style={disableDrop && { tintColor: globalColors.darkGray }}
+            style={disableDrop && {tintColor: globalColors.darkGray}}
           />
         )}
         items={data}
@@ -80,24 +80,23 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
               ? selectorStyles
               : selectorStylesDisebled
             : {
-              inputAndroid: {
-                ...selectorStyles.inputAndroid,
-                borderWidth: 1,
-                borderColor: globalColors.greenSecondary,
-              },
-              inputIOS: {
-                ...selectorStyles.inputIOS,
-                borderWidth: 1,
-                borderColor: globalColors.greenSecondary,
+                inputAndroid: {
+                  ...selectorStyles.inputAndroid,
+                  borderWidth: 1,
+                  borderColor: globalColors.greenSecondary,
+                },
+                inputIOS: {
+                  ...selectorStyles.inputIOS,
+                  borderWidth: 1,
+                  borderColor: globalColors.greenSecondary,
+                },
               }
-            }
         }
         useNativeAndroidPickerStyle={false}
         value={currentValue}
         disabled={disableDrop}
       />
     </View>
-
   );
 };
 
