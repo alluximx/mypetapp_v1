@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: 20,
     fontFamily: globalVars.fontBold,
-    fontWeight: Platform.OS == 'ios' ? 'bold' : 'normal',
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     color: globalColors.darkerGray,
     marginBottom: 8,
   },

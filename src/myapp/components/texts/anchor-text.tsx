@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     color: globalColors.greenSecondary,
     fontSize: 16,
     fontFamily: globalVars.fontBold,
-    fontWeight: Platform.OS == 'ios' ? 'bold' : 'normal',
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
   disabledText: {
     color: globalColors.lightGray,

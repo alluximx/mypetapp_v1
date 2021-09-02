@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   titleText: {
-    fontWeight: Platform.OS == 'ios' ? 'bold' : 'normal',
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 18,
   },
   contentText: {
