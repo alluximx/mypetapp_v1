@@ -145,7 +145,7 @@ export default ({navigation, route}): React.ReactElement => {
   };
   return (
     <DefaultLayout
-      statusBarStyle={'light-content'}
+      statusBarStyle={'dark-content'}
       style={[styles.container, {color: 'black'}]}>
       {listAdoption.length > 0 ? (
         <>
