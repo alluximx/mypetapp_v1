@@ -131,12 +131,13 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   );
 };
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const themedStyles = StyleService.create({
   container: {
     flex: 1,
     backgroundColor: globalColors.backgroundDefault,
     paddingHorizontal: 0,
+    paddingBottom: 16,
   },
   imagePort: {
     width: width,

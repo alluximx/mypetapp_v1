@@ -1,12 +1,18 @@
 import api from '../../services/app-services';
+import moment from 'moment';
 import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import useSaveVisitImage from './useSaveVisitImage';
 import useUpdateImage from './useUpdateImage';
 import useDeleteImage from './useDeleteImage';
 
-const postUpdateVisits = (data) =>
-  api.put('api/v1/vetvisits/' + data.id + '/', data, true);
+const postUpdateVisits = (data) => {
+  const formattedData = {
+    ...data,
+    visit_date: moment.utc(data.visit_date).utc().format('YYYY-MM-DD'),
+  };
+  return api.put('api/v1/vetvisits/' + data.id + '/', formattedData, true);
+};
 
 const useUpdateMedicalVisit = (visitId) => {
   const navigation = useNavigation();

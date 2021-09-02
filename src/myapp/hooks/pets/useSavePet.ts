@@ -1,10 +1,17 @@
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
 // Hooks.
 import useSavePetImage from './useSavePetImage';
 
-const postPet = (data) => api.post('api/v1/pets/', data, true);
+const postPet = (data) => {
+  const formattedData = {
+    ...data,
+    birthday: moment.utc(data.birthday).format('YYYY-MM-DD'),
+  };
+  return api.post('api/v1/pets/', formattedData, true);
+};
 
 const useSavePet = () => {
   const navigation = useNavigation();

@@ -18,7 +18,14 @@ import TitleHeader from '../../../components/texts/title-header';
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    user_pet: string;
+    vaccine_registered: string;
+    vaccine_date: string | Date;
+    next_vaccine_date: string | Date;
+    reminder: string | Date;
+    is_vaccine: boolean;
+  }>({
     user_pet: route.params.petId,
     vaccine_registered: '',
     vaccine_date: '',
@@ -81,6 +88,7 @@ export default ({navigation, route}): React.ReactElement => {
       <DatepickerInput
         currentValue={form.next_vaccine_date}
         disabled={form.vaccine_date === '' ? true : false}
+        minDate={form.vaccine_date}
         onSelect={(next_vaccine_date) => setForm({...form, next_vaccine_date})}
         placeholder="Fecha de expiración"
       />

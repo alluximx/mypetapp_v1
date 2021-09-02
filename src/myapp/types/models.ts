@@ -41,9 +41,9 @@ export interface VaccineHistory {
   id?: string;
   user_pet: string;
   vaccine_registered: string;
-  vaccine_date: string;
-  next_vaccine_date: string;
-  reminder: string;
+  vaccine_date: string | Date;
+  next_vaccine_date: string | Date;
+  reminder: string | Date;
   is_vaccine: boolean;
 }
 

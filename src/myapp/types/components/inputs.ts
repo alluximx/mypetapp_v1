@@ -2,7 +2,7 @@ export interface DatePickerProps {
   currentValue: string | Date;
   disabled?: boolean;
   maxDate?: Date;
-  minDate?: Date;
+  minDate?: string | Date;
   onSelect: (date: Date) => void;
   placeholder?: string;
 }
