@@ -1,6 +1,6 @@
 import React from 'react';
-import {StatusBarStyle, StyleSheet} from 'react-native';
-import {Layout} from '@ui-kitten/components';
+import { StatusBarStyle, StyleSheet } from 'react-native';
+import { Layout } from '@ui-kitten/components';
 // My components
 import FocusAwareStatusBar from '../focus-aware-status-bar';
 // Global styles.

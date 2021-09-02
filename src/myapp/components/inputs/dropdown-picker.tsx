@@ -29,9 +29,6 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
     }).start();
   }, [props.currentValue]);
 
-  console.log('band')
-  console.log(isDropdownOpen);
-
   return (
     <View style={[styles.container, props.style]}>
       <Animated.Text
