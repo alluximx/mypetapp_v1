@@ -97,7 +97,8 @@ export const MyAppNavigator = (): React.ReactElement => {
               headerHideShadow: true,
               headerStyle: styles.header,
               headerTopInsetEnabled: false,
-              stackAnimation: 'slide_from_right',
+              stackAnimation: 'fade',
+              contentStyle: {backgroundColor: globalColors.backgroundDefault},
             }}>
             {loading ? (
               <RootStack.Screen
@@ -113,7 +114,7 @@ export const MyAppNavigator = (): React.ReactElement => {
                 component={HomeNavigator}
                 options={{
                   headerShown: false,
-                  stackAnimation: 'slide_from_right',
+                  stackAnimation: 'fade',
                 }}
                 initialParams={{
                   isGuest: state.isGuest,

@@ -5,9 +5,19 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>mypetapp_v1</string>
+	<string>Dog it</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>icon.png</string>
+		<string>icon_83.5@2x.png</string>
+		<string>icon_20pt.png</string>
+		<string>icon_29pt.png</string>
+		<string>icon_40pt.png</string>
+		<string>icon_60pt@2x.png</string>
+		<string>icon_76pt.png</string>
+	</array>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -37,8 +47,16 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Permitir acceso a la cámara</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMainNibFile</key>
+	<string>LaunchScreen</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Permitir acceso al almacenamiento</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Permitir acceso al almacenamiento</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Bold.ttf</string>
@@ -56,12 +74,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Permitir acceso al almacenamiento</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Permitir acceso al almacenamiento</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Permitir acceso a la cámara</string>
-
 </dict>
 </plist>
