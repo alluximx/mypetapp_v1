@@ -98,7 +98,7 @@ export default ({navigation, route}): React.ReactElement => {
           </View>
           <DefaultLayout
             statusBarTranslucent
-            statusBarStyle={'light-content'}
+            statusBarStyle={'dark-content'}
             statusBarBackgroundColor={'rgba(230,240,233,0.50)'}
             style={styles.container}>
             <List
