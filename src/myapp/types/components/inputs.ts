@@ -43,6 +43,7 @@ export interface UserInputProps {
   error?: string;
   isNumeric?: boolean;
   isPassword?: boolean;
+  maxLength?: number;
   onChangeText: (value: string) => void;
   placeholder: string;
   value: string;

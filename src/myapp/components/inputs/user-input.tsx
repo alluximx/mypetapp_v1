@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   Animated,
   StyleSheet,
@@ -6,12 +6,12 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Input } from '@ui-kitten/components';
+import {Input} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types
-import { UserInputProps } from '../../types/components/inputs';
+import {UserInputProps} from '../../types/components/inputs';
 
 const UserInput = (props: UserInputProps): React.ReactElement => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -70,6 +70,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         onChangeText={(value) => {
           props.onChangeText(value);
         }}
+        maxLength={props.maxLength ?? null}
         onFocus={() => setIsFocused(true)}
         secureTextEntry={props.isPassword ? secureTextEntry : null}
         style={[
@@ -79,7 +80,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
           },
           props.error && props.error !== '' && styles.errorOutline,
         ]}
-        textStyle={[styles.inputValueText, { paddingTop: inputPadding }]}
+        textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
         value={props.value}
       />
     </View>

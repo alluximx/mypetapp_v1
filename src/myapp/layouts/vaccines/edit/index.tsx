@@ -260,5 +260,9 @@ export default ({navigation, route}): React.ReactElement => {
 const styles = StyleSheet.create({
   title: {marginBottom: 24},
   headerRight: {alignSelf: 'center'},
-  delete: {textAlign: 'center', color: globalColors.red},
+  delete: {
+    textAlign: 'center',
+    color: globalColors.red,
+    marginBottom: 16,
+  },
 });
