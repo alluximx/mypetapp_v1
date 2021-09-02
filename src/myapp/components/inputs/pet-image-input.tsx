@@ -3,6 +3,7 @@ import {useState} from 'react';
 import {
   Image,
   ImageSourcePropType,
+  Platform,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -40,6 +41,9 @@ const PetImageInput = ({
       if (!response.didCancel && !response.errorCode) {
         setImageResponse(response);
         setImage(response.assets[0]);
+      } else {
+        console.log('Error');
+        console.log(response.errorMessage);
       }
     });
   }, []);
@@ -55,7 +59,13 @@ const PetImageInput = ({
       additionalStyles = styles.takenPictureStyles;
     } else if (imageResponse) {
       // Or an image has been taken...
-      source = {uri: imageResponse.assets[0].uri};
+      const realPath =
+        Platform.OS === 'ios'
+          ? decodeURIComponent(
+              imageResponse.assets[0].uri.replace('file://', ''),
+            )
+          : imageResponse.assets[0].uri;
+      source = {uri: realPath};
       additionalStyles = styles.takenPictureStyles;
     } else {
       // Otherwise show default image.
