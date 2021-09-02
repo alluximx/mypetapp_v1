@@ -118,7 +118,10 @@ export default ({navigation}): React.ReactElement => {
           })}
         </View>
 
-        <Card activeOpacity={0.8} style={styles.adoptionBanner}>
+        <Card
+          activeOpacity={0.8}
+          style={styles.adoptionBanner}
+          onPress={() => navigation.navigate('AdoptionFilter')}>
           <TitleHeader style={styles.adoptionTitle}>
             ¡Haz un nuevo amigo!
           </TitleHeader>
