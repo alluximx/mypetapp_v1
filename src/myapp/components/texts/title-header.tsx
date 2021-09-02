@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: 20,
     fontFamily: globalVars.fontBold,
+    fontWeight: 'bold',
     color: globalColors.darkerGray,
     marginBottom: 8,
   },

@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   lightButtonText: {
     color: globalColors.greenSecondary,
     fontFamily: globalVars.fontBold,
+    fontWeight: 'bold',
     fontSize: 17,
   },
   defaultButton: {
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
   defaultButtonText: {
     color: globalColors.white,
     fontFamily: globalVars.fontBold,
+    fontWeight: 'bold',
     fontSize: 17,
   },
   defaultButtonDisabled: {

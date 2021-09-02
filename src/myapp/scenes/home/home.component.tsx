@@ -12,7 +12,11 @@ export const HomeScreen = ({navigation}): React.ReactElement => {
     <DrawerShowcase onPress={navigation.toggleDrawer} />
   );
   return (
-    <SafeAreaLayout style={styles.container} insets="top">
+    <SafeAreaLayout
+      appearance="default"
+      backgroundColor="color-default"
+      style={styles.container}
+      insets="top">
       <TopNavigation
         appearance="control"
         style={{backgroundColor: globalColors.backgroundDefault}}
@@ -26,5 +30,6 @@ export const HomeScreen = ({navigation}): React.ReactElement => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'red',
   },
 });

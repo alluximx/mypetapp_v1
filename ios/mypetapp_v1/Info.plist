@@ -56,5 +56,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Permitir acceso al almacenamiento</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Permitir acceso al almacenamiento</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Permitir acceso a la cámara</string>
+
 </dict>
 </plist>
