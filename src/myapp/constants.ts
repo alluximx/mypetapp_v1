@@ -79,4 +79,5 @@ const i18n: I18nConfig = {
 export const localeDateService = new NativeDateService('es', {
   i18n,
   startDayOfWeek: 1,
+  format: 'DD/MM/YYYY',
 });

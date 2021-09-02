@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   viewText: {
-    marginBottom: 25,
+    marginBottom: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -1,10 +1,4 @@
-import {
-  Layout,
-  StyleService,
-  useStyleSheet,
-  List,
-  Card,
-} from '@ui-kitten/components';
+import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
 import React from 'react';
 import {Dimensions, Image, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
@@ -81,10 +75,10 @@ export default ({navigation, route}): React.ReactElement => {
           }}>
           <Image style={styles.cardImg} source={{uri: auximg}} />
           <View>
-            <TitleHeader style={{marginTop: 6, marginLeft: 8}}>
+            <TitleHeader style={{marginTop: 12, marginLeft: 16}}>
               {services.item.name}
             </TitleHeader>
-            <DefaultText style={{alignItems: 'center', marginLeft: 8}}>
+            <DefaultText style={{alignItems: 'center', marginLeft: 16}}>
               {age}
               {age > 1
                 ? services.item.ageType === 'Y'
@@ -98,7 +92,7 @@ export default ({navigation, route}): React.ReactElement => {
               style={{
                 color: globalColors.greenPrimary,
                 fontSize: 14,
-                marginLeft: 8,
+                marginLeft: 16,
                 marginTop: 4,
               }}
               onPress={() => {

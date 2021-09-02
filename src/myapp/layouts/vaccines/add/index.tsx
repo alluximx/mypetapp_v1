@@ -18,7 +18,14 @@ import VisitsImgCard from '../../../components/cards/image-input-card';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<{
+    user_pet: string;
+    vaccine_registered: string;
+    vaccine_date: string | Date;
+    next_vaccine_date: string | Date;
+    reminder: string | Date;
+    is_vaccine: boolean;
+  }>({
     user_pet: route.params.petId,
     vaccine_registered: '',
     vaccine_date: '',

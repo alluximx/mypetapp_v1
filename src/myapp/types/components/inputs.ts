@@ -1,9 +1,9 @@
 export interface DatePickerProps {
-  currentValue: string;
+  currentValue: string | Date;
   disabled?: boolean;
   maxDate?: Date;
   minDate?: Date;
-  onSelect: (date: string) => void;
+  onSelect: (date: Date) => void;
   placeholder?: string;
 }
 

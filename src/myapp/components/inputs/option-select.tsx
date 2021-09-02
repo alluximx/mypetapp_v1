@@ -7,7 +7,7 @@ import globalVars from '../../styles/vars';
 // Types.
 import {OptionSelectProps} from '../../types/components/inputs';
 
-const {height, width} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const OPTION_GAP = 16;
 const LIST_ITEM_HEIGHT = 56;
 
@@ -45,10 +45,6 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
     );
   };
 
-  const selectedIndex = props.data
-    .map((option) => option.key)
-    .indexOf(props.currentValue);
-
   return (
     <List
       data={props.data}
@@ -59,9 +55,6 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
       })}
       horizontal={props.horizontal ?? false}
       renderItem={renderOption}
-      onScroll={(e) => {
-        // console.log(e);
-      }}
       scrollEnabled={props.horizontal ? false : true}
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
       style={[styles.optionsContainer, props.style]}
