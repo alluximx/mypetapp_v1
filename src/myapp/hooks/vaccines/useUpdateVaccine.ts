@@ -12,8 +12,11 @@ const putVaccine = (data, vaccineId) => {
     ...data,
     vaccine_date: moment.utc(data.vaccine_date).format('YYYY-MM-DD'),
     next_vaccine_date: moment.utc(data.next_vaccine_date).format('YYYY-MM-DD'),
-    reminder: data.reminder ?? moment.utc(data.reminder).format('YYYY-MM-DD'),
+    reminder: data.reminder
+      ? moment.utc(data.reminder).format('YYYY-MM-DD 09:00:00')
+      : null,
   };
+
   return api.put(`api/v1/vaccines-history/${vaccineId}/`, formattedData, true);
 };
 

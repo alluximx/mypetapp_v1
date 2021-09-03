@@ -12,10 +12,8 @@ import {
 import React, {useEffect} from 'react';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import globalColors from '../../../styles/colors';
-import {Dimensions, TouchableWithoutFeedback, Image, View} from 'react-native';
+import {Dimensions, Image, View} from 'react-native';
 import useBreedsInformation from '../../../hooks/breed/useBreedsInformation';
-import UserInput from '../../../components/inputs/user-input';
-import {TextInput} from 'react-native-gesture-handler';
 
 const InfBreedScreen = ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
@@ -76,11 +74,6 @@ const InfBreedScreen = ({navigation}): React.ReactElement => {
         ]}>
         <Text style={styles.title}>Características de Razas</Text>
         <Layout style={styles.filter}>
-          {/* {<UserInput
-                        value={name}
-                        placeholder="Nombre"
-                        onChangeText={onFilter}
-                    />} */}
           <Input
             placeholder="Nombre"
             accessoryLeft={renderIcon}

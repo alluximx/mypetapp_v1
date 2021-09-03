@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
@@ -156,7 +156,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
                 style={{
                   backgroundColor: globalColors.backgroundDefault,
                   borderRadius: 100,
-                  padding: 5,
+                  padding: Platform.OS === 'ios' ? 3 : 5,
                 }}
                 navigation={navigation}
               />
