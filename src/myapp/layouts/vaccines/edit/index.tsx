@@ -225,6 +225,7 @@ export default ({navigation, route}): React.ReactElement => {
           <DatepickerInput
             currentValue={form.next_vaccine_date}
             disabled={form.vaccine_date === '' ? true : false}
+            minDate={form.vaccine_date}
             onSelect={(next_vaccine_date) =>
               setForm({...form, next_vaccine_date})
             }
@@ -259,5 +260,9 @@ export default ({navigation, route}): React.ReactElement => {
 const styles = StyleSheet.create({
   title: {marginBottom: 24},
   headerRight: {alignSelf: 'center'},
-  delete: {textAlign: 'center', color: globalColors.red},
+  delete: {
+    textAlign: 'center',
+    color: globalColors.red,
+    marginBottom: 16,
+  },
 });

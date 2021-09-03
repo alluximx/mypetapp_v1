@@ -187,7 +187,6 @@ export default ({navigation, route}): React.ReactElement => {
         </TitleHeader>
         <DatepickerInput
           currentValue={form.visit_date}
-          minDate={new Date()}
           onSelect={(visit_date) => setForm({...form, visit_date})}
           placeholder="Fecha de visita"
         />

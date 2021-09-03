@@ -198,6 +198,7 @@ export default ({navigation, route}): React.ReactElement => {
         <UserInput
           placeholder="CP"
           isNumeric={true}
+          maxLength={5}
           value={form.cp}
           onChangeText={(value: string) => {
             setForm({...form, cp: value.replace(/[^0-9]/g, '')});
@@ -231,6 +232,7 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Celular"
           value={form.cel}
           isNumeric={true}
+          maxLength={10}
           onChangeText={(value: string) => {
             setForm({...form, cel: value.replace(/[^0-9]/g, '')});
           }}
@@ -239,6 +241,7 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Teléfono fijo"
           value={form.tel}
           isNumeric={true}
+          maxLength={10}
           onChangeText={(value: string) => {
             setForm({...form, tel: value.replace(/[^0-9]/g, '')});
           }}

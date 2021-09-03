@@ -147,7 +147,7 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   );
 };
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const themedStyles = StyleService.create({
   container: {
     flex: 1,

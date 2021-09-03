@@ -3,11 +3,16 @@ import {useNavigation} from '@react-navigation/native';
 import api from '../../services/app-services';
 // Hooks.
 import useUpdatePetImage from './useUpdatePetImage';
+import moment from 'moment';
 
 const putPet = (data) => {
   delete data.breedId;
   delete data.sizeId;
-  return api.put('api/v1/pets/' + data.id + '/', data, true);
+  const formattedData = {
+    ...data,
+    birthday: moment.utc(data.birthday).format('YYYY-MM-DD'),
+  };
+  return api.put('api/v1/pets/' + data.id + '/', formattedData, true);
 };
 
 const useUpdatePet = () => {
