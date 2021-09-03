@@ -179,6 +179,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
                 style={{
                   backgroundColor: globalColors.backgroundDefault,
                   borderRadius: 100,
+                  marginTop: 2,
                 }}
                 navigation={navigation}
               />

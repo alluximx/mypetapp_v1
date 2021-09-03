@@ -90,6 +90,9 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
                   borderWidth: 1,
                   borderColor: globalColors.greenSecondary,
                 },
+                placeholder: {
+                  color: 'transparent',
+                },
               }
         }
         useNativeAndroidPickerStyle={false}

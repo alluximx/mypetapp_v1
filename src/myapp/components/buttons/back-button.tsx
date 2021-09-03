@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Icon } from '@ui-kitten/components';
+import {Platform, StyleSheet, View} from 'react-native';
+import {Icon} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
 
@@ -20,7 +20,7 @@ const BackButton = (props): React.ReactElement => {
 
 const styles = StyleSheet.create({
   backButton: {
-    marginVertical: 10,
+    marginVertical: Platform.OS === 'ios' ? 2 : 10,
   },
 });
 
