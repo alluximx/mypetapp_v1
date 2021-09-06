@@ -46,7 +46,7 @@ export const HomeDrawer = (props): DrawerElement => {
         <View style={styles.optionsContainer}>
           {/* Menu Buttons */}
           <DrawerItem
-            urlKey="Home"
+            urlKey="MyProfile"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}
