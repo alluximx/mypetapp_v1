@@ -1,13 +1,24 @@
 import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
+import moment from 'moment';
 // Hooks.
 import useDeleteVaccineImage from './useDeleteVaccineImage';
 import useUpdateVaccineImage from './useUpdateVaccineImage';
 import useSaveVaccineImage from './useSaveVaccineImage';
 
-const putVaccine = (data, vaccineId) =>
-  api.put(`api/v1/vaccines-history/${vaccineId}/`, data, true);
+const putVaccine = (data, vaccineId) => {
+  const formattedData = {
+    ...data,
+    vaccine_date: moment.utc(data.vaccine_date).format('YYYY-MM-DD'),
+    next_vaccine_date: moment.utc(data.next_vaccine_date).format('YYYY-MM-DD'),
+    reminder: data.reminder
+      ? moment.utc(data.reminder).format('YYYY-MM-DD 09:00:00')
+      : null,
+  };
+
+  return api.put(`api/v1/vaccines-history/${vaccineId}/`, formattedData, true);
+};
 
 const useUpdateVaccine = (vaccineId) => {
   const navigation = useNavigation();

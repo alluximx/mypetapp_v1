@@ -70,6 +70,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         onChangeText={(value) => {
           props.onChangeText(value);
         }}
+        maxLength={props.maxLength ?? null}
         onFocus={() => setIsFocused(true)}
         secureTextEntry={props.isPassword ? secureTextEntry : null}
         style={[
@@ -88,7 +89,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    height: 56,
+    height: 60,
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
     marginBottom: 16,

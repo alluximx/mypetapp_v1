@@ -40,13 +40,11 @@ const VisitCardImg = ({
   };
 
   const onEdit = () => {
-    const date = moment(data.date).format('YYYY-MM-DD');
-
     navigation.navigate('NewVisitMedical', {
       isEdit: true,
       pet: route.params.pet,
       visit: {
-        date,
+        date: data.visit_date,
         details,
         idVisit: data.id,
         images,

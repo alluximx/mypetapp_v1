@@ -2,9 +2,15 @@ import api from '../../services/app-services';
 import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import useSaveVisitImage from './useSaveVisitImage';
+import moment from 'moment';
 
-const postMedicalVisit = (data: any) =>
-  api.post('api/v1/vetvisits/', data, true);
+const postMedicalVisit = (data: any) => {
+  const formattedData = {
+    ...data,
+    visit_date: moment.utc(data.visit_date).format('YYYY-MM-DD'),
+  };
+  return api.post('api/v1/vetvisits/', formattedData, true);
+};
 
 const useAddMedicalVisit = () => {
   const navigation = useNavigation();

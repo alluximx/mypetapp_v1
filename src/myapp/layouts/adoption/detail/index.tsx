@@ -6,6 +6,7 @@ import {
   Text,
   View,
   ScrollView,
+  Platform,
 } from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
@@ -73,7 +74,7 @@ export default ({navigation, route}): React.ReactElement => {
           onScroll={(e) => {
             const offset = e.nativeEvent.contentOffset.x;
             const index = offset / 300; // your cell height
-            setCurrentIndex(parseInt(index, 2));
+            setCurrentIndex(index);
           }}
           renderItem={({item}) => {
             const {uri} = item;
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   viewText: {
-    marginBottom: 25,
+    marginBottom: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },

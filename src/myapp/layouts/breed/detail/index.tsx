@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Dimensions,
-  Image,
   ImageBackground,
   StyleSheet,
   Text,
@@ -13,7 +12,7 @@ import globalColors from '../../../styles/colors';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
-import {Icon, Layout, List, Button, StyleService} from '@ui-kitten/components';
+import {List} from '@ui-kitten/components';
 import PawBreed from '../../../components/utils/paw-breed';
 export default ({navigation, route}): React.ReactElement => {
   const data = [route.params.breed];
@@ -98,7 +97,7 @@ export default ({navigation, route}): React.ReactElement => {
           </View>
           <DefaultLayout
             statusBarTranslucent
-            statusBarStyle={'light-content'}
+            statusBarStyle={'dark-content'}
             statusBarBackgroundColor={'rgba(230,240,233,0.50)'}
             style={styles.container}>
             <List

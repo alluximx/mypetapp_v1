@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet} from 'react-native';
+import {TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import {Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     color: globalColors.greenSecondary,
     fontSize: 16,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
   disabledText: {
     color: globalColors.lightGray,

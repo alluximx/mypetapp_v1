@@ -12,14 +12,15 @@ import useUpdateMedicalVisit from '../../../../hooks/visits/useUpdateVisitMedica
 // Models.
 import {VisitImage} from '../../../../types/models';
 // My Components
+import AnchorText from '../../../../components/texts/anchor-text';
 import CustomModal from '../../../../components/modals/custom-modal';
 import CustomSpinner from '../../../../components/custom-spinner';
 import DatepickerInput from '../../../../components/inputs/date-picker';
 import DefaultLayout from '../../../../components/layouts/default-layout';
+import ImageInputCard from '../../../../components/cards/image-input-card';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';
 import UserTextArea from '../../../../components/inputs/user-textAtea';
-import ImageInputCard from '../../../../components/cards/image-input-card';
 
 export default ({navigation, route}): React.ReactElement => {
   const {date, details, idVisit, images, title, user_pet} = route.params.visit;
@@ -187,7 +188,6 @@ export default ({navigation, route}): React.ReactElement => {
         </TitleHeader>
         <DatepickerInput
           currentValue={form.visit_date}
-          minDate={new Date()}
           onSelect={(visit_date) => setForm({...form, visit_date})}
           placeholder="Fecha de visita"
         />
@@ -231,11 +231,11 @@ export default ({navigation, route}): React.ReactElement => {
         />
         {route.params.isEdit && (
           <View>
-            <Text
+            <AnchorText
               style={styles.deleteButton}
               onPress={() => setIsModalVisible(true)}>
               Eliminar
-            </Text>
+            </AnchorText>
           </View>
         )}
       </ScrollView>
@@ -255,7 +255,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   deleteButton: {
-    fontFamily: globalVars.fontBold,
     color: globalColors.red,
     textAlign: 'center',
     marginVertical: 16,

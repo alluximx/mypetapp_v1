@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import {Text} from '@ui-kitten/components';
 // Global styles.
 import globalVars from '../../styles/vars';
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: 20,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     color: globalColors.darkerGray,
     marginBottom: 8,
   },

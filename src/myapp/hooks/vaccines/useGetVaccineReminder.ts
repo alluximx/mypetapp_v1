@@ -5,7 +5,7 @@ import moment from 'moment';
 const useGetVaccineReminder = (petId) => {
   return useQuery(['pet-vaccines-reminder', petId], () =>
     api.get(
-      'api/v1/vaccines-history?user_pet=' +
+      'api/v1/vaccines-history/?user_pet=' +
         petId +
         '&reminder__gte=' +
         moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),

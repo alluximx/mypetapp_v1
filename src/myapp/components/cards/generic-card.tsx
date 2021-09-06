@@ -11,7 +11,7 @@ import PreviewableImageList from '../modals/previewable-image-list';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {buttonAlign, buttonText, content, date, images, title} = props.data;
-  const formattedDate = moment(date).format('DD/MM/YYYY');
+  const formattedDate = moment.utc(date).format('DD/MM/YYYY');
   const styles = useStyleSheet(themedStyles);
   const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
 

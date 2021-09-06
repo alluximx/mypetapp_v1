@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, ImageSourcePropType, StyleSheet} from 'react-native';
+import {Image, ImageSourcePropType, Platform, StyleSheet} from 'react-native';
 import {Button, Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     fontFamily: globalVars.fontBold,
     color: globalColors.white,
     fontSize: 16,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     marginBottom: 4,
     textAlign: 'center',
   },

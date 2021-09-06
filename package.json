@@ -11,15 +11,13 @@
     "url": "https://github.com/alluximx/mypetapp_v1/issues"
   },
   "main": "./index.js",
-  "workspaces": {
-    "nohoist": [
-      "*",
-      "*/**"
-    ]
-  },
+  "workspaces": [
+    "*",
+    "*/**"
+  ],
   "scripts": {
-    "build:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --assets-dest='./ios' --dev=false --platform='ios'",
-    "android": "react-native run-android",
+    "bundle:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/app/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'    ",
+    "postinstall": "npm run bundle:ios",
     "ios": "react-native run-ios",
     "start": "npm run env -- prod && react-native start",
     "start:dev": "npm run env -- dev && react-native start --reset-cache",
@@ -28,8 +26,7 @@
     "build:web": "expo build:web",
     "clean": "rimraf ./dist ./web-build",
     "lint": "tslint -c ./tslint.json ./src/**/*.{ts,tsx}",
-    "changelog": "conventional-changelog -i ./CHANGELOG.md -s",
-    "postinstall": "jetify"
+    "changelog": "conventional-changelog -i ./CHANGELOG.md -s"
   },
   "dependencies": {
     "@babel/preset-react": "^7.12.13",

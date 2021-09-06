@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {Button, Spinner, Text} from '@ui-kitten/components';
 // Global styles.
 import globalColors from '../../styles/colors';
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   lightButtonText: {
     color: globalColors.greenSecondary,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 17,
   },
   defaultButton: {
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
   defaultButtonText: {
     color: globalColors.white,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 17,
   },
   defaultButtonDisabled: {

@@ -68,6 +68,8 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
           onBlur: () => setIsDropdownOpen(false),
           onFocus: () => setIsDropdownOpen(true),
         }}
+        onOpen={() => setIsDropdownOpen(true)}
+        onClose={() => setIsDropdownOpen(false)}
         placeholder={{
           value: '',
           label: placeholder ?? 'Seleccione una opción...',
@@ -83,6 +85,14 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
                   borderWidth: 1,
                   borderColor: globalColors.greenSecondary,
                 },
+                inputIOS: {
+                  ...selectorStyles.inputIOS,
+                  borderWidth: 1,
+                  borderColor: globalColors.greenSecondary,
+                },
+                placeholder: {
+                  color: 'transparent',
+                },
               }
         }
         useNativeAndroidPickerStyle={false}
@@ -96,6 +106,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 14,
+    height: 56,
   },
   inputLabel: {
     color: globalColors.darkGray,
@@ -108,6 +119,16 @@ const styles = StyleSheet.create({
 });
 
 const selectorStyles = {
+  inputIOS: {
+    backgroundColor: globalColors.lightGreen,
+    borderRadius: 10,
+    color: globalColors.black,
+    fontFamily: globalVars.fontRegular,
+    fontSize: 16,
+    height: 56,
+    padding: 15,
+    paddingBottom: -20,
+  },
   inputAndroid: {
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
@@ -125,6 +146,10 @@ const selectorStyles = {
 const selectorStylesDisebled = {
   inputAndroid: {
     ...selectorStyles.inputAndroid,
+    backgroundColor: globalColors.lightGray,
+  },
+  inputIOS: {
+    ...selectorStyles.inputIOS,
     backgroundColor: globalColors.lightGray,
   },
   placeholder: {

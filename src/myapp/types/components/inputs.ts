@@ -1,9 +1,9 @@
 export interface DatePickerProps {
-  currentValue: string;
+  currentValue: string | Date;
   disabled?: boolean;
   maxDate?: Date;
-  minDate?: Date;
-  onSelect: (date: string) => void;
+  minDate?: string | Date;
+  onSelect: (date: Date) => void;
   placeholder?: string;
 }
 
@@ -43,6 +43,7 @@ export interface UserInputProps {
   error?: string;
   isNumeric?: boolean;
   isPassword?: boolean;
+  maxLength?: number;
   onChangeText: (value: string) => void;
   placeholder: string;
   value: string;
