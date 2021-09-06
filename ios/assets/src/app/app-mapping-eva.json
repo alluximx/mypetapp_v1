@@ -1,6 +1,6 @@
 {
   "strict": {
-    "text-font-family": "System"
+    "text-font-family": "Montserrat-Medium"
   },
   "components": {
     "TopNavigation": {
@@ -82,6 +82,68 @@
                 "backgroundColor": "background-basic-color-1"
               }
             }
+          }
+        }
+      }
+    },
+    "Datepicker": {
+      "meta": {},
+      "appearances": {
+        "default": {
+          "mapping": {},
+          "variantGroups": {
+            "status": {
+              "basic": {
+                "backgroundColor": "#CFE2D5",
+                "textColor": "text-basic-color",
+                "iconTintColor": "#0a7029"
+              }
+            },
+            "size": {
+              "small": {
+                "borderRadius": 10
+              },
+              "medium": {
+                "borderRadius": 10
+              },
+              "large": {
+                "minHeight": 56,
+                "borderRadius": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    "Toggle": {
+      "appearances": {
+        "default": {
+          "mapping": {
+            "borderWidth": 1.5,
+            "height": 31,
+            "iconWidth": 0,
+            "iconHeight": 0
+          },
+          "variantGroups": {
+            "status": {
+              "success": {
+                "borderColor": "rgb(229,229,229)",
+                "state": {
+                  "disabled": {
+                    "backgroundColor": "transparent"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Card": {
+      "appearances": {
+        "outline": {
+          "mapping": {
+            "bodyPaddingHorizontal": 16
           }
         }
       }
