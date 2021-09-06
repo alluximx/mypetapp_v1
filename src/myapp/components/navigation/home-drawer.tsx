@@ -24,6 +24,7 @@ export const HomeDrawer = (props): DrawerElement => {
   const list = [
     {name: 'Mis Mascotas', ruta: 'Home'},
     {name: 'Info. de Razas', ruta: 'Breed'},
+    {name: 'Mi Perfil', ruta: 'MyProfile'},
     {name: 'Adopciones', ruta: 'AdoptionFilter'},
   ];
   useEffect(() => {
@@ -41,6 +42,9 @@ export const HomeDrawer = (props): DrawerElement => {
   const navigateAdoption = () => {
     props.navigation.navigate('AdoptionFilter', {});
   };
+  const navigateToProfile = () => {
+    props.navigation.navigate('MyProfile', {});
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerView}>
@@ -53,7 +57,7 @@ export const HomeDrawer = (props): DrawerElement => {
           <DrawerItem
             urlKey="Home"
             params={{}}
-            onPressOption={navigateToScreen}
+            onPressOption={navigateToProfile}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Mi Perfil"

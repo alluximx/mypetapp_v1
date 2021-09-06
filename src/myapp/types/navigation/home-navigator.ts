@@ -39,6 +39,10 @@ type HomeNavigatorParamList = {
   AdoptionDetail: {};
   AdoptionAdvanceFilter: {};
   AdoptionRequest: {};
+
+  MyProfile: {};
+  AddressInfo: {};
+  PaymentMethod: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

@@ -45,6 +45,12 @@ import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
 import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
 import {RequestScreen} from '../myapp/scenes/adoption/request.component';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+//Profile
+import {MyProfileScreen} from '../myapp/scenes/profile/profileInf.component';
+//Address
+import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
+//Payment Method
+import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -207,6 +213,15 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         <HomeStack.Screen name="Cart" component={CartScreen} />
         {/*Product*/}
+        {/*Profile*/}
+        <HomeStack.Screen name="MyProfile" component={MyProfileScreen} />
+        {/*Addresses*/}
+        <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
+        {/*Payment Method */}
+        <HomeStack.Screen
+          name="PaymentMethod"
+          component={paymentMethodComponent}
+        />
       </HomeStack.Navigator>
     </Animated.View>
   );

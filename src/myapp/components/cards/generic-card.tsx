@@ -15,11 +15,14 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
   const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
 
-  const imageList = images.map((image) => {
-    return {
-      uri: image.file,
-    };
-  });
+  let imageList;
+  if (images) {
+    imageList = images.map((image) => {
+      return {
+        uri: image.file,
+      };
+    });
+  }
 
   return (
     <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
@@ -30,7 +33,9 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
       <DefaultText style={styles.labelCard} numberOfLines={5} wrapText>
         {content}
       </DefaultText>
-      {images.length > 0 && <PreviewableImageList sources={imageList} />}
+      {images && images.length > 0 && (
+        <PreviewableImageList sources={imageList} />
+      )}
       <AnchorText onPress={props.onClick} style={stylesCart.header}>
         {buttonText}
       </AnchorText>
