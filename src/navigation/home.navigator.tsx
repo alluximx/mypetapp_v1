@@ -46,11 +46,11 @@ import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
 import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
 import {RequestScreen} from '../myapp/scenes/adoption/request.component';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
-//Profile
+// Profile
 import {MyProfileScreen} from '../myapp/scenes/profile/profileInf.component';
-//Address
+// Address
 import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
-//Payment Method
+// Payment Method
 import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
 
 const Drawer = createDrawerNavigator();

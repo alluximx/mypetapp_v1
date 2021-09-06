@@ -9,7 +9,7 @@ import GenericCard from '../../components/cards/generic-card';
 import globalVars from '../../styles/vars';
 
 export default ({navigation, route}): React.ReactElement => {
-  //const data = null;
+  // const data = null;
   const data = {
     buttonAlign: 'right',
     buttonText: 'Eliminar',
