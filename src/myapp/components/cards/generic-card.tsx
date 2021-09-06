@@ -63,7 +63,9 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
               {content}
             </DefaultText>
           </TouchableOpacity>
-          {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
+          {images && images.length > 0 && (
+            <PreviewableImageList sources={imageList} />
+          )}
           <AnchorText
             onPress={props.onClick}
             style={[stylesCart.header, props.buttonStyle]}>

@@ -23,6 +23,7 @@ export const HomeDrawer = (props): DrawerElement => {
   const list = [
     {name: 'Mis Mascotas', ruta: 'Home'},
     {name: 'Info. de Razas', ruta: 'Breed'},
+    {name: 'Mi Perfil', ruta: 'MyProfile'},
     {name: 'Adopciones', ruta: 'AdoptionFilter'},
     {name: 'Productos', ruta: 'AdoptionFilter'},
   ];
@@ -35,7 +36,6 @@ export const HomeDrawer = (props): DrawerElement => {
   const navigateToScreen = (urlKey: string, params: {}) => {
     props.navigation.navigate(urlKey, params);
   };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerView}>

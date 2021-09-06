@@ -12,6 +12,10 @@ export const DropUpIcon = ({style}: {style?: {}}): IconElement => (
   <Icon style={[styles.dropdownIcon, style]} name="chevron-up-outline" />
 );
 
+export const DropRightIcon = ({style}: {style?: {}}): IconElement => (
+  <Icon style={[styles.dropdownIcon, style]} name="chevron-right-outline" />
+);
+
 export const NotificationIConGreen = ({style}: {style?: {}}): IconElement => (
   <Icon style={[styles.notificationIcon, style]} name="bell-outline" />
 );
