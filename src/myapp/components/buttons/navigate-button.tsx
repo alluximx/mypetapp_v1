@@ -15,8 +15,8 @@ const NavigateButton = (props): React.ReactElement => {
   };
   return (
     <TouchableOpacity style={styles.container} onPress={navigateToScreen}>
-      {props.Title ? (
-        <TitleHeader>{props.Title}</TitleHeader>
+      {props.title ? (
+        <TitleHeader style={styles.title}>{props.title}</TitleHeader>
       ) : (
         <TitleHeader>{}</TitleHeader>
       )}
@@ -36,6 +36,10 @@ const styles = StyleService.create({
     borderRadius: 18,
     backgroundColor: globalColors.white,
     marginBottom: 14,
+  },
+  title: {
+    marginLeft: 14,
+    fontSize: 16,
   },
   subtitle: {
     marginLeft: 14,

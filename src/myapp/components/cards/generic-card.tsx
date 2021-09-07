@@ -10,10 +10,18 @@ import {DatasGeneric} from '../../types/components/cards';
 import PreviewableImageList from '../modals/previewable-image-list';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
-  const {buttonAlign, buttonText, content, date, images, title} = props.data;
+  const {
+    buttonAlign,
+    buttonColor,
+    buttonText,
+    content,
+    date,
+    images,
+    title,
+  } = props.data;
   const formattedDate = moment.utc(date).format('DD/MM/YYYY');
   const styles = useStyleSheet(themedStyles);
-  const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
+  const stylesCart = useStyleSheet(defaultStyle(buttonAlign, buttonColor));
 
   let imageList;
   if (images) {
@@ -61,11 +69,12 @@ const themedStyles = StyleService.create({
   },
 });
 
-const defaultStyle = (type) =>
+const defaultStyle = (type, color) =>
   StyleService.create({
     header: {
       textAlign: type,
       marginTop: 16,
+      color: color,
     },
   });
 

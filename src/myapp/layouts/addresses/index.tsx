@@ -1,35 +1,68 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet} from 'react-native';
+import {List} from '@ui-kitten/components';
 // My components
 import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
 // Global Styles
+import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Hook.
+import useGetAddress from '../../hooks/address/useGetAddress';
+import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
 
 export default ({navigation, route}): React.ReactElement => {
-  // const data = null;
-  const data = {
-    buttonAlign: 'right',
-    buttonText: 'Eliminar',
-    date: null,
-    content: 'Calle bosque del Valle 123,\n 54123, Gualajara Jalisco',
-    images: null,
-    styleCard: {},
-    title: 'Karen Beltran',
+  const [addresses, setAddresses] = useState([]);
+  const addressQuery = useGetAddress();
+  const userData = useMyNameAndPets();
+
+  useEffect(() => {
+    if (addressQuery.data) {
+      setAddresses(addressQuery.data.data);
+    }
+  }, [addressQuery.data]);
+
+  const renderServiceItem = (service) => {
+    const street = service.item.street;
+    const number = service.item.number;
+    const zipCode = service.item.zipcode;
+    const city = service.item.city;
+    const state = service.item.state.name;
+
+    const content =
+      street + ' #' + number + '\n' + zipCode + ', ' + city + ' ' + state;
+
+    const data = {
+      buttonAlign: 'right',
+      buttonColor: globalColors.red,
+      buttonText: 'Eliminar',
+      date: null,
+      content: content,
+      images: null,
+      styleCard: {},
+      title: userData.userName.split(' ')[0],
+    };
+    return (
+      <GenericCard
+        data={data}
+        styleCard={{marginHorizontal: 0}}
+        onClick={null}
+      />
+    );
   };
 
-  return data ? (
+  return addresses.length > 0 ? (
     <DefaultLayout>
       <TitleHeader>Direcciones</TitleHeader>
       <DefaultText style={{marginBottom: 16}}>
         Puedes guardar hasta 3 direcciones
       </DefaultText>
-      <GenericCard
-        data={data}
-        styleCard={{marginHorizontal: 0}}
-        onClick={null}
+      <List
+        style={styles.servicesContainer}
+        data={addresses}
+        renderItem={renderServiceItem}
       />
     </DefaultLayout>
   ) : (
@@ -64,5 +97,9 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: globalVars.fontBold,
+  },
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 10,
   },
 });

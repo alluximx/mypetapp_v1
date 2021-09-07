@@ -4,6 +4,7 @@ import moment from 'moment';
 import useVisitImage from '../../hooks/visits/useVisitImage';
 // My Components.
 import GenericCard from '../cards/generic-card';
+import globalColors from '../../styles/colors';
 
 interface VisitCardImgProps {
   data: any;
@@ -31,6 +32,7 @@ const VisitCardImg = ({
   const newData = {
     date: visit_date == null ? null : new Date(visit_date),
     buttonAlign: 'right',
+    buttonColor: globalColors.greenSecondary,
     buttonText: 'Editar',
     content: details,
     data: visit,

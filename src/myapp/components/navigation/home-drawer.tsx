@@ -126,11 +126,6 @@ export const HomeDrawer = (props): DrawerElement => {
             title="Info. de Razas"
             image={require('../../assets/images/menu/breed-characteristics.png')}
           />
-          <TouchableOpacity onPress={authContext.signOut}>
-            <View style={styles.itemContainer}>
-              <Text style={styles.text}>Cerrar Sesión</Text>
-            </View>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

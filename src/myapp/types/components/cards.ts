@@ -4,6 +4,7 @@ export interface DatasGeneric {
   click?: any;
   data: {
     buttonAlign: string;
+    buttonColor: string;
     buttonText: string;
     content: string;
     date?: Date | null;

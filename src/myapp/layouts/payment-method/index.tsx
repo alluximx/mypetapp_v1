@@ -7,11 +7,13 @@ import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
 // Global Styles
 import globalVars from '../../styles/vars';
+import globalColors from '../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
   // const data = null;
   const data = {
     buttonAlign: 'right',
+    buttonColor: globalColors.red,
     buttonText: 'Eliminar',
     date: null,
     content: '****0973',
@@ -22,6 +24,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const data1 = {
     buttonAlign: 'right',
+    buttonColor: globalColors.red,
     buttonText: 'Eliminar',
     date: null,
     content: '****0973',
