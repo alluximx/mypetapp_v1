@@ -15,6 +15,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {
     buttonAlign,
+    buttonColor,
     buttonText,
     content,
     coverImage,
@@ -24,7 +25,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
   } = props.data;
   const formattedDate = moment.utc(date).format('DD/MM/YYYY');
   const styles = useStyleSheet(themedStyles);
-  const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
+  const stylesCart = useStyleSheet(defaultStyle(buttonAlign, buttonColor));
 
   const imageList = images
     ? images.map((image) => {
@@ -110,11 +111,12 @@ const themedStyles = StyleService.create({
   },
 });
 
-const defaultStyle = (type) =>
+const defaultStyle = (type, color) =>
   StyleService.create({
     header: {
       textAlign: type,
       marginTop: 16,
+      color: color,
     },
   });
 

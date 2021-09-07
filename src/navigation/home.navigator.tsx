@@ -50,6 +50,7 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import {MyProfileScreen} from '../myapp/scenes/profile/profileInf.component';
 // Address
 import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
+import {AddAddressScreen} from '../myapp/scenes/addresses/add.component';
 // Payment Method
 import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
 
@@ -223,6 +224,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen name="MyProfile" component={MyProfileScreen} />
         {/*Addresses*/}
         <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
+        <HomeStack.Screen name="AddAddress" component={AddAddressScreen} />
         {/*Payment Method */}
         <HomeStack.Screen
           name="PaymentMethod"
