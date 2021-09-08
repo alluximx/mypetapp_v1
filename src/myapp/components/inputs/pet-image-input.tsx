@@ -1,6 +1,7 @@
 import React, {useCallback} from 'react';
 import {useState} from 'react';
 import {
+  Alert,
   Image,
   ImageSourcePropType,
   Platform,
@@ -10,17 +11,23 @@ import {
 } from 'react-native';
 import {
   launchCamera,
+  launchImageLibrary,
   CameraOptions,
   ImagePickerResponse,
 } from 'react-native-image-picker';
 // My Components.
 import AddButton from '../buttons/add-button';
 
-const options: CameraOptions = {
+const galleryOptions: CameraOptions = {
   mediaType: 'photo',
   maxWidth: 500,
   maxHeight: 500,
   quality: 0.5,
+};
+
+const options: CameraOptions = {
+  ...galleryOptions,
+  saveToPhotos: true,
 };
 
 interface PetImageInputProps {
@@ -37,12 +44,44 @@ const PetImageInput = ({
   const [imageResponse, setImageResponse] = useState<any>(null);
 
   const onPress = useCallback(() => {
-    launchCamera(options, (response: ImagePickerResponse) => {
-      if (!response.didCancel && !response.errorCode) {
-        setImageResponse(response);
-        setImage(response.assets[0]);
-      }
-    });
+    Alert.alert(
+      'Editar imagen',
+      'Selecciona una opción...',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Seleccionar desde mi galería',
+          style: 'default',
+          onPress: () =>
+            launchImageLibrary(
+              galleryOptions,
+              (response: ImagePickerResponse) => {
+                if (!response.didCancel && !response.errorCode) {
+                  setImageResponse(response);
+                  setImage(response.assets[0]);
+                }
+              },
+            ),
+        },
+        {
+          text: 'Tomar una nueva foto',
+          style: 'default',
+          onPress: () =>
+            launchCamera(options, (response: ImagePickerResponse) => {
+              if (!response.didCancel && !response.errorCode) {
+                setImageResponse(response);
+                setImage(response.assets[0]);
+              }
+            }),
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
   }, []);
 
   const renderPetImageAsset = () => {
