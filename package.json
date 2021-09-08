@@ -16,7 +16,8 @@
     "*/**"
   ],
   "scripts": {
-    "bundle:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/app/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'    ",
+    "bundle:ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --dev=false --platform='ios' --assets-dest='./ios'",
+    "build-ios": "react-native bundle --entry-file='index.js' --bundle-output='./ios/main.jsbundle' --assets-dest='./ios' --dev=false --platform='ios'",
     "postinstall": "npm run bundle:ios",
     "ios": "react-native run-ios",
     "start": "npm run env -- prod && react-native start",

@@ -37,3 +37,18 @@ If you find any compiling problems, try to clean your cache. From the home app f
 and
 
 `cd node_modules/react-native/third-party/glog-0.3.5/ && ../../scripts/ios-configure-glog.sh && cd ../../../../`
+
+
+# Required fix < React native 0.63.2
+
+```
+- (void)displayLayer:(CALayer *)layer
+{
+  if (_currentFrame) {
+    layer.contentsScale = self.animatedImageScale;
+    layer.contents = (__bridge id)_currentFrame.CGImage;
+  } else {
+    [super displayLayer:layer];
+  }
+}
+```
