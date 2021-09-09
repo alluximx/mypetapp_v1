@@ -7,7 +7,7 @@ import globalColors from '../../styles/colors';
 import {SearchInputProps} from '../../types/components/inputs';
 
 const SearchInput = (props: SearchInputProps): React.ReactElement => {
-  const renderIcon = (props) => <Icon {...props} name={'search'} />;
+  const renderIcon = (iconProps) => <Icon {...iconProps} name={'search'} />;
 
   return (
     <Input
