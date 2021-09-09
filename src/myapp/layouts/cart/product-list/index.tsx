@@ -1,7 +1,6 @@
 import React from 'react';
 import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Icon, Input, List, Tab, TabBar} from '@ui-kitten/components';
-import {ProductListScreen} from './product-list.component';
+import {Icon, List} from '@ui-kitten/components';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
@@ -67,7 +66,7 @@ export default ({navigation}): React.ReactElement => {
             width: 'auto',
           },
           renderTabBarItem: (props) => {
-            console.log(props.getLabelText());
+            // console.log(props.getLabelText());
             return (
               <TouchableOpacity style={props.style} onPress={props.onPress}>
                 <TitleHeader>{props.getLabelText}</TitleHeader>
