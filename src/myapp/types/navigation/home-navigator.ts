@@ -24,21 +24,20 @@ type HomeNavigatorParamList = {
   VaccinesIndex: {};
 
   ClinicalHistory: {};
-  Orders: {};
+
+  AdoptionFilter: {};
+  AdoptionResult: {};
+  AdoptionDetail: {};
+  AdoptionAdvanceFilter: {};
+  AdoptionRequest: {};
+
   ProductList: {};
+  Orders: {};
   ProductDetail: {};
   Cart: {};
 
   Breed: {};
   DetailBreed: {};
-
-  AdoptionFilter: {};
-
-  ProductIndex: {};
-  AdoptionResult: {};
-  AdoptionDetail: {};
-  AdoptionAdvanceFilter: {};
-  AdoptionRequest: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

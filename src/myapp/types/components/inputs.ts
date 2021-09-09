@@ -31,6 +31,12 @@ export interface OptionSelectProps {
   style?: {};
 }
 
+export interface SearchInputProps {
+  onFilter: (text: string) => Promise<void>;
+  placeholder?: string;
+  style?: {};
+}
+
 export interface ReminderInputProps {
   isActive: boolean;
   setIsActive: (isActive: boolean) => void;

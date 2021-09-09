@@ -15,7 +15,6 @@ import DrawerItem from './drawer-item';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
-import {useNavigationState} from '@react-navigation/native';
 import {useEffect} from 'react';
 
 export const HomeDrawer = (props): DrawerElement => {
@@ -25,6 +24,7 @@ export const HomeDrawer = (props): DrawerElement => {
     {name: 'Mis Mascotas', ruta: 'Home'},
     {name: 'Info. de Razas', ruta: 'Breed'},
     {name: 'Adopciones', ruta: 'AdoptionFilter'},
+    {name: 'Productos', ruta: 'AdoptionFilter'},
   ];
   useEffect(() => {
     list.map((route) => {
@@ -35,12 +35,7 @@ export const HomeDrawer = (props): DrawerElement => {
   const navigateToScreen = (urlKey: string, params: {}) => {
     props.navigation.navigate(urlKey, params);
   };
-  const navigateBreed = () => {
-    props.navigation.navigate('Breed', {});
-  };
-  const navigateAdoption = () => {
-    props.navigation.navigate('AdoptionFilter', {});
-  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.containerView}>
@@ -80,14 +75,14 @@ export const HomeDrawer = (props): DrawerElement => {
           <DrawerItem
             urlKey="AdoptionFilter"
             params={{}}
-            onPressOption={navigateAdoption}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Adopciones"
             image={require('../../assets/images/menu/adoptions.png')}
           />
           <DrawerItem
-            urlKey="Home"
+            urlKey="ProductList"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}
@@ -116,7 +111,7 @@ export const HomeDrawer = (props): DrawerElement => {
           <DrawerItem
             urlKey="Breed"
             params={{}}
-            onPressOption={navigateBreed}
+            onPressOption={navigateToScreen}
             currentTab={currentTab}
             setCurrentTab={setCurrentTab}
             title="Info. de Razas"
