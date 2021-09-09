@@ -198,14 +198,14 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="ClinicalHistory"
           component={ClinicalHistoryScreen}
         />
-        <HomeStack.Screen name="Orders" component={OrdersScreen} />
+        {/*Product*/}
         <HomeStack.Screen name="ProductList" component={ProductListScreen} />
         <HomeStack.Screen
           name="ProductDetail"
           component={ProductDetailScreen}
         />
+        <HomeStack.Screen name="Orders" component={OrdersScreen} />
         <HomeStack.Screen name="Cart" component={CartScreen} />
-        {/*Product*/}
       </HomeStack.Navigator>
     </Animated.View>
   );
