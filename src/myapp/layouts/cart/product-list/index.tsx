@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Icon, List} from '@ui-kitten/components';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+// Hooks.
+import useGetCategories from '../../../hooks/categories/useGetCategories';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -10,20 +12,31 @@ import SearchInput from '../../../components/inputs/search-input';
 // Global Styles.
 import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
+import CustomSpinner from '../../../components/custom-spinner';
 
 export default ({navigation}): React.ReactElement => {
-  const renderIcon = (props) => <Icon {...props} name={'search'} />;
-
+  const {data, isLoading} = useGetCategories();
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const onFilter = async (text: string) => {};
-  const Tab = createMaterialTopTabNavigator();
+  // const Tab = createMaterialTopTabNavigator();
 
-  const TabContent = () => {
-    return (
-      <List data={[]} renderItem={() => <TitleHeader>HOMLA SIS</TitleHeader>} />
-    );
+  // const TabContent = () => {
+  //   return (
+  //     <List data={[]} renderItem={() => <TitleHeader>HOMLA SIS</TitleHeader>} />
+  //   );
+  // };
+
+  const toggleActiveFilter = (id) => {
+    if (activeFilter === id) {
+      setActiveFilter(null);
+    } else {
+      setActiveFilter(id);
+    }
   };
 
-  return (
+  return isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout style={styles.container}>
       <View style={styles.headerContainer}>
         <TitleHeader>Productos para tus mascotas</TitleHeader>
@@ -34,72 +47,37 @@ export default ({navigation}): React.ReactElement => {
           </AnchorText>
         </View>
       </View>
-      <Tab.Navigator
-        tabBarOptions={{
-          style: {
-            backgroundColor: globalColors.backgroundDefault,
-            elevation: 0,
-            width: 'auto',
-            minWidth: 0,
-          },
-          activeTintColor: globalColors.white,
-          contentContainerStyle: {
-            paddingHorizontal: globalVars.outsidePadding,
-          },
-          inactiveTintColor: globalColors.darkGray,
-          indicatorStyle: {
-            backgroundColor: 'transparent',
-          },
-          labelStyle: {
-            fontFamily: globalVars.fontBold,
-            fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
-            fontSize: 16,
-            textTransform: 'none',
-          },
-          pressColor: 'transparent',
-          tabStyle: {
-            backgroundColor: globalColors.greenSecondary,
-            borderRadius: 10,
-            height: 32,
-            marginHorizontal: 8,
-            paddingHorizontal: 10,
-            width: 'auto',
-          },
-          renderTabBarItem: (props) => {
-            // console.log(props.getLabelText());
-            return (
-              <TouchableOpacity style={props.style} onPress={props.onPress}>
-                <TitleHeader>{props.getLabelText}</TitleHeader>
-              </TouchableOpacity>
-            );
-          },
-          scrollEnabled: true,
-        }}>
-        <Tab.Screen
-          name="Comida"
-          component={() => <TitleHeader>OMLA</TitleHeader>}
+      <View>
+        <List
+          data={data ? data.data : []}
+          horizontal={true}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => toggleActiveFilter(item.id)}
+              style={[
+                styles.filterOption,
+                activeFilter === item.id && styles.filterOptionEnabled,
+              ]}>
+              <TitleHeader
+                style={[
+                  styles.filterOptionText,
+                  activeFilter === item.id && styles.filterOptionTextEnabled,
+                ]}>
+                {item.name}
+              </TitleHeader>
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterOptionsContainer}
         />
-        <Tab.Screen
-          name="Juguetes"
-          component={() => <TitleHeader>OMLA 2</TitleHeader>}
+      </View>
+      <View>
+        <List
+          data={[]}
+          renderItem={({item}) => <TitleHeader>{item}</TitleHeader>}
         />
-        <Tab.Screen
-          name="Juguetes 2"
-          component={() => <TitleHeader>OMLA 2</TitleHeader>}
-        />
-        <Tab.Screen
-          name="Juguetes 3"
-          component={() => <TitleHeader>OMLA 2</TitleHeader>}
-        />
-        <Tab.Screen
-          name="Juguetes 4"
-          component={() => <TitleHeader>OMLA 2</TitleHeader>}
-        />
-        <Tab.Screen
-          name="Juguetes 5"
-          component={() => <TitleHeader>OMLA 2</TitleHeader>}
-        />
-      </Tab.Navigator>
+      </View>
     </DefaultLayout>
   );
 };
@@ -121,5 +99,27 @@ const styles = StyleSheet.create({
   filterButton: {
     paddingLeft: 18,
     paddingVertical: 18,
+  },
+  filterOptionsContainer: {
+    marginTop: 16,
+    backgroundColor: globalColors.backgroundDefault,
+    paddingHorizontal: globalVars.outsidePadding,
+  },
+  filterOption: {
+    paddingVertical: 6,
+    paddingBottom: 2,
+    paddingHorizontal: 16,
+    backgroundColor: globalColors.backgroundDefault,
+    borderRadius: 10,
+  },
+  filterOptionEnabled: {
+    backgroundColor: globalColors.greenSecondary,
+  },
+  filterOptionText: {
+    color: globalColors.lightGray,
+    fontSize: 16,
+  },
+  filterOptionTextEnabled: {
+    color: globalColors.white,
   },
 });
