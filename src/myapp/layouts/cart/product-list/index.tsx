@@ -1,36 +1,29 @@
 import React, {useState} from 'react';
-import {Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Icon, List} from '@ui-kitten/components';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {List} from '@ui-kitten/components';
 // Hooks.
 import useGetCategories from '../../../hooks/categories/useGetCategories';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
-import SearchInput from '../../../components/inputs/search-input';
-// Global Styles.
-import globalVars from '../../../styles/vars';
-import globalColors from '../../../styles/colors';
 import CustomSpinner from '../../../components/custom-spinner';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import ProductList from '../../../components/products/product-list';
+import SearchInput from '../../../components/inputs/search-input';
+import TitleHeader from '../../../components/texts/title-header';
+// Global Styles.
+import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 
 export default ({navigation}): React.ReactElement => {
   const {data, isLoading} = useGetCategories();
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
   const onFilter = async (text: string) => {};
-  // const Tab = createMaterialTopTabNavigator();
 
-  // const TabContent = () => {
-  //   return (
-  //     <List data={[]} renderItem={() => <TitleHeader>HOMLA SIS</TitleHeader>} />
-  //   );
-  // };
-
-  const toggleActiveFilter = (id) => {
-    if (activeFilter === id) {
-      setActiveFilter(null);
+  const togglecategory = (id) => {
+    if (category === id) {
+      setCategory(null);
     } else {
-      setActiveFilter(id);
+      setCategory(id);
     }
   };
 
@@ -51,18 +44,21 @@ export default ({navigation}): React.ReactElement => {
         <List
           data={data ? data.data : []}
           horizontal={true}
-          renderItem={({item}) => (
+          renderItem={({item, index}) => (
             <TouchableOpacity
               activeOpacity={0.8}
-              onPress={() => toggleActiveFilter(item.id)}
+              onPress={() => togglecategory(item.id)}
               style={[
                 styles.filterOption,
-                activeFilter === item.id && styles.filterOptionEnabled,
+                category === item.id && styles.filterOptionEnabled,
+                index === 0 && styles.filterOptionLeftSpacing,
+                index === data?.data.length - 1 &&
+                  styles.filterOptionRightSpacing,
               ]}>
               <TitleHeader
                 style={[
                   styles.filterOptionText,
-                  activeFilter === item.id && styles.filterOptionTextEnabled,
+                  category === item.id && styles.filterOptionTextEnabled,
                 ]}>
                 {item.name}
               </TitleHeader>
@@ -73,10 +69,7 @@ export default ({navigation}): React.ReactElement => {
         />
       </View>
       <View>
-        <List
-          data={[]}
-          renderItem={({item}) => <TitleHeader>{item}</TitleHeader>}
-        />
+        <ProductList categoryId={category} />
       </View>
     </DefaultLayout>
   );
@@ -103,7 +96,6 @@ const styles = StyleSheet.create({
   filterOptionsContainer: {
     marginTop: 16,
     backgroundColor: globalColors.backgroundDefault,
-    paddingHorizontal: globalVars.outsidePadding,
   },
   filterOption: {
     paddingVertical: 6,
@@ -121,5 +113,11 @@ const styles = StyleSheet.create({
   },
   filterOptionTextEnabled: {
     color: globalColors.white,
+  },
+  filterOptionLeftSpacing: {
+    marginLeft: globalVars.outsidePadding,
+  },
+  filterOptionRightSpacing: {
+    marginRight: globalVars.outsidePadding,
   },
 });

@@ -1,39 +1,69 @@
-import {Card, StyleService, useStyleSheet} from '@ui-kitten/components';
 import React from 'react';
+import {Card, StyleService, useStyleSheet} from '@ui-kitten/components';
 import moment from 'moment';
+import {View} from 'react-native';
 // My Components.
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
+import PreviewableImage from '../modals/previewable-image';
+import PreviewableImageList from '../modals/previewable-image-list';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {DatasGeneric} from '../../types/components/cards';
-import PreviewableImageList from '../modals/previewable-image-list';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
-  const {buttonAlign, buttonText, content, date, images, title} = props.data;
+  const {
+    buttonAlign,
+    buttonText,
+    content,
+    coverImage,
+    date,
+    images,
+    title,
+  } = props.data;
+  console.log(coverImage);
   const formattedDate = moment.utc(date).format('DD/MM/YYYY');
   const styles = useStyleSheet(themedStyles);
   const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
 
-  const imageList = images.map((image) => {
-    return {
-      uri: image.file,
-    };
-  });
+  const imageList = images
+    ? images.map((image) => {
+        return {
+          uri: image.file,
+        };
+      })
+    : [];
 
   return (
     <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
-      {date && (
-        <DefaultText style={styles.labelDate}>{formattedDate}</DefaultText>
-      )}
-      <TitleHeader style={styles.title}>{title}</TitleHeader>
-      <DefaultText style={styles.labelCard} numberOfLines={5} wrapText>
-        {content}
-      </DefaultText>
-      {images.length > 0 && <PreviewableImageList sources={imageList} />}
-      <AnchorText onPress={props.onClick} style={stylesCart.header}>
-        {buttonText}
-      </AnchorText>
+      <View style={{flexDirection: 'row'}}>
+        {coverImage && (
+          <PreviewableImage
+            source={{uri: coverImage}}
+            style={styles.coverImage}
+          />
+        )}
+        <View style={styles.cardContentContainer}>
+          {date && (
+            <DefaultText style={styles.labelDate}>{formattedDate}</DefaultText>
+          )}
+          <TitleHeader style={[styles.title, props.titleStyle]}>
+            {title}
+          </TitleHeader>
+          <DefaultText
+            style={[styles.labelCard, props.contentTextStyle]}
+            numberOfLines={5}
+            wrapText>
+            {content}
+          </DefaultText>
+          {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
+          <AnchorText
+            onPress={props.onClick}
+            style={[stylesCart.header, props.buttonStyle]}>
+            {buttonText}
+          </AnchorText>
+        </View>
+      </View>
     </Card>
   );
 };
@@ -53,6 +83,17 @@ const themedStyles = StyleService.create({
     marginHorizontal: 24,
     marginBottom: 16,
     borderRadius: 18,
+  },
+  coverImage: {
+    width: 60,
+    height: 80,
+    resizeMode: 'cover',
+    marginRight: 8,
+    marginTop: 6,
+  },
+  cardContentContainer: {
+    flexGrow: 1,
+    marginLeft: 6,
   },
 });
 

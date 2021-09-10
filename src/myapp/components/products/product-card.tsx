@@ -1,30 +1,38 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-// Hooks.
-import useProductsList from '../../hooks/products/useProductsList';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+// Global Styles.
+import globalColors from '../../styles/colors';
 // My Components.
 import GenericCard from '../cards/generic-card';
+// Types.
+import {ProductCardProps} from '../../types/components/products';
 
-const ProductCard = (props): React.ReactElement => {
-  const {data, isLoading} = useProductsList(props.categoryId);
-
+const ProductCard = (props: ProductCardProps): React.ReactElement => {
   return (
-    <GenericCard
-      data={{
-        content: props.brand.name,
-        title: props.name,
-        buttonText: null,
-        buttonAlign: 'right',
-      }}
-      onClick={() => {}}
-    />
+    <TouchableOpacity activeOpacity={0.6}>
+      <GenericCard
+        data={{
+          buttonText: '$200.00',
+          buttonAlign: 'right',
+          content: props.brand,
+          coverImage: props.cover_image,
+          title: props.name,
+        }}
+        onClick={() => {}}
+        buttonStyle={styles.price}
+        contentTextStyle={styles.subtitle}
+      />
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+  subtitle: {
+    fontSize: 14,
+    marginTop: 0,
+  },
+  price: {
+    color: globalColors.greenPrimary,
   },
 });
 
