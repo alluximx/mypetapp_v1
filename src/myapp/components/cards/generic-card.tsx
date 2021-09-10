@@ -21,7 +21,6 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
     images,
     title,
   } = props.data;
-  console.log(coverImage);
   const formattedDate = moment.utc(date).format('DD/MM/YYYY');
   const styles = useStyleSheet(themedStyles);
   const stylesCart = useStyleSheet(defaultStyle(buttonAlign));
