@@ -14,6 +14,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
     currentValue,
     data,
     disabled = false,
+    disabledPlaceholder = false,
     placeholder,
     setCurrentValue,
   } = props;
@@ -70,10 +71,14 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
         }}
         onOpen={() => setIsDropdownOpen(true)}
         onClose={() => setIsDropdownOpen(false)}
-        placeholder={{
-          value: '',
-          label: placeholder ?? 'Seleccione una opción...',
-        }}
+        placeholder={
+          !disabledPlaceholder
+            ? {
+                value: '',
+                label: placeholder ?? 'Seleccione una opción...',
+              }
+            : {}
+        }
         style={
           !isDropdownOpen
             ? !disableDrop
