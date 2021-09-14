@@ -4,6 +4,7 @@ import {ScrollView} from 'react-native';
 // My components
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
 import UserInput from '../../../components/inputs/user-input';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
@@ -131,15 +132,20 @@ export default ({navigation, route}): React.ReactElement => {
     <DefaultLayout>
       <TitleHeader>Envio</TitleHeader>
       <ScrollView>
-        <TitleHeader style={styles.subtitle}>Direcciones Guardadas</TitleHeader>
+        <TitleHeader style={styles.subtitle}>Direcciones guardadas</TitleHeader>
+        {addresses && addresses.length > 0 ? (
+          <List
+            style={styles.servicesContainer}
+            data={addresses}
+            renderItem={renderServiceItem}
+          />
+        ) : (
+          <DefaultText style={styles.subtitle}>
+            No hay direcciones guardadas
+          </DefaultText>
+        )}
 
-        <List
-          style={styles.servicesContainer}
-          data={addresses}
-          renderItem={renderServiceItem}
-        />
-
-        <TitleHeader style={styles.subtitle}>Nueva Dirección</TitleHeader>
+        <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
         <UserInput
           placeholder="Calle"
           value={form.street}
@@ -211,7 +217,7 @@ export default ({navigation, route}): React.ReactElement => {
           setIsActive={changeValue}
           setValue={null}
           value={null}
-          text={'Guardar Dirección'}
+          text={'Guardar dirección'}
           isDisable={isDisable}
           isNotReminder={true}
         />

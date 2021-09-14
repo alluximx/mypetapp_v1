@@ -53,6 +53,7 @@ import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
 import {AddAddressScreen} from '../myapp/scenes/addresses/add.component';
 // Payment Method
 import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
+import {AddPaymentMethodScreen} from '../myapp/scenes/payment-method/add.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -229,6 +230,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen
           name="PaymentMethod"
           component={paymentMethodComponent}
+        />
+        <HomeStack.Screen
+          name="AddPaymentMethod"
+          component={AddPaymentMethodScreen}
         />
       </HomeStack.Navigator>
     </Animated.View>

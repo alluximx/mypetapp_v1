@@ -29,7 +29,11 @@ export default ({navigation, route}): React.ReactElement => {
         subtitle={'Pedidos'}
         destination={'AddAddress'}
       />
-      <NavigateButton subtitle={'Solicitudes de Adopción'} />
+      <NavigateButton
+        navigation={navigation}
+        subtitle={'Solicitudes de Adopción'}
+        destination={'AddPaymentMethod'}
+      />
       <AnchorText onPress={authContext.signOut} style={styles.logOut}>
         Cerrar Sesión
       </AnchorText>
