@@ -11,21 +11,25 @@ import OptionSelect from './option-select';
 import {ReminderInputProps} from '../../types/components/inputs';
 
 const ReminderInput = (props: ReminderInputProps): React.ReactElement => {
+  const text = props.text ? props.text : 'Recordatorio';
+  const disable = props.isDisable ? props.isDisable : false;
+  const isReminder = props.isNotReminder ? props.isNotReminder : false;
   return (
     <View style={[styles.container, props.style]}>
       <Card style={styles.cardContainer}>
         <View style={styles.rowContainer}>
-          <Text style={styles.label}>Recordatorio</Text>
+          <Text style={styles.label}>{text}</Text>
           <Toggle
             checked={props.isActive}
             onChange={props.setIsActive}
             status="success"
+            disabled={disable}
             style={styles.toggleInput}>
             {''}
           </Toggle>
         </View>
       </Card>
-      {props.isActive && (
+      {props.isActive && !isReminder && (
         <OptionSelect
           currentValue={props.value}
           data={reminderOptions}
