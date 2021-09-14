@@ -55,10 +55,10 @@ export default ({navigation, route}): React.ReactElement => {
   const dataImg = [];
 
   const findVariant = (value) => {
-    const variant = dataVariants.data.data.filter(
-      (variant) => variant.id === value,
+    const variantFilter = dataVariants.data.data.filter(
+      (item) => item.id === value,
     );
-    setVariant(variant[0]);
+    setVariant(variantFilter[0]);
     setIsLoadingVariant(false);
   };
   useEffect(() => {
@@ -94,9 +94,6 @@ export default ({navigation, route}): React.ReactElement => {
         dataImg.push({
           uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element.image,
         });
-        console.log(
-          'https://mpa-stage.s3.amazonaws.com/media/' + element.image + '\n',
-        );
       });
     }
   }, [variant]);
