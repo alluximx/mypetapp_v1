@@ -44,6 +44,7 @@ type HomeNavigatorParamList = {
   AddressInfo: {};
   PaymentMethod: {};
   AddAddress: {};
+  AddPaymentMethod: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;
