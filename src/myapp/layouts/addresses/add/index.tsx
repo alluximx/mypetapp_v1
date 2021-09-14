@@ -1,31 +1,41 @@
 import React, {useState, useEffect} from 'react';
 import {List, StyleService} from '@ui-kitten/components';
+import {ScrollView} from 'react-native';
 // My components
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import UserInput from '../../../components/inputs/user-input';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import ReminderInput from '../../../components/inputs/reminder-input';
+import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import NavigateButton from '../../../components/buttons/navigate-button';
 // Hook.
 import useStates from '../../../hooks/util/useState';
 import useGetAddress from '../../../hooks/address/useGetAddress';
-import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
+import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+import useSaveAddress from '../../../hooks/address/useSaveAddress';
 
 export default ({navigation, route}): React.ReactElement => {
   const [stateList, setStateList] = useState([]);
   const [addresses, setAddresses] = useState([]);
-  const userData = useMyNameAndPets();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isDisable, setIsDisable] = useState(false);
+  const [isReminderActive, setIsReminderActive] = useState(false);
   const dataStates = useStates();
   const addressQuery = useGetAddress();
+  const addAddressQuery = useSaveAddress();
 
   const [form, setForm] = useState({
-    name: '',
-    stret: '',
+    street: '',
     number: '',
-    insideNumber: '',
+    int_number: '',
+    reference: '',
+    colony: '',
     city: '',
     state: '',
-    zipCode: '',
+    municipality: '',
+    zipcode: '',
+    is_saved: false,
   });
 
   useEffect(() => {
@@ -47,79 +57,165 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [addressQuery.data]);
 
+  const changeValue = () => {
+    setIsReminderActive(!isReminderActive);
+    setForm({...form, is_saved: !isReminderActive});
+  };
+
+  useEffect(() => {
+    !isReminderActive && setForm({...form, is_saved: isReminderActive});
+  }, [isReminderActive]);
+
+  useEffect(() => {
+    addresses.length > 2 && setIsDisable(true);
+  }, [addresses.length]);
+
   const renderServiceItem = (service) => {
     const street = service.item.street;
     const number = service.item.number;
     const zipCode = service.item.zipcode;
     const city = service.item.city;
     const state = service.item.state.name;
+    const title = service.item.user_address.name;
 
-    const user = userData.userName.split(' ')[0];
+    const auxData = {
+      city: city,
+      colony: service.item.colony,
+      int_number: service.item.int_number,
+      is_saved: service.item.is_saved,
+      municipality: service.item.municipality.id,
+      number: number,
+      reference: service.item.reference,
+      state: service.item.state.id,
+      street: street,
+      zipcode: zipCode,
+    };
+
     const content =
       street + ' #' + number + '\n' + zipCode + ', ' + city + ' ' + state;
 
-    return <NavigateButton title={user} subtitle={content} />;
+    return (
+      <NavigateButton
+        navigation={navigation}
+        title={title}
+        subtitle={content}
+        destination={'MyProfile'}
+        data={auxData}
+      />
+    );
   };
+
+  const onSavePress = () => {
+    addAddressQuery.mutate(form);
+  };
+
+  const isDisabled =
+    form.street === '' ||
+    form.number === '' ||
+    form.city === '' ||
+    form.colony === '' ||
+    form.state === '' ||
+    form.zipcode === '' ||
+    isLoading;
+
+  useSetNavigationHeaders({
+    isDisabled,
+    isLoading,
+    navigation,
+    setIsLoading,
+    onRightPress: onSavePress,
+    data: {...form},
+  });
 
   return (
     <DefaultLayout>
       <TitleHeader>Envio</TitleHeader>
-      <TitleHeader style={styles.subtitle}>Direcciones Guardadas</TitleHeader>
-      <List
-        style={styles.servicesContainer}
-        data={addresses}
-        renderItem={renderServiceItem}
-      />
-      <UserInput
-        placeholder="Nombre Completo"
-        value={form.name}
-        onChangeText={(value: string) => {
-          setForm({...form, name: value});
-        }}
-      />
-      <UserInput
-        placeholder="Calle"
-        value={form.stret}
-        onChangeText={(value: string) => {
-          setForm({...form, stret: value});
-        }}
-      />
-      <UserInput
-        placeholder="Número"
-        value={form.number}
-        onChangeText={(value: string) => {
-          setForm({...form, number: value});
-        }}
-      />
-      <UserInput
-        placeholder="Número Interior"
-        value={form.insideNumber}
-        onChangeText={(value: string) => {
-          setForm({...form, insideNumber: value});
-        }}
-      />
-      <UserInput
-        placeholder="Ciudad"
-        value={form.name}
-        onChangeText={(value: string) => {
-          setForm({...form, name: value});
-        }}
-      />
-      <DropdownPicker
-        data={stateList}
-        currentValue={form.state}
-        placeholder="Estado"
-        setCurrentValue={(stateId) => {
-          setForm({...form, state: stateId});
-        }}
-      />
-      <UserInput
-        placeholder="Codigo Postal"
-        value={form.name}
-        onChangeText={(value: string) => {
-          setForm({...form, name: value});
-        }}
-      />
+      <ScrollView>
+        <TitleHeader style={styles.subtitle}>Direcciones Guardadas</TitleHeader>
+
+        <List
+          style={styles.servicesContainer}
+          data={addresses}
+          renderItem={renderServiceItem}
+        />
+
+        <TitleHeader style={styles.subtitle}>Nueva Dirección</TitleHeader>
+        <UserInput
+          placeholder="Calle"
+          value={form.street}
+          onChangeText={(value: string) => {
+            setForm({...form, street: value});
+          }}
+        />
+        <UserInput
+          placeholder="Número"
+          value={form.number}
+          onChangeText={(value: string) => {
+            setForm({...form, number: value});
+          }}
+        />
+        <UserInput
+          placeholder="Número Interior"
+          value={form.int_number}
+          onChangeText={(value: string) => {
+            setForm({...form, int_number: value});
+          }}
+        />
+        <UserInput
+          placeholder="Referencia"
+          value={form.reference}
+          onChangeText={(value: string) => {
+            setForm({...form, reference: value});
+          }}
+        />
+        <UserInput
+          placeholder="Colonia"
+          value={form.colony}
+          onChangeText={(value: string) => {
+            setForm({...form, colony: value});
+          }}
+        />
+        <DropdownPicker
+          data={stateList}
+          currentValue={form.state}
+          placeholder="Estado"
+          setCurrentValue={(stateId) => {
+            setForm({...form, state: stateId});
+          }}
+        />
+        <MunicipalityDrop
+          status={false}
+          id={form.state}
+          change={(valor, name) => {
+            valor === ''
+              ? setForm({...form, municipality: '', city: ''})
+              : setForm({...form, municipality: valor, city: name});
+          }}
+        />
+        <UserInput
+          placeholder="Ciudad"
+          value={form.city}
+          onChangeText={(value: string) => {
+            setForm({...form, city: value});
+          }}
+        />
+        <UserInput
+          placeholder="Codigo Postal"
+          value={form.zipcode}
+          onChangeText={(value: string) => {
+            setForm({...form, zipcode: value});
+          }}
+        />
+        <ReminderInput
+          isActive={isReminderActive}
+          setIsActive={changeValue}
+          setValue={null}
+          value={null}
+          text={'Guardar Dirección'}
+          isDisable={isDisable}
+          isNotReminder={true}
+        />
+      </ScrollView>
     </DefaultLayout>
   );
 };
@@ -133,5 +229,12 @@ const styles = StyleService.create({
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
+  },
+  select: {
+    marginBottom: 16,
+  },
+  options: {
+    marginTop: 15,
+    height: 100,
   },
 });

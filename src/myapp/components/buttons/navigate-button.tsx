@@ -11,7 +11,12 @@ import TitleHeader from '../../components/texts/title-header';
 
 const NavigateButton = (props): React.ReactElement => {
   const navigateToScreen = () => {
-    props.destination && props.navigation.navigate(props.destination);
+    if (props.data) {
+      props.destination &&
+        props.navigation.navigate(props.destination, {data: props.data});
+    } else {
+      props.destination && props.navigation.navigate(props.destination);
+    }
   };
   return (
     <TouchableOpacity style={styles.container} onPress={navigateToScreen}>

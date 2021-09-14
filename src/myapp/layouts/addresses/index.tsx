@@ -11,12 +11,10 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Hook.
 import useGetAddress from '../../hooks/address/useGetAddress';
-import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
   const addressQuery = useGetAddress();
-  const userData = useMyNameAndPets();
 
   useEffect(() => {
     if (addressQuery.data) {
@@ -30,6 +28,7 @@ export default ({navigation, route}): React.ReactElement => {
     const zipCode = service.item.zipcode;
     const city = service.item.city;
     const state = service.item.state.name;
+    const title = service.item.user_address.name;
 
     const content =
       street + ' #' + number + '\n' + zipCode + ', ' + city + ' ' + state;
@@ -42,7 +41,7 @@ export default ({navigation, route}): React.ReactElement => {
       content: content,
       images: null,
       styleCard: {},
-      title: userData.userName.split(' ')[0],
+      title: title,
     };
     return (
       <GenericCard
