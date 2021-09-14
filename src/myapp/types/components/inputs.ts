@@ -43,6 +43,9 @@ export interface ReminderInputProps {
   setValue: (key: number) => void;
   style?: {};
   value: number;
+  text?: string;
+  isDisable?: boolean;
+  isNotReminder?: boolean;
 }
 
 export interface UserInputProps {
