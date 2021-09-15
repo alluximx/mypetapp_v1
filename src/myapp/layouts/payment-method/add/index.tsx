@@ -10,6 +10,8 @@ import DatepickerInput from '../../../components/inputs/date-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
 // Hooks
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+// Global Styles
+import globalColors from '../../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -95,6 +97,8 @@ export default ({navigation, route}): React.ReactElement => {
             onSelect={(expiration_date) => setForm({...form, expiration_date})}
             placeholder="Expiración"
             minDate={new Date()}
+            style={styles.datePickerContainer}
+            iconStyle={styles.arrowIconStyle}
           />
           <UserInput
             placeholder="CVV "
@@ -102,6 +106,7 @@ export default ({navigation, route}): React.ReactElement => {
             onChangeText={(value: string) => {
               setForm({...form, cvv: value});
             }}
+            style={styles.UserInputContainer}
           />
         </View>
         <ReminderInput
@@ -129,5 +134,20 @@ const styles = StyleService.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'stretch',
+  },
+  UserInputContainer: {
+    height: 60,
+    backgroundColor: globalColors.lightGreen,
+    borderRadius: 10,
+    marginBottom: 16,
+    width: 186,
+  },
+  datePickerContainer: {
+    width: 186,
+  },
+  arrowIconStyle: {
+    top: -7,
+    right: 0,
+    left: -29,
   },
 });
