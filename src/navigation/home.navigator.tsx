@@ -215,6 +215,21 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           component={ProductFilterScreen}
         />
         <HomeStack.Screen
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
           name="ProductDetail"
           component={ProductDescriptionScreen}
         />

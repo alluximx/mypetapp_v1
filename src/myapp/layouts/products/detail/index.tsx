@@ -122,6 +122,7 @@ export default ({route}): React.ReactElement => {
                         <FlatList
                           data={dataImages}
                           horizontal
+                          showsHorizontalScrollIndicator={false}
                           pagingEnabled
                           ref={carouselRef}
                           onScroll={(e) => {
