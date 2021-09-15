@@ -12,9 +12,11 @@ import globalVars from '../../styles/vars';
 // Types
 import {DatePickerProps} from '../../types/components/inputs';
 
-const CalendarIcon = () => <DropDownIcon style={styles.arrowIcon} />;
-
 const DatepickerInput = (props: DatePickerProps) => {
+  const CalendarIcon = () => (
+    <DropDownIcon style={[styles.arrowIcon, props.iconStyle]} />
+  );
+
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
   const minDate = props.minDate
     ? new Date(props.minDate)

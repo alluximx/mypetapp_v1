@@ -40,7 +40,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
   }, [isFocused]);
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, props.style]}>
       <Animated.Text
         style={[
           styles.inputLabel,
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
     marginBottom: 16,
-    minWidth: 150,
   },
   inputLabel: {
     position: 'absolute',
