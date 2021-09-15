@@ -10,6 +10,7 @@ import PreviewableImageList from '../modals/previewable-image-list';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {DatasGeneric} from '../../types/components/cards';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {
@@ -35,7 +36,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
 
   return (
     <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
-      <View style={{flexDirection: 'row'}}>
+      <View style={styles.contentWrapper}>
         {coverImage && (
           <PreviewableImage
             source={{uri: coverImage}}
@@ -43,18 +44,25 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
           />
         )}
         <View style={styles.cardContentContainer}>
-          {date && (
-            <DefaultText style={styles.labelDate}>{formattedDate}</DefaultText>
-          )}
-          <TitleHeader style={[styles.title, props.titleStyle]}>
-            {title}
-          </TitleHeader>
-          <DefaultText
-            style={[styles.labelCard, props.contentTextStyle]}
-            numberOfLines={5}
-            wrapText>
-            {content}
-          </DefaultText>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={props.onClick}
+            style={styles.cardContentContainer}>
+            {date && (
+              <DefaultText style={styles.labelDate}>
+                {formattedDate}
+              </DefaultText>
+            )}
+            <TitleHeader style={[styles.title, props.titleStyle]}>
+              {title}
+            </TitleHeader>
+            <DefaultText
+              style={[styles.labelCard, props.contentTextStyle]}
+              numberOfLines={5}
+              wrapText>
+              {content}
+            </DefaultText>
+          </TouchableOpacity>
           {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
           <AnchorText
             onPress={props.onClick}
@@ -89,6 +97,10 @@ const themedStyles = StyleService.create({
     resizeMode: 'cover',
     marginRight: 8,
     marginTop: 6,
+    zIndex: 25,
+  },
+  contentWrapper: {
+    flexDirection: 'row',
   },
   cardContentContainer: {
     flexGrow: 1,

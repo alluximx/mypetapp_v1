@@ -9,20 +9,18 @@ import {ProductCardProps} from '../../types/components/products';
 
 const ProductCard = (props: ProductCardProps): React.ReactElement => {
   return (
-    <TouchableOpacity activeOpacity={0.6} onPress={props.onPress}>
-      <GenericCard
-        data={{
-          buttonText: '$200.00',
-          buttonAlign: 'right',
-          content: props.brand,
-          coverImage: props.cover_image,
-          title: props.name,
-        }}
-        onClick={props.onPress}
-        buttonStyle={styles.price}
-        contentTextStyle={styles.subtitle}
-      />
-    </TouchableOpacity>
+    <GenericCard
+      data={{
+        buttonText: '$200.00',
+        buttonAlign: 'right',
+        content: props.brand,
+        coverImage: props.cover_image,
+        title: props.name,
+      }}
+      onClick={props.onPress}
+      buttonStyle={styles.price}
+      contentTextStyle={styles.subtitle}
+    />
   );
 };
 
