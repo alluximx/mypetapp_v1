@@ -12,7 +12,6 @@ import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
-import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
@@ -20,7 +19,7 @@ import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 // Products
-import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
+import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
 import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
 // Vaccines.
@@ -209,10 +208,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         <HomeStack.Screen
           name="ProductDetail"
-          component={ProductDetailScreen}
+          component={ProductDescriptionScreen}
         />
         <HomeStack.Screen name="Orders" component={OrdersScreen} />
-        <HomeStack.Screen name="Cart" component={CartScreen} />
+        {/* <HomeStack.Screen name="Cart" component={CartScreen} /> */}
       </HomeStack.Navigator>
     </Animated.View>
   );
