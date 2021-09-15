@@ -45,6 +45,9 @@ export default ({navigation, route}): React.ReactElement => {
     route.params.setPrices([productPrices.MIN_PRICE, productPrices.MAX_PRICE]);
     setBrand('');
     route.params.setBrand('');
+    setTimeout(() => {
+      navigation.goBack();
+    }, 500);
   };
 
   useLayoutEffect(() => {
