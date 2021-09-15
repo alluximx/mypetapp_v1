@@ -206,7 +206,6 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen
           name="ProductFilter"
           component={ProductFilterScreen}
-          initialParams={{brand: ''}}
         />
         <HomeStack.Screen
           name="ProductDetail"

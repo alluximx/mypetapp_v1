@@ -32,7 +32,12 @@ type HomeNavigatorParamList = {
   AdoptionRequest: {};
 
   ProductList: {};
-  ProductFilter: {};
+  ProductFilter: {
+    brand: string;
+    category: string;
+    name: string;
+    setBrand: (brandId: string) => void;
+  };
   Orders: {};
   ProductDetail: {};
   Cart: {};
