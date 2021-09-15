@@ -1,9 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
-  Button,
   Layout,
   StyleService,
-  Text,
   useStyleSheet,
   Spinner,
 } from '@ui-kitten/components';
@@ -16,12 +14,13 @@ import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import globalStyles from '../../../styles/style';
 import useVariants from '../../../hooks/products/useVariants';
-import LinearGradient from 'react-native-linear-gradient';
+import useSaveProductCart from '../../../hooks/products/useSaveProductCart';
 import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
 import {FlatList} from 'react-native-gesture-handler';
 
 const INITIAL_INDEX = 0;
 export default ({navigation, route}): React.ReactElement => {
+  // example of route.product
   const routeProduct = {
     id: 'dcd718c7-1f73-4aa9-baba-c95b5bd40f14',
     name: 'Croquetas de Salmón',
@@ -41,10 +40,11 @@ export default ({navigation, route}): React.ReactElement => {
     cover_image:
       'https://mpa-stage.s3.amazonaws.com/media/products_covers/image1.jpg',
   };
+  // example of route.product
 
   const dataVariants = useVariants(routeProduct.id);
+  const saveProductCart = useSaveProductCart();
   const styles = useStyleSheet(themedStyles);
-  const [isLoding, setIsLoding] = useState(false);
   const [presentationValue, setPresentationValue] = useState('1');
   const [amountValue, setAmountValue] = useState('1');
   const [variantsList, setVariantsList] = useState([]);
@@ -53,6 +53,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [isLoadingVariant, setIsLoadingVariant] = useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(true);
   const dataImg = [];
+  const [dataImages, setDataimages] = useState([]);
 
   const findVariant = (value) => {
     const variantFilter = dataVariants.data.data.filter(
@@ -61,6 +62,7 @@ export default ({navigation, route}): React.ReactElement => {
     setVariant(variantFilter[0]);
     setIsLoadingVariant(false);
   };
+
   useEffect(() => {
     if (dataVariants.data?.data.length > 0) {
       const aux = [];
@@ -95,8 +97,21 @@ export default ({navigation, route}): React.ReactElement => {
           uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element.image,
         });
       });
+      setDataimages(dataImg);
     }
   }, [variant]);
+
+  const actionButton = () => {
+    const data = {item: presentationValue, quantity: parseInt(amountValue, 10)};
+    saveProductCart.mutate(data, {
+      onSuccess: () => {
+        // Action
+      },
+      onError: () => {
+        // Action
+      },
+    });
+  };
 
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_INDEX);
@@ -108,11 +123,11 @@ export default ({navigation, route}): React.ReactElement => {
       statusBarBackgroundColor={'transparent'}
       style={styles.container}>
       {dataVariants.isLoading || !variant ? (
-        <DefaultLayout style={styles.containerSpinner}>
+        <View style={styles.containerSpinner}>
           <View style={styles.viewContainer}>
             <Spinner size="large" status="success" />
           </View>
-        </DefaultLayout>
+        </View>
       ) : (
         <>
           <View style={styles.imageContainer}>
@@ -127,43 +142,47 @@ export default ({navigation, route}): React.ReactElement => {
                     {variant.images.length > 0 ? (
                       <View style={styles.containerCarousel}>
                         <FlatList
-                          data={dataImg}
+                          data={dataImages}
                           horizontal
                           pagingEnabled
                           ref={carouselRef}
                           onScroll={(e) => {
                             const offset = e.nativeEvent.contentOffset.x;
-                            const index = offset / 300; // your cell height
+                            const index = offset / width;
                             setCurrentIndex(index);
                           }}
                           renderItem={({item}) => {
                             const {uri} = item;
                             return (
-                              <Image
-                                source={{uri: uri}}
+                              <View
                                 style={{
                                   width: width,
-                                  height: height * 0.45,
-                                  resizeMode: 'cover',
-                                }}
-                              />
+                                  height: '100%',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}>
+                                <Image
+                                  source={{uri: uri}}
+                                  style={{
+                                    width: '100%',
+                                    height: height * 0.3,
+                                    resizeMode: 'contain',
+                                  }}
+                                />
+                              </View>
                             );
                           }}
                           keyExtractor={(_, item) => item.toString()}
                         />
-                        <LinearGradient
-                          colors={['rgba(0,0,0,0.50)', 'transparent']}
-                          style={styles.linearGradientTop}
+                        <SimplePaginationDot
+                          currentIndex={currentIndex}
+                          length={dataImages.length}
+                          color={'#000'}
+                          style={{
+                            position: 'absolute',
+                            bottom: 10,
+                          }}
                         />
-                        <LinearGradient
-                          colors={['transparent', globalColors.black]}
-                          style={styles.linearGradient}>
-                          <SimplePaginationDot
-                            currentIndex={currentIndex}
-                            length={dataImg.length}
-                            style={{position: 'absolute', bottom: 80}}
-                          />
-                        </LinearGradient>
                       </View>
                     ) : (
                       <Image
@@ -186,7 +205,7 @@ export default ({navigation, route}): React.ReactElement => {
             )}
           </View>
 
-          <DefaultLayout style={styles.containerDetail}>
+          <View style={styles.containerDetail}>
             <ScrollView>
               <Layout style={styles.layoutPort}>
                 <TitleHeader>{routeProduct.name}</TitleHeader>
@@ -222,16 +241,14 @@ export default ({navigation, route}): React.ReactElement => {
                   }}
                 />
                 <CustomButton
-                  isLoading={isLoding}
+                  isLoading={saveProductCart.isLoading}
                   isDisabled={isDisabledButton || amountValue === ''}
-                  onPress={() => {
-                    navigation.navigate('AdoptionFilter');
-                  }}>
+                  onPress={actionButton}>
                   Agregar al Carrito
                 </CustomButton>
               </Layout>
             </ScrollView>
-          </DefaultLayout>
+          </View>
         </>
       )}
     </DefaultLayout>
@@ -244,7 +261,7 @@ const themedStyles = StyleService.create({
     flex: 1,
     backgroundColor: globalColors.white,
     paddingHorizontal: 0,
-    paddingBottom: 16,
+    paddingBottom: 0,
   },
   containerDetail: {
     flex: 1,
@@ -286,17 +303,5 @@ const themedStyles = StyleService.create({
     position: 'relative',
     height: '100%',
     marginBottom: '-15%',
-  },
-  linearGradientTop: {
-    height: 100,
-    width: width,
-    position: 'absolute',
-    top: 0,
-  },
-  linearGradient: {
-    height: 150,
-    width: width,
-    position: 'absolute',
-    bottom: 0,
   },
 });
