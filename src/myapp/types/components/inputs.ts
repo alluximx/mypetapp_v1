@@ -14,6 +14,7 @@ export interface DropdownPickerProps {
   setCurrentValue: (key: string) => void;
   style?: {};
   disabled?: boolean;
+  disabledPlaceholder?: boolean;
 }
 
 export interface Option {
