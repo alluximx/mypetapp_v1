@@ -8,11 +8,14 @@ import DefaultText from '../../../components/texts/default-text';
 import UserInput from '../../../components/inputs/user-input';
 import DatepickerInput from '../../../components/inputs/date-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
+// Hooks
+import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: '',
@@ -34,6 +37,26 @@ export default ({navigation, route}): React.ReactElement => {
   useEffect(() => {
     paymentMethods.length > 2 && setIsDisable(true);
   }, [paymentMethods.length]);
+
+  const onSavePress = () => {
+    console.log('Guardar');
+  };
+
+  const isDisabled =
+    form.name === '' ||
+    form.number === '' ||
+    form.expiration_date === '' ||
+    form.cvv === '' ||
+    isLoading;
+
+  useSetNavigationHeaders({
+    isDisabled,
+    isLoading,
+    navigation,
+    setIsLoading,
+    onRightPress: onSavePress,
+    data: {...form},
+  });
 
   return (
     <DefaultLayout>
