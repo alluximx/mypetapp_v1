@@ -32,6 +32,7 @@ type HomeNavigatorParamList = {
   AdoptionRequest: {};
 
   ProductList: {};
+  ProductFilter: {};
   Orders: {};
   ProductDetail: {};
   Cart: {};

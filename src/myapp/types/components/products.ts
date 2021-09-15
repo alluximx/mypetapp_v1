@@ -1,6 +1,7 @@
 export interface ProductListProps {
   categoryId?: string;
   brandId?: string;
+  name?: string;
 }
 
 export interface ProductCardProps {

@@ -32,7 +32,7 @@ export interface OptionSelectProps {
 }
 
 export interface SearchInputProps {
-  onFilter: (text: string) => Promise<void>;
+  onFilter: (text: string) => void;
   placeholder?: string;
   style?: {};
 }
