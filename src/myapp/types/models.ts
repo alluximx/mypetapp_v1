@@ -1,31 +1,29 @@
-interface GenericModel {
+export interface BaseModel {
   id: string;
   name: string;
 }
 
-export interface Brand extends GenericModel {
+export interface Brand extends BaseModel {
   is_active?: boolean;
 }
 
-export interface Breed extends GenericModel {}
-
-export interface Category extends GenericModel {
+export interface Category extends BaseModel {
   is_active?: boolean;
 }
 
-export interface Pet extends GenericModel {
+export interface Pet extends BaseModel {
   birthday: string;
-  breed: Breed;
+  breed: BaseModel;
   image: string;
   ownerUser: User;
   pet_age: {
     months: number;
     years: number;
   };
-  size: Size;
+  size: BaseModel;
 }
 
-export interface Product extends GenericModel {
+export interface Product extends BaseModel {
   brand: Brand;
   category: Category;
   cover_image?: string;
@@ -37,9 +35,7 @@ export interface Product extends GenericModel {
   };
 }
 
-export interface Size extends GenericModel {}
-
-export interface User extends GenericModel {
+export interface User extends BaseModel {
   email?: string;
   password?: string;
   username: string;

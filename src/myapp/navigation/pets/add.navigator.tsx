@@ -2,7 +2,11 @@ import React, {useMemo, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 // Context
-import {AddPetContext, AddPetContextType} from '../../context/AddPetContext';
+import {
+  AddPetContext,
+  AddPetContextType,
+  AddPetFormParams,
+} from '../../context/AddPetContext';
 // Global styles
 import globalColors from '../../styles/colors';
 // My components
@@ -16,7 +20,7 @@ import {SelectBreedScreen} from '../../scenes/pets/add/select-breed.component';
 const AddPetStack = createNativeStackNavigator();
 
 const AddPetNavigator = (): React.ReactElement => {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<AddPetFormParams>({
     image: null,
     name: '',
     breed: '',
