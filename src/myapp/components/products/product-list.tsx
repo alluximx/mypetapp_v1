@@ -9,9 +9,10 @@ import useProductsList from '../../hooks/products/useProductsList';
 // My Components.
 import CustomSpinner from '../custom-spinner';
 import ProductCard from './product-card';
+import ProductListEmpty from './product-list-empty';
 // Types.
 import {ProductListProps} from '../../types/components/products';
-import ProductListEmpty from './product-list-empty';
+import {Product} from '../../types/models';
 
 const ProductList = (props: ProductListProps): React.ReactElement => {
   const navigation = useNavigation();
@@ -21,13 +22,20 @@ const ProductList = (props: ProductListProps): React.ReactElement => {
     props.brandId ?? '',
   );
 
+  const filteredData =
+    data?.data?.filter(
+      (product: Product) =>
+        props.prices[0] <= product.range_prices.price__min &&
+        props.prices[1] >= product.range_prices.price__max,
+    ) ?? [];
+
   return isLoading ? (
     <View style={styles.loadingContainer}>
       <CustomSpinner />
     </View>
   ) : (
     <List
-      data={data ? data.data : []}
+      data={filteredData}
       ListEmptyComponent={<ProductListEmpty />}
       scrollEnabled={data?.data?.length ? true : false}
       renderItem={({item}) => (

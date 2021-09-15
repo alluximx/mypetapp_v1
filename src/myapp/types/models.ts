@@ -1,58 +1,73 @@
-export interface Breed {
+interface GenericModel {
   id: string;
   name: string;
 }
 
-export interface Size {
-  id: string;
-  name: string;
+export interface Brand extends GenericModel {
+  is_active?: boolean;
 }
 
-export interface User {
-  id: number;
-  username: string;
-  email?: string;
-  password?: string;
-  name: string;
+export interface Breed extends GenericModel {}
+
+export interface Category extends GenericModel {
+  is_active?: boolean;
 }
 
-export interface Pet {
+export interface Pet extends GenericModel {
   birthday: string;
   breed: Breed;
-  id: string;
   image: string;
-  name: string;
   ownerUser: User;
   pet_age: {
-    years: number;
     months: number;
+    years: number;
   };
   size: Size;
 }
 
+export interface Product extends GenericModel {
+  brand: Brand;
+  category: Category;
+  cover_image?: string;
+  description: string;
+  is_active: boolean;
+  range_prices?: {
+    price__max: number;
+    price__min: number;
+  };
+}
+
+export interface Size extends GenericModel {}
+
+export interface User extends GenericModel {
+  email?: string;
+  password?: string;
+  username: string;
+}
+
 export interface Vaccine {
   id?: string;
-  vaccine_name: string;
   is_unique: boolean;
   is_vaccine: boolean;
+  vaccine_name: string;
 }
 
 export interface VaccineHistory {
   id?: string;
-  user_pet: string;
-  vaccine_registered: string;
-  vaccine_date: string | Date;
+  is_vaccine: boolean;
   next_vaccine_date: string | Date;
   reminder: string | Date;
-  is_vaccine: boolean;
+  user_pet: string;
+  vaccine_date: string | Date;
+  vaccine_registered: string;
 }
 
 export interface Visit {
+  details: string;
   id: string;
+  title: string;
   user_pet: string;
   visit_date: string;
-  title: string;
-  details: string;
 }
 
 export interface VisitImage {

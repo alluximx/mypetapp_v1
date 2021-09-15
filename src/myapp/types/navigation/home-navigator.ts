@@ -36,7 +36,9 @@ type HomeNavigatorParamList = {
     brand: string;
     category: string;
     name: string;
+    prices: number[];
     setBrand: (brandId: string) => void;
+    setPrices: (prices: number[]) => void;
   };
   Orders: {};
   ProductDetail: {};
