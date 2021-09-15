@@ -39,7 +39,7 @@ export default ({navigation, route}): React.ReactElement => {
   }, [paymentMethods.length]);
 
   const onSavePress = () => {
-    console.log('Guardar');
+    // Aqui hay que guardar
   };
 
   const isDisabled =
