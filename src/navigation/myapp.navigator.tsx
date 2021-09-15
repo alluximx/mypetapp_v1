@@ -7,6 +7,7 @@ import {
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {StyleSheet} from 'react-native';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import CustomSpinner from '../myapp/components/custom-spinner';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
 // My Components
@@ -23,7 +24,6 @@ import {reducer, initialState} from '../../src/reducer';
 import RootStackParamList from '../myapp/types/navigation/root-stack';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
-import CustomSpinner from '../myapp/components/custom-spinner';
 enableScreens(true);
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();

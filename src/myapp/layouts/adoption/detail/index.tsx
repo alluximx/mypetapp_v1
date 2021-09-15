@@ -73,7 +73,7 @@ export default ({navigation, route}): React.ReactElement => {
           ref={carouselRef}
           onScroll={(e) => {
             const offset = e.nativeEvent.contentOffset.x;
-            const index = offset / 300; // your cell height
+            const index = offset / width; // your cell width
             setCurrentIndex(index);
           }}
           renderItem={({item}) => {

@@ -12,15 +12,16 @@ import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
 // Screens.
-import {CartScreen} from '../myapp/scenes/cart/shopping-cart.component';
 import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
-import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
-import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
+// Products
+import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
+import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
+import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
 // Vaccines.
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
@@ -199,14 +200,18 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="ClinicalHistory"
           component={ClinicalHistoryScreen}
         />
-        <HomeStack.Screen name="Orders" component={OrdersScreen} />
+        {/*Product*/}
         <HomeStack.Screen name="ProductList" component={ProductListScreen} />
         <HomeStack.Screen
-          name="ProductDetail"
-          component={ProductDetailScreen}
+          name="ProductFilter"
+          component={ProductFilterScreen}
         />
-        <HomeStack.Screen name="Cart" component={CartScreen} />
-        {/*Product*/}
+        <HomeStack.Screen
+          name="ProductDetail"
+          component={ProductDescriptionScreen}
+        />
+        <HomeStack.Screen name="Orders" component={OrdersScreen} />
+        {/* <HomeStack.Screen name="Cart" component={CartScreen} /> */}
       </HomeStack.Navigator>
     </Animated.View>
   );

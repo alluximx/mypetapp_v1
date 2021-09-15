@@ -17,19 +17,23 @@ import globalVars from '../../styles/vars';
 import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
 // Types
 import {HomeRouteParams} from '../../types/navigation/home-navigator';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const servicesList = [
   {
     serviceName: 'Veterinaria',
     icon: require('../../assets/images/menu/vets.png'),
+    route: 'Home',
   },
   {
     serviceName: 'Estética',
     icon: require('../../assets/images/menu/pet-stylists.png'),
+    route: 'Home',
   },
   {
     serviceName: 'Productos',
     icon: require('../../assets/images/menu/products.png'),
+    route: 'ProductList',
   },
 ];
 
@@ -43,9 +47,6 @@ export default ({navigation}): React.ReactElement => {
 
   const onDetailPetButtonPress = (pet) =>
     navigation && navigation.navigate('DetailPet', {pet: pet});
-
-  const onServiceButtonPress = (service) =>
-    navigation && navigation.navigate('ProductList', {service: service});
 
   const renderHeader = () => (
     <View style={styles.centeredContainer}>
@@ -68,14 +69,16 @@ export default ({navigation}): React.ReactElement => {
   );
 
   const renderServiceItem = (service) => (
-    <View style={styles.serviceContainer}>
+    <TouchableOpacity
+      style={styles.serviceContainer}
+      onPress={() => navigation.navigate(service.route, {})}>
       <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
         <Image style={styles.serviceIcon} source={service.icon} />
       </Card>
       <DefaultText style={styles.serviceNameText}>
         {service.serviceName}
       </DefaultText>
-    </View>
+    </TouchableOpacity>
   );
 
   return data.isLoading ? (

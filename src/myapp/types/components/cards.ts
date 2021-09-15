@@ -6,11 +6,15 @@ export interface DatasGeneric {
     buttonAlign: string;
     buttonText: string;
     content: string;
+    coverImage?: string;
     date?: Date | null;
     images?: {file: string}[];
     title: string;
   };
   onClick: (data?: any) => void;
+  buttonStyle?: any;
+  contentTextStyle?: any;
+  titleStyle?: any;
   styleCard?: any;
 }
 

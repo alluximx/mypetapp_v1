@@ -24,21 +24,26 @@ type HomeNavigatorParamList = {
   VaccinesIndex: {};
 
   ClinicalHistory: {};
-  Orders: {};
+
+  AdoptionFilter: {};
+  AdoptionResult: {};
+  AdoptionDetail: {};
+  AdoptionAdvanceFilter: {};
+  AdoptionRequest: {};
+
   ProductList: {};
+  ProductFilter: {
+    brand: string;
+    category: string;
+    name: string;
+    setBrand: (brandId: string) => void;
+  };
+  Orders: {};
   ProductDetail: {};
   Cart: {};
 
   Breed: {};
   DetailBreed: {};
-
-  AdoptionFilter: {};
-
-  ProductIndex: {};
-  AdoptionResult: {};
-  AdoptionDetail: {};
-  AdoptionAdvanceFilter: {};
-  AdoptionRequest: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

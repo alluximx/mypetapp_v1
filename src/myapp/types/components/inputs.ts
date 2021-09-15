@@ -14,6 +14,7 @@ export interface DropdownPickerProps {
   setCurrentValue: (key: string) => void;
   style?: {};
   disabled?: boolean;
+  disabledPlaceholder?: boolean;
 }
 
 export interface Option {
@@ -27,6 +28,12 @@ export interface OptionSelectProps {
   horizontal?: boolean;
   optionStyle?: {};
   setCurrentValue: (key: string | number) => void;
+  style?: {};
+}
+
+export interface SearchInputProps {
+  onFilter: (text: string) => void;
+  placeholder?: string;
   style?: {};
 }
 
