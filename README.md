@@ -41,6 +41,8 @@ and
 
 # Required fix < React native 0.63.2
 
+`https://stackoverflow.com/questions/64016070/react-native-image-is-not-loaded-in-ios-14-upgrade `
+
 ```
 - (void)displayLayer:(CALayer *)layer
 {

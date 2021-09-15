@@ -9893,7 +9893,7 @@
     "prop-types" "^15.6.0"
     "react-timer-mixin" "^0.13.4"
 
-"react-native@0.62.2":
+"react-native@>=0.55", "react-native@0.62.2":
   "integrity" "sha512-gADZZ3jcm2WFTjh8CCBCbl5wRSbdxqZGd+8UpNwLQFgrkp/uHorwAhLNqcd4+fHmADgPBltNL0uR1Vhv47zcOw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.62.2.tgz"
   "version" "0.62.2"
