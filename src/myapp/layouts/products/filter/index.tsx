@@ -38,8 +38,8 @@ export default ({navigation, route}): React.ReactElement => {
   }, [navigation]);
 
   const data = brandsData
-    ? brandsData?.data.map((brand) => {
-        return {value: brand.id, label: brand.name};
+    ? brandsData?.data.map((brandItem) => {
+        return {value: brandItem.id, label: brandItem.name};
       })
     : [];
 

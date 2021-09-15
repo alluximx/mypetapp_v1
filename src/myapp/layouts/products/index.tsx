@@ -20,8 +20,11 @@ export default ({navigation, route}): React.ReactElement => {
   const [name, setName] = useState<string>('');
 
   const togglecategory = (id) => {
-    if (category === id) setCategory('');
-    else setCategory(id);
+    if (category === id) {
+      setCategory('');
+    } else {
+      setCategory(id);
+    }
   };
 
   return isLoading ? (
