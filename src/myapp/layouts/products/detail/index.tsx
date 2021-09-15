@@ -19,30 +19,8 @@ import SimplePaginationDot from '../../../components/adoption/SimplePaginationDo
 import {FlatList} from 'react-native-gesture-handler';
 
 const INITIAL_INDEX = 0;
-export default ({navigation, route}): React.ReactElement => {
-  // example of route.product
-  const routeProduct = {
-    id: 'dcd718c7-1f73-4aa9-baba-c95b5bd40f14',
-    name: 'Croquetas de Salmón',
-    description:
-      'Wholehearted Libre de Granos Alimento Natural para todas las Etapas de Vida Receta Salmón y Chícharo, nutre a tu mascota con un delicioso sabor.',
-    brand: {
-      id: '224739da-ae2a-4270-a6f6-ab8a507494c8',
-      name: 'Whole hearted',
-      is_active: true,
-    },
-    category: {
-      id: 'e8a055f4-85bb-4032-8b45-139a74ccdec2',
-      name: 'Comida',
-      is_active: true,
-    },
-    is_active: true,
-    cover_image:
-      'https://mpa-stage.s3.amazonaws.com/media/products_covers/image1.jpg',
-  };
-  // example of route.product
-
-  const dataVariants = useVariants(routeProduct.id);
+export default ({route}): React.ReactElement => {
+  const dataVariants = useVariants(route.params.id);
   const saveProductCart = useSaveProductCart();
   const styles = useStyleSheet(themedStyles);
   const [presentationValue, setPresentationValue] = useState('1');
@@ -188,7 +166,7 @@ export default ({navigation, route}): React.ReactElement => {
                       <Image
                         style={styles.imageProduct}
                         source={{
-                          uri: routeProduct.cover_image,
+                          uri: route.params.cover_image,
                         }}
                       />
                     )}
@@ -197,7 +175,7 @@ export default ({navigation, route}): React.ReactElement => {
                   <Image
                     style={styles.imageProduct}
                     source={{
-                      uri: routeProduct.cover_image,
+                      uri: route.params.cover_image,
                     }}
                   />
                 )}
@@ -208,8 +186,8 @@ export default ({navigation, route}): React.ReactElement => {
           <View style={styles.containerDetail}>
             <ScrollView>
               <Layout style={styles.layoutPort}>
-                <TitleHeader>{routeProduct.name}</TitleHeader>
-                <DefaultText>{routeProduct.brand.name}</DefaultText>
+                <TitleHeader>{route.params.name}</TitleHeader>
+                <DefaultText>{route.params.brand.name}</DefaultText>
                 <TitleHeader
                   style={[
                     globalStyles.highlightedText,
@@ -217,7 +195,7 @@ export default ({navigation, route}): React.ReactElement => {
                   ]}>
                   {variant ? '$' + variant.price : '$0.00'}
                 </TitleHeader>
-                <DefaultText>{routeProduct.description}</DefaultText>
+                <DefaultText>{route.params.description}</DefaultText>
                 <DropdownPicker
                   style={{marginTop: 24}}
                   data={variantsList}

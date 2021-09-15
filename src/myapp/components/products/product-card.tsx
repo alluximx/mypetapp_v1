@@ -9,7 +9,7 @@ import {ProductCardProps} from '../../types/components/products';
 
 const ProductCard = (props: ProductCardProps): React.ReactElement => {
   return (
-    <TouchableOpacity activeOpacity={0.6}>
+    <TouchableOpacity activeOpacity={0.6} onPress={props.onPress}>
       <GenericCard
         data={{
           buttonText: '$200.00',
@@ -18,7 +18,7 @@ const ProductCard = (props: ProductCardProps): React.ReactElement => {
           coverImage: props.cover_image,
           title: props.name,
         }}
-        onClick={() => {}}
+        onClick={props.onPress}
         buttonStyle={styles.price}
         contentTextStyle={styles.subtitle}
       />

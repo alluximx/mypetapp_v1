@@ -9,4 +9,5 @@ export interface ProductCardProps {
   cover_image?: string;
   brand: string;
   name: string;
+  onPress: () => void;
 }

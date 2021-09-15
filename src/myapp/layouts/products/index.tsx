@@ -14,7 +14,7 @@ import TitleHeader from '../../components/texts/title-header';
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 
-export default ({navigation, route}): React.ReactElement => {
+export default ({navigation}): React.ReactElement => {
   const {data, isLoading} = useGetCategories();
   const [category, setCategory] = useState<string>('');
   const [brand, setBrand] = useState<string>('');

@@ -1,6 +1,7 @@
 import {List} from '@ui-kitten/components';
 import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
@@ -13,6 +14,7 @@ import {ProductListProps} from '../../types/components/products';
 import ProductListEmpty from './product-list-empty';
 
 const ProductList = (props: ProductListProps): React.ReactElement => {
+  const navigation = useNavigation();
   const {data, isLoading} = useProductsList(
     props.categoryId ?? '',
     props.name ?? '',
@@ -33,6 +35,7 @@ const ProductList = (props: ProductListProps): React.ReactElement => {
           brand={item.brand.name}
           cover_image={item.cover_image}
           name={item.name}
+          onPress={() => navigation.navigate('ProductDetail', {...item})}
         />
       )}
       style={styles.container}
