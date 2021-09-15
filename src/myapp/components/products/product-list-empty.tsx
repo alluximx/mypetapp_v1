@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   emptyImage: {
     width: '100%',
-    maxHeight: 300,
+    maxHeight: 250,
     resizeMode: 'contain',
   },
   emptyTitle: {

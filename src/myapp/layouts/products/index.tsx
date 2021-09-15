@@ -17,6 +17,7 @@ import globalVars from '../../styles/vars';
 export default ({navigation, route}): React.ReactElement => {
   const {data, isLoading} = useGetCategories();
   const [category, setCategory] = useState<string>('');
+  const [brand, setBrand] = useState<string>('');
   const [name, setName] = useState<string>('');
 
   const togglecategory = (id) => {
@@ -40,6 +41,8 @@ export default ({navigation, route}): React.ReactElement => {
               navigation.navigate('ProductFilter', {
                 category,
                 name,
+                brand,
+                setBrand,
               })
             }
             style={styles.filterButton}>
@@ -79,7 +82,8 @@ export default ({navigation, route}): React.ReactElement => {
         <ProductList
           categoryId={category}
           name={name}
-          brandId={route.params.brand}
+          brandId={brand}
+          setBrand={setBrand}
         />
       </View>
     </DefaultLayout>

@@ -81,3 +81,8 @@ export const localeDateService = new NativeDateService('es', {
   startDayOfWeek: 1,
   format: 'DD/MM/YYYY',
 });
+
+export const productPrices = {
+  MIN_PRICE: 0,
+  MAX_PRICE: 1000,
+};
