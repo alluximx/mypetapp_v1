@@ -2,29 +2,26 @@ import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Hooks.
-import useGetCategories from '../../../hooks/categories/useGetCategories';
+import useGetCategories from '../../hooks/categories/useGetCategories';
 // My Components.
-import AnchorText from '../../../components/texts/anchor-text';
-import CustomSpinner from '../../../components/custom-spinner';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import ProductList from '../../../components/products/product-list';
-import SearchInput from '../../../components/inputs/search-input';
-import TitleHeader from '../../../components/texts/title-header';
+import AnchorText from '../../components/texts/anchor-text';
+import CustomSpinner from '../../components/custom-spinner';
+import DefaultLayout from '../../components/layouts/default-layout';
+import ProductList from '../../components/products/product-list';
+import SearchInput from '../../components/inputs/search-input';
+import TitleHeader from '../../components/texts/title-header';
 // Global Styles.
-import globalColors from '../../../styles/colors';
-import globalVars from '../../../styles/vars';
+import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 
-export default ({navigation}): React.ReactElement => {
+export default ({navigation, route}): React.ReactElement => {
   const {data, isLoading} = useGetCategories();
-  const [category, setCategory] = useState<string | null>(null);
-  const onFilter = async (text: string) => {};
+  const [category, setCategory] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
   const togglecategory = (id) => {
-    if (category === id) {
-      setCategory(null);
-    } else {
-      setCategory(id);
-    }
+    if (category === id) setCategory('');
+    else setCategory(id);
   };
 
   return isLoading ? (
@@ -34,8 +31,15 @@ export default ({navigation}): React.ReactElement => {
       <View style={styles.headerContainer}>
         <TitleHeader>Productos para tus mascotas</TitleHeader>
         <View style={styles.filterSection}>
-          <SearchInput onFilter={onFilter} style={styles.searchInput} />
-          <AnchorText onPress={() => {}} style={styles.filterButton}>
+          <SearchInput onFilter={setName} style={styles.searchInput} />
+          <AnchorText
+            onPress={() =>
+              navigation.navigate('ProductFilter', {
+                category,
+                name,
+              })
+            }
+            style={styles.filterButton}>
             Filtrar
           </AnchorText>
         </View>
@@ -68,8 +72,12 @@ export default ({navigation}): React.ReactElement => {
           style={styles.filterOptionsContainer}
         />
       </View>
-      <View>
-        <ProductList categoryId={category} />
+      <View style={styles.resultSection}>
+        <ProductList
+          categoryId={category}
+          name={name}
+          brandId={route.params.brand}
+        />
       </View>
     </DefaultLayout>
   );
@@ -119,5 +127,9 @@ const styles = StyleSheet.create({
   },
   filterOptionRightSpacing: {
     marginRight: globalVars.outsidePadding,
+  },
+  resultSection: {
+    flexGrow: 1,
+    flexBasis: 300,
   },
 });

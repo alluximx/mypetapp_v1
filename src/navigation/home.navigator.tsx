@@ -19,8 +19,10 @@ import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
+// Products
 import {ProductDetailScreen} from '../myapp/scenes/cart/product-detail.component';
-import {ProductListScreen} from '../myapp/scenes/cart/product-list.component';
+import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
+import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
 // Vaccines.
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
@@ -200,6 +202,11 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         {/*Product*/}
         <HomeStack.Screen name="ProductList" component={ProductListScreen} />
+        <HomeStack.Screen
+          name="ProductFilter"
+          component={ProductFilterScreen}
+          initialParams={{brand: ''}}
+        />
         <HomeStack.Screen
           name="ProductDetail"
           component={ProductDetailScreen}
