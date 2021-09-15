@@ -61,9 +61,9 @@ export default ({navigation, route}): React.ReactElement => {
         currentValue={brand}
         data={data}
         placeholder="Marca"
-        setCurrentValue={(brand: string) => {
-          route.params.setBrand(brand);
-          setBrand(brand);
+        setCurrentValue={(brandId: string) => {
+          route.params.setBrand(brandId);
+          setBrand(brandId);
         }}
         style={styles.brandSelector}
       />
