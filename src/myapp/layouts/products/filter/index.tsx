@@ -1,10 +1,11 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 // Constants.
 import {productPrices} from '../../../constants';
 // Global Styles.
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 // Hooks.
 import useGetBrands from '../../../hooks/brands/useGetBrands';
 import useProductsList from '../../../hooks/products/useProductsList';
@@ -15,10 +16,11 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import TitleHeader from '../../../components/texts/title-header';
-import globalVars from '../../../styles/vars';
+// Types
+import {Brand, Product} from '../../../types/models';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [prices, setPrices] = useState([200, 600]);
+  const [prices, setPrices] = useState(route.params.prices);
   const [brand, setBrand] = useState(route.params.brand);
   const {data: brandsData, isLoading: brandsLoading} = useGetBrands();
   const {data: productsData, isLoading: productsLoading} = useProductsList(
@@ -26,6 +28,27 @@ export default ({navigation, route}): React.ReactElement => {
     route.params.name,
     brand,
   );
+
+  const filteredData =
+    productsData?.data?.filter(
+      (product: Product) =>
+        prices[0] <= product.range_prices.price__min &&
+        prices[1] >= product.range_prices.price__max,
+    ) ?? [];
+
+  useEffect(() => {
+    route.params.setPrices(prices);
+  }, [prices]);
+
+  const clearFilters = () => {
+    setPrices([productPrices.MIN_PRICE, productPrices.MAX_PRICE]);
+    route.params.setPrices([productPrices.MIN_PRICE, productPrices.MAX_PRICE]);
+    setBrand('');
+    route.params.setBrand('');
+    setTimeout(() => {
+      navigation.goBack();
+    }, 500);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -42,7 +65,7 @@ export default ({navigation, route}): React.ReactElement => {
   }, [navigation]);
 
   const data = brandsData
-    ? brandsData?.data.map((brandItem) => {
+    ? brandsData?.data.map((brandItem: Brand) => {
         return {value: brandItem.id, label: brandItem.name};
       })
     : [];
@@ -55,7 +78,7 @@ export default ({navigation, route}): React.ReactElement => {
     <DefaultLayout style={styles.container}>
       <TitleHeader>Filtros</TitleHeader>
       <DefaultText style={styles.results}>
-        {productsData?.data.length ?? 0} resultados
+        {filteredData.length ?? 0} resultados
       </DefaultText>
       <DropdownPicker
         currentValue={brand}
@@ -86,13 +109,16 @@ export default ({navigation, route}): React.ReactElement => {
         snapped
         max={productPrices.MAX_PRICE}
         min={productPrices.MIN_PRICE}
-        minMarkerOverlapDistance={100}
+        minMarkerOverlapDistance={70}
         onValuesChange={setPrices}
         trackStyle={styles.sliderTrack}
         selectedStyle={styles.sliderActiveTrack}
         step={50}
         values={prices}
       />
+      <AnchorText style={styles.clearFilters} onPress={clearFilters}>
+        Limpiar filtros
+      </AnchorText>
     </DefaultLayout>
   );
 };
@@ -127,5 +153,9 @@ const styles = StyleSheet.create({
   },
   sliderActiveTrack: {
     backgroundColor: globalColors.greenSecondary,
+  },
+  clearFilters: {
+    textAlign: 'center',
+    marginTop: 24,
   },
 });

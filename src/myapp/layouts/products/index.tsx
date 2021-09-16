@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {List} from '@ui-kitten/components';
+// Constants.
+import {productPrices} from '../../constants';
+// Global Styles.
+import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 // Hooks.
 import useGetCategories from '../../hooks/categories/useGetCategories';
 // My Components.
@@ -10,15 +15,16 @@ import DefaultLayout from '../../components/layouts/default-layout';
 import ProductList from '../../components/products/product-list';
 import SearchInput from '../../components/inputs/search-input';
 import TitleHeader from '../../components/texts/title-header';
-// Global Styles.
-import globalColors from '../../styles/colors';
-import globalVars from '../../styles/vars';
 
 export default ({navigation}): React.ReactElement => {
   const {data, isLoading} = useGetCategories();
   const [category, setCategory] = useState<string>('');
   const [brand, setBrand] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [prices, setPrices] = useState([
+    productPrices.MIN_PRICE,
+    productPrices.MAX_PRICE,
+  ]);
 
   const togglecategory = (id) => {
     if (category === id) {
@@ -43,6 +49,8 @@ export default ({navigation}): React.ReactElement => {
                 name,
                 brand,
                 setBrand,
+                prices,
+                setPrices,
               })
             }
             style={styles.filterButton}>
@@ -83,6 +91,7 @@ export default ({navigation}): React.ReactElement => {
           categoryId={category}
           name={name}
           brandId={brand}
+          prices={prices}
           setBrand={setBrand}
         />
       </View>

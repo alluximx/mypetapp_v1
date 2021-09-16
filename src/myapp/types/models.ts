@@ -1,58 +1,69 @@
-export interface Breed {
+export interface BaseModel {
   id: string;
   name: string;
 }
 
-export interface Size {
-  id: string;
-  name: string;
+export interface Brand extends BaseModel {
+  is_active?: boolean;
 }
 
-export interface User {
-  id: number;
-  username: string;
-  email?: string;
-  password?: string;
-  name: string;
+export interface Category extends BaseModel {
+  is_active?: boolean;
 }
 
-export interface Pet {
+export interface Pet extends BaseModel {
   birthday: string;
-  breed: Breed;
-  id: string;
+  breed: BaseModel;
   image: string;
-  name: string;
   ownerUser: User;
   pet_age: {
-    years: number;
     months: number;
+    years: number;
   };
-  size: Size;
+  size: BaseModel;
+}
+
+export interface Product extends BaseModel {
+  brand: Brand;
+  category: Category;
+  cover_image?: string;
+  description: string;
+  is_active: boolean;
+  range_prices?: {
+    price__max: number;
+    price__min: number;
+  };
+}
+
+export interface User extends BaseModel {
+  email?: string;
+  password?: string;
+  username: string;
 }
 
 export interface Vaccine {
   id?: string;
-  vaccine_name: string;
   is_unique: boolean;
   is_vaccine: boolean;
+  vaccine_name: string;
 }
 
 export interface VaccineHistory {
   id?: string;
-  user_pet: string;
-  vaccine_registered: string;
-  vaccine_date: string | Date;
+  is_vaccine: boolean;
   next_vaccine_date: string | Date;
   reminder: string | Date;
-  is_vaccine: boolean;
+  user_pet: string;
+  vaccine_date: string | Date;
+  vaccine_registered: string;
 }
 
 export interface Visit {
+  details: string;
   id: string;
+  title: string;
   user_pet: string;
   visit_date: string;
-  title: string;
-  details: string;
 }
 
 export interface VisitImage {

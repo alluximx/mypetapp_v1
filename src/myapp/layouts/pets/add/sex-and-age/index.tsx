@@ -9,7 +9,7 @@ import globalStyles from '../../../../styles/style';
 import useSavePet from '../../../../hooks/pets/useSavePet';
 import useSizes from '../../../../hooks/pets/useSizes';
 // Models.
-import {Size} from '../../../../types/models';
+import {BaseModel} from '../../../../types/models';
 // My Components
 import CustomSpinner from '../../../../components/custom-spinner';
 import DefaultLayout from '../../../../components/layouts/default-layout';
@@ -35,7 +35,7 @@ export default ({navigation, route}): React.ReactElement => {
           label: 'Cargando...',
         },
       ]
-    : sizes?.data.map((option: Size) => {
+    : sizes?.data.map((option: BaseModel) => {
         return {value: option.id, label: option.name};
       });
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import {ImageSourcePropType} from 'react-native';
 
-interface AddPetFormParams {
+export interface AddPetFormParams {
   image: ImageSourcePropType;
   name: string;
   breed: string;
   owner_user: number;
-  sex: string;
+  sex: string | number;
   size: string;
-  birthday: string;
+  birthday: string | Date;
 }
 
 export interface AddPetContextType {
