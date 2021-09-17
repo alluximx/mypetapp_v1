@@ -43,6 +43,7 @@ const ProductList = (props: ProductListProps): React.ReactElement => {
           brand={item.brand.name}
           cover_image={item.cover_image}
           name={item.name}
+          range_prices={item.range_prices}
           onPress={() => navigation.navigate('ProductDetail', {...item})}
         />
       )}
