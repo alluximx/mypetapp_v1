@@ -58,7 +58,7 @@ const DatepickerInput = (props: DatePickerProps) => {
       </Animated.Text>
       <Datepicker
         accessoryRight={CalendarIcon}
-        controlStyle={styles.container}
+        controlStyle={[styles.container, props.style]}
         date={
           props.currentValue !== ''
             ? moment(props.currentValue).utc().toDate()

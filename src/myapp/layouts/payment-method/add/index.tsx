@@ -98,7 +98,6 @@ export default ({navigation, route}): React.ReactElement => {
             placeholder="Expiración"
             minDate={new Date()}
             style={styles.datePickerContainer}
-            iconStyle={styles.arrowIconStyle}
           />
           <UserInput
             placeholder="CVV "
@@ -140,10 +139,10 @@ const styles = StyleService.create({
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
     marginBottom: 16,
-    width: 186,
+    width: 144,
   },
   datePickerContainer: {
-    width: 186,
+    height: 62,
   },
   arrowIconStyle: {
     top: -7,
