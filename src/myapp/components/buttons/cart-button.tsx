@@ -2,15 +2,8 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from '@ui-kitten/components';
 import {Image, StyleSheet} from 'react-native';
-// Global styles.
-import globalColors from '../../styles/colors';
 
-interface CartButtonProps {
-  iconStyle?: {};
-  style?: {};
-}
-
-const CartButton = (props: CartButtonProps): React.ReactElement => {
+const CartButton = (): React.ReactElement => {
   const navigation = useNavigation();
 
   const onPress = () => navigation.navigate('Cart');

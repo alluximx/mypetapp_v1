@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@ui-kitten/components';
-import {ImageStyle, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 // Global styles.
 import globalColors from '../../styles/colors';
 // My Components.
