@@ -54,8 +54,12 @@ export const MyAppNavigator = (): React.ReactElement => {
   const authContext = useMemo(
     (): AuthContextType => ({
       isGuest: state.userToken == null ? true : false,
+      userId: state.userId,
       goHomeAsGuest: () => {
         dispatch({type: 'GUEST_SIGN_IN'});
+      },
+      setUserId: (userId) => {
+        dispatch({type: 'SET_USER_ID', userId});
       },
       signIn: async (data) => {
         try {
@@ -81,7 +85,7 @@ export const MyAppNavigator = (): React.ReactElement => {
         dispatch({type: 'SIGN_OUT'});
       },
     }),
-    [state.userToken],
+    [state.userToken, state.userId],
   );
 
   const backButton = () => <BackButton navigation={navigationRef} />;
