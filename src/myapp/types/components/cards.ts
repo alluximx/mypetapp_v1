@@ -1,11 +1,15 @@
 import {ImageURISource} from 'react-native';
 
 export interface DatasGeneric {
+  buttonStyle?: any;
   click?: any;
+  contentTextStyle?: any;
+  coverImageStyle?: any;
   data: {
-    buttonAlign: string;
-    buttonColor: string;
-    buttonText: string;
+    additionalButtons?: React.ReactElement[];
+    additionalContent?: React.ReactElement[];
+    buttonAlign?: string;
+    buttonText?: string;
     content: string;
     coverImage?: string;
     date?: Date | null;
@@ -13,10 +17,8 @@ export interface DatasGeneric {
     title: string;
   };
   onClick: (data?: any) => void;
-  buttonStyle?: any;
-  contentTextStyle?: any;
-  titleStyle?: any;
   styleCard?: any;
+  titleStyle?: any;
 }
 
 export interface ImageInputCardProps {

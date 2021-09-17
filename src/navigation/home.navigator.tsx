@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {Dimensions, Platform, StyleSheet} from 'react-native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
@@ -22,6 +23,7 @@ import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
 import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
+import {CartScreen} from '../myapp/scenes/cart/cart.component';
 // Vaccines.
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
@@ -233,6 +235,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="ProductDetail"
           component={ProductDescriptionScreen}
         />
+        <HomeStack.Screen name="Cart" component={CartScreen} />
         <HomeStack.Screen name="Orders" component={OrdersScreen} />
         {/* <HomeStack.Screen name="Cart" component={CartScreen} /> */}
         {/*Product*/}
