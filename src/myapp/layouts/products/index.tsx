@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useLayoutEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Constants.
@@ -10,6 +10,7 @@ import globalVars from '../../styles/vars';
 import useGetCategories from '../../hooks/categories/useGetCategories';
 // My Components.
 import AnchorText from '../../components/texts/anchor-text';
+import CartButton from '../../components/buttons/cart-button';
 import CustomSpinner from '../../components/custom-spinner';
 import DefaultLayout from '../../components/layouts/default-layout';
 import ProductList from '../../components/products/product-list';
@@ -25,6 +26,12 @@ export default ({navigation}): React.ReactElement => {
     productPrices.MIN_PRICE,
     productPrices.MAX_PRICE,
   ]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <CartButton />,
+    });
+  }, [navigation]);
 
   const togglecategory = (id) => {
     if (category === id) {
