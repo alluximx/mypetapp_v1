@@ -6,7 +6,6 @@ import TitleHeader from '../../../components/texts/title-header';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import UserInput from '../../../components/inputs/user-input';
-import DatepickerInput from '../../../components/inputs/date-picker';
 import ReminderInput from '../../../components/inputs/reminder-input';
 // Hooks
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
@@ -86,22 +85,31 @@ export default ({navigation, route}): React.ReactElement => {
         <UserInput
           placeholder="Número de tarjeta"
           value={form.number}
+          isNumeric={true}
           onChangeText={(value: string) => {
             setForm({...form, number: value});
           }}
         />
 
         <View style={styles.horizontalContainer}>
-          <DatepickerInput
-            currentValue={form.expiration_date}
-            onSelect={(expiration_date) => setForm({...form, expiration_date})}
-            placeholder="Expiración"
-            minDate={new Date()}
-            style={styles.datePickerContainer}
+          <UserInput
+            placeholder="Expriación "
+            value={form.expiration_date}
+            isNumeric={true}
+            maxLength={5}
+            onChangeText={(value: string) => {
+              value.length === 2 && value.length < 3
+                ? (value += '/')
+                : (value = value);
+              setForm({...form, expiration_date: value});
+            }}
+            style={styles.UserInputContainer}
           />
           <UserInput
             placeholder="CVV "
             value={form.cvv}
+            isNumeric={true}
+            maxLength={3}
             onChangeText={(value: string) => {
               setForm({...form, cvv: value});
             }}
@@ -135,14 +143,15 @@ const styles = StyleService.create({
     alignItems: 'stretch',
   },
   UserInputContainer: {
+    flexBasis: 185,
     height: 60,
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
     marginBottom: 16,
-    width: 144,
   },
   datePickerContainer: {
     height: 62,
+    minWidth: 190,
   },
   arrowIconStyle: {
     top: -7,
