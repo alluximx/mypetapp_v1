@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {List} from '@ui-kitten/components';
 import {StyleSheet, View} from 'react-native';
 // Context.
@@ -6,72 +6,66 @@ import {AuthContext} from '../../context/AuthContext';
 // Hooks.
 import useShoppingCart from '../../hooks/products/useShoppingCart';
 // My components.
-import AnchorText from '../../components/texts/anchor-text';
+import CartCard from '../../components/products/cart-card';
 import CustomButton from '../../components/buttons/custom-button';
 import CustomSpinner from '../../components/custom-spinner';
 import DefaultLayout from '../../components/layouts/default-layout';
-import GenericCard from '../../components/cards/generic-card';
 import TitleHeader from '../../components/texts/title-header';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
-import DefaultText from '../../components/texts/default-text';
+// Types.
+import {Cart} from '../../types/models';
+import EditProductModal from '../../components/modals/edit-product-modal';
 
 export default ({navigation}): React.ReactElement => {
   const authContext = useContext(AuthContext);
   const {data, isLoading} = useShoppingCart(authContext.userId);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const totalAmount =
+    data?.data?.length > 0
+      ? data?.data
+          ?.map((cart: Cart) => cart.total_item_price)
+          .reduce((total: number, cart: number) => total + cart)
+      : 0;
 
   return isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
+      <EditProductModal
+        onAccept={() => {}}
+        onCancel={() => setModalVisible(false)}
+        visible={modalVisible}
+      />
       <View style={styles.topContainer}>
         <TitleHeader style={styles.title}>Carrito de compras</TitleHeader>
         <List
           data={data?.data?.length ? data?.data : []}
           // ListEmptyComponent={<ProductListEmpty />}
           scrollEnabled={data?.data?.length ? true : false}
-          renderItem={({item}) => {
-            return (
-              <GenericCard
-                data={{
-                  additionalButtons: [
-                    <AnchorText onPress={() => {}} style={styles.buttonDelete}>
-                      Eliminar
-                    </AnchorText>,
-                    <AnchorText onPress={() => {}} style={styles.buttonEdit}>
-                      Editar
-                    </AnchorText>,
-                  ],
-                  additionalContent: [
-                    <DefaultText style={styles.quantity}>
-                      Cantidad: {item.quantity}
-                    </DefaultText>,
-                    <TitleHeader style={styles.price}>
-                      ${item.total_item_price.toFixed(2)}
-                    </TitleHeader>,
-                  ],
-                  // buttonText: `$${price.toFixed(2)}`,
-                  // buttonAlign: 'right',
-                  content: '200 gr',
-                  coverImage:
-                    'https://mpa-stage.s3.amazonaws.com/media/products_covers/image1.jpg',
-                  title: 'Croquetas de Salmón',
-                }}
-                coverImageStyle={{height: 70}}
-                onClick={() => {}}
-                buttonStyle={styles.price}
-                contentTextStyle={styles.subtitle}
-              />
-            );
-          }}
+          renderItem={({item}) => (
+            <CartCard
+              cover_image={item.item.product.cover_image}
+              id={item.id}
+              productName={item.item.product.name}
+              quantity={item.quantity}
+              setModalVisible={setModalVisible}
+              totalItemPrice={item.total_item_price}
+              userId={authContext.userId}
+              variantName={item.item.name}
+            />
+          )}
           style={styles.listContainer}
         />
       </View>
       <View style={styles.bottomCardContainer}>
         <View style={styles.total}>
           <TitleHeader style={styles.totalText}>Total</TitleHeader>
-          <TitleHeader style={styles.totalText}>$400.00</TitleHeader>
+          <TitleHeader style={styles.totalText}>
+            ${totalAmount.toFixed(2)}
+          </TitleHeader>
         </View>
         <CustomButton isLight onPress={() => {}}>
           Continuar con Pago
@@ -95,16 +89,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 0,
   },
-  quantity: {
-    fontSize: 14,
-    marginTop: 4,
-  },
-  price: {
-    color: globalColors.greenPrimary,
-    fontSize: 16,
-    marginTop: 4,
-    marginBottom: 16,
-  },
   listContainer: {
     backgroundColor: 'transparent',
     padding: 0,
@@ -122,12 +106,5 @@ const styles = StyleSheet.create({
   },
   totalText: {
     color: globalColors.white,
-  },
-  buttonDelete: {
-    color: globalColors.red,
-    marginRight: 32,
-  },
-  buttonEdit: {
-    color: globalColors.greenSecondary,
   },
 });
