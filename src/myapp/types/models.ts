@@ -11,6 +11,14 @@ export interface Category extends BaseModel {
   is_active?: boolean;
 }
 
+export interface Cart {
+  id: string;
+  item_price: number;
+  item: string;
+  quantity: number;
+  total_item_price: number;
+}
+
 export interface Pet extends BaseModel {
   birthday: string;
   breed: BaseModel;
