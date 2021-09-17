@@ -19,6 +19,7 @@ export const reducer = (prevState, action) => {
         isSignout: true,
         userToken: null,
         isGuest: false,
+        userId: null,
       };
     case 'GUEST_SIGN_IN':
       return {
@@ -26,6 +27,11 @@ export const reducer = (prevState, action) => {
         isGuest: true,
         isSignout: false,
         userToken: null,
+      };
+    case 'SET_USER_ID':
+      return {
+        ...prevState,
+        userId: action.userId,
       };
   }
 };
@@ -35,4 +41,5 @@ export const initialState = {
   isLoading: true,
   isSignout: false,
   userToken: null,
+  userId: null,
 };
