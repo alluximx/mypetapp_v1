@@ -14,6 +14,8 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {
+    additionalButtons,
+    additionalContent,
     buttonAlign,
     buttonText,
     content,
@@ -40,7 +42,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
         {coverImage && (
           <PreviewableImage
             source={{uri: coverImage}}
-            style={styles.coverImage}
+            style={[styles.coverImage, props.coverImageStyle]}
           />
         )}
         <View style={styles.cardContentContainer}>
@@ -62,13 +64,17 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
               wrapText>
               {content}
             </DefaultText>
+            <View style={styles.additionalContentRow}>{additionalContent}</View>
           </TouchableOpacity>
           {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
-          <AnchorText
-            onPress={props.onClick}
-            style={[stylesCart.header, props.buttonStyle]}>
-            {buttonText}
-          </AnchorText>
+          {buttonText && (
+            <AnchorText
+              onPress={props.onClick}
+              style={[stylesCart.header, props.buttonStyle]}>
+              {buttonText}
+            </AnchorText>
+          )}
+          <View style={styles.buttonRow}>{additionalButtons}</View>
         </View>
       </View>
     </Card>
@@ -105,6 +111,14 @@ const themedStyles = StyleService.create({
   cardContentContainer: {
     flexGrow: 1,
     marginLeft: 6,
+  },
+  additionalContentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 });
 
