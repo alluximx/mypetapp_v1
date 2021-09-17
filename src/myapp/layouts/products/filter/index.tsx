@@ -105,12 +105,13 @@ export default ({navigation, route}): React.ReactElement => {
             />
           </View>
         )}
-        sliderLength={windowWidth - globalVars.outsidePadding * 2}
+        sliderLength={windowWidth - globalVars.outsidePadding * 2 - 20}
         snapped
         max={productPrices.MAX_PRICE}
         min={productPrices.MIN_PRICE}
         minMarkerOverlapDistance={70}
         onValuesChange={setPrices}
+        markerOffsetX={10}
         trackStyle={styles.sliderTrack}
         selectedStyle={styles.sliderActiveTrack}
         step={50}
@@ -150,6 +151,7 @@ const styles = StyleSheet.create({
   sliderTrack: {
     backgroundColor: globalColors.lightGray,
     height: 4,
+    marginLeft: 5,
   },
   sliderActiveTrack: {
     backgroundColor: globalColors.greenSecondary,
