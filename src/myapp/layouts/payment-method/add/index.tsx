@@ -140,10 +140,9 @@ const styles = StyleService.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-between',
-    alignItems: 'stretch',
   },
   UserInputContainer: {
-    flexBasis: 185,
+    flexBasis: '48%',
     height: 60,
     backgroundColor: globalColors.lightGreen,
     borderRadius: 10,
