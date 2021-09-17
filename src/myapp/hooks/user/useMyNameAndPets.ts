@@ -25,10 +25,9 @@ const useMyNameAndPets = () => {
     }, []);
 
     const profileQuery = useQuery('my-profile', () => auth_service.me());
-    const petsQuery = useMyPets(
-      authContext.isGuest,
-      profileQuery.data?.data.id,
-    );
+    const userId = profileQuery.data?.data.id;
+    authContext.setUserId(userId);
+    const petsQuery = useMyPets(authContext.isGuest, userId);
 
     useEffect(() => {
       // Update profile data if success...
