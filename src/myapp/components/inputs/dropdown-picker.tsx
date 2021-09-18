@@ -20,7 +20,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
   } = props;
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const disableDrop = props.disabled ? true : false;
+  const disableDrop = disabled ? true : false;
 
   useEffect(() => {
     Animated.timing(focusAnim, {
@@ -69,7 +69,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
           onBlur: () => setIsDropdownOpen(false),
           onFocus: () => setIsDropdownOpen(true),
         }}
-        onOpen={() => setIsDropdownOpen(true)}
+        onOpen={() => setIsDropdownOpen(!disableDrop ? true : false)}
         onClose={() => setIsDropdownOpen(false)}
         placeholder={
           !disabledPlaceholder
