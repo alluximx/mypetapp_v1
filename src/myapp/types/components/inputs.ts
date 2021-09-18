@@ -1,10 +1,12 @@
 export interface DatePickerProps {
   currentValue: string | Date;
   disabled?: boolean;
+  iconStyle?: {};
   maxDate?: Date;
   minDate?: string | Date;
   onSelect: (date: Date) => void;
   placeholder?: string;
+  style?: {};
 }
 
 export interface DropdownPickerProps {
@@ -39,9 +41,12 @@ export interface SearchInputProps {
 
 export interface ReminderInputProps {
   isActive: boolean;
+  isDisable?: boolean;
+  isNotReminder?: boolean;
   setIsActive: (isActive: boolean) => void;
   setValue: (key: number) => void;
   style?: {};
+  text?: string;
   value: number;
 }
 
@@ -53,5 +58,6 @@ export interface UserInputProps {
   maxLength?: number;
   onChangeText: (value: string) => void;
   placeholder: string;
+  style?: {};
   value: string;
 }

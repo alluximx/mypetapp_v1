@@ -40,7 +40,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
   }, [isFocused]);
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, props.style]}>
       <Animated.Text
         style={[
           styles.inputLabel,
