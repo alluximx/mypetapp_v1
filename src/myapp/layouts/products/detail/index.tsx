@@ -1,22 +1,27 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
   Layout,
+  Spinner,
   StyleService,
   useStyleSheet,
-  Spinner,
 } from '@ui-kitten/components';
-import DefaultLayout from '../../../components/layouts/default-layout';
 import {Dimensions, Image, View, ScrollView} from 'react-native';
-import globalColors from '../../../styles/colors';
-import DropdownPicker from '../../../components/inputs/dropdown-picker';
-import CustomButton from '../../../components/buttons/custom-button';
-import TitleHeader from '../../../components/texts/title-header';
-import DefaultText from '../../../components/texts/default-text';
-import globalStyles from '../../../styles/style';
-import useVariants from '../../../hooks/products/useVariants';
-import useSaveProductCart from '../../../hooks/products/useSaveProductCart';
-import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
 import {FlatList} from 'react-native-gesture-handler';
+// Global Styles
+import globalColors from '../../../styles/colors';
+import globalStyles from '../../../styles/style';
+// Hooks
+import useSaveProductCart from '../../../hooks/products/useSaveProductCart';
+import useVariants from '../../../hooks/products/useVariants';
+// My Components
+import CustomButton from '../../../components/buttons/custom-button';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
+import TitleHeader from '../../../components/texts/title-header';
+// Models
+import {BaseModel} from '../../../types/models';
 
 const INITIAL_INDEX = 0;
 export default ({route}): React.ReactElement => {
@@ -35,7 +40,7 @@ export default ({route}): React.ReactElement => {
 
   const findVariant = (value) => {
     const variantFilter = dataVariants.data.data.filter(
-      (item) => item.id === value,
+      (item: BaseModel) => item.id === value,
     );
     setVariant(variantFilter[0]);
     setIsLoadingVariant(false);
@@ -44,7 +49,7 @@ export default ({route}): React.ReactElement => {
   useEffect(() => {
     if (dataVariants.data?.data.length > 0) {
       const aux = [];
-      dataVariants.data.data.forEach((element) => {
+      dataVariants.data.data.forEach((element: BaseModel) => {
         aux.push({
           value: element.id,
           label: element.name,
