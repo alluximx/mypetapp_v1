@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 // Global Styles.
 import globalColors from '../../styles/colors';
@@ -11,44 +11,66 @@ import GenericCard from '../cards/generic-card';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {CartCardProps} from '../../types/components/products';
+import EditProductModal from '../modals/edit-product-modal';
+import useVariants from '../../hooks/products/useVariants';
+import {Variant} from '../../types/models';
 
 const CartCard = (props: CartCardProps): React.ReactElement => {
   const deleteCart = useDeleteShoppingCart(props.userId);
   const onPressDelete = (cartId: string) => deleteCart.mutate(cartId);
-  const onPressEdit = () => {
-    props.setModalVisible(true);
-  };
+  const [modalVisible, setModalVisible] = useState(false);
+  const {data} = useVariants(props.productId);
+
+  const onPressEdit = () => setModalVisible(true);
 
   return (
-    <GenericCard
-      data={{
-        additionalButtons: [
-          <AnchorText
-            onPress={() => onPressDelete(props.id)}
-            style={styles.buttonDelete}>
-            Eliminar
-          </AnchorText>,
-          <AnchorText onPress={onPressEdit} style={styles.buttonEdit}>
-            Editar
-          </AnchorText>,
-        ],
-        additionalContent: [
-          <DefaultText style={styles.quantity}>
-            Cantidad: {props.quantity}
-          </DefaultText>,
-          <TitleHeader style={styles.price}>
-            ${props.totalItemPrice.toFixed(2)}
-          </TitleHeader>,
-        ],
-        content: props.variantName,
-        coverImage: props.cover_image,
-        title: props.productName,
-      }}
-      coverImageStyle={styles.coverImage}
-      onClick={onPressEdit}
-      buttonStyle={styles.price}
-      contentTextStyle={styles.subtitle}
-    />
+    <>
+      <EditProductModal
+        onAccept={() => {}}
+        onCancel={() => setModalVisible(false)}
+        presentationId={props.itemId}
+        quantity={props.quantity}
+        variantsList={
+          data?.data?.length
+            ? data.data.map((variant: Variant) => ({
+                value: variant.id,
+                label: variant.name,
+                stock: variant.stock,
+              }))
+            : []
+        }
+        visible={modalVisible}
+      />
+      <GenericCard
+        data={{
+          additionalButtons: [
+            <AnchorText
+              onPress={() => onPressDelete(props.id)}
+              style={styles.buttonDelete}>
+              Eliminar
+            </AnchorText>,
+            <AnchorText onPress={onPressEdit} style={styles.buttonEdit}>
+              Editar
+            </AnchorText>,
+          ],
+          additionalContent: [
+            <DefaultText style={styles.quantity}>
+              Cantidad: {props.quantity}
+            </DefaultText>,
+            <TitleHeader style={styles.price}>
+              ${props.totalItemPrice.toFixed(2)}
+            </TitleHeader>,
+          ],
+          content: props.variantName,
+          coverImage: props.cover_image,
+          title: props.productName,
+        }}
+        coverImageStyle={styles.coverImage}
+        onClick={onPressEdit}
+        buttonStyle={styles.price}
+        contentTextStyle={styles.subtitle}
+      />
+    </>
   );
 };
 
