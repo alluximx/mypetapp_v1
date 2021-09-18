@@ -16,12 +16,10 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types.
 import {Cart} from '../../types/models';
-import EditProductModal from '../../components/modals/edit-product-modal';
 
 export default ({navigation}): React.ReactElement => {
   const authContext = useContext(AuthContext);
   const {data, isLoading} = useShoppingCart(authContext.userId);
-  const [modalVisible, setModalVisible] = useState(false);
 
   const totalAmount =
     data?.data?.length > 0
@@ -34,11 +32,6 @@ export default ({navigation}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
-      <EditProductModal
-        onAccept={() => {}}
-        onCancel={() => setModalVisible(false)}
-        visible={modalVisible}
-      />
       <View style={styles.topContainer}>
         <TitleHeader style={styles.title}>Carrito de compras</TitleHeader>
         <List
@@ -49,9 +42,10 @@ export default ({navigation}): React.ReactElement => {
             <CartCard
               cover_image={item.item.product.cover_image}
               id={item.id}
+              productId={item.item.product.id}
+              itemId={item.item.id}
               productName={item.item.product.name}
               quantity={item.quantity}
-              setModalVisible={setModalVisible}
               totalItemPrice={item.total_item_price}
               userId={authContext.userId}
               variantName={item.item.name}

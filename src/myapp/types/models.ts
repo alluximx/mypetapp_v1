@@ -19,6 +19,15 @@ export interface Cart {
   total_item_price: number;
 }
 
+export interface Option {
+  label: string;
+  value: string;
+}
+
+export interface VariantOption extends Option {
+  stock: number;
+}
+
 export interface Pet extends BaseModel {
   birthday: string;
   breed: BaseModel;
@@ -64,6 +73,10 @@ export interface VaccineHistory {
   user_pet: string;
   vaccine_date: string | Date;
   vaccine_registered: string;
+}
+
+export interface Variant extends BaseModel {
+  stock: number;
 }
 
 export interface Visit {

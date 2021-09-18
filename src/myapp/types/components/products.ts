@@ -1,9 +1,10 @@
 export interface CartCardProps {
   cover_image: string;
   id: string;
+  itemId: string;
+  productId: string;
   productName: string;
   quantity: number;
-  setModalVisible: (value: boolean) => void;
   totalItemPrice: number;
   userId: number;
   variantName: string;

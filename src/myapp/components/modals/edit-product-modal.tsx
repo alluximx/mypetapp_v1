@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 // Global Styles
 import globalColors from '../../styles/colors';
@@ -7,8 +7,40 @@ import globalVars from '../../styles/vars';
 import CustomButton from '../buttons/custom-button';
 import DropdownPicker from '../inputs/dropdown-picker';
 import TitleHeader from '../texts/title-header';
+// Types
+import {EditProductModalProps} from '../../types/components/modals';
+import {VariantOption} from '../../types/models';
 
-const EditProductModal = ({onAccept, onCancel, visible}) => {
+const EditProductModal = (props: EditProductModalProps) => {
+  const {
+    onAccept,
+    onCancel,
+    presentationId,
+    quantity,
+    variantsList,
+    visible,
+  } = props;
+
+  const [presentationValue, setPresentationValue] = useState(presentationId);
+  const amountList = [];
+
+  const currentVariant = variantsList.find((variant: VariantOption) => {
+    return variant.value === presentationValue;
+  });
+
+  for (let i = 1; i < currentVariant?.stock + 1 ?? 0; i++) {
+    amountList.push({
+      label: `${i}`,
+      value: `${i}`,
+    });
+  }
+
+  const [amountValue, setAmountValue] = useState(
+    amountList.length > 0 ? amountList[quantity - 1].value : '',
+  );
+
+  const isDisabled = amountValue === '' || presentationValue === '';
+
   return (
     <Modal
       animationType="fade"
@@ -17,33 +49,35 @@ const EditProductModal = ({onAccept, onCancel, visible}) => {
       visible={visible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <TitleHeader style={styles.modalTitle}>Editar Producto</TitleHeader>
-          {/* <DropdownPicker
-            style={{marginTop: 24}}
-            data={variantsList}
-            currentValue={presentationValue}
-            placeholder="Presentación"
-            disabledPlaceholder={true}
-            setCurrentValue={(value) => {
-              setIsLoadingVariant(true);
-              setPresentationValue(value);
-              findVariant(value);
-            }}
-          />
-          <DropdownPicker
-            style={{marginTop: 5, marginBottom: 20}}
-            data={amountList}
-            currentValue={amountValue}
-            placeholder="Cantidad"
-            disabledPlaceholder={true}
-            setCurrentValue={(value) => {
-              setAmountValue(value);
-            }}
-          /> */}
-          <CustomButton onPress={onAccept}>Guardar</CustomButton>
-          <TouchableOpacity activeOpacity={0.8} onPress={onCancel}>
-            <Text style={styles.textCancel}>Cancelar</Text>
-          </TouchableOpacity>
+          <View>
+            <TitleHeader style={styles.modalTitle}>Editar Producto</TitleHeader>
+            <DropdownPicker
+              style={{marginTop: 24}}
+              data={variantsList}
+              currentValue={presentationValue}
+              placeholder="Presentación"
+              setCurrentValue={(value: string) => {
+                setPresentationValue(value);
+                setAmountValue(amountList[0].value);
+              }}
+            />
+            <DropdownPicker
+              style={{marginTop: 5, marginBottom: 20}}
+              data={amountList}
+              disabled={!(amountList.length > 0)}
+              currentValue={amountValue}
+              placeholder="Cantidad"
+              setCurrentValue={setAmountValue}
+            />
+          </View>
+          <View>
+            <CustomButton onPress={onAccept} isDisabled={isDisabled}>
+              Guardar
+            </CustomButton>
+            <TouchableOpacity activeOpacity={0.8} onPress={onCancel}>
+              <Text style={styles.textCancel}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -66,6 +100,7 @@ const styles = StyleSheet.create({
     maxHeight: 500,
     height: '50%',
     overflow: 'hidden',
+    justifyContent: 'space-between',
   },
   pawImage: {
     position: 'absolute',
