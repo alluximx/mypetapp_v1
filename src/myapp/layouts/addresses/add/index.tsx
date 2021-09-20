@@ -87,7 +87,10 @@ export default ({navigation, route}): React.ReactElement => {
       municipality: service.item.municipality.id,
       number: number,
       reference: service.item.reference,
-      state: service.item.state.id,
+      state: {
+        id_state: service.item.state.id,
+        nombre_state: state,
+      },
       street: street,
       zipcode: zipCode,
     };
@@ -100,14 +103,25 @@ export default ({navigation, route}): React.ReactElement => {
         navigation={navigation}
         title={title}
         subtitle={content}
-        destination={'MyProfile'}
+        destination={'PaymentSummary'}
         data={auxData}
       />
     );
   };
 
   const onSavePress = () => {
-    addAddressQuery.mutate(form);
+    if (isReminderActive) {
+      addAddressQuery.mutate(form, {
+        onSuccess: () => {
+          // action
+        },
+        onError: () => {
+          // action
+        },
+      });
+    } else {
+      // navigate
+    }
   };
 
   const isDisabled =

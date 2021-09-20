@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Layout, StyleService, useStyleSheet} from '@ui-kitten/components';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import {View, ScrollView} from 'react-native';
@@ -9,6 +9,30 @@ import NavigateButton from '../../../components/buttons/navigate-button';
 import CustomButton from '../../../components/buttons/custom-button';
 
 export default ({navigation, route}): React.ReactElement => {
+  const [contentSubtitle, setContentSubtitle] = useState('');
+  const [contentTitle, setContentTitle] = useState('');
+  const [address, setAddress] = useState();
+  useEffect(() => {
+    if (route.params.data) {
+      const dataParam = route.params.data;
+      setAddress(dataParam);
+      const content =
+        dataParam.street +
+        ' #' +
+        dataParam.number +
+        '\n' +
+        dataParam.zipcode +
+        ', ' +
+        dataParam.city +
+        ' ' +
+        dataParam.state.nombre_state;
+      setContentSubtitle(content);
+      setContentTitle('Karen Beltrán');
+    } else {
+      setContentSubtitle('Selecciona dirección de envio');
+    }
+  }, [route.params.data]);
+
   const styles = useStyleSheet(themedStyles);
 
   return (
@@ -21,14 +45,15 @@ export default ({navigation, route}): React.ReactElement => {
           <TitleHeader style={styles.titleText}>Dirección de envío</TitleHeader>
           <NavigateButton
             navigation={navigation}
-            subtitle={'Selecciona dirección de envio'}
-            destination={'Home'}
+            title={contentTitle}
+            subtitle={contentSubtitle}
+            destination={'AddAddress'}
           />
           <TitleHeader style={styles.titleText}>Método de pago</TitleHeader>
           <NavigateButton
             navigation={navigation}
             subtitle={'Selecciona el método de pago'}
-            destination={'Home'}
+            destination={'AddPaymentMethod'}
           />
           <TitleHeader style={styles.titleText}>Método de envío</TitleHeader>
           <DefaultText>El costo base del envio es de $90.</DefaultText>
