@@ -4,15 +4,15 @@ import {StyleSheet} from 'react-native';
 import globalColors from '../../styles/colors';
 // Hooks.
 import useDeleteShoppingCart from '../../hooks/products/useDeleteShoppingCart';
+import useVariants from '../../hooks/products/useVariants';
 // My Components.
 import AnchorText from '../texts/anchor-text';
+import EditProductModal from '../modals/edit-product-modal';
 import DefaultText from '../texts/default-text';
 import GenericCard from '../cards/generic-card';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {CartCardProps} from '../../types/components/products';
-import EditProductModal from '../modals/edit-product-modal';
-import useVariants from '../../hooks/products/useVariants';
 import {Variant} from '../../types/models';
 
 const CartCard = (props: CartCardProps): React.ReactElement => {
@@ -26,10 +26,12 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
   return (
     <>
       <EditProductModal
-        onAccept={() => {}}
+        id={props.id}
+        userId={props.userId}
         onCancel={() => setModalVisible(false)}
         presentationId={props.itemId}
         quantity={props.quantity}
+        setVisible={setModalVisible}
         variantsList={
           data?.data?.length
             ? data.data.map((variant: Variant) => ({
