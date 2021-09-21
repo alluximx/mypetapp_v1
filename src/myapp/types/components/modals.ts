@@ -13,10 +13,12 @@ export interface PreviewableImageListProps {
 }
 
 export interface EditProductModalProps {
-  onAccept: () => void;
+  id: string;
   onCancel: () => void;
   presentationId: string;
   quantity: number;
+  setVisible: (value: boolean) => void;
   variantsList: VariantOption[];
   visible: boolean;
+  userId: number;
 }

@@ -36,7 +36,6 @@ export default ({navigation}): React.ReactElement => {
         <TitleHeader style={styles.title}>Carrito de compras</TitleHeader>
         <List
           data={data?.data?.length ? data?.data : []}
-          // ListEmptyComponent={<ProductListEmpty />}
           scrollEnabled={data?.data?.length ? true : false}
           renderItem={({item}) => (
             <CartCard
