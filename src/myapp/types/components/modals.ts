@@ -20,4 +20,5 @@ export interface EditProductModalProps {
   setVisible: (value: boolean) => void;
   variantsList: VariantOption[];
   visible: boolean;
+  userId: number;
 }
