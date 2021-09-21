@@ -15,6 +15,8 @@ import useStates from '../../../hooks/util/useState';
 import useGetAddress from '../../../hooks/address/useGetAddress';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
+// Global Styles
+import globalColors from '../../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
   const [stateList, setStateList] = useState([]);
@@ -212,6 +214,11 @@ export default ({navigation, route}): React.ReactElement => {
             setForm({...form, zipcode: value});
           }}
         />
+        {addresses.length > 2 && (
+          <DefaultText style={styles.message}>
+            Solo puedes guardar 3 direcciones
+          </DefaultText>
+        )}
         <ReminderInput
           isActive={isReminderActive}
           setIsActive={changeValue}
@@ -231,6 +238,12 @@ const styles = StyleService.create({
     marginTop: 10,
     marginBottom: 15,
     fontSize: 16,
+  },
+  message: {
+    marginTop: 10,
+    marginBottom: 15,
+    fontSize: 14,
+    color: globalColors.red,
   },
   servicesContainer: {
     backgroundColor: 'transparent',
