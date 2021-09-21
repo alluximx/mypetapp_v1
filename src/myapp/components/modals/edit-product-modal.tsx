@@ -3,6 +3,8 @@ import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Hooks
+import useUpdateShoppingCart from '../../hooks/products/useUpdateShoppingCart';
 // My Components
 import CustomButton from '../buttons/custom-button';
 import DropdownPicker from '../inputs/dropdown-picker';
@@ -13,14 +15,18 @@ import {VariantOption} from '../../types/models';
 
 const EditProductModal = (props: EditProductModalProps) => {
   const {
-    onAccept,
+    id,
     onCancel,
     presentationId,
     quantity,
+    setVisible,
     variantsList,
     visible,
+    userId,
   } = props;
 
+  const updateCart = useUpdateShoppingCart(userId);
+  const [loading, setLoading] = useState(false);
   const [presentationValue, setPresentationValue] = useState(presentationId);
   const amountList = [];
 
@@ -40,6 +46,23 @@ const EditProductModal = (props: EditProductModalProps) => {
   );
 
   const isDisabled = amountValue === '' || presentationValue === '';
+
+  const onPressSave = () => {
+    setLoading(true);
+    updateCart.mutate(
+      {
+        id: id,
+        item: presentationValue,
+        quantity: amountValue,
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          setVisible(false);
+        },
+      },
+    );
+  };
 
   return (
     <Modal
@@ -71,7 +94,10 @@ const EditProductModal = (props: EditProductModalProps) => {
             />
           </View>
           <View>
-            <CustomButton onPress={onAccept} isDisabled={isDisabled}>
+            <CustomButton
+              isLoading={loading}
+              onPress={onPressSave}
+              isDisabled={isDisabled}>
               Guardar
             </CustomButton>
             <TouchableOpacity activeOpacity={0.8} onPress={onCancel}>
