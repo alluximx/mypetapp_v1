@@ -7,11 +7,18 @@ import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import CustomButton from '../../../components/buttons/custom-button';
+import useMyProfile from '../../../hooks/user/useMyProfile';
 
 export default ({navigation, route}): React.ReactElement => {
+  const routeCart = {
+    subtotal: '400.00',
+    total: '490.00',
+    envio: '90.00',
+  };
   const [contentSubtitle, setContentSubtitle] = useState('');
   const [contentTitle, setContentTitle] = useState('');
   const [address, setAddress] = useState();
+  const myProfile = useMyProfile();
   useEffect(() => {
     if (route.params.data) {
       const dataParam = route.params.data;
@@ -25,9 +32,9 @@ export default ({navigation, route}): React.ReactElement => {
         ', ' +
         dataParam.city +
         ' ' +
-        dataParam.state.nombre_state;
+        dataParam.state.name_state;
       setContentSubtitle(content);
-      setContentTitle('Karen Beltrán');
+      setContentTitle(myProfile.data?.data.name);
     } else {
       setContentSubtitle('Selecciona dirección de envio');
     }
@@ -56,7 +63,9 @@ export default ({navigation, route}): React.ReactElement => {
             destination={'AddPaymentMethod'}
           />
           <TitleHeader style={styles.titleText}>Método de envío</TitleHeader>
-          <DefaultText>El costo base del envio es de $90.</DefaultText>
+          <DefaultText>
+            El costo base del envio es de ${routeCart.envio}.
+          </DefaultText>
           <View style={styles.summaryContainer}>
             <View style={styles.infoSummary1}>
               <DefaultText style={styles.defaultText}>Subtotal</DefaultText>
@@ -64,9 +73,15 @@ export default ({navigation, route}): React.ReactElement => {
               <TitleHeader style={styles.defaultText}>Total</TitleHeader>
             </View>
             <View style={styles.infoSummary2}>
-              <DefaultText style={styles.defaultText}>$400.00</DefaultText>
-              <DefaultText style={styles.defaultText}>$90.00</DefaultText>
-              <TitleHeader style={styles.defaultText}>$452.00</TitleHeader>
+              <DefaultText style={styles.defaultText}>
+                ${routeCart.subtotal}
+              </DefaultText>
+              <DefaultText style={styles.defaultText}>
+                ${routeCart.envio}
+              </DefaultText>
+              <TitleHeader style={styles.defaultText}>
+                ${routeCart.total}
+              </TitleHeader>
             </View>
           </View>
           <CustomButton

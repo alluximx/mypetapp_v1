@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {List, StyleService} from '@ui-kitten/components';
 import {ScrollView} from 'react-native';
 // My components
@@ -22,6 +22,9 @@ export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
   const [isReminderActive, setIsReminderActive] = useState(false);
+  const [nameState, setNameState] = useState('');
+  const [nameMunicipality, setNameMunicipality] = useState('');
+  const ref = useRef(null);
   const dataStates = useStates();
   const addressQuery = useGetAddress();
   const addAddressQuery = useSaveAddress();
@@ -84,12 +87,15 @@ export default ({navigation, route}): React.ReactElement => {
       colony: service.item.colony,
       int_number: service.item.int_number,
       is_saved: service.item.is_saved,
-      municipality: service.item.municipality.id,
+      municipality: {
+        id_municipality: service.item.municipality.id,
+        name_municipality: service.item.municipality.name,
+      },
       number: number,
       reference: service.item.reference,
       state: {
         id_state: service.item.state.id,
-        nombre_state: state,
+        name_state: state,
       },
       street: street,
       zipcode: zipCode,
@@ -113,14 +119,29 @@ export default ({navigation, route}): React.ReactElement => {
     if (isReminderActive) {
       addAddressQuery.mutate(form, {
         onSuccess: () => {
-          // action
-        },
-        onError: () => {
-          // action
+          ref.current.scrollTo({x: 0, y: 0, animated: true});
         },
       });
     } else {
-      // navigate
+      const auxData = {
+        city: form.city,
+        colony: form.colony,
+        int_number: form.int_number,
+        is_saved: form.is_saved,
+        municipality: {
+          id_municipality: form.municipality,
+          name_municipality: nameMunicipality,
+        },
+        number: form.number,
+        reference: form.reference,
+        state: {
+          id_state: form.state,
+          name_state: nameState,
+        },
+        street: form.street,
+        zipcode: form.zipcode,
+      };
+      navigation.navigate('PaymentSummary', {data: auxData});
     }
   };
 
@@ -145,7 +166,7 @@ export default ({navigation, route}): React.ReactElement => {
   return (
     <DefaultLayout>
       <TitleHeader>Envio</TitleHeader>
-      <ScrollView>
+      <ScrollView ref={ref}>
         <TitleHeader style={styles.subtitle}>Direcciones guardadas</TitleHeader>
         {addresses && addresses.length > 0 ? (
           <List
@@ -200,6 +221,8 @@ export default ({navigation, route}): React.ReactElement => {
           currentValue={form.state}
           placeholder="Estado"
           setCurrentValue={(stateId) => {
+            const stateObj = stateList.find((item) => item.value === stateId);
+            stateObj ? setNameState(stateObj.label) : setNameState('');
             setForm({...form, state: stateId});
           }}
         />
@@ -208,8 +231,10 @@ export default ({navigation, route}): React.ReactElement => {
           id={form.state}
           change={(valor, name) => {
             valor === ''
-              ? setForm({...form, municipality: '', city: ''})
-              : setForm({...form, municipality: valor, city: name});
+              ? (setForm({...form, municipality: '', city: ''}),
+                setNameMunicipality(''))
+              : (setForm({...form, municipality: valor, city: name}),
+                setNameMunicipality(name));
           }}
         />
         <UserInput
