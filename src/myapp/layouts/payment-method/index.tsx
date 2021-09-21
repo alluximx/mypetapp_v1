@@ -1,53 +1,63 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet} from 'react-native';
+import {List} from '@ui-kitten/components';
 // My components
 import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
+import CustomSpinner from '../../components/custom-spinner';
 // Global Styles
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
+// Hook
+import useGetPaymentMethod from '../../hooks/payment-method/useGetPaymentMethod';
 
 export default ({navigation, route}): React.ReactElement => {
-  // const data = null;
-  const data = {
-    buttonAlign: 'right',
-    buttonColor: globalColors.red,
-    buttonText: 'Eliminar',
-    date: null,
-    content: '****0973',
-    images: null,
-    styleCard: {},
-    title: 'Visa',
-  };
+  const [cards, setCards] = useState([]);
+  const paymentQuery = useGetPaymentMethod();
 
-  const data1 = {
-    buttonAlign: 'right',
-    buttonColor: globalColors.red,
-    buttonText: 'Eliminar',
-    date: null,
-    content: '****0973',
-    images: null,
-    styleCard: {},
-    title: 'MasterCard',
-  };
+  useEffect(() => {
+    if (paymentQuery.data) {
+      setCards(paymentQuery.data.data);
+    }
+  }, [paymentQuery.data]);
 
-  return data ? (
-    <DefaultLayout>
-      <TitleHeader>Métodos de Pago</TitleHeader>
-      <DefaultText style={{marginBottom: 16}}>
-        Puedes guardar hasta 3 Métodos de Pago
-      </DefaultText>
+  const renderServiceItem = (service) => {
+    const brand = service.item.brand;
+    const content = '****' + service.item.last4;
+
+    const data = {
+      buttonAlign: 'right',
+      buttonColor: globalColors.red,
+      buttonText: 'Eliminar',
+      date: null,
+      content: content,
+      images: null,
+      styleCard: {},
+      title: brand,
+    };
+    return (
       <GenericCard
         data={data}
         styleCard={{marginHorizontal: 0}}
         onClick={null}
       />
-      <GenericCard
-        data={data1}
-        styleCard={{marginHorizontal: 0}}
-        onClick={null}
+    );
+  };
+
+  return paymentQuery.isLoading ? (
+    <CustomSpinner />
+  ) : cards.length > 0 ? (
+    <DefaultLayout>
+      <TitleHeader>Métodos de Pago</TitleHeader>
+      <DefaultText style={{marginBottom: 16}}>
+        Puedes guardar hasta 3 Métodos de Pago
+      </DefaultText>
+      <List
+        style={styles.servicesContainer}
+        data={cards}
+        renderItem={renderServiceItem}
       />
     </DefaultLayout>
   ) : (
@@ -82,5 +92,9 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: globalVars.fontBold,
+  },
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 10,
   },
 });

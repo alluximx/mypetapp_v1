@@ -6,6 +6,7 @@ import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
+import CustomSpinner from '../../components/custom-spinner';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
@@ -52,7 +53,9 @@ export default ({navigation, route}): React.ReactElement => {
     );
   };
 
-  return addresses.length > 0 ? (
+  return addressQuery.isLoading ? (
+    <CustomSpinner />
+  ) : addresses.length > 0 ? (
     <DefaultLayout>
       <TitleHeader>Direcciones</TitleHeader>
       <DefaultText style={{marginBottom: 16}}>
