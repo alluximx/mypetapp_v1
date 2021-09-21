@@ -11,7 +11,6 @@ const postPaymentMethod = (data) => {
       exp_year: data.expiration_date.split('/')[1],
     },
   };
-  console.log(formattedData);
   return api.post('api/v1/user-cards/', formattedData, true);
 };
 
