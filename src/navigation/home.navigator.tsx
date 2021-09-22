@@ -12,24 +12,42 @@ import BackButton from '../myapp/components/buttons/back-button';
 import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
-// Screens.
-import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
+// Types
+import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
+/***************
+ *** Screens ***
+ ***************/
+// Adoption
+import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
+import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
+import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
+import {RequestScreen} from '../myapp/scenes/adoption/request.component';
+import {ResultScreen} from '../myapp/scenes/adoption/result.component';
+// Breed
+import {DetailBreed} from '../myapp/scenes/breed/detail.component';
+import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
+// Cart
+import {CartScreen} from '../myapp/scenes/cart/cart.component';
+// Deworming
+import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
+import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
+import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
+// Home
+import {HomeScreen} from '../myapp/scenes/home/home.component';
+// Orders
+import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
-import {HomeScreen} from '../myapp/scenes/home/home.component';
-import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 // Products
 import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
 import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
-import {CartScreen} from '../myapp/scenes/cart/cart.component';
 // Vaccines.
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
-// Types
-import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
-// visits
+import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
+// Visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 // Vaccines
@@ -206,10 +224,6 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           component={FilterScreen}
         />
 
-        <HomeStack.Screen
-          name="ClinicalHistory"
-          component={ClinicalHistoryScreen}
-        />
         {/*Product*/}
         <HomeStack.Screen name="ProductList" component={ProductListScreen} />
         <HomeStack.Screen
