@@ -57,6 +57,7 @@ const DropdownPicker = (props: DropdownPickerProps): React.ReactElement => {
       </Animated.Text>
 
       <RNPickerSelect
+        fixAndroidTouchableBug
         Icon={() => (
           <DropDownIcon
             style={disableDrop && {tintColor: globalColors.darkGray}}
