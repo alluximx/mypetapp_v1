@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import {
   Layout,
   Spinner,
@@ -7,6 +7,8 @@ import {
 } from '@ui-kitten/components';
 import {Dimensions, Image, View, ScrollView} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
+// Context
+import {AuthContext} from '../../../context/AuthContext';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalStyles from '../../../styles/style';
@@ -26,8 +28,9 @@ import {BaseModel} from '../../../types/models';
 const INITIAL_INDEX = 0;
 
 export default ({route}): React.ReactElement => {
+  const authContext = useContext(AuthContext);
   const dataVariants = useVariants(route.params.id);
-  const saveProductCart = useSaveProductCart();
+  const saveProductCart = useSaveProductCart(authContext.userId);
   const styles = useStyleSheet(themedStyles);
   const [presentationValue, setPresentationValue] = useState('1');
   const [amountValue, setAmountValue] = useState('1');
