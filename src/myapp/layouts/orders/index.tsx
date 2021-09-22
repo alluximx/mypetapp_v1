@@ -1,7 +1,6 @@
 import React from 'react';
 import {ScrollView, View, Image} from 'react-native';
 import {
-  Avatar,
   Layout,
   StyleService,
   List,
@@ -27,7 +26,7 @@ export default ({navigation}): React.ReactElement => {
         style={[styles.image, {tintColor: null}]}
         source={require('../home/assets/image-pet-1.jpg')}
       />
-      <View style={styles.detailsContainer}>
+      <View>
         <Text category="s1">Entrega estimada:</Text>
         <Text category="s1">{`${item.date} ${index + 1}`}</Text>
         <Text appearance="hint" category="p2">

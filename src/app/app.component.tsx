@@ -1,6 +1,5 @@
 import React from 'react';
 import {AppearanceProvider} from 'react-native-appearance';
-import {AppIconsPack} from './app-icons-pack';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {AppLoading} from './app-loading.component';
 import {appMappings, appThemes} from './app-theming';
@@ -40,7 +39,7 @@ const App = ({mapping, theme}): React.ReactElement => {
 
   return (
     <>
-      <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
+      <IconRegistry icons={[EvaIconsPack]} />
       <AppearanceProvider>
         <ApplicationProvider
           {...currentMapping}
