@@ -116,31 +116,31 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const onSavePress = () => {
+    const auxData = {
+      city: form.city,
+      colony: form.colony,
+      int_number: form.int_number,
+      is_saved: form.is_saved,
+      municipality: {
+        id_municipality: form.municipality,
+        name_municipality: nameMunicipality,
+      },
+      number: form.number,
+      reference: form.reference,
+      state: {
+        id_state: form.state,
+        name_state: nameState,
+      },
+      street: form.street,
+      zipcode: form.zipcode,
+    };
     if (isReminderActive) {
       addAddressQuery.mutate(form, {
         onSuccess: () => {
-          ref.current.scrollTo({x: 0, y: 0, animated: true});
+          navigation.navigate('PaymentSummary', {data: auxData});
         },
       });
     } else {
-      const auxData = {
-        city: form.city,
-        colony: form.colony,
-        int_number: form.int_number,
-        is_saved: form.is_saved,
-        municipality: {
-          id_municipality: form.municipality,
-          name_municipality: nameMunicipality,
-        },
-        number: form.number,
-        reference: form.reference,
-        state: {
-          id_state: form.state,
-          name_state: nameState,
-        },
-        street: form.street,
-        zipcode: form.zipcode,
-      };
       navigation.navigate('PaymentSummary', {data: auxData});
     }
   };

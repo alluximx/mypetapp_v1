@@ -11,9 +11,7 @@ import useMyProfile from '../../../hooks/user/useMyProfile';
 
 export default ({navigation, route}): React.ReactElement => {
   const routeCart = {
-    subtotal: '400.00',
-    total: '490.00',
-    envio: '90.00',
+    subtotal: '400',
   };
   const [contentSubtitle, setContentSubtitle] = useState('');
   const [contentTitle, setContentTitle] = useState('');
@@ -62,9 +60,11 @@ export default ({navigation, route}): React.ReactElement => {
             subtitle={'Selecciona el método de pago'}
             destination={'AddPaymentMethod'}
           />
-          <TitleHeader style={styles.titleText}>Método de envío</TitleHeader>
+          <TitleHeader style={styles.titleText}>Envío</TitleHeader>
           <DefaultText>
-            El costo base del envio es de ${routeCart.envio}.
+            El precio por envío fijo es de $90 MXN, sin importar a qué área de
+            la Ciudad de México se dirija. Nuestro tiempo estimado de entrega es
+            de 2-3 días.
           </DefaultText>
           <View style={styles.summaryContainer}>
             <View style={styles.infoSummary1}>
@@ -76,11 +76,9 @@ export default ({navigation, route}): React.ReactElement => {
               <DefaultText style={styles.defaultText}>
                 ${routeCart.subtotal}
               </DefaultText>
-              <DefaultText style={styles.defaultText}>
-                ${routeCart.envio}
-              </DefaultText>
+              <DefaultText style={styles.defaultText}>$90</DefaultText>
               <TitleHeader style={styles.defaultText}>
-                ${routeCart.total}
+                ${parseInt(routeCart.subtotal, 10) + 90}
               </TitleHeader>
             </View>
           </View>
