@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Button} from '@ui-kitten/components';
 import {Image, StyleSheet} from 'react-native';
+import {AuthContext} from '../../context/AuthContext';
+import useShoppingCart from '../../hooks/products/useShoppingCart';
 
 const CartButton = (): React.ReactElement => {
   const navigation = useNavigation();
+  const authContext = useContext(AuthContext);
+  const {data} = useShoppingCart(authContext.userId);
 
   const onPress = () => navigation.navigate('Cart');
 
