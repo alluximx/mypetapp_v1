@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 // Global Styles
 import globalColors from '../../styles/colors';
@@ -25,9 +25,9 @@ const EditProductModal = (props: EditProductModalProps) => {
     userId,
   } = props;
 
-  const updateCart = useUpdateShoppingCart(userId);
   const [loading, setLoading] = useState(false);
   const [presentationValue, setPresentationValue] = useState(presentationId);
+  const updateCart = useUpdateShoppingCart(userId);
   const amountList = [];
 
   const currentVariant = variantsList.find((variant: VariantOption) => {
@@ -42,8 +42,18 @@ const EditProductModal = (props: EditProductModalProps) => {
   }
 
   const [amountValue, setAmountValue] = useState(
-    amountList.length > 0 ? amountList[quantity - 1].value : '',
+    amountList.length > 0 && quantity <= amountList.length
+      ? amountList[quantity - 1]?.value
+      : amountList[amountList.length - 1]?.value,
   );
+
+  useEffect(() => {
+    setAmountValue(
+      amountList.length > 0 && quantity <= amountList.length
+        ? amountList[quantity - 1]?.value
+        : amountList[amountList.length - 1]?.value,
+    );
+  }, [amountList.length]);
 
   const isDisabled = amountValue === '' || presentationValue === '';
 
@@ -64,6 +74,14 @@ const EditProductModal = (props: EditProductModalProps) => {
     );
   };
 
+  const onPressCancel = () => {
+    onCancel();
+    setPresentationValue(presentationId);
+    setAmountValue(
+      amountList.length > 0 ? amountList[quantity - 1]?.value : '',
+    );
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -79,10 +97,7 @@ const EditProductModal = (props: EditProductModalProps) => {
               data={variantsList}
               currentValue={presentationValue}
               placeholder="Presentación"
-              setCurrentValue={(value: string) => {
-                setPresentationValue(value);
-                setAmountValue(amountList[0].value);
-              }}
+              setCurrentValue={setPresentationValue}
             />
             <DropdownPicker
               style={{marginTop: 5, marginBottom: 20}}
@@ -100,7 +115,7 @@ const EditProductModal = (props: EditProductModalProps) => {
               isDisabled={isDisabled}>
               Guardar
             </CustomButton>
-            <TouchableOpacity activeOpacity={0.8} onPress={onCancel}>
+            <TouchableOpacity activeOpacity={0.8} onPress={onPressCancel}>
               <Text style={styles.textCancel}>Cancelar</Text>
             </TouchableOpacity>
           </View>
