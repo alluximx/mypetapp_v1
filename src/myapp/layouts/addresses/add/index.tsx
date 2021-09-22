@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {List, StyleService} from '@ui-kitten/components';
 import {ScrollView} from 'react-native';
 // My components
@@ -24,7 +24,6 @@ export default ({navigation, route}): React.ReactElement => {
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [nameState, setNameState] = useState('');
   const [nameMunicipality, setNameMunicipality] = useState('');
-  const ref = useRef(null);
   const dataStates = useStates();
   const addressQuery = useGetAddress();
   const addAddressQuery = useSaveAddress();
@@ -166,7 +165,7 @@ export default ({navigation, route}): React.ReactElement => {
   return (
     <DefaultLayout>
       <TitleHeader>Envio</TitleHeader>
-      <ScrollView ref={ref}>
+      <ScrollView>
         <TitleHeader style={styles.subtitle}>Direcciones guardadas</TitleHeader>
         {addresses && addresses.length > 0 ? (
           <List
