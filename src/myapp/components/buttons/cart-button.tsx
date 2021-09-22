@@ -1,14 +1,21 @@
-import React, {useContext} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, {useContext, useEffect} from 'react';
 import {Button} from '@ui-kitten/components';
 import {Image, StyleSheet} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+// Context
 import {AuthContext} from '../../context/AuthContext';
+// Hooks
 import useShoppingCart from '../../hooks/products/useShoppingCart';
 
 const CartButton = (): React.ReactElement => {
   const navigation = useNavigation();
   const authContext = useContext(AuthContext);
   const {data} = useShoppingCart(authContext.userId);
+  const hasProducts = data?.data?.length > 0;
+
+  useEffect(() => {
+    console.log('HOLA');
+  }, [data]);
 
   const onPress = () => navigation.navigate('Cart');
 
@@ -16,13 +23,21 @@ const CartButton = (): React.ReactElement => {
     <Button
       activeOpacity={0.8}
       style={styles.addButton}
-      accessoryLeft={(accessoryProps) => (
-        <Image
-          {...accessoryProps}
-          style={styles.icon}
-          source={require('../../assets/images/icons/cart.png')}
-        />
-      )}
+      accessoryLeft={(accessoryProps) => {
+        return hasProducts ? (
+          <Image
+            {...accessoryProps}
+            style={styles.icon}
+            source={require('../../assets/images/icons/cart-bubble.png')}
+          />
+        ) : (
+          <Image
+            {...accessoryProps}
+            style={styles.icon}
+            source={require('../../assets/images/icons/cart.png')}
+          />
+        );
+      }}
       onPress={onPress}
     />
   );
