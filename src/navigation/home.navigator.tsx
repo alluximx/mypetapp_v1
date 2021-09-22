@@ -43,7 +43,6 @@ import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
 import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
 import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
-import {CartScreen} from '../myapp/scenes/cart/cart.component';
 // Vaccines.
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
