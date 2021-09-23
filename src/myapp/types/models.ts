@@ -14,7 +14,9 @@ export interface Category extends BaseModel {
 export interface Cart {
   id: string;
   item_price: number;
-  item: string;
+  item: {
+    stock: number;
+  };
   quantity: number;
   total_item_price: number;
 }

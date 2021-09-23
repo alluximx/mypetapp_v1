@@ -9,10 +9,7 @@ const useUpdateShoppingCart = () => {
   const queryClient = useQueryClient();
 
   return useMutation((data: any) => updateShoppingCart(data), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('shopping-cart');
-      queryClient.refetchQueries('shopping-cart');
-    },
+    onSuccess: () => queryClient.invalidateQueries('shopping-cart'),
   });
 };
 
