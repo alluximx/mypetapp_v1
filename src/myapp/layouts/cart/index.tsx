@@ -17,7 +17,7 @@ import globalVars from '../../styles/vars';
 // Types.
 import {Cart} from '../../types/models';
 
-export default ({navigation}): React.ReactElement => {
+export default (): React.ReactElement => {
   const authContext = useContext(AuthContext);
   const {data, isLoading} = useShoppingCart(authContext.userId);
 
@@ -41,12 +41,12 @@ export default ({navigation}): React.ReactElement => {
             <CartCard
               cover_image={item.item.product.cover_image}
               id={item.id}
-              productId={item.item.product.id}
+              isLastOne={data?.data?.length === 1}
               itemId={item.item.id}
+              productId={item.item.product.id}
               productName={item.item.product.name}
               quantity={item.quantity}
               totalItemPrice={item.total_item_price}
-              userId={authContext.userId}
               variantName={item.item.name}
             />
           )}

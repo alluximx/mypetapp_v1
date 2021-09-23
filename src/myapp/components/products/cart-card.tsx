@@ -16,21 +16,31 @@ import {CartCardProps} from '../../types/components/products';
 import {Variant} from '../../types/models';
 
 const CartCard = (props: CartCardProps): React.ReactElement => {
-  const deleteCart = useDeleteShoppingCart(props.userId);
+  const {
+    cover_image,
+    id,
+    isLastOne,
+    itemId,
+    productId,
+    productName,
+    quantity,
+    totalItemPrice,
+    variantName,
+  } = props;
+  const deleteCart = useDeleteShoppingCart(isLastOne);
+  const {data} = useVariants(productId);
   const onPressDelete = (cartId: string) => deleteCart.mutate(cartId);
   const [modalVisible, setModalVisible] = useState(false);
-  const {data} = useVariants(props.productId);
 
   const onPressEdit = () => setModalVisible(true);
 
   return (
     <>
       <EditProductModal
-        id={props.id}
-        userId={props.userId}
+        id={id}
         onCancel={() => setModalVisible(false)}
-        presentationId={props.itemId}
-        quantity={props.quantity}
+        presentationId={itemId}
+        quantity={quantity}
         setVisible={setModalVisible}
         variantsList={
           data?.data?.length
@@ -47,7 +57,7 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
         data={{
           additionalButtons: [
             <AnchorText
-              onPress={() => onPressDelete(props.id)}
+              onPress={() => onPressDelete(id)}
               style={styles.buttonDelete}>
               Eliminar
             </AnchorText>,
@@ -57,15 +67,15 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
           ],
           additionalContent: [
             <DefaultText style={styles.quantity}>
-              Cantidad: {props.quantity}
+              Cantidad: {quantity}
             </DefaultText>,
             <TitleHeader style={styles.price}>
-              ${props.totalItemPrice.toFixed(2)}
+              ${totalItemPrice.toFixed(2)}
             </TitleHeader>,
           ],
-          content: props.variantName,
-          coverImage: props.cover_image,
-          title: props.productName,
+          content: variantName,
+          coverImage: cover_image,
+          title: productName,
         }}
         coverImageStyle={styles.coverImage}
         onClick={onPressEdit}
