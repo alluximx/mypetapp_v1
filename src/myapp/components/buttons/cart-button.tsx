@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {Button} from '@ui-kitten/components';
 import {Image, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -13,18 +13,14 @@ const CartButton = (): React.ReactElement => {
   const {data} = useShoppingCart(authContext.userId);
   const hasProducts = data?.data?.length > 0;
 
-  useEffect(() => {
-    console.log('HOLA');
-  }, [data]);
-
   const onPress = () => navigation.navigate('Cart');
 
   return (
     <Button
       activeOpacity={0.8}
       style={styles.addButton}
-      accessoryLeft={(accessoryProps) => {
-        return hasProducts ? (
+      accessoryLeft={(accessoryProps) =>
+        hasProducts ? (
           <Image
             {...accessoryProps}
             style={styles.icon}
@@ -36,8 +32,8 @@ const CartButton = (): React.ReactElement => {
             style={styles.icon}
             source={require('../../assets/images/icons/cart.png')}
           />
-        );
-      }}
+        )
+      }
       onPress={onPress}
     />
   );

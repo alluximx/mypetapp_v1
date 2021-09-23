@@ -2,7 +2,7 @@ import {useQuery} from 'react-query';
 import api from '../../services/app-services';
 
 const useShoppingCart = (userId: number) =>
-  useQuery(['shopping-cart', userId], () =>
+  useQuery('shopping-cart', () =>
     api.get(`api/v1/shopping-cart/?user=${userId}`, true),
   );
 
