@@ -29,7 +29,9 @@ export default ({navigation}): React.ReactElement => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <CartButton />,
+      headerRight: () => {
+        return <CartButton />;
+      },
     });
   }, [navigation]);
 
