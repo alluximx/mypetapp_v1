@@ -18,6 +18,7 @@ import paymentMethod from '..';
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBackSpace, setIsBackSpace] = useState(false);
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
@@ -114,17 +115,9 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Número de tarjeta"
           value={form.number}
           isNumeric={true}
-          maxLength={19}
+          maxLength={16}
           onChangeText={(value: string) => {
-            if (
-              (value.length + 1) % 5 === 0 &&
-              value.length > 1 &&
-              value.length < 19
-            ) {
-              setForm({...form, number: (value += ' ')});
-            } else {
-              setForm({...form, number: value});
-            }
+            setForm({...form, number: value});
           }}
         />
 
@@ -135,10 +128,21 @@ export default ({navigation, route}): React.ReactElement => {
             isNumeric={true}
             maxLength={5}
             onChangeText={(value: string) => {
-              value.length === 2 && value.length < 3
+              value.length === 2 && value.length < 3 && !isBackSpace
                 ? (value += '/')
                 : (value = value);
               setForm({...form, expiration_date: value});
+              setIsBackSpace(false);
+            }}
+            onKeyPress={({nativeEvent}) => {
+              if (nativeEvent.key === 'Backspace') {
+                const lastCaracter = form.expiration_date.charAt(
+                  form.expiration_date.length - 1,
+                );
+                lastCaracter === '/'
+                  ? setIsBackSpace(true)
+                  : setIsBackSpace(false);
+              }
             }}
             style={styles.UserInputContainer}
           />
@@ -146,7 +150,7 @@ export default ({navigation, route}): React.ReactElement => {
             placeholder="CVV "
             value={form.cvc}
             isNumeric={true}
-            maxLength={3}
+            maxLength={4}
             onChangeText={(value: string) => {
               setForm({...form, cvc: value});
             }}

@@ -57,6 +57,7 @@ export interface UserInputProps {
   isPassword?: boolean;
   maxLength?: number;
   onChangeText: (value: string) => void;
+  onKeyPress?: (event) => void;
   placeholder: string;
   style?: {};
   value: string;
