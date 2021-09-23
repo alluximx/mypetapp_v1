@@ -21,7 +21,7 @@ import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
 import TitleHeader from '../../../components/texts/title-header';
 // Models
-import {BaseModel} from '../../../types/models';
+import {BaseModel, Variant} from '../../../types/models';
 
 const INITIAL_INDEX = 0;
 
@@ -33,7 +33,7 @@ export default ({route}): React.ReactElement => {
   const [amountValue, setAmountValue] = useState('1');
   const [variantsList, setVariantsList] = useState([]);
   const [amountList, setAmountList] = useState([]);
-  const [variant, setVariant] = useState();
+  const [variant, setVariant] = useState<Variant>();
   const [isLoadingVariant, setIsLoadingVariant] = useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(true);
   const dataImg = [];
@@ -197,26 +197,27 @@ export default ({route}): React.ReactElement => {
                 </TitleHeader>
                 <DefaultText>{route.params.description}</DefaultText>
                 <DropdownPicker
-                  style={{marginTop: 24}}
-                  data={variantsList}
                   currentValue={presentationValue}
-                  placeholder="Presentación"
+                  data={variantsList}
                   disabledPlaceholder={true}
+                  placeholder="Presentación"
                   setCurrentValue={(value) => {
                     setIsLoadingVariant(true);
                     setPresentationValue(value);
                     findVariant(value);
                   }}
+                  style={{marginTop: 24}}
                 />
                 <DropdownPicker
-                  style={{marginTop: 5, marginBottom: 20}}
-                  data={amountList}
                   currentValue={amountValue}
-                  placeholder="Cantidad"
+                  data={amountList}
                   disabledPlaceholder={true}
+                  placeholder="Cantidad"
                   setCurrentValue={(value) => {
                     setAmountValue(value);
                   }}
+                  style={{marginTop: 5, marginBottom: 20}}
+                  disabled={!(amountList.length > 0)}
                 />
                 <CustomButton
                   isLoading={saveProductCart.isLoading}
