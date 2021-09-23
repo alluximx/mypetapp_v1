@@ -6,6 +6,7 @@ export interface CartCardProps {
   productId: string;
   productName: string;
   quantity: number;
+  stock: number;
   totalItemPrice: number;
   variantName: string;
 }

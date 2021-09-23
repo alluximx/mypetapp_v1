@@ -1,6 +1,7 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {List} from '@ui-kitten/components';
 import {StyleSheet, View} from 'react-native';
+import {useQueryClient} from 'react-query';
 // Context.
 import {AuthContext} from '../../context/AuthContext';
 // Hooks.
@@ -8,6 +9,7 @@ import useShoppingCart from '../../hooks/products/useShoppingCart';
 // My components.
 import CartCard from '../../components/products/cart-card';
 import CustomButton from '../../components/buttons/custom-button';
+import CustomModal from '../../components/modals/custom-modal';
 import CustomSpinner from '../../components/custom-spinner';
 import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
@@ -17,9 +19,12 @@ import globalVars from '../../styles/vars';
 // Types.
 import {Cart} from '../../types/models';
 
-export default (): React.ReactElement => {
+export default ({navigation}): React.ReactElement => {
+  const queryClient = useQueryClient();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const authContext = useContext(AuthContext);
-  const {data, isLoading} = useShoppingCart(authContext.userId);
+  const shoppingCartData = useShoppingCart(authContext.userId);
+  const {data, isLoading} = shoppingCartData;
 
   const totalAmount =
     data?.data?.length > 0
@@ -28,10 +33,40 @@ export default (): React.ReactElement => {
           .reduce((total: number, cart: number) => total + cart)
       : 0;
 
+  const onAccept = () => setIsModalVisible(false);
+
+  const onPressPay = () => {
+    // Refetch variants and cart products.
+    queryClient.refetchQueries('get-variants');
+    shoppingCartData.refetch().then((response) => {
+      // Compare and check if stock existances match
+      // requested products.
+      const stockMatches = response.data?.data?.every(
+        (cartItem: Cart) =>
+          cartItem.item.stock > 0 && cartItem.quantity <= cartItem.item.stock,
+      );
+
+      if (stockMatches) {
+        navigation.navigate('ProductList');
+      } else {
+        setIsModalVisible(true);
+      }
+    });
+  };
+
   return isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
+      <CustomModal
+        labelAccept="Entendido"
+        title="Algunos productos han cambiado"
+        text="Edita o elimina los productos para continuar con tu pago."
+        onAccept={onAccept}
+        onCancel={() => {}}
+        showCancel={false}
+        visible={isModalVisible}
+      />
       <View style={styles.topContainer}>
         <TitleHeader style={styles.title}>Carrito de compras</TitleHeader>
         <List
@@ -46,6 +81,7 @@ export default (): React.ReactElement => {
               productId={item.item.product.id}
               productName={item.item.product.name}
               quantity={item.quantity}
+              stock={item.item.stock}
               totalItemPrice={item.total_item_price}
               variantName={item.item.name}
             />
@@ -60,7 +96,7 @@ export default (): React.ReactElement => {
             ${totalAmount.toFixed(2)}
           </TitleHeader>
         </View>
-        <CustomButton isLight onPress={() => {}}>
+        <CustomButton isLight onPress={onPressPay}>
           Continuar con Pago
         </CustomButton>
       </View>

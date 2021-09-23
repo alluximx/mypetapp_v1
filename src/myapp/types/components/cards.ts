@@ -8,6 +8,7 @@ export interface DatasGeneric {
   data: {
     additionalButtons?: React.ReactElement[];
     additionalContent?: React.ReactElement[];
+    additionalHeader?: string;
     buttonAlign?: string;
     buttonText?: string;
     content: string;
@@ -16,6 +17,7 @@ export interface DatasGeneric {
     images?: {file: string}[];
     title: string;
   };
+  isDisabled?: boolean;
   onClick: (data?: any) => void;
   styleCard?: any;
   titleStyle?: any;
