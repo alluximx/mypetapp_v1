@@ -22,12 +22,11 @@ const EditProductModal = (props: EditProductModalProps) => {
     setVisible,
     variantsList,
     visible,
-    userId,
   } = props;
 
   const [loading, setLoading] = useState(false);
   const [presentationValue, setPresentationValue] = useState(presentationId);
-  const updateCart = useUpdateShoppingCart(userId);
+  const updateCart = useUpdateShoppingCart();
   const amountList = [];
 
   const currentVariant = variantsList.find((variant: VariantOption) => {
