@@ -61,7 +61,15 @@ export default ({navigation}): React.ReactElement => {
       );
 
       if (stockMatches) {
-        navigation.navigate('ProductList');
+        navigation.navigate('PaymentSummary', {
+          data: {
+            street: 'Bravo',
+            number: '209',
+            zipcode: '25700',
+            city: 'Monclova',
+            state: {name_state: 'Coahuila'},
+          },
+        });
       } else {
         setIsModalVisible(true);
       }
