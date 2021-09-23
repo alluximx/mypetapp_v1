@@ -50,22 +50,6 @@ import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.compone
 // Visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
-// Vaccines
-import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
-// Deworming
-import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
-import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
-import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
-// Breed
-import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
-import {DetailBreed} from '../myapp/scenes/breed/detail.component';
-// Adoption
-import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
-import {ResultScreen} from '../myapp/scenes/adoption/result.component';
-import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
-import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
-import {RequestScreen} from '../myapp/scenes/adoption/request.component';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 // Profile
 import {MyProfileScreen} from '../myapp/scenes/profile/profileInf.component';
 // Address
@@ -251,22 +235,6 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         <HomeStack.Screen name="Cart" component={CartScreen} />
         <HomeStack.Screen name="Orders" component={OrdersScreen} />
-        {/* <HomeStack.Screen name="Cart" component={CartScreen} /> */}
-        {/*Product*/}
-        {/*Profile*/}
-        <HomeStack.Screen name="MyProfile" component={MyProfileScreen} />
-        {/*Addresses*/}
-        <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
-        <HomeStack.Screen name="AddAddress" component={AddAddressScreen} />
-        {/*Payment Method */}
-        <HomeStack.Screen
-          name="PaymentMethod"
-          component={paymentMethodComponent}
-        />
-        <HomeStack.Screen
-          name="AddPaymentMethod"
-          component={AddPaymentMethodScreen}
-        />
       </HomeStack.Navigator>
     </Animated.View>
   );
