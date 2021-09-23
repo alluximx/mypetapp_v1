@@ -1,6 +1,6 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {List} from '@ui-kitten/components';
-import {StyleSheet, View} from 'react-native';
+import {AppState, StyleSheet, View} from 'react-native';
 import {useQueryClient} from 'react-query';
 // Context.
 import {AuthContext} from '../../context/AuthContext';
@@ -25,6 +25,20 @@ export default ({navigation}): React.ReactElement => {
   const authContext = useContext(AuthContext);
   const shoppingCartData = useShoppingCart(authContext.userId);
   const {data, isLoading} = shoppingCartData;
+
+  const refetchOnReopenApp = () => {
+    // If reenters app after minimizing.
+    if (AppState.currentState === 'active') {
+      shoppingCartData.refetch();
+    }
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', refetchOnReopenApp);
+    return () => {
+      AppState.removeEventListener('change', refetchOnReopenApp);
+    };
+  }, []);
 
   const totalAmount =
     data?.data?.length > 0
