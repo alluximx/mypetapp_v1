@@ -78,6 +78,8 @@ export interface VaccineHistory {
 }
 
 export interface Variant extends BaseModel {
+  images: {image: string}[];
+  price: number;
   stock: number;
 }
 
