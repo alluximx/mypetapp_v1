@@ -96,8 +96,8 @@ export default ({route}): React.ReactElement => {
   return (
     <DefaultLayout
       statusBarTranslucent
-      statusBarStyle={'light-content'}
-      statusBarBackgroundColor={'transparent'}
+      statusBarStyle="dark-content"
+      statusBarBackgroundColor="transparent"
       style={styles.container}>
       {dataVariants.isLoading || !variant ? (
         <View style={styles.containerSpinner}>

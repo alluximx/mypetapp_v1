@@ -11,6 +11,7 @@ export interface DatasGeneric {
     additionalHeader?: string;
     buttonAlign?: string;
     buttonText?: string;
+    buttonColor?: string;
     content: string;
     coverImage?: string;
     date?: Date | null;
