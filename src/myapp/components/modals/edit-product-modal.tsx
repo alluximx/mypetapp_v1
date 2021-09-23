@@ -22,7 +22,6 @@ const EditProductModal = (props: EditProductModalProps) => {
     setVisible,
     variantsList,
     visible,
-    userId,
   } = props;
 
   const [loading, setLoading] = useState(false);
