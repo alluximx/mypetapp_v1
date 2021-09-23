@@ -2,6 +2,8 @@ import React from 'react';
 import {Card, StyleService, useStyleSheet} from '@ui-kitten/components';
 import moment from 'moment';
 import {View} from 'react-native';
+// Global styles.
+import globalColors from '../../styles/colors';
 // My Components.
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
@@ -16,6 +18,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {
     additionalButtons,
     additionalContent,
+    additionalHeader,
     buttonAlign,
     buttonColor,
     buttonText,
@@ -39,6 +42,11 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
 
   return (
     <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
+      {additionalHeader && (
+        <DefaultText style={styles.productChangedText}>
+          {additionalHeader}
+        </DefaultText>
+      )}
       <View style={styles.contentWrapper}>
         {coverImage && (
           <PreviewableImage
@@ -49,6 +57,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
         <View style={styles.cardContentContainer}>
           <TouchableOpacity
             activeOpacity={0.6}
+            disabled={props.isDisabled ?? false}
             onPress={props.onClick}
             style={styles.cardContentContainer}>
             {date && (
@@ -90,9 +99,15 @@ const themedStyles = StyleService.create({
   labelCard: {
     marginTop: 4,
   },
-  labelDate: {
-    fontSize: 14,
+  productChangedText: {
+    backgroundColor: globalColors.greenSecondary,
+    color: globalColors.white,
+    padding: 8,
+    marginBottom: 12,
+    borderRadius: 12,
+    fontSize: 13,
   },
+  labelDate: {},
   cardStyle: {
     marginHorizontal: 24,
     marginBottom: 16,
