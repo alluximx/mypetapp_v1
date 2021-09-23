@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../../context/AuthContext';
 // Hooks
 import useShoppingCart from '../../hooks/products/useShoppingCart';
+import globalColors from '../../styles/colors';
 
 const CartButton = (): React.ReactElement => {
   const navigation = useNavigation();
@@ -17,8 +18,6 @@ const CartButton = (): React.ReactElement => {
 
   return (
     <Button
-      activeOpacity={0.8}
-      style={styles.addButton}
       accessoryLeft={(accessoryProps) =>
         hasProducts ? (
           <Image
@@ -29,11 +28,14 @@ const CartButton = (): React.ReactElement => {
         ) : (
           <Image
             {...accessoryProps}
-            style={styles.icon}
+            style={[styles.icon, styles.disabled]}
             source={require('../../assets/images/icons/cart.png')}
           />
         )
       }
+      activeOpacity={0.8}
+      disabled={!hasProducts}
+      style={styles.addButton}
       onPress={onPress}
     />
   );
@@ -50,6 +52,9 @@ const styles = StyleSheet.create({
   icon: {
     height: 45,
     width: 45,
+  },
+  disabled: {
+    tintColor: globalColors.darkGray,
   },
 });
 
