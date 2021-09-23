@@ -249,24 +249,6 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             headerLeft: closeButton,
           }}
         />
-        <HomeStack.Screen name="Cart" component={CartScreen} />
-        <HomeStack.Screen name="Orders" component={OrdersScreen} />
-        {/* <HomeStack.Screen name="Cart" component={CartScreen} /> */}
-        {/*Product*/}
-        {/*Profile*/}
-        <HomeStack.Screen name="MyProfile" component={MyProfileScreen} />
-        {/*Addresses*/}
-        <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
-        <HomeStack.Screen name="AddAddress" component={AddAddressScreen} />
-        {/*Payment Method */}
-        <HomeStack.Screen
-          name="PaymentMethod"
-          component={paymentMethodComponent}
-        />
-        <HomeStack.Screen
-          name="AddPaymentMethod"
-          component={AddPaymentMethodScreen}
-        />
       </HomeStack.Navigator>
     </Animated.View>
   );
