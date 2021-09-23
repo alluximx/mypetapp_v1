@@ -22,6 +22,8 @@ export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
   const [isReminderActive, setIsReminderActive] = useState(false);
+  const [nameState, setNameState] = useState('');
+  const [nameMunicipality, setNameMunicipality] = useState('');
   const dataStates = useStates();
   const addressQuery = useGetAddress();
   const addAddressQuery = useSaveAddress();
@@ -84,10 +86,16 @@ export default ({navigation, route}): React.ReactElement => {
       colony: service.item.colony,
       int_number: service.item.int_number,
       is_saved: service.item.is_saved,
-      municipality: service.item.municipality.id,
+      municipality: {
+        id_municipality: service.item.municipality.id,
+        name_municipality: service.item.municipality.name,
+      },
       number: number,
       reference: service.item.reference,
-      state: service.item.state.id,
+      state: {
+        id_state: service.item.state.id,
+        name_state: state,
+      },
       street: street,
       zipcode: zipCode,
     };
@@ -100,14 +108,40 @@ export default ({navigation, route}): React.ReactElement => {
         navigation={navigation}
         title={title}
         subtitle={content}
-        destination={'MyProfile'}
+        destination={'PaymentSummary'}
         data={auxData}
       />
     );
   };
 
   const onSavePress = () => {
-    addAddressQuery.mutate(form);
+    const auxData = {
+      city: form.city,
+      colony: form.colony,
+      int_number: form.int_number,
+      is_saved: form.is_saved,
+      municipality: {
+        id_municipality: form.municipality,
+        name_municipality: nameMunicipality,
+      },
+      number: form.number,
+      reference: form.reference,
+      state: {
+        id_state: form.state,
+        name_state: nameState,
+      },
+      street: form.street,
+      zipcode: form.zipcode,
+    };
+    if (isReminderActive) {
+      addAddressQuery.mutate(form, {
+        onSuccess: () => {
+          navigation.navigate('PaymentSummary', {data: auxData});
+        },
+      });
+    } else {
+      navigation.navigate('PaymentSummary', {data: auxData});
+    }
   };
 
   const isDisabled =
@@ -186,6 +220,8 @@ export default ({navigation, route}): React.ReactElement => {
           currentValue={form.state}
           placeholder="Estado"
           setCurrentValue={(stateId) => {
+            const stateObj = stateList.find((item) => item.value === stateId);
+            stateObj ? setNameState(stateObj.label) : setNameState('');
             setForm({...form, state: stateId});
           }}
         />
@@ -194,8 +230,10 @@ export default ({navigation, route}): React.ReactElement => {
           id={form.state}
           change={(valor, name) => {
             valor === ''
-              ? setForm({...form, municipality: '', city: ''})
-              : setForm({...form, municipality: valor, city: name});
+              ? (setForm({...form, municipality: '', city: ''}),
+                setNameMunicipality(''))
+              : (setForm({...form, municipality: valor, city: name}),
+                setNameMunicipality(name));
           }}
         />
         <UserInput
