@@ -11,6 +11,25 @@ export interface Category extends BaseModel {
   is_active?: boolean;
 }
 
+export interface Cart {
+  id: string;
+  item_price: number;
+  item: {
+    stock: number;
+  };
+  quantity: number;
+  total_item_price: number;
+}
+
+export interface Option {
+  label: string;
+  value: string;
+}
+
+export interface VariantOption extends Option {
+  stock: number;
+}
+
 export interface Pet extends BaseModel {
   birthday: string;
   breed: BaseModel;
@@ -56,6 +75,12 @@ export interface VaccineHistory {
   user_pet: string;
   vaccine_date: string | Date;
   vaccine_registered: string;
+}
+
+export interface Variant extends BaseModel {
+  images: {image: string}[];
+  price: number;
+  stock: number;
 }
 
 export interface Visit {

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {Dimensions, Platform, StyleSheet} from 'react-native';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
@@ -11,49 +12,53 @@ import BackButton from '../myapp/components/buttons/back-button';
 import CloseButton from '../myapp/components/buttons/close-button';
 // Navigators.
 import AddPetNavigator from '../myapp/navigation/pets/add.navigator';
-// Screens.
-import {ClinicalHistoryScreen} from '../myapp/scenes/clinical-history/clinical-history.component';
+// Types
+import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
+/***************
+ *** Screens ***
+ ***************/
+// Address
+import {AddAddressScreen} from '../myapp/scenes/addresses/add.component';
+import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
+// Adoption
+import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
+import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
+import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
+import {RequestScreen} from '../myapp/scenes/adoption/request.component';
+import {ResultScreen} from '../myapp/scenes/adoption/result.component';
+// Breed
+import {DetailBreed} from '../myapp/scenes/breed/detail.component';
+import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
+// Cart
+import {CartScreen} from '../myapp/scenes/cart/cart.component';
+// Deworming
+import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
+import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
+import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
+// Home
+import {HomeScreen} from '../myapp/scenes/home/home.component';
+// Orders
+import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
+import {PaymentSummaryScreen} from '../myapp/scenes/payment/payment-summary.component';
+// Payment Method
+import {AddPaymentMethodScreen} from '../myapp/scenes/payment-method/add.component';
+import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
-import {HomeScreen} from '../myapp/scenes/home/home.component';
-import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
 // Products
 import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
 import {ProductListScreen} from '../myapp/scenes/products/product-list.component';
-// Vaccines.
-import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
-import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
-// Types
-import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
-// visits
-import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
-import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
-// Vaccines
-import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
-// Deworming
-import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
-import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
-import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
-// Breed
-import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
-import {DetailBreed} from '../myapp/scenes/breed/detail.component';
-// Adoption
-import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
-import {ResultScreen} from '../myapp/scenes/adoption/result.component';
-import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
-import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
-import {RequestScreen} from '../myapp/scenes/adoption/request.component';
-import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 // Profile
 import {MyProfileScreen} from '../myapp/scenes/profile/profileInf.component';
-// Address
-import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
-import {AddAddressScreen} from '../myapp/scenes/addresses/add.component';
-// Payment Method
-import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
-import {AddPaymentMethodScreen} from '../myapp/scenes/payment-method/add.component';
+// Vaccines
+import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
+import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
+import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
+// Visits
+import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
+import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -77,6 +82,69 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           stackAnimation: 'slide_from_right',
           headerTitle: null,
         }}>
+        {/*Addresses*/}
+        <HomeStack.Screen name="AddAddress" component={AddAddressScreen} />
+        <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
+        {/*Adoption */}
+        <HomeStack.Screen name="AdoptionFilter" component={AdoptionScreen} />
+        <HomeStack.Screen
+          name="AdoptionDetail"
+          component={adoptionDetailScreen}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
+        <HomeStack.Screen
+          name="AdoptionAdvanceFilter"
+          component={FilterScreen}
+        />
+        <HomeStack.Screen name="AdoptionResult" component={ResultScreen} />
+        <HomeStack.Screen name="AdoptionRequest" component={RequestScreen} />
+        {/* Breed */}
+        <HomeStack.Screen
+          name="DetailBreed"
+          component={DetailBreed}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  padding: Platform.OS === 'ios' ? 3 : 5,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
+        <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
+        {/* Cart */}
+        <HomeStack.Screen name="Cart" component={CartScreen} />
+        {/* Deworming */}
+        <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
+        <HomeStack.Screen
+          name="DewormingHistory"
+          component={DewormingHistoryScreen}
+        />
+        <HomeStack.Screen
+          name="EditDeworming"
+          component={EditDewormingScreen}
+        />
         {/* HOME */}
         <HomeStack.Screen
           name="Home"
@@ -88,8 +156,22 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             isGuest: route.params.isGuest,
           }}
         />
-
-        {/* PETS */}
+        {/* Order */}
+        <HomeStack.Screen name="Orders" component={OrdersScreen} />
+        <HomeStack.Screen
+          name="PaymentSummary"
+          component={PaymentSummaryScreen}
+        />
+        {/*Payment Method */}
+        <HomeStack.Screen
+          name="PaymentMethod"
+          component={paymentMethodComponent}
+        />
+        <HomeStack.Screen
+          name="AddPaymentMethod"
+          component={AddPaymentMethodScreen}
+        />
+        {/* Pets */}
         <HomeStack.Screen
           name="AddPet"
           component={AddPetNavigator}
@@ -116,15 +198,40 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             headerLeft: closeButton,
           }}
         />
-
+        {/* Product */}
+        <HomeStack.Screen name="ProductList" component={ProductListScreen} />
+        <HomeStack.Screen
+          name="ProductFilter"
+          component={ProductFilterScreen}
+        />
+        <HomeStack.Screen
+          name="ProductDetail"
+          component={ProductDescriptionScreen}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
+        {/* Profile */}
+        <HomeStack.Screen name="MyProfile" component={MyProfileScreen} />
         {/* Services visits */}
-        <HomeStack.Screen name="ServicesDoc" component={InfVisitinScreen} />
         <HomeStack.Screen
           name="NewVisitMedical"
           component={newVisitScreen}
           options={{headerLeft: closeButton}}
         />
-
+        <HomeStack.Screen name="ServicesDoc" component={InfVisitinScreen} />
         {/* Vaccines */}
         <HomeStack.Screen name="VaccinesIndex" component={VaccineIndexScreen} />
         <HomeStack.Screen
@@ -141,114 +248,6 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           options={{
             headerLeft: closeButton,
           }}
-        />
-
-        {/* Deworming */}
-        <HomeStack.Screen
-          name="DewormingHistory"
-          component={DewormingHistoryScreen}
-        />
-        <HomeStack.Screen name="AddDeworming" component={AddDewormingScreen} />
-        <HomeStack.Screen
-          name="EditDeworming"
-          component={EditDewormingScreen}
-        />
-
-        {/* Breed */}
-        <HomeStack.Screen name="Breed" component={InfoBreedScreen} />
-        <HomeStack.Screen
-          name="DetailBreed"
-          component={DetailBreed}
-          options={{
-            headerLeft: () => (
-              <BackButton
-                style={{
-                  backgroundColor: globalColors.backgroundDefault,
-                  borderRadius: 100,
-                  padding: Platform.OS === 'ios' ? 3 : 5,
-                }}
-                navigation={navigation}
-              />
-            ),
-            headerTopInsetEnabled: true,
-            headerTranslucent: true,
-            headerStyle: {backgroundColor: 'transparent'},
-          }}
-        />
-
-        {/*Adoption */}
-        <HomeStack.Screen name="AdoptionFilter" component={AdoptionScreen} />
-        <HomeStack.Screen name="AdoptionResult" component={ResultScreen} />
-        <HomeStack.Screen
-          name="AdoptionDetail"
-          component={adoptionDetailScreen}
-          options={{
-            headerLeft: () => (
-              <BackButton
-                style={{
-                  backgroundColor: globalColors.backgroundDefault,
-                  borderRadius: 100,
-                  marginTop: 2,
-                }}
-                navigation={navigation}
-              />
-            ),
-            headerTopInsetEnabled: true,
-            headerTranslucent: true,
-            headerStyle: {backgroundColor: 'transparent'},
-          }}
-        />
-        <HomeStack.Screen name="AdoptionRequest" component={RequestScreen} />
-        <HomeStack.Screen
-          name="AdoptionAdvanceFilter"
-          component={FilterScreen}
-        />
-
-        <HomeStack.Screen
-          name="ClinicalHistory"
-          component={ClinicalHistoryScreen}
-        />
-        {/*Product*/}
-        <HomeStack.Screen name="ProductList" component={ProductListScreen} />
-        <HomeStack.Screen
-          name="ProductFilter"
-          component={ProductFilterScreen}
-        />
-        <HomeStack.Screen
-          options={{
-            headerLeft: () => (
-              <BackButton
-                style={{
-                  backgroundColor: globalColors.backgroundDefault,
-                  borderRadius: 100,
-                  marginTop: 2,
-                }}
-                navigation={navigation}
-              />
-            ),
-            headerTopInsetEnabled: true,
-            headerTranslucent: true,
-            headerStyle: {backgroundColor: 'transparent'},
-          }}
-          name="ProductDetail"
-          component={ProductDescriptionScreen}
-        />
-        <HomeStack.Screen name="Orders" component={OrdersScreen} />
-        {/* <HomeStack.Screen name="Cart" component={CartScreen} /> */}
-        {/*Product*/}
-        {/*Profile*/}
-        <HomeStack.Screen name="MyProfile" component={MyProfileScreen} />
-        {/*Addresses*/}
-        <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
-        <HomeStack.Screen name="AddAddress" component={AddAddressScreen} />
-        {/*Payment Method */}
-        <HomeStack.Screen
-          name="PaymentMethod"
-          component={paymentMethodComponent}
-        />
-        <HomeStack.Screen
-          name="AddPaymentMethod"
-          component={AddPaymentMethodScreen}
         />
       </HomeStack.Navigator>
     </Animated.View>

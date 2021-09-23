@@ -2,6 +2,8 @@ import React from 'react';
 import {Card, StyleService, useStyleSheet} from '@ui-kitten/components';
 import moment from 'moment';
 import {View} from 'react-native';
+// Global styles.
+import globalColors from '../../styles/colors';
 // My Components.
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
@@ -14,6 +16,9 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const GenericCard = (props: DatasGeneric): React.ReactElement => {
   const {
+    additionalButtons,
+    additionalContent,
+    additionalHeader,
     buttonAlign,
     buttonColor,
     buttonText,
@@ -37,16 +42,22 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
 
   return (
     <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
+      {additionalHeader && (
+        <DefaultText style={styles.productChangedText}>
+          {additionalHeader}
+        </DefaultText>
+      )}
       <View style={styles.contentWrapper}>
         {coverImage && (
           <PreviewableImage
             source={{uri: coverImage}}
-            style={styles.coverImage}
+            style={[styles.coverImage, props.coverImageStyle]}
           />
         )}
         <View style={styles.cardContentContainer}>
           <TouchableOpacity
             activeOpacity={0.6}
+            disabled={props.isDisabled ?? false}
             onPress={props.onClick}
             style={styles.cardContentContainer}>
             {date && (
@@ -63,15 +74,17 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
               wrapText>
               {content}
             </DefaultText>
+            <View style={styles.additionalContentRow}>{additionalContent}</View>
           </TouchableOpacity>
-          {images && images.length > 0 && (
-            <PreviewableImageList sources={imageList} />
+          {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
+          {buttonText && (
+            <AnchorText
+              onPress={props.onClick}
+              style={[stylesCart.header, props.buttonStyle]}>
+              {buttonText}
+            </AnchorText>
           )}
-          <AnchorText
-            onPress={props.onClick}
-            style={[stylesCart.header, props.buttonStyle]}>
-            {buttonText}
-          </AnchorText>
+          <View style={styles.buttonRow}>{additionalButtons}</View>
         </View>
       </View>
     </Card>
@@ -86,9 +99,15 @@ const themedStyles = StyleService.create({
   labelCard: {
     marginTop: 4,
   },
-  labelDate: {
-    fontSize: 14,
+  productChangedText: {
+    backgroundColor: globalColors.greenSecondary,
+    color: globalColors.white,
+    padding: 8,
+    marginBottom: 12,
+    borderRadius: 12,
+    fontSize: 13,
   },
+  labelDate: {},
   cardStyle: {
     marginHorizontal: 24,
     marginBottom: 16,
@@ -108,6 +127,14 @@ const themedStyles = StyleService.create({
   cardContentContainer: {
     flexGrow: 1,
     marginLeft: 6,
+  },
+  additionalContentRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
 });
 

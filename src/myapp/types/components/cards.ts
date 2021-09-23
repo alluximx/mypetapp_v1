@@ -1,22 +1,27 @@
 import {ImageURISource} from 'react-native';
 
 export interface DatasGeneric {
+  buttonStyle?: any;
   click?: any;
+  contentTextStyle?: any;
+  coverImageStyle?: any;
   data: {
-    buttonAlign: string;
-    buttonColor: string;
-    buttonText: string;
+    additionalButtons?: React.ReactElement[];
+    additionalContent?: React.ReactElement[];
+    additionalHeader?: string;
+    buttonAlign?: string;
+    buttonText?: string;
+    buttonColor?: string;
     content: string;
     coverImage?: string;
     date?: Date | null;
     images?: {file: string}[];
     title: string;
   };
+  isDisabled?: boolean;
   onClick: (data?: any) => void;
-  buttonStyle?: any;
-  contentTextStyle?: any;
-  titleStyle?: any;
   styleCard?: any;
+  titleStyle?: any;
 }
 
 export interface ImageInputCardProps {

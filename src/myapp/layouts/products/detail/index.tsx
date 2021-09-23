@@ -1,24 +1,30 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
   Layout,
+  Spinner,
   StyleService,
   useStyleSheet,
-  Spinner,
 } from '@ui-kitten/components';
-import DefaultLayout from '../../../components/layouts/default-layout';
 import {Dimensions, Image, View, ScrollView} from 'react-native';
-import globalColors from '../../../styles/colors';
-import DropdownPicker from '../../../components/inputs/dropdown-picker';
-import CustomButton from '../../../components/buttons/custom-button';
-import TitleHeader from '../../../components/texts/title-header';
-import DefaultText from '../../../components/texts/default-text';
-import globalStyles from '../../../styles/style';
-import useVariants from '../../../hooks/products/useVariants';
-import useSaveProductCart from '../../../hooks/products/useSaveProductCart';
-import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
 import {FlatList} from 'react-native-gesture-handler';
+// Global Styles
+import globalColors from '../../../styles/colors';
+import globalStyles from '../../../styles/style';
+// Hooks
+import useSaveProductCart from '../../../hooks/products/useSaveProductCart';
+import useVariants from '../../../hooks/products/useVariants';
+// My Components
+import CustomButton from '../../../components/buttons/custom-button';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import SimplePaginationDot from '../../../components/adoption/SimplePaginationDot';
+import TitleHeader from '../../../components/texts/title-header';
+// Models
+import {BaseModel, Variant} from '../../../types/models';
 
 const INITIAL_INDEX = 0;
+
 export default ({route}): React.ReactElement => {
   const dataVariants = useVariants(route.params.id);
   const saveProductCart = useSaveProductCart();
@@ -27,7 +33,7 @@ export default ({route}): React.ReactElement => {
   const [amountValue, setAmountValue] = useState('1');
   const [variantsList, setVariantsList] = useState([]);
   const [amountList, setAmountList] = useState([]);
-  const [variant, setVariant] = useState();
+  const [variant, setVariant] = useState<Variant>();
   const [isLoadingVariant, setIsLoadingVariant] = useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(true);
   const dataImg = [];
@@ -35,7 +41,7 @@ export default ({route}): React.ReactElement => {
 
   const findVariant = (value) => {
     const variantFilter = dataVariants.data.data.filter(
-      (item) => item.id === value,
+      (item: BaseModel) => item.id === value,
     );
     setVariant(variantFilter[0]);
     setIsLoadingVariant(false);
@@ -44,7 +50,7 @@ export default ({route}): React.ReactElement => {
   useEffect(() => {
     if (dataVariants.data?.data.length > 0) {
       const aux = [];
-      dataVariants.data.data.forEach((element) => {
+      dataVariants.data.data.forEach((element: BaseModel) => {
         aux.push({
           value: element.id,
           label: element.name,
@@ -81,14 +87,7 @@ export default ({route}): React.ReactElement => {
 
   const actionButton = () => {
     const data = {item: presentationValue, quantity: parseInt(amountValue, 10)};
-    saveProductCart.mutate(data, {
-      onSuccess: () => {
-        // Action
-      },
-      onError: () => {
-        // Action
-      },
-    });
+    saveProductCart.mutate(data);
   };
 
   const carouselRef = useRef(null);
@@ -97,8 +96,8 @@ export default ({route}): React.ReactElement => {
   return (
     <DefaultLayout
       statusBarTranslucent
-      statusBarStyle={'light-content'}
-      statusBarBackgroundColor={'transparent'}
+      statusBarStyle="dark-content"
+      statusBarBackgroundColor="transparent"
       style={styles.container}>
       {dataVariants.isLoading || !variant ? (
         <View style={styles.containerSpinner}>
@@ -198,26 +197,27 @@ export default ({route}): React.ReactElement => {
                 </TitleHeader>
                 <DefaultText>{route.params.description}</DefaultText>
                 <DropdownPicker
-                  style={{marginTop: 24}}
-                  data={variantsList}
                   currentValue={presentationValue}
-                  placeholder="Presentación"
+                  data={variantsList}
                   disabledPlaceholder={true}
+                  placeholder="Presentación"
                   setCurrentValue={(value) => {
                     setIsLoadingVariant(true);
                     setPresentationValue(value);
                     findVariant(value);
                   }}
+                  style={{marginTop: 24}}
                 />
                 <DropdownPicker
-                  style={{marginTop: 5, marginBottom: 20}}
-                  data={amountList}
                   currentValue={amountValue}
-                  placeholder="Cantidad"
+                  data={amountList}
                   disabledPlaceholder={true}
+                  placeholder="Cantidad"
                   setCurrentValue={(value) => {
                     setAmountValue(value);
                   }}
+                  style={{marginTop: 5, marginBottom: 20}}
+                  disabled={!(amountList.length > 0)}
                 />
                 <CustomButton
                   isLoading={saveProductCart.isLoading}
