@@ -24,6 +24,7 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
     productId,
     productName,
     quantity,
+    stock,
     totalItemPrice,
     variantName,
   } = props;
@@ -33,6 +34,8 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const onPressEdit = () => setModalVisible(true);
+  const emptyStock = stock === 0;
+  const lessStock = quantity > stock;
 
   return (
     <>
@@ -54,6 +57,9 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
         visible={modalVisible}
       />
       <GenericCard
+        buttonStyle={styles.price}
+        contentTextStyle={styles.subtitle}
+        coverImageStyle={styles.coverImage}
         data={{
           additionalButtons: [
             <AnchorText
@@ -61,7 +67,10 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
               style={styles.buttonDelete}>
               Eliminar
             </AnchorText>,
-            <AnchorText onPress={onPressEdit} style={styles.buttonEdit}>
+            <AnchorText
+              isDisabled={emptyStock}
+              onPress={onPressEdit}
+              style={[styles.buttonEdit, emptyStock && styles.disabledEdit]}>
               Editar
             </AnchorText>,
           ],
@@ -73,14 +82,17 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
               ${totalItemPrice.toFixed(2)}
             </TitleHeader>,
           ],
+          additionalHeader: emptyStock
+            ? 'Este producto ya no está disponible, elimínalo para continuar'
+            : lessStock
+            ? 'El stock de este producto ha cambiado, edítalo o elimínalo para continuar'
+            : null,
           content: variantName,
           coverImage: cover_image,
           title: productName,
         }}
-        coverImageStyle={styles.coverImage}
+        isDisabled={emptyStock}
         onClick={onPressEdit}
-        buttonStyle={styles.price}
-        contentTextStyle={styles.subtitle}
       />
     </>
   );
@@ -108,6 +120,9 @@ const styles = StyleSheet.create({
   },
   buttonEdit: {
     color: globalColors.greenSecondary,
+  },
+  disabledEdit: {
+    color: globalColors.darkGray,
   },
 });
 
