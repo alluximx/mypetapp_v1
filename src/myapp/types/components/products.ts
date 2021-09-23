@@ -1,12 +1,12 @@
 export interface CartCardProps {
   cover_image: string;
   id: string;
+  isLastOne: boolean;
   itemId: string;
   productId: string;
   productName: string;
   quantity: number;
   totalItemPrice: number;
-  userId: number;
   variantName: string;
 }
 
