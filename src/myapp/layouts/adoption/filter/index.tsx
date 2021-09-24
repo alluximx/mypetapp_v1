@@ -1,23 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Button,
-  Layout,
-  StyleService,
-  Text,
-  useStyleSheet,
-} from '@ui-kitten/components';
+import {Layout, StyleService, useStyleSheet} from '@ui-kitten/components';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import {Dimensions, Image} from 'react-native';
+// Global styles
 import globalColors from '../../../styles/colors';
-import DropdownPicker from '../../../components/inputs/dropdown-picker';
-import useStates from '../../../hooks/util/useState';
-import MunicipalityDrop from '../../../components/adoption/municipality-drop';
-import CustomButton from '../../../components/buttons/custom-button';
-import TitleHeader from '../../../components/texts/title-header';
-import DefaultText from '../../../components/texts/default-text';
+import globalVars from '../../../styles/vars';
+// Hooks
 import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
+import useStates from '../../../hooks/util/useState';
+// My Components
+import CustomButton from '../../../components/buttons/custom-button';
+import DefaultText from '../../../components/texts/default-text';
+import DropdownPicker from '../../../components/inputs/dropdown-picker';
+import MunicipalityDrop from '../../../components/adoption/municipality-drop';
+import TitleHeader from '../../../components/texts/title-header';
+// Types
+import {BaseModel} from '../../../types/models';
 
-export default ({navigation, route}): React.ReactElement => {
+export default ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
   const [form, setForm] = useState({
     state: '',
@@ -38,10 +38,11 @@ export default ({navigation, route}): React.ReactElement => {
     query: form.query,
     status: statusData,
   });
+
   useEffect(() => {
     if (dataStates.data) {
       const aux = [];
-      dataStates.data.data.forEach((element) => {
+      dataStates.data.data.forEach((element: BaseModel) => {
         aux.push({
           value: element.id,
           label: element.name,
@@ -69,12 +70,14 @@ export default ({navigation, route}): React.ReactElement => {
       }
     }
   }, [dataStates.data, dataStates.isFetched, data.data, statusData]);
+
   const changeMunicipality = (valor, name) => {
     valor === '' ? setStatusBtn(true) : setStatusBtn(false);
     valor === ''
       ? setForm({...form, townName: '', town: '', query: ''})
       : setForm({...form, townName: name, town: valor, query: ''});
   };
+
   return (
     <DefaultLayout
       statusBarStyle={'dark-content'}
@@ -131,6 +134,7 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   );
 };
+
 const {width} = Dimensions.get('window');
 const themedStyles = StyleService.create({
   container: {
@@ -150,12 +154,12 @@ const themedStyles = StyleService.create({
     marginTop: 12,
   },
   textTitle: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: globalVars.fontBold,
     fontSize: 22,
   },
   textContent: {
     lineHeight: 24,
-    fontFamily: 'Montserrat-Medium',
+    fontFamily: globalVars.fontRegular,
     fontSize: 18,
     color: globalColors.darkGray,
   },
