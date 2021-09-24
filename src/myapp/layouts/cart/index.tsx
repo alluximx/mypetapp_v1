@@ -40,12 +40,12 @@ export default ({navigation}): React.ReactElement => {
     };
   }, []);
 
-  const totalAmount =
-    data?.data?.length > 0
-      ? data?.data
-          ?.map((cart: Cart) => cart.total_item_price)
-          .reduce((total: number, cart: number) => total + cart)
-      : 0;
+  const totalAmount = (data?.data?.length > 0
+    ? data?.data
+        ?.map((cart: Cart) => cart.total_item_price)
+        .reduce((total: number, cart: number) => total + cart)
+    : 0
+  ).toFixed(2);
 
   const onAccept = () => setIsModalVisible(false);
 
@@ -62,13 +62,7 @@ export default ({navigation}): React.ReactElement => {
 
       if (stockMatches) {
         navigation.navigate('PaymentSummary', {
-          data: {
-            street: 'Bravo',
-            number: '209',
-            zipcode: '25700',
-            city: 'Monclova',
-            state: {name_state: 'Coahuila'},
-          },
+          subtotal: totalAmount,
         });
       } else {
         setIsModalVisible(true);
@@ -114,9 +108,7 @@ export default ({navigation}): React.ReactElement => {
       <View style={styles.bottomCardContainer}>
         <View style={styles.total}>
           <TitleHeader style={styles.totalText}>Total</TitleHeader>
-          <TitleHeader style={styles.totalText}>
-            ${totalAmount.toFixed(2)}
-          </TitleHeader>
+          <TitleHeader style={styles.totalText}>${totalAmount}</TitleHeader>
         </View>
         <CustomButton isLight onPress={onPressPay}>
           Continuar con Pago
