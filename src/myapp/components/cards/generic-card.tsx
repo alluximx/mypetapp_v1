@@ -59,7 +59,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
             activeOpacity={0.6}
             disabled={props.isDisabled ?? false}
             onPress={props.onClick}
-            style={styles.cardContentContainer}>
+            style={styles.cardContentContainer2}>
             {date && (
               <DefaultText style={styles.labelDate}>
                 {formattedDate}
@@ -127,6 +127,10 @@ const themedStyles = StyleService.create({
   cardContentContainer: {
     flexGrow: 1,
     marginLeft: 6,
+  },
+  cardContentContainer2: {
+    flexGrow: 1,
+    marginLeft: 0,
   },
   additionalContentRow: {
     flexDirection: 'row',
