@@ -54,15 +54,20 @@ export default ({route}): React.ReactElement => {
     const results = data?.data;
     if (results?.length > 0) {
       setVariantsList(
-        results.map((variantItem: VariantItem) => ({
-          images: variantItem.images.map((image) => ({
-            uri: 'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
-          })),
-          label: variantItem.name,
-          price: variantItem.price,
-          stock: variantItem.stock,
-          value: variantItem.id,
-        })),
+        results
+          .map((variantItem: Variant) => ({
+            images: variantItem.images.map((image) => ({
+              uri: 'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
+            })),
+            label: variantItem.name,
+            price: variantItem.price,
+            stock: variantItem.stock,
+            value: variantItem.id,
+          }))
+          .sort(
+            (variant1: VariantOption, variant2: VariantOption) =>
+              variant1.label > variant2.label,
+          ),
       );
       setPresentationValue(results[0].id);
       setVariant(results[0]);
