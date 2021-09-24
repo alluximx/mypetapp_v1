@@ -28,24 +28,27 @@ const ImageCarousel = (props: ImageCarouselProps): React.ReactElement => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.style]}>
       <FlatList
         data={props.images}
         horizontal
         pagingEnabled
         onScroll={onScroll}
         renderItem={({item}) => (
-          <Image source={{uri: item.uri}} style={styles.carouselImage} />
+          <Image
+            source={{uri: item.uri}}
+            style={[styles.carouselImage, props.imagesStyle]}
+          />
         )}
         keyExtractor={(_, item) => item.toString()}
       />
       <LinearGradient
         colors={['rgba(0,0,0,0.50)', 'transparent']}
-        style={styles.linearGradientTop}
+        style={[styles.linearGradientTop, props.gradientTopStyles]}
       />
       <LinearGradient
         colors={['transparent', globalColors.black]}
-        style={styles.linearGradient}>
+        style={[styles.linearGradient, props.gradientBottomStyles]}>
         <SimplePaginationDot
           currentIndex={currentIndex}
           length={props.images.length}
