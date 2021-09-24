@@ -39,6 +39,7 @@ import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 // Orders
 import {OrdersScreen} from '../myapp/scenes/orders/orders.component';
+import {OrdersDetailScreen} from '../myapp/scenes/orders/orders-detail.component';
 import {PaymentSummaryScreen} from '../myapp/scenes/payment/payment-summary.component';
 // Payment Method
 import {AddPaymentMethodScreen} from '../myapp/scenes/payment-method/add.component';
@@ -158,6 +159,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         {/* Order */}
         <HomeStack.Screen name="Orders" component={OrdersScreen} />
+        <HomeStack.Screen name="OrdersDetail" component={OrdersDetailScreen} />
         <HomeStack.Screen
           name="PaymentSummary"
           component={PaymentSummaryScreen}
