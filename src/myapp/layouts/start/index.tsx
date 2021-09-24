@@ -9,6 +9,7 @@ import CustomButton from '../../components/buttons/custom-button';
 import DefaultLayout from '../../components/layouts/default-layout';
 // Global styles.
 import globalColors from '../../styles/colors';
+import globalVars from '../../styles/vars';
 
 export default ({navigation}): React.ReactElement => {
   const authContext = useContext<AuthContextType>(AuthContext);
@@ -50,11 +51,11 @@ export default ({navigation}): React.ReactElement => {
           </AnchorText>
         </View>
       </View>
-      <AnchorText
+      {/* <AnchorText
         style={styles.signInAsInvited}
         onPress={authContext.goHomeAsGuest}>
-        {/* Ingresar como invitado */}
-      </AnchorText>
+        Ingresar como invitado
+      </AnchorText> */}
     </DefaultLayout>
   );
 };
@@ -83,7 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     lineHeight: 34,
     marginBottom: 24,
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: globalVars.fontBold,
   },
   signUpButton: {
     marginBottom: 24,
