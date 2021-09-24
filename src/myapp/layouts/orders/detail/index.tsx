@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet, View, ScrollView} from 'react-native';
+import React from 'react';
+import {StyleSheet, View, ScrollView} from 'react-native';
 import {List} from '@ui-kitten/components';
 // My components
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -7,7 +7,6 @@ import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import GenericCard from '../../../components/cards/generic-card';
 // Global Styles
-import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
