@@ -1,129 +1,93 @@
-import React from 'react';
-import {ScrollView, View, Image} from 'react-native';
-import {
-  Avatar,
-  Layout,
-  StyleService,
-  List,
-  ListItem,
-  useStyleSheet,
-  Button,
-  Text,
-} from '@ui-kitten/components';
+import React, {useState, useEffect} from 'react';
+import {Image, StyleSheet} from 'react-native';
+import {List} from '@ui-kitten/components';
+// My components
+import DefaultLayout from '../../components/layouts/default-layout';
+import TitleHeader from '../../components/texts/title-header';
+import DefaultText from '../../components/texts/default-text';
+import GenericCard from '../../components/cards/generic-card';
+// Global Styles
+import globalVars from '../../styles/vars';
+import globalColors from '../../styles/colors';
+import useSalesOrders from '../../hooks/orders/useSalesOrders';
 
 export default ({navigation}): React.ReactElement => {
-  const styles = useStyleSheet(themedStyle);
+  const [salesOrders, setSalesOrders] = useState([]);
+  const myOrders = useSalesOrders();
 
-  const InstallButton = (props) => <Button size="tiny">INSTALL</Button>;
+  useEffect(() => {
+    if (myOrders.data) {
+      setSalesOrders(myOrders.data.data);
+    }
+  }, [myOrders.data]);
 
-  const data = new Array(8).fill({
-    date: '12 de Febrero - 15 de Febrero',
-    status: 'Entregado',
-  });
-
-  const renderItem = ({item, index}) => (
-    <ListItem>
-      <Image
-        style={[styles.image, {tintColor: null}]}
-        source={require('../home/assets/image-pet-1.jpg')}
+  const renderItem = (order) => {
+    const trackingNumber = order.item.tracking_number;
+    const status = order.item.status;
+    const deliveryTime = order.item.delivery_time;
+    const data = {
+      buttonAlign: 'left',
+      buttonColor: globalColors.greenPrimary,
+      buttonText: status,
+      date: null,
+      content: `Tiempo de entrega estimado: \n${deliveryTime}`,
+      images: null,
+      styleCard: {},
+      title: `#${trackingNumber}`,
+    };
+    return (
+      <GenericCard
+        data={data}
+        styleCard={{marginHorizontal: 0}}
+        onClick={null}
       />
-      <View style={styles.detailsContainer}>
-        <Text category="s1">Entrega estimada:</Text>
-        <Text category="s1">{`${item.date} ${index + 1}`}</Text>
-        <Text appearance="hint" category="p2">
-          {`${item.status} ${index + 1}`}
-        </Text>
-        {InstallButton}
-      </View>
-    </ListItem>
-  );
+    );
+  };
 
-  return (
-    <ScrollView style={styles.contentContainer}>
-      <Layout style={styles.header} level="1">
-        <View style={styles.profileContainer}>
-          <List data={data} renderItem={renderItem} />
-        </View>
-      </Layout>
-      <Button size="tiny">Ver todos mis pedidos</Button>
-    </ScrollView>
+  return salesOrders.length > 0 ? (
+    <DefaultLayout>
+      <TitleHeader style={{marginBottom: 20}}>Pedidos</TitleHeader>
+      <List
+        style={styles.servicesContainer}
+        data={salesOrders}
+        renderItem={renderItem}
+      />
+    </DefaultLayout>
+  ) : (
+    <DefaultLayout style={styles.container}>
+      <Image
+        style={styles.dogImage}
+        source={require('../../assets/images/pets/petOrders.png')}
+      />
+      <TitleHeader style={styles.center}>Pedidos</TitleHeader>
+      <DefaultText style={[styles.center, styles.subtitle]}>
+        No tienes pedidos pendientes.
+      </DefaultText>
+    </DefaultLayout>
   );
 };
 
-const themedStyle = StyleService.create({
-  contentContainer: {
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
+    paddingHorizontal: 0,
   },
-  card: {
-    borderWidth: 0,
+  dogImage: {
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    height: 390,
+    maxHeight: 390,
+    marginVertical: 5,
+    padding: 10,
   },
-  header: {
-    padding: 16,
+  center: {
+    textAlign: 'center',
   },
-  profileContainer: {
-    flexDirection: 'row',
+  subtitle: {
+    fontFamily: globalVars.fontBold,
   },
-  profileDetailsContainer: {
-    flex: 1,
-    marginHorizontal: 8,
-  },
-  profileLocationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileLocation: {
-    marginHorizontal: 8,
-  },
-  profileAvatar: {
-    marginHorizontal: 8,
-  },
-  profileButtonsContainer: {
-    flexDirection: 'row',
-    marginVertical: 24,
-  },
-  profileButton: {
-    flex: 1,
-    marginHorizontal: 4,
-    borderRadius: 30,
-  },
-  profileSocialsDivider: {
-    marginHorizontal: -16,
-  },
-  profileSocialsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: 24,
-    marginBottom: 8,
-  },
-  postsList: {
-    paddingHorizontal: 8,
-  },
-  banner: {
-    margin: 20,
-    padding: 20,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 4,
-    borderWidth: 0,
-    marginHorizontal: 8,
-    overflow: 'hidden',
-  },
-  postItem: {
-    width: 144,
-    height: 144,
-    borderRadius: 4,
-    borderWidth: 0,
-    marginHorizontal: 8,
-    overflow: 'hidden',
-  },
-  footerContainer: {
-    borderWidth: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  footerControl: {
-    marginHorizontal: 2,
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 10,
   },
 });

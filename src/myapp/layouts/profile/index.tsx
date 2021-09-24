@@ -27,7 +27,7 @@ export default ({navigation, route}): React.ReactElement => {
       <NavigateButton
         navigation={navigation}
         subtitle={'Pedidos'}
-        destination={'AddAddress'}
+        destination={'Orders'}
       />
       <NavigateButton
         navigation={navigation}
