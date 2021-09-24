@@ -20,14 +20,24 @@ const NavigateButton = (props): React.ReactElement => {
   };
   return (
     <TouchableOpacity style={styles.container} onPress={navigateToScreen}>
-      {props.title ? (
-        <TitleHeader style={styles.title}>{props.title}</TitleHeader>
-      ) : (
-        <TitleHeader>{}</TitleHeader>
-      )}
-      <View style={styles.content}>
-        <DefaultText style={styles.subtitle} children={props.subtitle} />
-        <DropRightIcon style={styles.arrowIcon} />
+      <View>
+        {props.title ? (
+          <View style={styles.titleContent}>
+            <TitleHeader style={styles.title}>{props.title}</TitleHeader>
+          </View>
+        ) : (
+          <DefaultText>{}</DefaultText>
+        )}
+
+        <View style={styles.content}>
+          <DefaultText style={styles.subtitle}>{props.subtitle} </DefaultText>
+        </View>
+      </View>
+      <View style={styles.containerIcon}>
+        <DefaultText>{}</DefaultText>
+        <View style={styles.arrowIcon}>
+          <DropRightIcon style={{top: -2}} />
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -37,10 +47,10 @@ const {width} = Dimensions.get('window');
 const styles = StyleService.create({
   container: {
     width: width - globalVars.outsidePadding - 22,
-    height: 70,
     borderRadius: 18,
     backgroundColor: globalColors.white,
     marginBottom: 14,
+    flexDirection: 'row',
   },
   title: {
     marginLeft: 14,
@@ -50,14 +60,26 @@ const styles = StyleService.create({
     marginLeft: 14,
     fontSize: 14,
   },
-  arrowIcon: {
-    alignContent: 'flex-end',
-    top: -5,
-  },
-  content: {
-    marginTop: -10,
+  containerIcon: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  arrowIcon: {
+    alignContent: 'flex-end',
+    justifyContent: 'center',
+  },
+
+  titleContent: {
+    marginTop: 15,
+  },
+  emptyTitle: {
+    marginTop: 0,
+  },
+  content: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
 });
 

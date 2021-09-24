@@ -24,16 +24,8 @@ export default ({navigation, route}): React.ReactElement => {
         subtitle={'Métodos de Pago'}
         destination={'PaymentMethod'}
       />
-      <NavigateButton
-        navigation={navigation}
-        subtitle={'Pedidos'}
-        destination={'AddAddress'}
-      />
-      <NavigateButton
-        navigation={navigation}
-        subtitle={'Solicitudes de Adopción'}
-        destination={'AddPaymentMethod'}
-      />
+      <NavigateButton subtitle={'Pedidos'} />
+      <NavigateButton subtitle={'Solicitudes de Adopción'} />
       <AnchorText onPress={authContext.signOut} style={styles.logOut}>
         Cerrar Sesión
       </AnchorText>
