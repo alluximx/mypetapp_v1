@@ -11,7 +11,7 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import UserInput from '../../../components/inputs/user-input';
 import globalColors from '../../../styles/colors';
 import AnchorText from '../../../components/texts/anchor-text';
-import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
+import useAdoptionSearch from '../../../hooks/adoption/useAdoptionSearch';
 import CloseButton from '../../../components/buttons/close-button';
 
 export default ({navigation, route}): React.ReactElement => {
@@ -21,7 +21,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [query, setQuery] = useState('');
   const [list, setList] = useState([]);
   const [auxList, setAuxList] = useState([]);
-  const data = useAdoptionSerch({
+  const data = useAdoptionSearch({
     stateId: state,
     municipalityId: town,
     query: query,

@@ -1,7 +1,7 @@
-import {useState, useEffect} from 'react';
 import {useQuery} from 'react-query';
 import api from '../../services/app-services';
-const useAdoptionSerch = (data) => {
+
+const useAdoptionSearch = (data) => {
   return useQuery(
     [
       'adoption-serch',
@@ -23,4 +23,5 @@ const useAdoptionSerch = (data) => {
     {enabled: data.status},
   );
 };
-export default useAdoptionSerch;
+
+export default useAdoptionSearch;
