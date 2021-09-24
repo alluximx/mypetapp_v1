@@ -66,9 +66,9 @@ export default ({route}): React.ReactElement => {
       );
       setPresentationValue(results[0].id);
       setVariant(results[0]);
-      const amountList = calculateAmountList(results[0].stock);
-      setAmountList(amountList);
-      setAmountValue(amountList[0].value);
+      const calculatedAmountList = calculateAmountList(results[0].stock);
+      setAmountList(calculatedAmountList);
+      setAmountValue(calculatedAmountList[0].value);
     }
   }, [data?.data]);
 
@@ -76,9 +76,9 @@ export default ({route}): React.ReactElement => {
     if (presentationValue) {
       const foundVariant = findVariant(presentationValue);
       setVariant(foundVariant);
-      const amountList = calculateAmountList(foundVariant.stock);
-      setAmountList(amountList);
-      setAmountValue(amountList[0]?.value);
+      const recalculatedAmountList = calculateAmountList(foundVariant.stock);
+      setAmountList(recalculatedAmountList);
+      setAmountValue(recalculatedAmountList[0]?.value);
     }
   }, [presentationValue]);
 
