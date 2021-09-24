@@ -10,11 +10,11 @@ import GenericCard from '../../components/cards/generic-card';
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Hook.
-import useGetAddress from '../../hooks/address/useGetAddress';
+import useGetAddresses from '../../hooks/address/useGetAddresses';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
-  const addressQuery = useGetAddress();
+  const addressQuery = useGetAddresses();
 
   useEffect(() => {
     if (addressQuery.data) {

@@ -12,7 +12,7 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import NavigateButton from '../../../components/buttons/navigate-button';
 // Hook.
 import useStates from '../../../hooks/util/useState';
-import useGetAddress from '../../../hooks/address/useGetAddress';
+import useGetAddresses from '../../../hooks/address/useGetAddresses';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
 
@@ -25,7 +25,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [nameState, setNameState] = useState('');
   const [nameMunicipality, setNameMunicipality] = useState('');
   const dataStates = useStates();
-  const addressQuery = useGetAddress();
+  const addressQuery = useGetAddresses();
   const addAddressQuery = useSaveAddress();
 
   const [form, setForm] = useState({
@@ -73,43 +73,43 @@ export default ({navigation, route}): React.ReactElement => {
     addresses.length > 2 && setIsDisable(true);
   }, [addresses.length]);
 
-  const renderServiceItem = (service) => {
-    const street = service.item.street;
-    const number = service.item.number;
-    const zipCode = service.item.zipcode;
-    const city = service.item.city;
-    const state = service.item.state.name;
-    const title = service.item.user_address.name;
+  const renderServiceItem = ({item}) => {
+    const street = item.street;
+    const number = item.number;
+    const zipcode = item.zipcode;
+    const city = item.city;
+    const state = item.state.name;
+    const title = item.user_address.name;
 
     const auxData = {
-      city: city,
-      colony: service.item.colony,
-      int_number: service.item.int_number,
-      is_saved: service.item.is_saved,
+      city,
+      colony: item.colony,
+      int_number: item.int_number,
+      id: item.id,
+      is_saved: item.is_saved,
       municipality: {
-        id_municipality: service.item.municipality.id,
-        name_municipality: service.item.municipality.name,
+        id_municipality: item.municipality.id,
+        name_municipality: item.municipality.name,
       },
-      number: number,
-      reference: service.item.reference,
+      number,
+      reference: item.reference,
       state: {
-        id_state: service.item.state.id,
+        id_state: item.state.id,
         name_state: state,
       },
-      street: street,
-      zipcode: zipCode,
+      street,
+      zipcode,
     };
 
     const content =
-      street + ' #' + number + '\n' + zipCode + ', ' + city + ' ' + state;
+      street + ' #' + number + '\n' + zipcode + ', ' + city + ' ' + state;
 
     return (
       <NavigateButton
-        navigation={navigation}
         title={title}
         subtitle={content}
         destination={'PaymentSummary'}
-        data={auxData}
+        data={{address: auxData}}
       />
     );
   };
@@ -133,15 +133,19 @@ export default ({navigation, route}): React.ReactElement => {
       street: form.street,
       zipcode: form.zipcode,
     };
-    if (isReminderActive) {
-      addAddressQuery.mutate(form, {
-        onSuccess: () => {
-          navigation.navigate('PaymentSummary', {data: auxData});
-        },
-      });
-    } else {
-      navigation.navigate('PaymentSummary', {data: auxData});
-    }
+
+    addAddressQuery.mutate(form, {
+      onSuccess: (response) => {
+        navigation.navigate('PaymentSummary', {
+          data: {
+            address: {
+              ...auxData,
+              id: response.data.id,
+            },
+          },
+        });
+      },
+    });
   };
 
   const isDisabled =

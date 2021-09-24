@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleService} from '@ui-kitten/components';
 import {TouchableOpacity, Dimensions, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
@@ -8,14 +9,18 @@ import globalVars from '../../styles/vars';
 import {DropRightIcon} from '../icons';
 import DefaultText from '../../components/texts/default-text';
 import TitleHeader from '../../components/texts/title-header';
+// Types
+import {NavigateButtonProps} from '../../types/components/buttons';
 
-const NavigateButton = (props): React.ReactElement => {
+const NavigateButton = (props: NavigateButtonProps): React.ReactElement => {
+  const navigation = useNavigation();
   const navigateToScreen = () => {
+    const params = {setValue: props.setValue};
     if (props.data) {
       props.destination &&
-        props.navigation.navigate(props.destination, {data: props.data});
+        navigation.navigate(props.destination, {...params, data: props.data});
     } else {
-      props.destination && props.navigation.navigate(props.destination);
+      props.destination && navigation.navigate(props.destination, params);
     }
   };
   return (

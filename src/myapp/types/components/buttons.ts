@@ -6,3 +6,10 @@ export interface CustomButtonProps {
   isDisabled?: boolean;
   isLoading?: boolean;
 }
+
+export interface NavigateButtonProps {
+  data?: {};
+  destination: string;
+  subtitle: string;
+  title: string;
+}
