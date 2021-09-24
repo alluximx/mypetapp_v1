@@ -1,13 +1,16 @@
-import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
 import React from 'react';
+import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
 import {Dimensions, Image, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import globalColors from '../../../styles/colors';
-import AnchorText from '../../../components/texts/anchor-text';
-import TitleHeader from '../../../components/texts/title-header';
-import DefaultText from '../../../components/texts/default-text';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+// Global Styles
+import globalColors from '../../../styles/colors';
+// My Components
+import AnchorText from '../../../components/texts/anchor-text';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
+
 export default ({navigation, route}): React.ReactElement => {
   const state = route.params.filter.state;
   const stateName = route.params.filter.stateName;
@@ -17,15 +20,18 @@ export default ({navigation, route}): React.ReactElement => {
   const auxData = [];
   const aux = [];
   let num = 0;
+
   route.params.data.forEach((element) => {
     if (element.status === 'PUBLICADO') {
       aux.push(element);
       num = num + 1;
     }
   });
+
   aux.length > 0 && auxData.push(aux);
   const listAdoption = aux;
   const numResult = num;
+
   navigation.setOptions({
     headerRight: () => (
       <AnchorText
@@ -54,6 +60,7 @@ export default ({navigation, route}): React.ReactElement => {
       </AnchorText>
     ),
   });
+
   const renderServiceItem = (services) => {
     let img = './../assets/abue.jpg';
     services.item.images.forEach((images) => {
@@ -105,6 +112,7 @@ export default ({navigation, route}): React.ReactElement => {
       </View>
     );
   };
+
   const details = (adoption) => {
     navigation.navigate('AdoptionDetail', {
       adoption: adoption,
@@ -147,6 +155,7 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   );
 };
+
 const {width} = Dimensions.get('window');
 const themedStyles = StyleService.create({
   container: {
