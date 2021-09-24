@@ -6,7 +6,7 @@ import {Dimensions, Image} from 'react-native';
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Hooks
-import useAdoptionSerch from '../../../hooks/adoption/useAdoptionSerch';
+import useAdoptionSearch from '../../../hooks/adoption/useAdoptionSearch';
 import useStates from '../../../hooks/util/useState';
 // My Components
 import CustomButton from '../../../components/buttons/custom-button';
@@ -32,7 +32,7 @@ export default ({navigation}): React.ReactElement => {
   const [statusData, setStatusData] = useState(false);
   const [isLoding, setIsLoding] = useState(false);
   const dataStates = useStates();
-  const data = useAdoptionSerch({
+  const data = useAdoptionSearch({
     stateId: form.state,
     municipalityId: form.town,
     query: form.query,
