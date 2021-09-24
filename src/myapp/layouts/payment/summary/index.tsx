@@ -2,47 +2,84 @@ import React, {useState, useEffect} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
 // Global Styles
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 // Hooks
+import useAddSaleOrder from '../../../hooks/orders/useAddSaleOrder';
 import useDeliveryInformation from '../../../hooks/delivery/useDeliveryInformation';
 import useMyProfile from '../../../hooks/user/useMyProfile';
 // My Components
 import CustomButton from '../../../components/buttons/custom-button';
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import TitleHeader from '../../../components/texts/title-header';
-import CustomSpinner from '../../../components/custom-spinner';
-import globalVars from '../../../styles/vars';
+import CustomModal from '../../../components/modals/custom-modal';
 
 export default ({navigation, route}): React.ReactElement => {
   const {data: deliveryMessage, isLoading} = useDeliveryInformation();
-  const {price, message} = deliveryMessage?.data[0];
-  const {subtotal} = route.params;
-  const total = (parseFloat(subtotal) + parseFloat(price)).toFixed(2);
-
-  const [contentSubtitle, setContentSubtitle] = useState('');
-  const [contentTitle, setContentTitle] = useState('');
-  const [address, setAddress] = useState();
+  const addOrder = useAddSaleOrder();
   const myProfile = useMyProfile();
+  const deliveryInfo = deliveryMessage?.data[0];
+  const {subtotal} = route.params;
+  const total = (
+    parseFloat(subtotal) + parseFloat(deliveryInfo?.price)
+  ).toFixed(2);
+
+  const [addressContentSubtitle, setAddressContentSubtitle] = useState('');
+  const [addressContentTitle, setAddressContentTitle] = useState('');
+  const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [form, setForm] = useState({
+    delivery_address: route.params?.data?.addressId,
+    card_id: 'card_1JdBIgJcwi75eaUV40o7gahe',
+    delivery_id: deliveryInfo?.id,
+  });
+
+  const onPressOrder = () => {
+    setIsCreatingOrder(true);
+    addOrder.mutate(form, {
+      onSuccess: () => {
+        setIsCreatingOrder(false);
+        setIsModalVisible(true);
+      },
+      onError: () => {
+        setIsCreatingOrder(false);
+      },
+    });
+  };
+
+  const onAcceptModal = () => {
+    setIsModalVisible(false);
+    navigation.navigate('Orders');
+  };
+
+  const isDisabled =
+    !form.card_id || !form.delivery_address || !form.delivery_id;
+
   useEffect(() => {
     if (route.params?.data) {
-      // const dataParam = route.params.data;
-      // setAddress(dataParam);
-      // const content =
-      //   dataParam.street +
-      //   ' #' +
-      //   dataParam.number +
-      //   '\n' +
-      //   dataParam.zipcode +
-      //   ', ' +
-      //   dataParam.city +
-      //   ' ' +
-      //   dataParam.state.name_state;
-      // setContentSubtitle(content);
-      setContentSubtitle('');
-      setContentTitle(myProfile.data?.data.name);
+      if (route.params.data.address) {
+        const dataParam = route.params.data.address;
+        setForm({...form, delivery_address: dataParam.id});
+        const addressContent =
+          dataParam.street +
+          ' #' +
+          dataParam.number +
+          '\n' +
+          dataParam.zipcode +
+          ', ' +
+          dataParam.city +
+          ' ' +
+          dataParam.state.name_state;
+        setAddressContentSubtitle(addressContent);
+        setAddressContentTitle(myProfile.data?.data.name);
+      }
+      if (route.params.data.paymentMethod) {
+      }
     } else {
-      setContentSubtitle('Selecciona dirección de envio');
+      setAddressContentSubtitle('Selecciona dirección de envío');
     }
   }, [route.params?.data]);
 
@@ -50,28 +87,37 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <DefaultLayout
-      statusBarStyle={'dark-content'}
+      statusBarStyle="dark-content"
       style={[styles.container, {color: 'black'}]}>
+      <CustomModal
+        labelAccept="Entendido"
+        title="Pago Exitoso"
+        text='Tu pago se ha realizado correctamente y te hemos enviado un correo de confirmación.\nPuedes seguir el estado de tu orden desde la sección de "Mis Pedidos" que se encuentra en tu perfil.'
+        onAccept={onAcceptModal}
+        onCancel={() => {}}
+        showCancel={false}
+        visible={isModalVisible}
+      />
       <TitleHeader style={{marginHorizontal: globalVars.outsidePadding}}>
         Pago
       </TitleHeader>
       <ScrollView style={styles.layoutPort}>
         <TitleHeader style={styles.titleText}>Dirección de envío</TitleHeader>
         <NavigateButton
-          navigation={navigation}
-          title={contentTitle}
-          subtitle={contentSubtitle}
-          destination={'AddAddress'}
+          destination="AddAddress"
+          subtitle={addressContentSubtitle}
+          title={addressContentTitle}
         />
         <TitleHeader style={styles.titleText}>Método de pago</TitleHeader>
         <NavigateButton
-          navigation={navigation}
-          subtitle={'Selecciona el método de pago'}
-          destination={'AddPaymentMethod'}
+          subtitle="Selecciona el método de pago"
+          destination="AddPaymentMethod"
+          title=""
         />
         <TitleHeader style={styles.titleText}>Envío</TitleHeader>
         <DefaultText>
-          El precio por envío fijo es de ${price} MXN. {message}
+          El precio por envío fijo es de ${deliveryInfo?.price} MXN.{' '}
+          {deliveryInfo?.message}
         </DefaultText>
       </ScrollView>
       <View style={styles.summaryContainer}>
@@ -82,15 +128,16 @@ export default ({navigation, route}): React.ReactElement => {
         </View>
         <View style={styles.infoSummary2}>
           <DefaultText style={styles.defaultText}>${subtotal}</DefaultText>
-          <DefaultText style={styles.defaultText}>${price}</DefaultText>
+          <DefaultText style={styles.defaultText}>
+            ${deliveryInfo?.price}
+          </DefaultText>
           <TitleHeader style={styles.defaultText}>${total}</TitleHeader>
         </View>
       </View>
       <CustomButton
-        isDisabled={true}
-        onPress={() => {
-          // Hacer pedido
-        }}
+        isDisabled={isDisabled}
+        isLoading={isCreatingOrder}
+        onPress={onPressOrder}
         style={styles.button}>
         Hacer Pedido
       </CustomButton>
