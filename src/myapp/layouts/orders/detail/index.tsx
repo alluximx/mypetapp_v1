@@ -11,8 +11,6 @@ import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
-  console.log(route.params.order);
-  //const [salesOrder, setSalesOrder] = useState();
   const orderSale = route.params.order;
   const addressOrder = orderSale.delivery_address;
   const paymentOrder = orderSale.payment_information;
