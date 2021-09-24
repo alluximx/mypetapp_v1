@@ -76,6 +76,7 @@ export default ({navigation, route}): React.ReactElement => {
   }, [addresses.length]);
 
   const renderServiceItem = (service) => {
+    const id = service.item.id;
     const street = service.item.street;
     const number = service.item.number;
     const zipCode = service.item.zipcode;
@@ -84,6 +85,7 @@ export default ({navigation, route}): React.ReactElement => {
     const title = service.item.user_address.name;
 
     const auxData = {
+      id: id,
       city: city,
       colony: service.item.colony,
       int_number: service.item.int_number,
@@ -248,6 +250,7 @@ export default ({navigation, route}): React.ReactElement => {
         <UserInput
           placeholder="Codigo Postal"
           value={form.zipcode}
+          maxLength={5}
           onChangeText={(value: string) => {
             setForm({...form, zipcode: value});
           }}
