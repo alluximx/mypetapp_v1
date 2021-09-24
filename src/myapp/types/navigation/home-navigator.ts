@@ -41,7 +41,6 @@ type HomeNavigatorParamList = {
     setPrices: (prices: number[]) => void;
   };
   Orders: {};
-  OrdersDetail: {};
   PaymentSummary: {};
   ProductDetail: {};
   Cart: {};
