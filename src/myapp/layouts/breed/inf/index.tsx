@@ -1,19 +1,23 @@
 import {
-  StyleService,
-  useStyleSheet,
-  Layout,
-  Text,
-  Input,
-  Icon,
   Card,
+  Icon,
+  Input,
+  Layout,
   List,
   Spinner,
+  StyleService,
+  Text,
+  useStyleSheet,
 } from '@ui-kitten/components';
 import React, {useEffect} from 'react';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import globalColors from '../../../styles/colors';
 import {Dimensions, Image, View} from 'react-native';
+// Global Styles
+import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
+// Hooks
 import useBreedsInformation from '../../../hooks/breed/useBreedsInformation';
+// My Components
+import DefaultLayout from '../../../components/layouts/default-layout';
 
 const InfBreedScreen = ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
@@ -125,7 +129,7 @@ const themedStyles = StyleService.create({
   title: {
     marginTop: 20,
     marginLeft: 24,
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: globalVars.fontBold,
     fontSize: 20,
   },
   filter: {
@@ -154,7 +158,7 @@ const themedStyles = StyleService.create({
     marginBottom: 20,
   },
   tituloCard: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: globalVars.fontBold,
     fontSize: 20,
     marginTop: 14,
     marginLeft: 15,
@@ -164,7 +168,7 @@ const themedStyles = StyleService.create({
     height: 320,
   },
   labelNot: {
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: globalVars.fontBold,
     fontSize: 20,
     alignSelf: 'center',
     marginTop: 20,
