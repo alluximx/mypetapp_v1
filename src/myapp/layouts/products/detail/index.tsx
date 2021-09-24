@@ -27,7 +27,7 @@ export default ({route}): React.ReactElement => {
   const [variantsList, setVariantsList] = useState([]);
   const [amountList, setAmountList] = useState([]);
   const [presentationValue, setPresentationValue] = useState('');
-  const [amountValue, setAmountValue] = useState(null);
+  const [amountValue, setAmountValue] = useState('');
   const [variant, setVariant] = useState(null);
 
   const findVariant = (variantId: string) => {
@@ -73,7 +73,7 @@ export default ({route}): React.ReactElement => {
       setVariant(results[0]);
       const calculatedAmountList = calculateAmountList(results[0].stock);
       setAmountList(calculatedAmountList);
-      setAmountValue(calculatedAmountList[0].value);
+      setAmountValue(calculatedAmountList[0]?.value ?? '');
     }
   }, [data?.data]);
 
@@ -83,7 +83,7 @@ export default ({route}): React.ReactElement => {
       setVariant(foundVariant);
       const recalculatedAmountList = calculateAmountList(foundVariant.stock);
       setAmountList(recalculatedAmountList);
-      setAmountValue(recalculatedAmountList[0]?.value);
+      setAmountValue(recalculatedAmountList[0]?.value ?? '');
     }
   }, [presentationValue]);
 
@@ -104,16 +104,14 @@ export default ({route}): React.ReactElement => {
       statusBarBackgroundColor="transparent"
       style={styles.container}>
       <View style={styles.imageContainer}>
-        {variant ? (
-          variant?.images?.length > 0 && (
-            <ImageCarousel
-              gradientBottomStyles={styles.gradientBottom}
-              gradientTopStyles={styles.gradientTop}
-              images={variant.images}
-              imagesStyle={styles.images}
-              style={styles.containerCarousel}
-            />
-          )
+        {variant && variant?.images?.length > 0 ? (
+          <ImageCarousel
+            gradientBottomStyles={styles.gradientBottom}
+            gradientTopStyles={styles.gradientTop}
+            images={variant.images}
+            imagesStyle={styles.images}
+            style={styles.containerCarousel}
+          />
         ) : (
           <Image
             style={styles.imageProduct}
@@ -155,7 +153,7 @@ export default ({route}): React.ReactElement => {
           />
           <CustomButton
             isLoading={saveProductCart.isLoading}
-            isDisabled={amountValue === '' || presentationValue === ''}
+            isDisabled={!amountValue || !presentationValue}
             onPress={actionButton}
             style={styles.button}>
             Agregar al Carrito
