@@ -129,7 +129,8 @@ export default ({navigation, route}): React.ReactElement => {
         />
         <TitleHeader style={styles.titleText}>Envío</TitleHeader>
         <DefaultText>
-          El precio por envío fijo es de ${price} MXN. {message}
+          El precio por envío fijo es de ${deliveryInfo?.price} MXN.{' '}
+          {deliveryInfo?.message}
         </DefaultText>
       </ScrollView>
       <View style={styles.summaryContainer}>
@@ -140,7 +141,9 @@ export default ({navigation, route}): React.ReactElement => {
         </View>
         <View style={styles.infoSummary2}>
           <DefaultText style={styles.defaultText}>${subtotal}</DefaultText>
-          <DefaultText style={styles.defaultText}>${price}</DefaultText>
+          <DefaultText style={styles.defaultText}>
+            ${deliveryInfo?.price}
+          </DefaultText>
           <TitleHeader style={styles.defaultText}>${total}</TitleHeader>
         </View>
       </View>
