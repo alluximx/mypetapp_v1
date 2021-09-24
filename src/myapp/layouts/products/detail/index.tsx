@@ -38,30 +38,30 @@ export default ({route}): React.ReactElement => {
   };
 
   const calculateAmountList = (stock: number) => {
-    const amountList = [];
+    const newAmountList = [];
 
     for (let i = 1; i < stock + 1; i++) {
-      amountList.push({
+      newAmountList.push({
         label: `${i}`,
         value: `${i}`,
       });
     }
 
-    return amountList;
+    return newAmountList;
   };
 
   useEffect(() => {
     const results = data?.data;
     if (results?.length > 0) {
       setVariantsList(
-        results.map((variant: Variant) => ({
-          images: variant.images.map((image) => ({
+        results.map((variantItem: VariantItem) => ({
+          images: variantItem.images.map((image) => ({
             uri: 'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
           })),
-          label: variant.name,
-          price: variant.price,
-          stock: variant.stock,
-          value: variant.id,
+          label: variantItem.name,
+          price: variantItem.price,
+          stock: variantItem.stock,
+          value: variantItem.id,
         })),
       );
       setPresentationValue(results[0].id);
@@ -83,8 +83,11 @@ export default ({route}): React.ReactElement => {
   }, [presentationValue]);
 
   const actionButton = () => {
-    const data = {item: presentationValue, quantity: parseInt(amountValue, 10)};
-    saveProductCart.mutate(data);
+    const formattedData = {
+      item: presentationValue,
+      quantity: parseInt(amountValue, 10),
+    };
+    saveProductCart.mutate(formattedData);
   };
 
   return isLoading ? (
