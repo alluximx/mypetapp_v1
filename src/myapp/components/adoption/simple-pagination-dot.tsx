@@ -2,14 +2,20 @@ import React from 'react';
 
 import {View, StyleSheet} from 'react-native';
 
-function genCircleStyle(size) {
+const genCircleStyle = (size: number) => {
   if (!size) {
     return {};
   }
   return {width: size, height: size, borderRadius: size / 2};
-}
+};
 
-function Dot({isActive, color, activeDotSize, inActiveDotSize, dotSeparator}) {
+const Dot = ({
+  isActive,
+  color,
+  activeDotSize,
+  inActiveDotSize,
+  dotSeparator,
+}) => {
   const processedActiveDotStyle = [
     styles.activeDot,
     {
@@ -28,6 +34,7 @@ function Dot({isActive, color, activeDotSize, inActiveDotSize, dotSeparator}) {
       ...genCircleStyle(inActiveDotSize),
     },
   ];
+
   return (
     <View
       style={[
@@ -36,36 +43,34 @@ function Dot({isActive, color, activeDotSize, inActiveDotSize, dotSeparator}) {
       ]}
     />
   );
-}
+};
 
-export default function SimplePaginationDot(props) {
-  const {
-    style,
-    length,
-    currentIndex = 0,
-    color = '#fff',
-    activeDotSize = 14,
-    inActiveDotSize = 10,
-    dotSeparator = 10,
-  } = props;
-  function renderItem(item, index) {
-    return (
-      <Dot
-        key={index}
-        isActive={index === currentIndex}
-        color={color}
-        activeDotSize={activeDotSize}
-        inActiveDotSize={inActiveDotSize}
-        dotSeparator={dotSeparator}
-      />
-    );
-  }
+const SimplePaginationDot = ({
+  style,
+  length,
+  currentIndex = 0,
+  color = '#fff',
+  activeDotSize = 14,
+  inActiveDotSize = 10,
+  dotSeparator = 10,
+}) => {
+  const renderItem = (_: any, index: number) => (
+    <Dot
+      key={index}
+      isActive={index === currentIndex}
+      color={color}
+      activeDotSize={activeDotSize}
+      inActiveDotSize={inActiveDotSize}
+      dotSeparator={dotSeparator}
+    />
+  );
+
   return (
     <View style={[styles.container, style]}>
       {Array(length).fill(0).map(renderItem)}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -87,3 +92,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
+
+export default SimplePaginationDot;
