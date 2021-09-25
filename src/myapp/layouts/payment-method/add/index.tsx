@@ -6,48 +6,67 @@ import TitleHeader from '../../../components/texts/title-header';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import UserInput from '../../../components/inputs/user-input';
-import ReminderInput from '../../../components/inputs/reminder-input';
+import NavigateButton from '../../../components/buttons/navigate-button';
 // Hooks
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMethod';
+import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
 // Global Styles
 import globalColors from '../../../styles/colors';
+import paymentMethod from '..';
 
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
-  const [isReminderActive, setIsReminderActive] = useState(false);
-  const [isDisable, setIsDisable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBackSpace, setIsBackSpace] = useState(false);
+  const addCardQuery = useSavePaymentMethod();
+  const paymentQuery = useGetPaymentMethod();
 
   const [form, setForm] = useState({
     name: '',
     number: '',
     expiration_date: '',
-    cvv: '',
-    is_saved: false,
+    cvc: '',
+    exp_month: '',
+    exp_year: '',
   });
 
-  const changeValue = () => {
-    setIsReminderActive(!isReminderActive);
-    setForm({...form, is_saved: !isReminderActive});
-  };
-
   useEffect(() => {
-    !isReminderActive && setForm({...form, is_saved: isReminderActive});
-  }, [isReminderActive]);
-
-  useEffect(() => {
-    paymentMethods.length > 2 && setIsDisable(true);
-  }, [paymentMethods.length]);
+    if (paymentQuery.data) {
+      setPaymentMethods(paymentQuery.data.data);
+    }
+  }, [paymentQuery.data]);
 
   const onSavePress = () => {
-    // Aqui hay que guardar
+    addCardQuery.mutate(form);
+  };
+
+  const renderServiceItem = (service) => {
+    const brand = service.item.brand;
+    const content = '****' + service.item.last4;
+
+    const auxData = {
+      brand: brand,
+      last4: service.item.last4,
+    };
+
+    return (
+      <NavigateButton
+        navigation={navigation}
+        title={brand}
+        subtitle={content}
+        destination={'MyProfile'}
+        data={auxData}
+      />
+    );
   };
 
   const isDisabled =
+    paymentMethods.length > 2 ||
     form.name === '' ||
     form.number === '' ||
     form.expiration_date === '' ||
-    form.cvv === '' ||
+    form.cvc === '' ||
     isLoading;
 
   useSetNavigationHeaders({
@@ -67,10 +86,20 @@ export default ({navigation, route}): React.ReactElement => {
           Métodos de pago guardados
         </TitleHeader>
         {paymentMethods && paymentMethods.length > 0 ? (
-          <DefaultText style={styles.subtitle}>Aqui va una lista</DefaultText>
+          <List
+            style={styles.servicesContainer}
+            data={paymentMethods}
+            renderItem={renderServiceItem}
+          />
         ) : (
           <DefaultText style={styles.subtitle}>
             No hay métodos de pago guardados
+          </DefaultText>
+        )}
+
+        {paymentMethods.length > 2 && (
+          <DefaultText style={styles.message}>
+            Solo puedes guardar 3 métodos de pago
           </DefaultText>
         )}
 
@@ -86,6 +115,7 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Número de tarjeta"
           value={form.number}
           isNumeric={true}
+          maxLength={16}
           onChangeText={(value: string) => {
             setForm({...form, number: value});
           }}
@@ -98,33 +128,35 @@ export default ({navigation, route}): React.ReactElement => {
             isNumeric={true}
             maxLength={5}
             onChangeText={(value: string) => {
-              value.length === 2 && value.length < 3
+              value.length === 2 && value.length < 3 && !isBackSpace
                 ? (value += '/')
                 : (value = value);
               setForm({...form, expiration_date: value});
+              setIsBackSpace(false);
+            }}
+            onKeyPress={({nativeEvent}) => {
+              if (nativeEvent.key === 'Backspace') {
+                const lastCaracter = form.expiration_date.charAt(
+                  form.expiration_date.length - 1,
+                );
+                lastCaracter === '/'
+                  ? setIsBackSpace(true)
+                  : setIsBackSpace(false);
+              }
             }}
             style={styles.UserInputContainer}
           />
           <UserInput
             placeholder="CVV "
-            value={form.cvv}
+            value={form.cvc}
             isNumeric={true}
-            maxLength={3}
+            maxLength={4}
             onChangeText={(value: string) => {
-              setForm({...form, cvv: value});
+              setForm({...form, cvc: value});
             }}
             style={styles.UserInputContainer}
           />
         </View>
-        <ReminderInput
-          isActive={isReminderActive}
-          setIsActive={changeValue}
-          setValue={null}
-          value={null}
-          text={'Guardar método de pago'}
-          isDisable={isDisable}
-          isNotReminder={true}
-        />
       </ScrollView>
     </DefaultLayout>
   );
@@ -148,13 +180,14 @@ const styles = StyleService.create({
     borderRadius: 10,
     marginBottom: 16,
   },
-  datePickerContainer: {
-    height: 62,
-    minWidth: 190,
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 10,
   },
-  arrowIconStyle: {
-    top: -7,
-    right: 0,
-    left: -29,
+  message: {
+    marginTop: 10,
+    marginBottom: 15,
+    fontSize: 14,
+    color: globalColors.red,
   },
 });

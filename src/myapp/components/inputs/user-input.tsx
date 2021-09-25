@@ -70,6 +70,9 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         onChangeText={(value) => {
           props.onChangeText(value);
         }}
+        onKeyPress={(event) => {
+          props.onKeyPress && props.onKeyPress(event);
+        }}
         maxLength={props.maxLength ?? null}
         onFocus={() => setIsFocused(true)}
         secureTextEntry={props.isPassword ? secureTextEntry : null}

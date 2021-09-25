@@ -3,18 +3,24 @@ import {Image, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
 // My components
 import DefaultLayout from '../../components/layouts/default-layout';
+import CustomModal from '../../components/modals/custom-modal';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
+import CustomSpinner from '../../components/custom-spinner';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Hook.
 import useGetAddress from '../../hooks/address/useGetAddress';
+import useDeleteAddress from '../../hooks/address/useDeleteAddress';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
+  const [currentId, setCurrentId] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const addressQuery = useGetAddress();
+  const deleteQuery = useDeleteAddress();
 
   useEffect(() => {
     if (addressQuery.data) {
@@ -22,7 +28,18 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [addressQuery.data]);
 
+  const onDeleteAccept = () => {
+    deleteQuery.mutate(currentId);
+    setIsModalVisible(false);
+  };
+
+  const previusModal = (id) => {
+    setCurrentId(id);
+    setIsModalVisible(true);
+  };
+
   const renderServiceItem = (service) => {
+    const id = service.item.id;
     const street = service.item.street;
     const number = service.item.number;
     const zipCode = service.item.zipcode;
@@ -47,13 +64,26 @@ export default ({navigation, route}): React.ReactElement => {
       <GenericCard
         data={data}
         styleCard={{marginHorizontal: 0}}
-        onClick={null}
+        onClick={() => {
+          previusModal(id);
+        }}
       />
     );
   };
 
-  return addresses.length > 0 ? (
+  return addressQuery.isLoading ? (
+    <CustomSpinner />
+  ) : addresses.length > 0 ? (
     <DefaultLayout>
+      <CustomModal
+        labelAccept="Eliminar Registro"
+        title="Eliminar Registro"
+        text="¿Seguro que quieres eliminar este registro?"
+        onAccept={onDeleteAccept}
+        onCancel={() => setIsModalVisible(false)}
+        showCancel={true}
+        visible={isModalVisible}
+      />
       <TitleHeader>Direcciones</TitleHeader>
       <DefaultText style={{marginBottom: 16}}>
         Puedes guardar hasta 3 direcciones
