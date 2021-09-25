@@ -12,7 +12,7 @@ import globalColors from '../../../styles/colors';
 export default ({navigation, route}): React.ReactElement => {
   const orderSale = route.params.order;
   const addressOrder = orderSale.delivery_address;
-  const paymentOrder = orderSale.payment_information;
+  const paymentOrder = orderSale.card_id;
   const OrderSalesDetail = orderSale.sales_detail;
 
   const contentAddress =
@@ -32,19 +32,32 @@ export default ({navigation, route}): React.ReactElement => {
     buttonColor: globalColors.greenPrimary,
     buttonText: orderSale.status,
     date: null,
-    content: `Tiempo de entrega estimado: \n${orderSale.delivery_time}`,
+    content: `Tiempo de entrega estimado: \n${
+      orderSale.delivery_time === null
+        ? 'Podras consultar el tiempo de entrega cuando el producto este en camino.'
+        : orderSale.delivery_time
+    }`,
     images: null,
     styleCard: {},
-    title: `#${orderSale.tracking_number}`,
+    title:
+      orderSale.tracking_number === null
+        ? 'Estamos trabajando en tu pedido'
+        : `#${orderSale.tracking_number}`,
   };
 
   const dataDelivery = {
     buttonText: null,
     date: null,
-    content: `#${orderSale.tracking_number}`,
+    content:
+      orderSale.tracking_number === null
+        ? 'Podras consultar el número de guía cuando el producto este en camino.'
+        : `#${orderSale.tracking_number}`,
     images: null,
     styleCard: {},
-    title: orderSale.delivery_company,
+    title:
+      orderSale.delivery_company === null
+        ? 'Estamos trabajando en tu pedido'
+        : orderSale.delivery_company,
   };
 
   const dataAddress = {
@@ -66,10 +79,11 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const renderItem = (product) => {
-    const productName = product.item.item;
+    const productName = product.item.product_name;
     const variantName = product.item.item;
     const totalPrice = product.item.total_price;
     const quantity = product.item.quantity;
+    const productImage = product.item.product_image;
     return (
       <GenericCard
         buttonStyle={styles.price}
@@ -86,8 +100,7 @@ export default ({navigation, route}): React.ReactElement => {
             </TitleHeader>,
           ],
           content: variantName,
-          coverImage:
-            'https://mpa-stage.s3.amazonaws.com/media/products_covers/image1.jpg',
+          coverImage: `https://mpa-stage.s3.amazonaws.com/media/${productImage}`,
           title: productName,
         }}
         onClick={null}
@@ -104,7 +117,7 @@ export default ({navigation, route}): React.ReactElement => {
           styleCard={{marginHorizontal: 0}}
           onClick={null}
         />
-        <TitleHeader style={styles.titleText}>Numero de guía</TitleHeader>
+        <TitleHeader style={styles.titleText}>Número de guía</TitleHeader>
         <GenericCard
           data={dataDelivery}
           styleCard={{marginHorizontal: 0}}
