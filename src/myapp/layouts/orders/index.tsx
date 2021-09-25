@@ -22,9 +22,15 @@ export default ({navigation}): React.ReactElement => {
   }, [myOrders.data]);
 
   const renderItem = (order) => {
-    const trackingNumber = order.item.tracking_number;
+    const trackingNumber =
+      order.item.tracking_number === null
+        ? 'Estamos trabajando en tu pedido'
+        : `#${order.item.tracking_number}`;
     const status = order.item.status;
-    const deliveryTime = order.item.delivery_time;
+    const deliveryTime =
+      order.item.delivery_time === null
+        ? 'Podras consultar el tiempo de entrega cuando el producto este en camino.'
+        : order.item.delivery_time;
     const data = {
       buttonAlign: 'left',
       buttonColor: globalColors.greenPrimary,
@@ -33,13 +39,16 @@ export default ({navigation}): React.ReactElement => {
       content: `Tiempo de entrega estimado: \n${deliveryTime}`,
       images: null,
       styleCard: {},
-      title: `#${trackingNumber}`,
+      title: trackingNumber,
     };
     return (
       <GenericCard
         data={data}
         styleCard={{marginHorizontal: 0}}
-        onClick={null}
+        onClick={() => {
+          const itemOrder = order.item;
+          navigation.navigate('OrdersDetail', {order: itemOrder});
+        }}
       />
     );
   };
