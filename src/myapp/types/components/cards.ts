@@ -12,6 +12,7 @@ export interface DatasGeneric {
     buttonAlign?: string;
     buttonText?: string;
     buttonColor?: string;
+    buttonClick?: (data?: any) => void;
     content: string;
     coverImage?: string;
     date?: Date | null;
