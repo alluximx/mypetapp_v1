@@ -11,6 +11,7 @@ const useAddSaleOrder = () => {
   return useMutation((data: any) => postSaleOrder(data), {
     onSuccess: () => {
       queryClient.invalidateQueries('get-orders');
+      queryClient.invalidateQueries('shopping-cart');
     },
   });
 };
