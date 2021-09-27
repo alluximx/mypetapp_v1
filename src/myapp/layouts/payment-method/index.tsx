@@ -7,15 +7,20 @@ import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
 import CustomSpinner from '../../components/custom-spinner';
+import CustomModal from '../../components/modals/custom-modal';
 // Global Styles
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
 // Hook
 import useGetPaymentMethod from '../../hooks/payment-method/useGetPaymentMethod';
+import useDeletePaymentMethod from '../../hooks/payment-method/useDeletePaymentMethod';
 
 export default ({navigation, route}): React.ReactElement => {
   const [cards, setCards] = useState([]);
+  const [currentId, setCurrentId] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const paymentQuery = useGetPaymentMethod();
+  const deleteQuery = useDeletePaymentMethod();
 
   useEffect(() => {
     if (paymentQuery.data) {
@@ -23,7 +28,18 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [paymentQuery.data]);
 
+  const onDeleteAccept = () => {
+    deleteQuery.mutate(currentId);
+    setIsModalVisible(false);
+  };
+
+  const previusModal = (id) => {
+    setCurrentId(id);
+    setIsModalVisible(true);
+  };
+
   const renderServiceItem = (service) => {
+    const id = service.item.id;
     const brand = service.item.brand;
     const content = '****' + service.item.last4;
 
@@ -36,12 +52,15 @@ export default ({navigation, route}): React.ReactElement => {
       images: null,
       styleCard: {},
       title: brand,
+      buttonClick: () => {
+        previusModal(id);
+      },
     };
     return (
       <GenericCard
         data={data}
         styleCard={{marginHorizontal: 0}}
-        onClick={null}
+        onClick={() => {}}
       />
     );
   };
@@ -50,6 +69,15 @@ export default ({navigation, route}): React.ReactElement => {
     <CustomSpinner />
   ) : cards.length > 0 ? (
     <DefaultLayout>
+      <CustomModal
+        labelAccept="Eliminar Registro"
+        title="Eliminar Registro"
+        text="¿Seguro que quieres eliminar este registro?"
+        onAccept={onDeleteAccept}
+        onCancel={() => setIsModalVisible(false)}
+        showCancel={true}
+        visible={isModalVisible}
+      />
       <TitleHeader>Métodos de Pago</TitleHeader>
       <DefaultText style={{marginBottom: 16}}>
         Puedes guardar hasta 3 Métodos de Pago

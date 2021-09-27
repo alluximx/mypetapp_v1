@@ -22,6 +22,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
     buttonAlign,
     buttonColor,
     buttonText,
+    buttonClick,
     content,
     coverImage,
     date,
@@ -79,7 +80,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
           {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
           {buttonText && (
             <AnchorText
-              onPress={props.onClick}
+              onPress={buttonClick ? buttonClick : props.onClick}
               style={[stylesCart.header, props.buttonStyle]}>
               {buttonText}
             </AnchorText>
