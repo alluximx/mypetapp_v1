@@ -53,23 +53,22 @@ export default ({route}): React.ReactElement => {
   useEffect(() => {
     const results = data?.data;
     if (results?.length > 0) {
-      setVariantsList(
-        results
-          .map((variantItem: Variant) => ({
-            images: variantItem.images.map((image) => ({
-              uri: 'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
-            })),
-            label: variantItem.name,
-            price: variantItem.price,
-            stock: variantItem.stock,
-            value: variantItem.id,
-          }))
-          .sort(
-            (variant1: VariantOption, variant2: VariantOption) =>
-              variant1.label > variant2.label,
-          ),
-      );
-      setPresentationValue(results[0].id);
+      const formattedVariants = results
+        .map((variantItem: Variant) => ({
+          images: variantItem.images.map((image) => ({
+            uri: 'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
+          })),
+          label: variantItem.name,
+          price: variantItem.price,
+          stock: variantItem.stock,
+          value: variantItem.id,
+        }))
+        .sort(
+          (variant1: VariantOption, variant2: VariantOption) =>
+            variant1.label > variant2.label,
+        );
+      setVariantsList(formattedVariants);
+      setPresentationValue(formattedVariants[0].value);
       setVariant(results[0]);
       const calculatedAmountList = calculateAmountList(results[0].stock);
       setAmountList(calculatedAmountList);

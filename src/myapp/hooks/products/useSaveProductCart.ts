@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
+import {StackActions} from '@react-navigation/routers';
 
 const postProductCar = (data: any) =>
   api.post('api/v1/shopping-cart/', data, true);
@@ -11,7 +12,7 @@ const useSaveProductCart = () => {
   return useMutation((data: any) => postProductCar(data), {
     onSuccess: () => {
       queryClient.invalidateQueries('shopping-cart');
-      navigation.navigate('ProductList');
+      navigation.dispatch(StackActions.replace('Cart'));
     },
   });
 };

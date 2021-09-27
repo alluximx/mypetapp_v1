@@ -68,6 +68,7 @@ const EditProductModal = (props: EditProductModalProps) => {
         onSuccess: () => {
           setLoading(false);
           setVisible(false);
+          setPresentationValue(presentationId);
         },
       },
     );
@@ -76,9 +77,6 @@ const EditProductModal = (props: EditProductModalProps) => {
   const onPressCancel = () => {
     onCancel();
     setPresentationValue(presentationId);
-    setAmountValue(
-      amountList.length > 0 ? amountList[quantity - 1]?.value : '',
-    );
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
+import {StackActions} from '@react-navigation/routers';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -37,6 +38,12 @@ export default ({navigation, route}): React.ReactElement => {
     delivery_id: deliveryInfo?.id,
   });
 
+  useEffect(() => {
+    if (deliveryMessage) {
+      setForm({...form, delivery_id: deliveryInfo.id});
+    }
+  }, [deliveryMessage]);
+
   const onPressOrder = () => {
     setIsCreatingOrder(true);
     addOrder.mutate(form, {
@@ -52,7 +59,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const onAcceptModal = () => {
     setIsModalVisible(false);
-    navigation.navigate('Orders');
+    navigation.dispatch(StackActions.pop(2));
   };
 
   const isDisabled =
@@ -92,7 +99,11 @@ export default ({navigation, route}): React.ReactElement => {
       <CustomModal
         labelAccept="Entendido"
         title="Pago Exitoso"
-        text='Tu pago se ha realizado correctamente y te hemos enviado un correo de confirmación.\nPuedes seguir el estado de tu orden desde la sección de "Mis Pedidos" que se encuentra en tu perfil.'
+        text={
+          'Tu pago se ha realizado correctamente y te hemos enviado un correo de confirmación.' +
+          '\n' +
+          'Puedes seguir el estado de tu orden desde la sección de "Mis Pedidos" que se encuentra en tu perfil.'
+        }
         onAccept={onAcceptModal}
         onCancel={() => {}}
         showCancel={false}
