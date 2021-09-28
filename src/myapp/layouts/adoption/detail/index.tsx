@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+// Env
+import environments from '../../../environments';
 // Global Styles.
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 // Hooks.
 import useAdoptionRequestAll from '../../../hooks/adoption/useAdoptionRquestAll';
 import useAdoptionRequest from '../../../hooks/adoption/useAdoptionRequest';
@@ -9,9 +12,8 @@ import useAdoptionRequest from '../../../hooks/adoption/useAdoptionRequest';
 import CustomButton from '../../../components/buttons/custom-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import TitleHeader from '../../../components/texts/title-header';
 import ImageCarousel from '../../../components/images/image-carousel';
-import globalVars from '../../../styles/vars';
+import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const dataImg = [];
@@ -49,7 +51,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   route.params.adoption.images.forEach((element) => {
     dataImg.push({
-      uri: 'https://mpa-stage.s3.amazonaws.com/media/' + element.image,
+      uri: environments.IMAGES_HOST + element.image,
     });
   });
 

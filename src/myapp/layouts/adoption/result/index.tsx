@@ -3,6 +3,8 @@ import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
 import {Dimensions, Image, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+// Env
+import environments from '../../../environments';
 // Global Styles
 import globalColors from '../../../styles/colors';
 // My Components
@@ -69,7 +71,7 @@ export default ({navigation, route}): React.ReactElement => {
       }
     });
 
-    const auximg = 'https://mpa-stage.s3.amazonaws.com/media/' + img;
+    const auximg = environments.IMAGES_HOST + img;
     const age = services.item.ageNumber;
     const auxName = services.item.association.name;
     const nameAss =
