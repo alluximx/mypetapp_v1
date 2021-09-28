@@ -12,14 +12,14 @@ import CustomSpinner from '../../components/custom-spinner';
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Hook.
-import useGetAddress from '../../hooks/address/useGetAddress';
+import useGetAddresses from '../../hooks/address/useGetAddresses';
 import useDeleteAddress from '../../hooks/address/useDeleteAddress';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
   const [currentId, setCurrentId] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const addressQuery = useGetAddress();
+  const addressQuery = useGetAddresses();
   const deleteQuery = useDeleteAddress();
 
   useEffect(() => {
@@ -52,6 +52,9 @@ export default ({navigation, route}): React.ReactElement => {
 
     const data = {
       buttonAlign: 'right',
+      buttonClick: () => {
+        previusModal(id);
+      },
       buttonColor: globalColors.red,
       buttonText: 'Eliminar',
       date: null,
@@ -63,10 +66,9 @@ export default ({navigation, route}): React.ReactElement => {
     return (
       <GenericCard
         data={data}
+        isDisabled={true}
         styleCard={{marginHorizontal: 0}}
-        onClick={() => {
-          previusModal(id);
-        }}
+        onClick={() => {}}
       />
     );
   };
