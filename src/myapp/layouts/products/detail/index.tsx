@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Dimensions, Image, ScrollView, StyleSheet, View} from 'react-native';
+// Env
+import environments from '../../../environments';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalStyles from '../../../styles/style';
@@ -56,7 +58,7 @@ export default ({route}): React.ReactElement => {
       const formattedVariants = results
         .map((variantItem: Variant) => ({
           images: variantItem.images.map((image) => ({
-            uri: 'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
+            uri: environments.IMAGES_HOST + image.image,
           })),
           label: variantItem.name,
           price: variantItem.price,

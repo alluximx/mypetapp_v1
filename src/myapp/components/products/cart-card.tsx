@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
+// Env
+import environments from '../../environments';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
@@ -49,8 +51,7 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
             ? data.data
                 .map((variantItem: Variant) => ({
                   images: variantItem.images.map((image) => ({
-                    uri:
-                      'https://mpa-stage.s3.amazonaws.com/media/' + image.image,
+                    uri: environments.IMAGES_HOST + image.image,
                   })),
                   label: variantItem.name,
                   price: variantItem.price,
