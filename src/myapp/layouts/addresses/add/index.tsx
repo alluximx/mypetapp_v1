@@ -87,7 +87,7 @@ export default ({navigation, route}): React.ReactElement => {
       city,
       colony: item.colony,
       int_number: item.int_number,
-      id: item.id,
+      addressId: item.id,
       is_saved: item.is_saved,
       municipality: {
         id_municipality: item.municipality.id,
@@ -142,7 +142,7 @@ export default ({navigation, route}): React.ReactElement => {
           data: {
             address: {
               ...auxData,
-              id: response.data.id,
+              addressId: response.data.id,
             },
           },
         });

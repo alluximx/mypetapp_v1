@@ -10,6 +10,7 @@ export interface CustomButtonProps {
 export interface NavigateButtonProps {
   data?: {};
   destination: string;
-  subtitle: string;
-  title: string;
+  placeholder?: string;
+  subtitle?: string;
+  title?: string;
 }

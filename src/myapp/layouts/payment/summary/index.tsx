@@ -18,29 +18,57 @@ import TitleHeader from '../../../components/texts/title-header';
 import CustomModal from '../../../components/modals/custom-modal';
 
 export default ({navigation, route}): React.ReactElement => {
-  const {data: deliveryMessage, isLoading} = useDeliveryInformation();
+  // Hook Calls
   const addOrder = useAddSaleOrder();
   const myProfile = useMyProfile();
-  const deliveryInfo = deliveryMessage?.data[0];
-  const {subtotal} = route.params;
-  const total = (
-    parseFloat(subtotal) + parseFloat(deliveryInfo?.price)
-  ).toFixed(2);
+  const {data: deliveryMessage, isLoading} = useDeliveryInformation();
 
-  const [addressContentSubtitle, setAddressContentSubtitle] = useState('');
-  const [addressContentTitle, setAddressContentTitle] = useState('');
+  const {subtotal} = route.params;
+  const {address, paymentMethod} = route.params?.data ?? {};
+  // Modals & Loading
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  // PaymentInfo
+  const [cardTitle, setCardTitle] = useState('');
+  const [cardContent, setCardContent] = useState('');
+  // Delivery Info
+  const {id: deliveryId, message, price} = deliveryMessage?.data[0] ?? {};
+  const total = (parseFloat(subtotal) + parseFloat(price)).toFixed(2);
+  // Address
+  const [addressTitle, setAddressTitle] = useState('');
+  const [addressContent, setAddressContent] = useState('');
 
   const [form, setForm] = useState({
-    delivery_address: route.params?.data?.addressId,
-    card_id: 'card_1JdBIgJcwi75eaUV40o7gahe',
-    delivery_id: deliveryInfo?.id,
+    delivery_address: address?.addressId,
+    card_id: paymentMethod?.cardId,
+    delivery_id: deliveryId,
   });
+
+  const isDisabled =
+    !form.card_id || !form.delivery_address || !form.delivery_id;
+
+  useEffect(() => {
+    if (address) {
+      const {addressId, city, number, state, street, zipcode} = address;
+      setAddressTitle(addressId ? myProfile.data?.data.name : '');
+      setAddressContent(
+        addressId
+          ? `${street} #${number}\n${zipcode}, ${city} ${state?.name_state}`
+          : '',
+      );
+      setForm({...form, delivery_address: addressId});
+    }
+    if (paymentMethod) {
+      const {cardLabel, cardBrand, cardId} = paymentMethod;
+      setCardTitle(cardBrand);
+      setCardContent(cardLabel);
+      setForm({...form, card_id: cardId});
+    }
+  }, [address, paymentMethod]);
 
   useEffect(() => {
     if (deliveryMessage) {
-      setForm({...form, delivery_id: deliveryInfo.id});
+      setForm({...form, delivery_id: deliveryId});
     }
   }, [deliveryMessage]);
 
@@ -61,34 +89,6 @@ export default ({navigation, route}): React.ReactElement => {
     setIsModalVisible(false);
     navigation.dispatch(StackActions.pop(2));
   };
-
-  const isDisabled =
-    !form.card_id || !form.delivery_address || !form.delivery_id;
-
-  useEffect(() => {
-    if (route.params?.data) {
-      if (route.params.data.address) {
-        const dataParam = route.params.data.address;
-        setForm({...form, delivery_address: dataParam.id});
-        const addressContent =
-          dataParam.street +
-          ' #' +
-          dataParam.number +
-          '\n' +
-          dataParam.zipcode +
-          ', ' +
-          dataParam.city +
-          ' ' +
-          dataParam.state.name_state;
-        setAddressContentSubtitle(addressContent);
-        setAddressContentTitle(myProfile.data?.data.name);
-      }
-      if (route.params.data.paymentMethod) {
-      }
-    } else {
-      setAddressContentSubtitle('Selecciona dirección de envío');
-    }
-  }, [route.params?.data]);
 
   return isLoading ? (
     <CustomSpinner />
@@ -116,19 +116,20 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader style={styles.titleText}>Dirección de envío</TitleHeader>
         <NavigateButton
           destination="AddAddress"
-          subtitle={addressContentSubtitle}
-          title={addressContentTitle}
+          placeholder="Selecciona dirección de envío"
+          subtitle={addressContent}
+          title={addressTitle}
         />
         <TitleHeader style={styles.titleText}>Método de pago</TitleHeader>
         <NavigateButton
-          subtitle="Selecciona el método de pago"
           destination="AddPaymentMethod"
-          title=""
+          placeholder="Selecciona el método de pago"
+          subtitle={cardContent}
+          title={cardTitle}
         />
         <TitleHeader style={styles.titleText}>Envío</TitleHeader>
         <DefaultText>
-          El precio por envío fijo es de ${deliveryInfo?.price} MXN.{' '}
-          {deliveryInfo?.message}
+          El precio por envío fijo es de ${price} MXN. {message}
         </DefaultText>
       </ScrollView>
       <View style={styles.summaryContainer}>
@@ -139,9 +140,7 @@ export default ({navigation, route}): React.ReactElement => {
         </View>
         <View style={styles.infoSummary2}>
           <DefaultText style={styles.defaultText}>${subtotal}</DefaultText>
-          <DefaultText style={styles.defaultText}>
-            ${deliveryInfo?.price}
-          </DefaultText>
+          <DefaultText style={styles.defaultText}>${price}</DefaultText>
           <TitleHeader style={styles.defaultText}>${total}</TitleHeader>
         </View>
       </View>
