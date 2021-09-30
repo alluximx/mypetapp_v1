@@ -20,7 +20,7 @@ const CustomModal = ({
   title,
   text,
   onAccept,
-  onCancel,
+  onCancel = null,
   showCancel,
   labelAccept,
 }) => {

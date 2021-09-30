@@ -27,7 +27,8 @@ export default ({navigation, route}): React.ReactElement => {
   const {address, paymentMethod} = route.params?.data ?? {};
   // Modals & Loading
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
   // PaymentInfo
   const [cardTitle, setCardTitle] = useState('');
   const [cardContent, setCardContent] = useState('');
@@ -44,8 +45,15 @@ export default ({navigation, route}): React.ReactElement => {
     delivery_id: deliveryId,
   });
 
+  console.log(form);
+
   const isDisabled =
     !form.card_id || !form.delivery_address || !form.delivery_id;
+
+  /**********************************
+   ***  Update state on selecting ***
+   *** delivery or payment method ***
+   **********************************/
 
   useEffect(() => {
     if (address) {
@@ -72,23 +80,30 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [deliveryMessage]);
 
+  /**********************
+   *** Button actions ***
+   **********************/
+
   const onPressOrder = () => {
     setIsCreatingOrder(true);
     addOrder.mutate(form, {
       onSuccess: () => {
         setIsCreatingOrder(false);
-        setIsModalVisible(true);
+        setIsSuccessModalVisible(true);
       },
       onError: () => {
         setIsCreatingOrder(false);
+        setIsErrorModalVisible(true);
       },
     });
   };
 
-  const onAcceptModal = () => {
-    setIsModalVisible(false);
+  const onAcceptSuccessModal = () => {
+    setIsSuccessModalVisible(false);
     navigation.dispatch(StackActions.pop(2));
   };
+
+  const onAcceptErrorModal = () => setIsErrorModalVisible(false);
 
   return isLoading ? (
     <CustomSpinner />
@@ -98,16 +113,23 @@ export default ({navigation, route}): React.ReactElement => {
       style={[styles.container, {color: 'black'}]}>
       <CustomModal
         labelAccept="Entendido"
+        onAccept={onAcceptSuccessModal}
+        showCancel={false}
         title="Pago Exitoso"
         text={
           'Tu pago se ha realizado correctamente y te hemos enviado un correo de confirmación.' +
           '\n' +
           'Puedes seguir el estado de tu orden desde la sección de "Mis Pedidos" que se encuentra en tu perfil.'
         }
-        onAccept={onAcceptModal}
-        onCancel={() => {}}
+        visible={isSuccessModalVisible}
+      />
+      <CustomModal
+        labelAccept="Entendido"
+        onAccept={onAcceptErrorModal}
         showCancel={false}
-        visible={isModalVisible}
+        title="Lo sentimos"
+        text="Hubo un problema con tu método de pago. Selecciona un método de pago distinto o comunícate con tu banco e intenta nuevamente más tarde."
+        visible={isErrorModalVisible}
       />
       <TitleHeader style={{marginHorizontal: globalVars.outsidePadding}}>
         Pago
