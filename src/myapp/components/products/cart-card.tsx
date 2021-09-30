@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
+// Env
+import environments from '../../environments';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
@@ -13,7 +15,7 @@ import GenericCard from '../cards/generic-card';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {CartCardProps} from '../../types/components/products';
-import {Variant} from '../../types/models';
+import {Variant, VariantOption} from '../../types/models';
 
 const CartCard = (props: CartCardProps): React.ReactElement => {
   const {
@@ -36,7 +38,6 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
   const onPressEdit = () => setModalVisible(true);
   const emptyStock = stock === 0;
   const lessStock = quantity > stock;
-
   return (
     <>
       <EditProductModal
@@ -47,11 +48,20 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
         setVisible={setModalVisible}
         variantsList={
           data?.data?.length
-            ? data.data.map((variant: Variant) => ({
-                value: variant.id,
-                label: variant.name,
-                stock: variant.stock,
-              }))
+            ? data.data
+                .map((variantItem: Variant) => ({
+                  images: variantItem.images.map((image) => ({
+                    uri: environments.IMAGES_HOST + image.image,
+                  })),
+                  label: variantItem.name,
+                  price: variantItem.price,
+                  stock: variantItem.stock,
+                  value: variantItem.id,
+                }))
+                .sort(
+                  (variant1: VariantOption, variant2: VariantOption) =>
+                    variant1.label > variant2.label,
+                )
             : []
         }
         visible={modalVisible}

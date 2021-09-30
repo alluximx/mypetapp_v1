@@ -2,19 +2,21 @@ import React from 'react';
 import {
   Dimensions,
   ImageBackground,
+  ScrollView,
   StyleSheet,
   Text,
   View,
-  ScrollView,
 } from 'react-native';
+import {List} from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
-import {List} from '@ui-kitten/components';
 import PawBreed from '../../../components/utils/paw-breed';
-export default ({navigation, route}): React.ReactElement => {
+import TitleHeader from '../../../components/texts/title-header';
+
+export default ({route}): React.ReactElement => {
   const data = [route.params.breed];
   const image = require('../assets/dog-notFound.jpg');
   const renderDataItem = (service) => {
@@ -147,12 +149,12 @@ const styles = StyleSheet.create({
   },
   subtitulo: {
     fontSize: 16,
-    fontFamily: 'Montserrat-Bold',
+    fontFamily: globalVars.fontBold,
     marginTop: 32,
   },
   label: {
     fontSize: 16,
-    fontFamily: 'Montserrat-Medium',
+    fontFamily: globalVars.fontRegular,
     marginTop: 8,
     textAlign: 'justify',
     color: '#707070',

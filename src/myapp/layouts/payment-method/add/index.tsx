@@ -2,18 +2,17 @@ import React, {useState, useEffect} from 'react';
 import {ScrollView, View} from 'react-native';
 import {List, StyleService} from '@ui-kitten/components';
 // My components
-import TitleHeader from '../../../components/texts/title-header';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import UserInput from '../../../components/inputs/user-input';
 import NavigateButton from '../../../components/buttons/navigate-button';
+import TitleHeader from '../../../components/texts/title-header';
+import UserInput from '../../../components/inputs/user-input';
 // Hooks
-import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
-import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMethod';
 import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
+import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMethod';
+import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 // Global Styles
 import globalColors from '../../../styles/colors';
-import paymentMethod from '..';
 
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -41,22 +40,19 @@ export default ({navigation, route}): React.ReactElement => {
     addCardQuery.mutate(form);
   };
 
-  const renderServiceItem = (service) => {
-    const brand = service.item.brand;
-    const content = '****' + service.item.last4;
+  const renderServiceItem = ({item}) => {
+    const cardBrand = item.brand;
+    const cardId = item.id;
+    const cardLabel = '****' + item.last4;
 
-    const auxData = {
-      brand: brand,
-      last4: service.item.last4,
-    };
+    const auxData = {cardBrand, cardId, cardLabel};
 
     return (
       <NavigateButton
-        navigation={navigation}
-        title={brand}
-        subtitle={content}
-        destination={'MyProfile'}
-        data={auxData}
+        data={{paymentMethod: auxData}}
+        destination={'PaymentSummary'}
+        subtitle={cardLabel}
+        title={cardBrand}
       />
     );
   };

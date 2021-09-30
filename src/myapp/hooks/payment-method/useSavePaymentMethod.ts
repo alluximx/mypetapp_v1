@@ -19,9 +19,11 @@ const useSavePaymentMethod = () => {
   const queryClient = useQueryClient();
 
   return useMutation((data: any) => postPaymentMethod(data), {
-    onSuccess: (response, variables) => {
+    onSuccess: (response) => {
       // Save User Address
-      navigation.navigate('MyProfile', {data: variables});
+      navigation.navigate('PaymentSummary', {
+        data: {paymentMethod: response.data},
+      });
       queryClient.invalidateQueries('user-card');
     },
   });

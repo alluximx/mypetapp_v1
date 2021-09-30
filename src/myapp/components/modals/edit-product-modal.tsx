@@ -68,6 +68,7 @@ const EditProductModal = (props: EditProductModalProps) => {
         onSuccess: () => {
           setLoading(false);
           setVisible(false);
+          setPresentationValue(presentationId);
         },
       },
     );
@@ -76,9 +77,6 @@ const EditProductModal = (props: EditProductModalProps) => {
   const onPressCancel = () => {
     onCancel();
     setPresentationValue(presentationId);
-    setAmountValue(
-      amountList.length > 0 ? amountList[quantity - 1]?.value : '',
-    );
   };
 
   return (
@@ -92,19 +90,19 @@ const EditProductModal = (props: EditProductModalProps) => {
           <View>
             <TitleHeader style={styles.modalTitle}>Editar Producto</TitleHeader>
             <DropdownPicker
-              style={{marginTop: 24}}
-              data={variantsList}
               currentValue={presentationValue}
+              data={variantsList}
               placeholder="Presentación"
               setCurrentValue={setPresentationValue}
+              style={styles.variantDrop}
             />
             <DropdownPicker
-              style={{marginTop: 5, marginBottom: 20}}
+              currentValue={amountValue}
               data={amountList}
               disabled={!(amountList.length > 0)}
-              currentValue={amountValue}
               placeholder="Cantidad"
               setCurrentValue={setAmountValue}
+              style={styles.quantityDrop}
             />
           </View>
           <View>
@@ -150,6 +148,8 @@ const styles = StyleSheet.create({
     top: -38,
     right: -44,
   },
+  variantDrop: {marginTop: 24},
+  quantityDrop: {marginTop: 5, marginBottom: 20},
   textCancel: {
     color: globalColors.greenSecondary,
     fontFamily: globalVars.fontBold,

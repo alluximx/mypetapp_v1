@@ -59,6 +59,7 @@ export default ({navigation, route}): React.ReactElement => {
     return (
       <GenericCard
         data={data}
+        isDisabled={true}
         styleCard={{marginHorizontal: 0}}
         onClick={() => {}}
       />

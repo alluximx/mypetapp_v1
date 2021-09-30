@@ -9,7 +9,7 @@ const useSaveAddress = () => {
   const queryClient = useQueryClient();
 
   return useMutation((data: any) => postAddress(data), {
-    onSuccess: (response, variables) => {
+    onSuccess: () => {
       // Save User Address
       queryClient.invalidateQueries('user-address');
     },

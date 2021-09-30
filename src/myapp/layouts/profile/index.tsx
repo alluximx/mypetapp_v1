@@ -14,25 +14,15 @@ export default ({navigation, route}): React.ReactElement => {
   return (
     <DefaultLayout>
       <TitleHeader style={{marginBottom: 16}}>Mi Perfil</TitleHeader>
+      <NavigateButton placeholder="Direcciones" destination="AddressInfo" />
       <NavigateButton
-        navigation={navigation}
-        subtitle={'Direcciones'}
-        destination={'AddressInfo'}
+        placeholder="Métodos de Pago"
+        destination="PaymentMethod"
       />
+      <NavigateButton placeholder="Pedidos" destination="Orders" />
       <NavigateButton
-        navigation={navigation}
-        subtitle={'Métodos de Pago'}
-        destination={'PaymentMethod'}
-      />
-      <NavigateButton
-        navigation={navigation}
-        subtitle={'Pedidos'}
-        destination={'Orders'}
-      />
-      <NavigateButton
-        navigation={navigation}
-        subtitle={'Solicitudes de Adopción'}
-        destination={'AddPaymentMethod'}
+        placeholder="Solicitudes de Adopción"
+        destination="AddPaymentMethod"
       />
       <AnchorText onPress={authContext.signOut} style={styles.logOut}>
         Cerrar Sesión

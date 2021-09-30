@@ -84,7 +84,11 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           headerTitle: null,
         }}>
         {/*Addresses*/}
-        <HomeStack.Screen name="AddAddress" component={AddAddressScreen} />
+        <HomeStack.Screen
+          name="AddAddress"
+          component={AddAddressScreen}
+          initialParams={{data: {}}}
+        />
         <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
         {/*Adoption */}
         <HomeStack.Screen name="AdoptionFilter" component={AdoptionScreen} />
@@ -172,6 +176,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen
           name="AddPaymentMethod"
           component={AddPaymentMethodScreen}
+          initialParams={{data: {}}}
         />
         {/* Pets */}
         <HomeStack.Screen
