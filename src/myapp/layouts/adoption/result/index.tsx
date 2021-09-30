@@ -91,7 +91,7 @@ export default ({navigation, route}): React.ReactElement => {
               {age}
               {age > 1
                 ? services.item.ageType === 'Y'
-                  ? '  Años'
+                  ? ' Años'
                   : ' Meses'
                 : services.item.ageType === 'Y'
                 ? ' Año'
