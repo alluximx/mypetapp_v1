@@ -45,8 +45,6 @@ export default ({navigation, route}): React.ReactElement => {
     delivery_id: deliveryId,
   });
 
-  console.log(form);
-
   const isDisabled =
     !form.card_id || !form.delivery_address || !form.delivery_id;
 
