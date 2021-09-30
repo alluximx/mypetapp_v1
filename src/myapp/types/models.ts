@@ -1,3 +1,23 @@
+interface AdoptionImage {
+  id: string;
+  is_cover: boolean;
+  image: string;
+}
+
+export interface AdoptionRequest {
+  adoption_publication: {
+    ageNumber: string;
+    ageType: string;
+    association: {
+      name: string;
+    };
+    images: AdoptionImage[];
+    name: string;
+  };
+  id: string;
+  status: string;
+}
+
 export interface BaseModel {
   id: string;
   name: string;
