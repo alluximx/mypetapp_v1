@@ -114,11 +114,7 @@ export default ({navigation, route}): React.ReactElement => {
         onAccept={onAcceptSuccessModal}
         showCancel={false}
         title="Pago Exitoso"
-        text={
-          'Tu pago se ha realizado correctamente y te hemos enviado un correo de confirmación.' +
-          '\n' +
-          'Puedes seguir el estado de tu orden desde la sección de "Mis Pedidos" que se encuentra en tu perfil.'
-        }
+        text='Tu pago se ha realizado correctamente y te hemos enviado un correo de confirmación.\nPuedes seguir el estado de tu orden desde la sección de "Mis Pedidos" que se encuentra en tu perfil.'
         visible={isSuccessModalVisible}
       />
       <CustomModal

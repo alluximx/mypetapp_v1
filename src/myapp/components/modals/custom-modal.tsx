@@ -38,16 +38,18 @@ const CustomModal = ({
               source={require('../../assets/images/paw.png')}
             />
             <TitleHeader style={styles.modalTitle}>{title}</TitleHeader>
-            {text
-              .replace('\\n', '\n')
-              .split('\n')
-              .map((txt, key) => {
-                return (
-                  <DefaultText key={key} style={styles.modalText}>
-                    {txt}
-                  </DefaultText>
-                );
-              })}
+            <View style={styles.textContainer}>
+              {text
+                .replace('\\n', '\n')
+                .split('\n')
+                .map((txt, key) => {
+                  return (
+                    <DefaultText key={key} style={styles.modalText}>
+                      {txt}
+                    </DefaultText>
+                  );
+                })}
+            </View>
             <CustomButton onPress={onAccept} isLight={true}>
               {labelAccept}
             </CustomButton>
@@ -101,6 +103,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     color: globalColors.white,
+    marginBottom: 20,
+  },
+  textContainer: {
     marginBottom: 'auto',
   },
 });
