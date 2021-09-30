@@ -12,6 +12,7 @@ const useAddSaleOrder = () => {
     onSuccess: () => {
       queryClient.invalidateQueries('get-orders');
       queryClient.invalidateQueries('shopping-cart');
+      queryClient.invalidateQueries('get-variants');
     },
   });
 };
