@@ -107,6 +107,7 @@ const themedStyles = StyleService.create({
     marginBottom: 12,
     borderRadius: 12,
     fontSize: 13,
+    overflow: 'hidden',
   },
   labelDate: {},
   cardStyle: {
