@@ -17,7 +17,6 @@ import globalColors from '../../../styles/colors';
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isBackSpace, setIsBackSpace] = useState(false);
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
@@ -74,6 +73,8 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form},
   });
 
+  // console.log(form);
+
   return (
     <DefaultLayout>
       <TitleHeader>Método de pago</TitleHeader>
@@ -119,26 +120,21 @@ export default ({navigation, route}): React.ReactElement => {
 
         <View style={styles.horizontalContainer}>
           <UserInput
-            placeholder="Expriación "
+            placeholder="Expiración"
             value={form.expiration_date}
             isNumeric={true}
             maxLength={5}
             onChangeText={(value: string) => {
-              value.length === 2 && value.length < 3 && !isBackSpace
-                ? (value += '/')
-                : (value = value);
-              setForm({...form, expiration_date: value});
-              setIsBackSpace(false);
-            }}
-            onKeyPress={({nativeEvent}) => {
-              if (nativeEvent.key === 'Backspace') {
-                const lastCaracter = form.expiration_date.charAt(
-                  form.expiration_date.length - 1,
-                );
-                lastCaracter === '/'
-                  ? setIsBackSpace(true)
-                  : setIsBackSpace(false);
+              let result = value.replace('/', '');
+
+              if (result.length > 2) {
+                result = [result.slice(0, 2), '/', result.slice(2)].join('');
               }
+
+              const exp_month = result.substring(0, 2);
+              const exp_year = result.substring(2, 4);
+
+              setForm({...form, expiration_date: result, exp_month, exp_year});
             }}
             style={styles.UserInputContainer}
           />
