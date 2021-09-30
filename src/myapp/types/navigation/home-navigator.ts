@@ -30,6 +30,7 @@ type HomeNavigatorParamList = {
   AdoptionDetail: {};
   AdoptionAdvanceFilter: {};
   AdoptionRequest: {};
+  MyAdoptionRequests: {};
 
   ProductList: {};
   ProductFilter: {

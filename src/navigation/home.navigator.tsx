@@ -26,6 +26,7 @@ import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
 import {FilterScreen} from '../myapp/scenes/adoption/filter.component';
 import {RequestScreen} from '../myapp/scenes/adoption/request.component';
 import {ResultScreen} from '../myapp/scenes/adoption/result.component';
+import {MyRequestsScreen} from '../myapp/scenes/adoption/my-requests.component';
 // Breed
 import {DetailBreed} from '../myapp/scenes/breed/detail.component';
 import {InfoBreedScreen} from '../myapp/scenes/breed/Inf.component';
@@ -117,6 +118,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         <HomeStack.Screen name="AdoptionResult" component={ResultScreen} />
         <HomeStack.Screen name="AdoptionRequest" component={RequestScreen} />
+        <HomeStack.Screen
+          name="MyAdoptionRequests"
+          component={MyRequestsScreen}
+        />
         {/* Breed */}
         <HomeStack.Screen
           name="DetailBreed"
