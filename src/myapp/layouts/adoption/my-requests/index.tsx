@@ -47,7 +47,7 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const renderServiceItem = ({item}) => {
-    const data = {
+    const formattedData = {
       additionalContent: [
         <DefaultText style={styles.status}>{item.status}</DefaultText>,
       ],
@@ -74,7 +74,7 @@ export default ({navigation, route}): React.ReactElement => {
       <GenericCard
         contentTextStyle={styles.contentCard}
         coverImageStyle={styles.coverImage}
-        data={data}
+        data={formattedData}
         isDisabled={true}
         onClick={() => {}}
         styleCard={styles.cardStyle}
