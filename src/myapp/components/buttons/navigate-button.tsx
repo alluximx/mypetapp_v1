@@ -1,9 +1,8 @@
 import React from 'react';
-import {TouchableOpacity, Dimensions, View, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 // Global Styles
 import globalColors from '../../styles/colors';
-import globalVars from '../../styles/vars';
 // My Components
 import {DropRightIcon} from '../icons';
 import DefaultText from '../../components/texts/default-text';
@@ -14,7 +13,6 @@ import {NavigateButtonProps} from '../../types/components/buttons';
 const NavigateButton = (props: NavigateButtonProps): React.ReactElement => {
   const navigation = useNavigation();
   const navigateToScreen = () => {
-    const params = {setValue: props.setValue};
     if (props.data) {
       props.destination &&
         navigation.navigate(props.destination, {data: props.data});
