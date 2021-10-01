@@ -38,10 +38,16 @@ export const MyAppNavigator = (): React.ReactElement => {
     const bootstrapAsync = async () => {
       setLoading(true);
       let userToken: string;
+      let typeUser: boolean;
+      let stringTypeUser: string;
 
       try {
         userToken = await AsyncStorage.getItem('auth_token');
         dispatch({type: 'RESTORE_TOKEN', token: userToken});
+
+        stringTypeUser = await AsyncStorage.getItem('is_guest');
+        stringTypeUser === 'true' ? (typeUser = true) : (typeUser = false);
+        dispatch({type: 'RESTORE_IS_GUEST', isGuest: typeUser});
       } catch (e) {
         // Restoring token failed
       }
@@ -50,13 +56,20 @@ export const MyAppNavigator = (): React.ReactElement => {
     };
     bootstrapAsync();
   }, []);
-
   const authContext = useMemo(
     (): AuthContextType => ({
-      isGuest: state.userToken == null ? true : false,
+      isGuest: state.isGuest,
       userId: state.userId,
-      goHomeAsGuest: () => {
-        dispatch({type: 'GUEST_SIGN_IN'});
+      goHomeAsGuest: async (data) => {
+        try {
+          const response = await AuthService.PostLogin(data);
+          await AsyncStorage.setItem('auth_token', response.data.token);
+          await AsyncStorage.setItem('is_guest', JSON.stringify(true));
+          dispatch({type: 'GUEST_SIGN_IN', token: response.data.token});
+          return {status: true, data: response.data};
+        } catch (error) {
+          return {status: false, data: error.response.data};
+        }
       },
       setUserId: (userId) => {
         dispatch({type: 'SET_USER_ID', userId});
@@ -65,6 +78,7 @@ export const MyAppNavigator = (): React.ReactElement => {
         try {
           const response = await AuthService.PostLogin(data);
           await AsyncStorage.setItem('auth_token', response.data.token);
+          await AsyncStorage.setItem('is_guest', JSON.stringify(false));
           dispatch({type: 'SIGN_IN', token: response.data.token});
           return {status: true, data: response.data};
         } catch (error) {
@@ -81,11 +95,18 @@ export const MyAppNavigator = (): React.ReactElement => {
       },
       signOut: async () => {
         await AsyncStorage.removeItem('auth_token');
+        await AsyncStorage.removeItem('is_guest');
         queryClient.clear();
         dispatch({type: 'SIGN_OUT'});
       },
+      signOutGuest: async () => {
+        await AsyncStorage.removeItem('auth_token');
+        await AsyncStorage.removeItem('is_guest');
+        queryClient.clear();
+        dispatch({type: 'SIGN_OUT_GUEST'});
+      },
     }),
-    [state.userToken, state.userId],
+    [state.userToken, state.userId, state.isGuest],
   );
 
   const backButton = () => <BackButton navigation={navigationRef} />;
@@ -121,7 +142,7 @@ export const MyAppNavigator = (): React.ReactElement => {
                   stackAnimation: 'slide_from_right',
                 }}
                 initialParams={{
-                  isGuest: state.isGuest,
+                  isGuest: false,
                 }}
               />
             ) : (
@@ -129,7 +150,7 @@ export const MyAppNavigator = (): React.ReactElement => {
                 name="AuthNavigator"
                 component={AuthNavigator}
                 initialParams={{
-                  isGuest: state.isGuest,
+                  isSignoutGuest: state.isSignoutGuest,
                 }}
                 options={{
                   headerShown: false,

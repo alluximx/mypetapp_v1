@@ -6,6 +6,8 @@ import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
+
+import CustomSpinner from '../../components/custom-spinner';
 // Global Styles
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
@@ -53,7 +55,9 @@ export default ({navigation}): React.ReactElement => {
     );
   };
 
-  return salesOrders.length > 0 ? (
+  return myOrders.isLoading ? (
+    <CustomSpinner />
+  ) : salesOrders.length > 0 ? (
     <DefaultLayout>
       <TitleHeader style={{marginBottom: 20}}>Pedidos</TitleHeader>
       <List

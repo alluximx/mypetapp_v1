@@ -80,7 +80,8 @@ export default ({navigation, route}): React.ReactElement => {
               petImage: image,
               petImageId: petImage.data[0].id,
             })
-          }>
+          }
+          isSubmit>
           Editar
         </AnchorText>
       ),

@@ -6,8 +6,11 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types
 import {CustomButtonProps} from '../../types/components/buttons';
+import useIsGuest from '../../hooks/useIsGuest';
 
 const CustomButton = (props: CustomButtonProps): React.ReactElement => {
+  const [isGuest, showModal, renderAlert] = useIsGuest();
+  const shouldShowModal = props.isSubmit && isGuest;
   const loadingSpinner = () => (
     <View style={styles.spinner}>
       <Spinner size="medium" status="basic" />
@@ -16,31 +19,39 @@ const CustomButton = (props: CustomButtonProps): React.ReactElement => {
 
   return props.isLight ? (
     // Light Button
-    <Button
-      activeOpacity={0.8}
-      appearance="ghost"
-      style={[styles.button, styles.lightButton, props.style]}
-      onPress={props.onPress}>
-      {() => <Text style={styles.lightButtonText}>{props.children}</Text>}
-    </Button>
+    <>
+      {shouldShowModal && renderAlert()}
+      <Button
+        activeOpacity={0.8}
+        appearance="ghost"
+        style={[styles.button, styles.lightButton, props.style]}
+        onPress={shouldShowModal ? showModal : props.onPress}>
+        {() => <Text style={styles.lightButtonText}>{props.children}</Text>}
+      </Button>
+    </>
   ) : (
     // Default Button...
-    <Button
-      activeOpacity={0.8}
-      style={[
-        styles.button,
-        props.isDisabled ? styles.defaultButton : styles.defaultButtonDisabled,
-        props.style,
-      ]}
-      onPress={props.onPress}
-      disabled={props.isDisabled}
-      accessoryLeft={props.isLoading ? loadingSpinner : null}>
-      {() =>
-        !props.isLoading && (
-          <Text style={styles.defaultButtonText}>{props.children}</Text>
-        )
-      }
-    </Button>
+    <>
+      {shouldShowModal && renderAlert()}
+      <Button
+        activeOpacity={0.8}
+        style={[
+          styles.button,
+          props.isDisabled
+            ? styles.defaultButton
+            : styles.defaultButtonDisabled,
+          props.style,
+        ]}
+        onPress={shouldShowModal ? showModal : props.onPress}
+        disabled={props.isDisabled}
+        accessoryLeft={props.isLoading ? loadingSpinner : null}>
+        {() =>
+          !props.isLoading && (
+            <Text style={styles.defaultButtonText}>{props.children}</Text>
+          )
+        }
+      </Button>
+    </>
   );
 };
 

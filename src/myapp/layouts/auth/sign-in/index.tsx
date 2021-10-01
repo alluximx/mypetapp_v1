@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {KeyboardAvoidingView} from './extra/3rd-party';
 // My Components
@@ -18,6 +18,8 @@ import {
   SignInErrors,
   SignInFormFields,
 } from '../../../types/screens/auth/sign-in';
+// To reset Navigate
+import {CommonActions} from '@react-navigation/native';
 
 // Default values for form fields.
 const defaultValues = {username: '', password: ''};
@@ -25,6 +27,30 @@ const defaultValues = {username: '', password: ''};
 const defaultErrors = {non_field_errors: ''};
 
 export default ({navigation}): React.ReactElement => {
+  // To reset navigate
+  useEffect(() => {
+    navigation.dispatch(insertBeforeLast('Start'));
+  }, []);
+
+  const insertBeforeLast = (routeName) => (state) => {
+    const exists = state.routes.find((obj) => obj.name === 'Start');
+    let routes = [];
+    if (!exists) {
+      routes = [
+        ...state.routes.slice(0, -1),
+        {name: routeName},
+        state.routes[state.routes.length - 1],
+      ];
+    } else {
+      routes = state.routes;
+    }
+    return CommonActions.reset({
+      ...state,
+      routes,
+      index: routes.length - 1,
+    });
+  };
+
   const authContext = useContext<AuthContextType>(AuthContext);
   const [form, setForm] = useState<SignInFormFields>(defaultValues);
   const [errors, setErrors] = useState<SignInErrors>(defaultErrors);

@@ -53,7 +53,8 @@ const VaccineCard = (props): React.ReactElement => {
               vaccineId: item.id,
             });
           }}
-          style={styles.edit}>
+          style={styles.edit}
+          isSubmit>
           Editar
         </AnchorText>
       </View>

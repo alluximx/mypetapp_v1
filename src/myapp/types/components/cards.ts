@@ -11,6 +11,7 @@ export interface DatasGeneric {
     additionalHeader?: string;
     buttonAlign?: string;
     buttonText?: string;
+    buttonTextisSubmit?: boolean;
     buttonColor?: string;
     buttonClick?: (data?: any) => void;
     content: string;

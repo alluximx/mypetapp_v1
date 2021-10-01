@@ -10,9 +10,17 @@ import DefaultLayout from '../../components/layouts/default-layout';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
+// Environment
+import enviroments from '../../environments';
 
 export default ({navigation}): React.ReactElement => {
   const authContext = useContext<AuthContextType>(AuthContext);
+  const userGuest = enviroments.GUEST_USER;
+  const passGuest = enviroments.GUEST_PASS;
+  const userData = {
+    username: userGuest,
+    password: passGuest,
+  };
   const onStartButtonPress = (): void => {
     navigation && navigation.navigate('SignUp');
   };
@@ -51,11 +59,13 @@ export default ({navigation}): React.ReactElement => {
           </AnchorText>
         </View>
       </View>
-      {/* <AnchorText
+      <AnchorText
         style={styles.signInAsInvited}
-        onPress={authContext.goHomeAsGuest}>
+        onPress={() => {
+          authContext.goHomeAsGuest(userData);
+        }}>
         Ingresar como invitado
-      </AnchorText> */}
+      </AnchorText>
     </DefaultLayout>
   );
 };
