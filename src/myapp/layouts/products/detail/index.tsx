@@ -116,11 +116,16 @@ export default ({route}): React.ReactElement => {
             style={styles.containerCarousel}
           />
         ) : (
-          <Image
-            style={styles.imageProduct}
-            source={{
-              uri: route.params.cover_image,
-            }}
+          <ImageCarousel
+            gradientBottomStyles={styles.gradientBottom}
+            gradientTopStyles={styles.gradientTop}
+            images={[
+              {
+                uri: route.params.cover_image,
+              },
+            ]}
+            imagesStyle={styles.images}
+            style={styles.containerCarousel}
           />
         )}
       </View>
