@@ -2,6 +2,7 @@ import React, {useContext, useState} from 'react';
 import {AuthContext} from '../../context/AuthContext';
 import {
   Image,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     paddingLeft: 15,
     color: globalColors.greenSecondary,
   },

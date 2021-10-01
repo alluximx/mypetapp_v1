@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, Platform, StyleSheet, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 // Context
 import {AuthContext, AuthContextType} from '../../context/AuthContext';
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     marginBottom: 24,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
   signUpButton: {
     marginBottom: 24,

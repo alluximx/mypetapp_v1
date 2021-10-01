@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
@@ -68,6 +69,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     paddingLeft: 15,
   },
 });

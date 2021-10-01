@@ -1,5 +1,5 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Image, Dimensions} from 'react-native';
+import {Image, Dimensions, Platform} from 'react-native';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -144,11 +144,23 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader children="Desparasitaciones" style={styles.center} />
         <DefaultText
           children="Aún no has agregado desparasitaciones"
-          style={[styles.center, {fontFamily: globalVars.fontBold}]}
+          style={[
+            styles.center,
+            {
+              fontFamily: globalVars.fontBold,
+              fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
+            },
+          ]}
         />
         <DefaultText
           children="para tu mascota."
-          style={[styles.center, {fontFamily: globalVars.fontBold}]}
+          style={[
+            styles.center,
+            {
+              fontFamily: globalVars.fontBold,
+              fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
+            },
+          ]}
         />
       </Layout>
     </DefaultLayout>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet} from 'react-native';
+import {Image, Platform, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
 // My components
 import DefaultLayout from '../../components/layouts/default-layout';
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
   servicesContainer: {
     backgroundColor: 'transparent',

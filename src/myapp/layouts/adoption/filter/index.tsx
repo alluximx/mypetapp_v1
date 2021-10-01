@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Layout, StyleService, useStyleSheet} from '@ui-kitten/components';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import {Dimensions, Image} from 'react-native';
+import {Dimensions, Image, Platform} from 'react-native';
 // Global styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -152,6 +152,7 @@ const themedStyles = StyleService.create({
   },
   textTitle: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 22,
   },
   textContent: {

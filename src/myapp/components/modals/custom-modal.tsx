@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Image,
   Modal,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
   textCancel: {
     color: globalColors.white,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 16,
     textAlign: 'center',
     paddingTop: 28,

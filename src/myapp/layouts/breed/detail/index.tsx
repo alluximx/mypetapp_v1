@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Dimensions,
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -150,6 +151,7 @@ const styles = StyleSheet.create({
   subtitulo: {
     fontSize: 16,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     marginTop: 32,
   },
   label: {

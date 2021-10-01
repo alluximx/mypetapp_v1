@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 // Global styles.
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: globalColors.darkerGray,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     textAlign: 'center',
   },
 });
