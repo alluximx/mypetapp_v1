@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {List, StyleService} from '@ui-kitten/components';
-import {ScrollView} from 'react-native';
+import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
 import TitleHeader from '../../../components/texts/title-header';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -172,105 +172,111 @@ export default ({navigation, route}): React.ReactElement => {
     <DefaultLayout>
       <TitleHeader>Envio</TitleHeader>
       <ScrollView>
-        <TitleHeader style={styles.subtitle}>Direcciones guardadas</TitleHeader>
-        {addresses && addresses.length > 0 ? (
-          <List
-            style={styles.servicesContainer}
-            data={addresses}
-            renderItem={renderServiceItem}
-          />
-        ) : (
-          <DefaultText style={styles.subtitle}>
-            No hay direcciones guardadas
-          </DefaultText>
-        )}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
+          contentContainerStyle={styles.container}>
+          <TitleHeader style={styles.subtitle}>
+            Direcciones guardadas
+          </TitleHeader>
+          {addresses && addresses.length > 0 ? (
+            <List
+              style={styles.servicesContainer}
+              data={addresses}
+              renderItem={renderServiceItem}
+            />
+          ) : (
+            <DefaultText style={styles.subtitle}>
+              No hay direcciones guardadas
+            </DefaultText>
+          )}
 
-        <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
-        <UserInput
-          placeholder="Calle"
-          value={form.street}
-          onChangeText={(value: string) => {
-            setForm({...form, street: value});
-          }}
-        />
-        <UserInput
-          placeholder="Número"
-          value={form.number}
-          onChangeText={(value: string) => {
-            setForm({...form, number: value});
-          }}
-        />
-        <UserInput
-          placeholder="Número Interior"
-          value={form.int_number}
-          onChangeText={(value: string) => {
-            setForm({...form, int_number: value});
-          }}
-        />
-        <UserInput
-          placeholder="Referencia"
-          value={form.reference}
-          onChangeText={(value: string) => {
-            setForm({...form, reference: value});
-          }}
-        />
-        <UserInput
-          placeholder="Colonia"
-          value={form.colony}
-          onChangeText={(value: string) => {
-            setForm({...form, colony: value});
-          }}
-        />
-        <DropdownPicker
-          data={stateList}
-          currentValue={form.state}
-          placeholder="Estado"
-          setCurrentValue={(stateId) => {
-            const stateObj = stateList.find((item) => item.value === stateId);
-            stateObj ? setNameState(stateObj.label) : setNameState('');
-            setForm({...form, state: stateId});
-          }}
-        />
-        <MunicipalityDrop
-          status={false}
-          id={form.state}
-          change={(valor, name) => {
-            valor === ''
-              ? (setForm({...form, municipality: '', city: ''}),
-                setNameMunicipality(''))
-              : (setForm({...form, municipality: valor, city: name}),
-                setNameMunicipality(name));
-          }}
-        />
-        <UserInput
-          placeholder="Ciudad"
-          value={form.city}
-          onChangeText={(value: string) => {
-            setForm({...form, city: value});
-          }}
-        />
-        <UserInput
-          placeholder="Codigo Postal"
-          value={form.zipcode}
-          maxLength={5}
-          onChangeText={(value: string) => {
-            setForm({...form, zipcode: value});
-          }}
-        />
-        {addresses.length > 2 && (
-          <DefaultText style={styles.message}>
-            Solo puedes guardar 3 direcciones
-          </DefaultText>
-        )}
-        <ReminderInput
-          isActive={isReminderActive}
-          setIsActive={changeValue}
-          setValue={null}
-          value={null}
-          text={'Guardar dirección'}
-          isDisable={isDisable}
-          isNotReminder={true}
-        />
+          <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
+          <UserInput
+            placeholder="Calle"
+            value={form.street}
+            onChangeText={(value: string) => {
+              setForm({...form, street: value});
+            }}
+          />
+          <UserInput
+            placeholder="Número"
+            value={form.number}
+            onChangeText={(value: string) => {
+              setForm({...form, number: value});
+            }}
+          />
+          <UserInput
+            placeholder="Número Interior"
+            value={form.int_number}
+            onChangeText={(value: string) => {
+              setForm({...form, int_number: value});
+            }}
+          />
+          <UserInput
+            placeholder="Referencia"
+            value={form.reference}
+            onChangeText={(value: string) => {
+              setForm({...form, reference: value});
+            }}
+          />
+          <UserInput
+            placeholder="Colonia"
+            value={form.colony}
+            onChangeText={(value: string) => {
+              setForm({...form, colony: value});
+            }}
+          />
+          <DropdownPicker
+            data={stateList}
+            currentValue={form.state}
+            placeholder="Estado"
+            setCurrentValue={(stateId) => {
+              const stateObj = stateList.find((item) => item.value === stateId);
+              stateObj ? setNameState(stateObj.label) : setNameState('');
+              setForm({...form, state: stateId});
+            }}
+          />
+          <MunicipalityDrop
+            status={false}
+            id={form.state}
+            change={(valor, name) => {
+              valor === ''
+                ? (setForm({...form, municipality: ''}),
+                  setNameMunicipality(''))
+                : (setForm({...form, municipality: valor}),
+                  setNameMunicipality(name));
+            }}
+          />
+          <UserInput
+            placeholder="Ciudad"
+            value={form.city}
+            onChangeText={(value: string) => {
+              setForm({...form, city: value});
+            }}
+          />
+          <UserInput
+            placeholder="Codigo Postal"
+            value={form.zipcode}
+            maxLength={5}
+            onChangeText={(value: string) => {
+              setForm({...form, zipcode: value});
+            }}
+          />
+          {addresses.length > 2 && (
+            <DefaultText style={styles.message}>
+              Solo puedes guardar 3 direcciones
+            </DefaultText>
+          )}
+          <ReminderInput
+            isActive={isReminderActive}
+            setIsActive={changeValue}
+            setValue={null}
+            value={null}
+            text={'Guardar dirección'}
+            isDisable={isDisable}
+            isNotReminder={true}
+          />
+        </KeyboardAvoidingView>
       </ScrollView>
     </DefaultLayout>
   );
@@ -298,5 +304,8 @@ const styles = StyleService.create({
   options: {
     marginTop: 15,
     height: 100,
+  },
+  container: {
+    flex: 1,
   },
 });
