@@ -99,6 +99,7 @@ export default ({navigation, route}): React.ReactElement => {
   const onAcceptSuccessModal = () => {
     setIsSuccessModalVisible(false);
     navigation.dispatch(StackActions.pop(2));
+    navigation.push('Orders');
   };
 
   const onAcceptErrorModal = () => setIsErrorModalVisible(false);

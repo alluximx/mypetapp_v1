@@ -7,8 +7,6 @@ const postPaymentMethod = (data) => {
     card: {
       ...data,
       number: data.number.replace(/ /g, ''),
-      exp_month: data.expiration_date.split('/')[0],
-      exp_year: data.expiration_date.split('/')[1],
     },
   };
   return api.post('api/v1/user-cards/', formattedData, true);

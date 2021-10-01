@@ -71,8 +71,10 @@ export default ({route}): React.ReactElement => {
         );
       setVariantsList(formattedVariants);
       setPresentationValue(formattedVariants[0].value);
-      setVariant(results[0]);
-      const calculatedAmountList = calculateAmountList(results[0].stock);
+      setVariant(formattedVariants[0]);
+      const calculatedAmountList = calculateAmountList(
+        formattedVariants[0].stock,
+      );
       setAmountList(calculatedAmountList);
       setAmountValue(calculatedAmountList[0]?.value ?? '');
     }

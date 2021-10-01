@@ -13,11 +13,24 @@ import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMe
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 // Global Styles
 import globalColors from '../../../styles/colors';
+// Types
+import {ErrorResponse} from '../../../types/models';
+import CustomSpinner from '../../../components/custom-spinner';
+
+const initialErrors = {
+  card: {
+    cvc: '',
+    number: '',
+    exp_year: '',
+    exp_month: '',
+  },
+};
 
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isBackSpace, setIsBackSpace] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [errors, setErrors] = useState(initialErrors);
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
@@ -37,7 +50,17 @@ export default ({navigation, route}): React.ReactElement => {
   }, [paymentQuery.data]);
 
   const onSavePress = () => {
-    addCardQuery.mutate(form);
+    setHasError(true);
+    setErrors(initialErrors);
+
+    addCardQuery.mutate(form, {
+      onError: (error: ErrorResponse) => {
+        const requestErrors = error.response.data;
+        setErrors(requestErrors);
+        setIsLoading(false);
+        setHasError(true);
+      },
+    });
   };
 
   const renderServiceItem = ({item}) => {
@@ -74,7 +97,9 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form},
   });
 
-  return (
+  return paymentQuery.isLoading || isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout>
       <TitleHeader>Método de pago</TitleHeader>
       <ScrollView>
@@ -101,58 +126,81 @@ export default ({navigation, route}): React.ReactElement => {
 
         <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
         <UserInput
-          placeholder="Nombre de tarjetahabiente"
+          placeholder="Nombre del tarjetahabiente"
           value={form.name}
           onChangeText={(value: string) => {
             setForm({...form, name: value});
           }}
         />
         <UserInput
+          error={errors?.card?.number}
+          isNumeric={true}
+          maxLength={19}
+          onChangeText={(value: string) => {
+            let result = value.split(' ').join('');
+
+            if (result.length > 4 && result.length <= 8) {
+              result = [result.slice(0, 4), result.slice(4)].join(' ');
+            } else if (result.length > 8 && result.length <= 12) {
+              result = [
+                result.slice(0, 4),
+                result.slice(4, 8),
+                result.slice(8),
+              ].join(' ');
+            } else if (result.length > 12) {
+              result = [
+                result.slice(0, 4),
+                result.slice(4, 8),
+                result.slice(8, 12),
+                result.slice(12, 16),
+              ].join(' ');
+            }
+
+            setForm({...form, number: result});
+          }}
           placeholder="Número de tarjeta"
           value={form.number}
-          isNumeric={true}
-          maxLength={16}
-          onChangeText={(value: string) => {
-            setForm({...form, number: value});
-          }}
         />
 
         <View style={styles.horizontalContainer}>
           <UserInput
-            placeholder="Expriación "
-            value={form.expiration_date}
+            error={errors?.card?.exp_month || errors?.card?.exp_year}
             isNumeric={true}
             maxLength={5}
             onChangeText={(value: string) => {
-              value.length === 2 && value.length < 3 && !isBackSpace
-                ? (value += '/')
-                : (value = value);
-              setForm({...form, expiration_date: value});
-              setIsBackSpace(false);
-            }}
-            onKeyPress={({nativeEvent}) => {
-              if (nativeEvent.key === 'Backspace') {
-                const lastCaracter = form.expiration_date.charAt(
-                  form.expiration_date.length - 1,
-                );
-                lastCaracter === '/'
-                  ? setIsBackSpace(true)
-                  : setIsBackSpace(false);
+              let result = value.replace('/', '');
+
+              if (result.length > 2) {
+                result = [result.slice(0, 2), '/', result.slice(2)].join('');
               }
+
+              const exp_month = result.substring(0, 2);
+              const exp_year = result.substring(3, 5);
+
+              setForm({...form, expiration_date: result, exp_month, exp_year});
             }}
+            placeholder="Expiración"
             style={styles.UserInputContainer}
+            value={form.expiration_date}
           />
           <UserInput
-            placeholder="CVV "
-            value={form.cvc}
+            error={errors?.card?.cvc}
             isNumeric={true}
             maxLength={4}
             onChangeText={(value: string) => {
               setForm({...form, cvc: value});
             }}
+            placeholder="CVV "
             style={styles.UserInputContainer}
+            value={form.cvc}
           />
         </View>
+        {hasError && (
+          <DefaultText style={styles.message}>
+            Los datos ingresados son incorrectos. Por favor verifícalos y vuelve
+            a intentarlo.
+          </DefaultText>
+        )}
       </ScrollView>
     </DefaultLayout>
   );
