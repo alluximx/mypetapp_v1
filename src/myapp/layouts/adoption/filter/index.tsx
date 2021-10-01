@@ -117,11 +117,7 @@ export default ({navigation}): React.ReactElement => {
           idTown={form.town}
         />
         <CustomButton
-          style={
-            statusBtn
-              ? {backgroundColor: globalColors.lightGray, marginTop: 14}
-              : {marginTop: 14}
-          }
+          style={[styles.button, statusBtn && styles.disabledButton]}
           isDisabled={statusBtn}
           isLoading={isLoding}
           onPress={() => {
@@ -145,7 +141,8 @@ const themedStyles = StyleService.create({
   },
   imagePort: {
     width: width,
-    height: 320,
+    maxHeight: 320,
+    height: '42%',
   },
   layoutPort: {
     marginLeft: 24,
@@ -162,5 +159,11 @@ const themedStyles = StyleService.create({
     fontFamily: globalVars.fontRegular,
     fontSize: 18,
     color: globalColors.darkGray,
+  },
+  button: {
+    marginVertical: 14,
+  },
+  disabledButton: {
+    backgroundColor: globalColors.lightGray,
   },
 });

@@ -12,7 +12,6 @@ const useAdoption = () => {
       // Save Pet image.
       queryClient.invalidateQueries('request-adoptionAll');
       queryClient.invalidateQueries('adoption-request');
-      navigation.goBack();
     },
   });
 };

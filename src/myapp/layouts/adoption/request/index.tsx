@@ -1,19 +1,32 @@
-import React, {useEffect} from 'react';
-import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
-import DefaultText from '../../../components/texts/default-text';
-import UserInput from '../../../components/inputs/user-input';
-import {useState} from 'react';
-import CustomButton from '../../../components/buttons/custom-button';
-import {View, ScrollView} from 'react-native';
-import OptionSelect from '../../../components/inputs/option-select';
-import CustomModal from '../../../components/modals/custom-modal';
-import UserTextArea from '../../../components/inputs/user-textAtea';
+import React, {useEffect, useState} from 'react';
+import {View, ScrollView, StyleSheet} from 'react-native';
+// Hooks
 import useAdoption from '../../../hooks/adoption/useAdoption';
 import useStates from '../../../hooks/util/useState';
+// My Components
+import CloseButton from '../../../components/buttons/close-button';
+import CustomButton from '../../../components/buttons/custom-button';
+import CustomModal from '../../../components/modals/custom-modal';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import MunicipalityDrop from '../../../components/adoption/municipality-drop';
-import CloseButton from '../../../components/buttons/close-button';
+import OptionSelect from '../../../components/inputs/option-select';
+import TitleHeader from '../../../components/texts/title-header';
+import UserInput from '../../../components/inputs/user-input';
+import UserTextArea from '../../../components/inputs/user-textAtea';
+// Types
+import {BaseModel, ErrorResponse} from '../../../types/models';
+import globalVars from '../../../styles/vars';
+import globalColors from '../../../styles/colors';
+
+const initialErrors = {
+  cp: '',
+  cel: '',
+  reason: '',
+  tel: '',
+  generic: '',
+};
 
 export default ({navigation, route}): React.ReactElement => {
   const [form, setForm] = useState({
@@ -37,25 +50,29 @@ export default ({navigation, route}): React.ReactElement => {
     qresource: '',
   });
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [stateList, setStateList] = useState([]);
+  const [errors, setErrors] = useState(initialErrors);
   const useAddQuery = useAdoption();
   const dataStates = useStates();
+  const isValid =
+    form.cel.length === 10 &&
+    form.tel.length === 10 &&
+    form.cp.length === 5 &&
+    form.reason.length >= 20;
+
   const isDisable =
     form.age !== '' &&
     form.sex !== '' &&
     form.occupation !== '' &&
     form.street !== '' &&
     form.number !== '' &&
-    form.cp.length === 5 &&
-    form.cel.length === 10 &&
-    form.tel.length === 10 &&
     form.cologne !== '' &&
     form.city !== '' &&
     form.municipality !== '' &&
     form.state !== '' &&
     form.qpet !== '' &&
     form.qact !== '' &&
-    form.reason.length >= 20 &&
     form.qcount !== '' &&
     form.qallirgic !== '' &&
     form.qresource !== '';
@@ -63,7 +80,7 @@ export default ({navigation, route}): React.ReactElement => {
   useEffect(() => {
     if (dataStates.data) {
       const aux = [];
-      dataStates.data.data.forEach((element) => {
+      dataStates.data.data.forEach((element: BaseModel) => {
         aux.push({
           value: element.id,
           label: element.name,
@@ -81,6 +98,7 @@ export default ({navigation, route}): React.ReactElement => {
     {key: 'S', value: 'Si'},
     {key: 'N', value: 'No'},
   ];
+
   const onAdoption = () => {
     const request = {
       adoption_publication: route.params.adoption.id,
@@ -129,25 +147,57 @@ export default ({navigation, route}): React.ReactElement => {
       },
       data: route.params.adoption,
     };
-    useAddQuery.mutate(request);
+    useAddQuery.mutate(request, {
+      onSuccess: () => {
+        setIsModalVisible(true);
+      },
+      onError: (error: ErrorResponse) => {
+        setErrors({
+          ...errors,
+          generic:
+            'Hubo un problema al enviar la solicitud. Intenta nuevamente más tarde.',
+        });
+      },
+    });
   };
+
+  const setFormDataErrorMessages = () => {
+    setErrors({
+      ...errors,
+      cel: form.cel.length === 10 ? '' : 'El celular debe tener 10 dígitos',
+      tel:
+        form.tel.length === 10 ? '' : 'El teléfono fijo debe tener 10 dígitos',
+      cp: form.cp.length === 5 ? '' : 'El código postal debe tener 5 dígitos',
+      reason:
+        form.reason.length >= 20
+          ? ''
+          : 'El motivo debe contener al menos 25 caracteres',
+    });
+  };
+
   navigation.setOptions({
     headerLeft: () => <CloseButton navigation={navigation} />,
   });
+
+  const errorMessage = Object.entries(errors)
+    .map((error) => error[1])
+    .filter((error) => error !== '')
+    .join('\n');
+
   return (
-    <DefaultLayout>
+    <DefaultLayout style={styles.container}>
       <CustomModal
         labelAccept="Entendido"
         title="Solicitud Enviada"
         text="La solicitud la analizará la asociación y se pondrá en
         contacto contigo en caso de ser aprobada para continuar con el proceso y de ser necesario
         solicitarte más información."
-        onAccept={onAdoption}
+        onAccept={() => navigation.goBack()}
         onCancel={() => {}}
         showCancel={false}
         visible={isModalVisible}
       />
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         <TitleHeader>Solicitud de adopción</TitleHeader>
         <DefaultText style={{marginBottom: 48}}>
           Por favor llena los siguientes datos para ponernos en contacto
@@ -196,6 +246,7 @@ export default ({navigation, route}): React.ReactElement => {
           }}
         />
         <UserInput
+          error={errors.cp}
           placeholder="CP"
           isNumeric={true}
           maxLength={5}
@@ -229,6 +280,7 @@ export default ({navigation, route}): React.ReactElement => {
           }}
         />
         <UserInput
+          error={errors.cel}
           placeholder="Celular"
           value={form.cel}
           isNumeric={true}
@@ -238,6 +290,7 @@ export default ({navigation, route}): React.ReactElement => {
           }}
         />
         <UserInput
+          error={errors.tel}
           placeholder="Teléfono fijo"
           value={form.tel}
           isNumeric={true}
@@ -271,6 +324,7 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader>¿Qué te motivó a adoptar?</TitleHeader>
         <View style={{marginBottom: 15}}>
           <UserTextArea
+            error={errors.reason}
             placeholder="Motivos"
             value={form.reason}
             onChangeText={(value: string) => {
@@ -322,18 +376,20 @@ export default ({navigation, route}): React.ReactElement => {
           *La dirección registrada en la solicitud, podrá utilizada por las
           asociaciones para una visita presencial
         </DefaultText>
+        <DefaultText style={styles.errorMessage}>{errorMessage}</DefaultText>
         <CustomButton
-          style={
-            !isDisable
-              ? {
-                  marginTop: 50,
-                  marginBottom: 20,
-                }
-              : {marginTop: 50, marginBottom: 20}
-          }
+          style={styles.submitButton}
           isDisabled={!isDisable}
+          isLoading={isLoading}
           onPress={() => {
-            setIsModalVisible(true);
+            setIsLoading(true);
+            if (isValid) {
+              setErrors(initialErrors);
+              onAdoption();
+            } else {
+              setFormDataErrorMessages();
+            }
+            setIsLoading(false);
           }}>
           Solicitar Adopción
         </CustomButton>
@@ -341,3 +397,20 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingRight: globalVars.outsidePadding / 2,
+  },
+  scrollView: {
+    paddingRight: globalVars.outsidePadding / 2,
+  },
+  errorMessage: {
+    color: globalColors.red,
+    marginTop: 16,
+  },
+  submitButton: {
+    marginBottom: globalVars.outsidePadding,
+    marginTop: 50,
+  },
+});
