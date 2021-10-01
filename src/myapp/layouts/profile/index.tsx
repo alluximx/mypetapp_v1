@@ -22,7 +22,7 @@ export default ({navigation, route}): React.ReactElement => {
       <NavigateButton placeholder="Pedidos" destination="Orders" />
       <NavigateButton
         placeholder="Solicitudes de Adopción"
-        destination="AddAddress"
+        destination="MyAdoptionRequests"
       />
       <AnchorText onPress={authContext.signOut} style={styles.logOut}>
         Cerrar Sesión
