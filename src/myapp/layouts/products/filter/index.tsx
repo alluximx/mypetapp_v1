@@ -16,7 +16,7 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import TitleHeader from '../../../components/texts/title-header';
-// Types
+// Types.
 import {Brand, Product} from '../../../types/models';
 
 export default ({navigation, route}): React.ReactElement => {
@@ -29,6 +29,11 @@ export default ({navigation, route}): React.ReactElement => {
     brand,
   );
 
+  const [minAndMax, setMinAndMax] = useState([
+    productPrices.MIN_PRICE,
+    productPrices.MAX_PRICE,
+  ]);
+
   const filteredData =
     productsData?.data?.filter(
       (product: Product) =>
@@ -37,12 +42,30 @@ export default ({navigation, route}): React.ReactElement => {
     ) ?? [];
 
   useEffect(() => {
+    if (productsData?.data) {
+      let minPrice = productPrices.MAX_PRICE;
+      let maxPrice = productPrices.MIN_PRICE;
+
+      for (const product of productsData?.data) {
+        if (product.range_prices.price__min < minPrice) {
+          minPrice = product.range_prices.price__min;
+        }
+        if (product.range_prices.price__max > maxPrice) {
+          maxPrice = product.range_prices.price__max;
+        }
+      }
+
+      setMinAndMax([minPrice, maxPrice]);
+      setPrices([minPrice, maxPrice]);
+    }
+  }, [productsData]);
+
+  useEffect(() => {
     route.params.setPrices(prices);
   }, [prices]);
 
   const clearFilters = () => {
-    setPrices([productPrices.MIN_PRICE, productPrices.MAX_PRICE]);
-    route.params.setPrices([productPrices.MIN_PRICE, productPrices.MAX_PRICE]);
+    setPrices(minAndMax);
     setBrand('');
     route.params.setBrand('');
     setTimeout(() => {
@@ -92,8 +115,8 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <TitleHeader>Rango de Precio</TitleHeader>
       <View style={styles.pricesBoundsContainer}>
-        <DefaultText>${prices[0]}</DefaultText>
-        <DefaultText>${prices[1]}</DefaultText>
+        <DefaultText>${minAndMax[0]}</DefaultText>
+        <DefaultText>${minAndMax[1]}</DefaultText>
       </View>
       <MultiSlider
         allowOverlap={false}
@@ -107,14 +130,14 @@ export default ({navigation, route}): React.ReactElement => {
         )}
         sliderLength={windowWidth - globalVars.outsidePadding * 2 - 20}
         snapped
-        max={productPrices.MAX_PRICE}
-        min={productPrices.MIN_PRICE}
+        min={minAndMax[0]}
+        max={minAndMax[1]}
         minMarkerOverlapDistance={70}
         onValuesChange={setPrices}
         markerOffsetX={10}
         trackStyle={styles.sliderTrack}
         selectedStyle={styles.sliderActiveTrack}
-        step={50}
+        step={10}
         values={prices}
       />
       <AnchorText style={styles.clearFilters} onPress={clearFilters}>

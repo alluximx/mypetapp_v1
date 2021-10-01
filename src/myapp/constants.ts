@@ -84,5 +84,5 @@ export const localeDateService = new NativeDateService('es', {
 
 export const productPrices = {
   MIN_PRICE: 0,
-  MAX_PRICE: 1000,
+  MAX_PRICE: 2000,
 };
