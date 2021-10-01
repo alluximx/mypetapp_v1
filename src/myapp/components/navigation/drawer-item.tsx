@@ -15,6 +15,7 @@ interface DrawerItemProps {
   title: string;
   currentTab: string;
   setCurrentTab: (title: string) => void;
+  isDisabled?: boolean;
   image: ImageSourcePropType;
   urlKey: string;
   params: {};
@@ -28,11 +29,18 @@ const DrawerItem = (props: DrawerItemProps) => {
 
   return (
     <TouchableOpacity
+      disabled={props.isDisabled}
       onPress={() => {
         props.setCurrentTab(props.title);
         props.onPressOption(props.urlKey, props.params);
       }}>
-      <View style={styles.itemContainer}>
+      <View
+        style={[
+          styles.itemContainer,
+          props.isDisabled && {
+            opacity: 0.4,
+          },
+        ]}>
         <Image
           source={props.image}
           style={[

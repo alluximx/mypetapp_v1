@@ -19,14 +19,13 @@ import globalVars from '../../styles/vars';
 import {useEffect} from 'react';
 
 export const HomeDrawer = (props): DrawerElement => {
-  const authContext = useContext(AuthContext);
   const [currentTab, setCurrentTab] = useState<string>('Mis Mascotas');
   const list = [
     {name: 'Mis Mascotas', ruta: 'Home'},
     {name: 'Info. de Razas', ruta: 'Breed'},
     {name: 'Mi Perfil', ruta: 'MyProfile'},
     {name: 'Adopciones', ruta: 'AdoptionFilter'},
-    {name: 'Productos', ruta: 'AdoptionFilter'},
+    {name: 'Productos', ruta: 'Products'},
   ];
   useEffect(() => {
     list.map((route) => {
@@ -65,6 +64,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/my-pets.png')}
           />
           <DrawerItem
+            isDisabled
             urlKey="Home"
             params={{}}
             onPressOption={navigateToScreen}
@@ -92,6 +92,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/products.png')}
           />
           <DrawerItem
+            isDisabled
             urlKey="Home"
             params={{}}
             onPressOption={navigateToScreen}
@@ -101,6 +102,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/pet-stylists.png')}
           />
           <DrawerItem
+            isDisabled
             urlKey="Home"
             params={{}}
             onPressOption={navigateToScreen}
