@@ -40,13 +40,13 @@ export default ({route}): React.ReactElement => {
         <Text style={styles.subtitulo}>Principales características</Text>
         <Text style={styles.label}>{item.main_characteristics}</Text>
         <Text style={styles.subtitulo}>Nivel energético</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.energy_level, 2)} />
+        <PawBreed numberTteam={5} number={parseInt(item.energy_level, 10)} />
         <Text style={styles.subtitulo}>Tendencia a babear</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.slobber_level, 2)} />
+        <PawBreed numberTteam={5} number={parseInt(item.slobber_level, 10)} />
         <Text style={styles.subtitulo}>Tendencia a ladrar</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.barking_level, 2)} />
+        <PawBreed numberTteam={5} number={parseInt(item.barking_level, 10)} />
         <Text style={styles.subtitulo}>Necesidad de atención</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.attention_level, 2)} />
+        <PawBreed numberTteam={5} number={parseInt(item.attention_level, 10)} />
       </View>
     );
   };
