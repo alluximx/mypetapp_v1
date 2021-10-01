@@ -54,6 +54,7 @@ export default ({navigation, route}): React.ReactElement => {
       buttonAlign: 'right',
       buttonColor: globalColors.red,
       buttonText: 'Eliminar Solicitud',
+      buttonTextisSubmit: true,
       content: `${item.ageNumber} ${
         item.ageNumber > 1
           ? item.ageType === 'Y'
