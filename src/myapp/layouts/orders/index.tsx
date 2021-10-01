@@ -1,17 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Image, StyleSheet} from 'react-native';
+import {Image, Platform, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
+// Hooks
+import useSalesOrders from '../../hooks/orders/useSalesOrders';
 // My components
+import CustomSpinner from '../../components/custom-spinner';
 import DefaultLayout from '../../components/layouts/default-layout';
-import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
 import GenericCard from '../../components/cards/generic-card';
-
-import CustomSpinner from '../../components/custom-spinner';
+import TitleHeader from '../../components/texts/title-header';
 // Global Styles
-import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
-import useSalesOrders from '../../hooks/orders/useSalesOrders';
+import globalVars from '../../styles/vars';
 
 export default ({navigation}): React.ReactElement => {
   const [salesOrders, setSalesOrders] = useState([]);
@@ -24,10 +24,7 @@ export default ({navigation}): React.ReactElement => {
   }, [myOrders.data]);
 
   const renderItem = (order) => {
-    const trackingNumber =
-      order.item.tracking_number === null
-        ? 'Estamos trabajando en tu pedido'
-        : `#${order.item.tracking_number}`;
+    const trackingNumber = `#${order.item.id}`;
     const status = order.item.status;
     const deliveryTime =
       order.item.delivery_time === null
@@ -58,7 +55,7 @@ export default ({navigation}): React.ReactElement => {
   return myOrders.isLoading ? (
     <CustomSpinner />
   ) : salesOrders.length > 0 ? (
-    <DefaultLayout>
+    <DefaultLayout style={styles.container}>
       <TitleHeader style={{marginBottom: 20}}>Pedidos</TitleHeader>
       <List
         style={styles.servicesContainer}
@@ -83,7 +80,7 @@ export default ({navigation}): React.ReactElement => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 0,
+    paddingRight: globalVars.outsidePadding / 2,
   },
   dogImage: {
     alignSelf: 'center',
@@ -98,9 +95,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
+    paddingRight: globalVars.outsidePadding / 2,
   },
 });

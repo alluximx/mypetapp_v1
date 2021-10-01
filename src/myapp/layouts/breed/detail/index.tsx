@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Dimensions,
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,52 +20,33 @@ import TitleHeader from '../../../components/texts/title-header';
 export default ({route}): React.ReactElement => {
   const data = [route.params.breed];
   const image = require('../assets/dog-notFound.jpg');
-  const renderDataItem = (service) => {
+  const renderDataItem = ({item}) => {
     return (
       <View style={styles.servicesContainer}>
         <Text style={styles.subtitulo}>Descripción general</Text>
-        <Text style={styles.label}>{service.item.description}</Text>
+        <Text style={styles.label}>{item.description}</Text>
         <Text style={styles.subtitulo}>Tamaño</Text>
-        <Text style={styles.label}>{service.item.size.name}</Text>
+        <Text style={styles.label}>{item.size.name}</Text>
         <Text style={styles.subtitulo}>Peso</Text>
         <Text style={styles.label}>
-          Entre de {service.item.min_weight} y {service.item.max_weight} kg
+          Entre de {item.min_weight} y {item.max_weight} kg
         </Text>
         <Text style={styles.subtitulo}>Altura</Text>
         <Text style={styles.label}>
-          Entre de {service.item.min_height} y {service.item.max_height} cm
+          Entre de {item.min_height} y {item.max_height} cm
         </Text>
         <Text style={styles.subtitulo}>Esperanza de vida</Text>
-        <Text style={styles.label}>{service.item.life_expectancy} años</Text>
-        <Text style={styles.subtitulo}>Criado para</Text>
-        <Text style={styles.label}>{service.item.purpose}</Text>
+        <Text style={styles.label}>{item.life_expectancy} años</Text>
         <Text style={styles.subtitulo}>Principales características</Text>
-        <Text style={styles.label}>{service.item.main_characteristics}</Text>
+        <Text style={styles.label}>{item.main_characteristics}</Text>
         <Text style={styles.subtitulo}>Nivel energético</Text>
-        <PawBreed
-          numberTteam={5}
-          number={parseInt(service.item.energy_level, 2)}
-        />
+        <PawBreed numberTteam={5} number={parseInt(item.energy_level, 10)} />
         <Text style={styles.subtitulo}>Tendencia a babear</Text>
-        <PawBreed
-          numberTteam={5}
-          number={parseInt(service.item.slobber_level, 2)}
-        />
-        <Text style={styles.subtitulo}>Tendencia a roncar</Text>
-        <PawBreed
-          numberTteam={5}
-          number={parseInt(service.item.snoring_level, 2)}
-        />
+        <PawBreed numberTteam={5} number={parseInt(item.slobber_level, 10)} />
         <Text style={styles.subtitulo}>Tendencia a ladrar</Text>
-        <PawBreed
-          numberTteam={5}
-          number={parseInt(service.item.barking_level, 2)}
-        />
+        <PawBreed numberTteam={5} number={parseInt(item.barking_level, 10)} />
         <Text style={styles.subtitulo}>Necesidad de atención</Text>
-        <PawBreed
-          numberTteam={5}
-          number={parseInt(service.item.attention_level, 2)}
-        />
+        <PawBreed numberTteam={5} number={parseInt(item.attention_level, 10)} />
       </View>
     );
   };
@@ -150,6 +132,7 @@ const styles = StyleSheet.create({
   subtitulo: {
     fontSize: 16,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     marginTop: 32,
   },
   label: {

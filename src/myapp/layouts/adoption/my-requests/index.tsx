@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet} from 'react-native';
+import {Dimensions, Image, Platform, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Environment
 import environments from '../../../environments';
@@ -119,6 +119,7 @@ export default ({navigation, route}): React.ReactElement => {
   );
 };
 
+const {width} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
   dogImage: {
     alignSelf: 'center',
     resizeMode: 'contain',
+    width: width,
     height: 390,
     maxHeight: 390,
     marginVertical: 5,
@@ -137,6 +139,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
   servicesContainer: {
     backgroundColor: 'transparent',

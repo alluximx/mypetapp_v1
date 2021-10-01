@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Platform, ScrollView, StyleSheet, Text, View} from 'react-native';
 // Env
 import environments from '../../../environments';
 // Global Styles.
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 16,
     color: globalColors.darkerGray,
     alignItems: 'center',

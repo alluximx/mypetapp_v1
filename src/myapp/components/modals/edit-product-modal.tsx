@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Modal,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
@@ -154,6 +161,7 @@ const styles = StyleSheet.create({
   textCancel: {
     color: globalColors.greenSecondary,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 16,
     textAlign: 'center',
     paddingTop: 28,

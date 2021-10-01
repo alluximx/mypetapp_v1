@@ -10,7 +10,7 @@ import {
   useStyleSheet,
 } from '@ui-kitten/components';
 import React, {useEffect} from 'react';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, Platform, View} from 'react-native';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -130,6 +130,7 @@ const themedStyles = StyleService.create({
     marginTop: 20,
     marginLeft: 24,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 20,
   },
   filter: {
@@ -159,6 +160,7 @@ const themedStyles = StyleService.create({
   },
   tituloCard: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 20,
     marginTop: 14,
     marginLeft: 15,
@@ -169,6 +171,7 @@ const themedStyles = StyleService.create({
   },
   labelNot: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     fontSize: 20,
     alignSelf: 'center',
     marginTop: 20,

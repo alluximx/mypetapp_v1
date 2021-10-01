@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import React, {useLayoutEffect} from 'react';
-import {Image, Dimensions, View, StyleSheet} from 'react-native';
+import {Image, Dimensions, View, StyleSheet, Platform} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../../styles/colors';
@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
   },
   textLabel: {
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     textAlign: 'center',
   },
   dogImage: {

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
@@ -14,6 +15,7 @@ interface DrawerItemProps {
   title: string;
   currentTab: string;
   setCurrentTab: (title: string) => void;
+  isDisabled?: boolean;
   image: ImageSourcePropType;
   urlKey: string;
   params: {};
@@ -27,11 +29,18 @@ const DrawerItem = (props: DrawerItemProps) => {
 
   return (
     <TouchableOpacity
+      disabled={props.isDisabled}
       onPress={() => {
         props.setCurrentTab(props.title);
         props.onPressOption(props.urlKey, props.params);
       }}>
-      <View style={styles.itemContainer}>
+      <View
+        style={[
+          styles.itemContainer,
+          props.isDisabled && {
+            opacity: 0.4,
+          },
+        ]}>
         <Image
           source={props.image}
           style={[
@@ -68,6 +77,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
     paddingLeft: 15,
   },
 });

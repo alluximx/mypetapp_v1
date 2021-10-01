@@ -1,12 +1,13 @@
 import React from 'react';
 import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
-import {Dimensions, Image, View} from 'react-native';
+import {Dimensions, Image, Platform, View} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 // Env
 import environments from '../../../environments';
 // Global Styles
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 // My Components
 import AnchorText from '../../../components/texts/anchor-text';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -146,8 +147,10 @@ export default ({navigation, route}): React.ReactElement => {
             source={require('../assets/adoptionNo.png')}
           />
           <Layout style={styles.layoutPort}>
-            <TitleHeader>No se encontraron resultados</TitleHeader>
-            <DefaultText style={{alignItems: 'center'}}>
+            <TitleHeader style={styles.title}>
+              No se encontraron resultados
+            </TitleHeader>
+            <DefaultText style={styles.subtitle}>
               Intenta cambiar las opciones de filtros para obtener mejores
               resultados.
             </DefaultText>
@@ -199,5 +202,13 @@ const themedStyles = StyleService.create({
     height: '52%',
     borderTopLeftRadius: 18,
     borderTopRightRadius: 18,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  subtitle: {
+    textAlign: 'center',
+    fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
   },
 });
