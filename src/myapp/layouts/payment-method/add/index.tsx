@@ -73,8 +73,6 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form},
   });
 
-  // console.log(form);
-
   return (
     <DefaultLayout>
       <TitleHeader>Método de pago</TitleHeader>
@@ -112,9 +110,28 @@ export default ({navigation, route}): React.ReactElement => {
           placeholder="Número de tarjeta"
           value={form.number}
           isNumeric={true}
-          maxLength={16}
+          maxLength={19}
           onChangeText={(value: string) => {
-            setForm({...form, number: value});
+            let result = value.split(' ').join('');
+
+            if (result.length > 4 && result.length <= 8) {
+              result = [result.slice(0, 4), result.slice(4)].join(' ');
+            } else if (result.length > 8 && result.length <= 12) {
+              result = [
+                result.slice(0, 4),
+                result.slice(4, 8),
+                result.slice(8),
+              ].join(' ');
+            } else if (result.length > 12) {
+              result = [
+                result.slice(0, 4),
+                result.slice(4, 8),
+                result.slice(8, 12),
+                result.slice(12, 16),
+              ].join(' ');
+            }
+
+            setForm({...form, number: result});
           }}
         />
 
@@ -132,7 +149,7 @@ export default ({navigation, route}): React.ReactElement => {
               }
 
               const exp_month = result.substring(0, 2);
-              const exp_year = result.substring(2, 4);
+              const exp_year = result.substring(3, 5);
 
               setForm({...form, expiration_date: result, exp_month, exp_year});
             }}
