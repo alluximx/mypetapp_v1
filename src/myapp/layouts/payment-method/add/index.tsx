@@ -13,10 +13,24 @@ import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMe
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 // Global Styles
 import globalColors from '../../../styles/colors';
+// Types
+import {ErrorResponse} from '../../../types/models';
+import CustomSpinner from '../../../components/custom-spinner';
+
+const initialErrors = {
+  card: {
+    cvc: '',
+    number: '',
+    exp_year: '',
+    exp_month: '',
+  },
+};
 
 export default ({navigation, route}): React.ReactElement => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [errors, setErrors] = useState(initialErrors);
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
@@ -36,7 +50,19 @@ export default ({navigation, route}): React.ReactElement => {
   }, [paymentQuery.data]);
 
   const onSavePress = () => {
-    addCardQuery.mutate(form);
+    setHasError(true);
+    setErrors(initialErrors);
+
+    addCardQuery.mutate(form, {
+      onError: (error: ErrorResponse) => {
+        const requestErrors = error.response.data;
+        console.log(requestErrors);
+
+        setErrors(requestErrors);
+        setIsLoading(false);
+        setHasError(true);
+      },
+    });
   };
 
   const renderServiceItem = ({item}) => {
@@ -73,7 +99,9 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form},
   });
 
-  return (
+  return paymentQuery.isLoading || isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout>
       <TitleHeader>Método de pago</TitleHeader>
       <ScrollView>
@@ -100,15 +128,14 @@ export default ({navigation, route}): React.ReactElement => {
 
         <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
         <UserInput
-          placeholder="Nombre de tarjetahabiente"
+          placeholder="Nombre del tarjetahabiente"
           value={form.name}
           onChangeText={(value: string) => {
             setForm({...form, name: value});
           }}
         />
         <UserInput
-          placeholder="Número de tarjeta"
-          value={form.number}
+          error={errors?.card?.number}
           isNumeric={true}
           maxLength={19}
           onChangeText={(value: string) => {
@@ -133,12 +160,13 @@ export default ({navigation, route}): React.ReactElement => {
 
             setForm({...form, number: result});
           }}
+          placeholder="Número de tarjeta"
+          value={form.number}
         />
 
         <View style={styles.horizontalContainer}>
           <UserInput
-            placeholder="Expiración"
-            value={form.expiration_date}
+            error={errors?.card?.exp_month || errors?.card?.exp_year}
             isNumeric={true}
             maxLength={5}
             onChangeText={(value: string) => {
@@ -153,19 +181,28 @@ export default ({navigation, route}): React.ReactElement => {
 
               setForm({...form, expiration_date: result, exp_month, exp_year});
             }}
+            placeholder="Expiración"
             style={styles.UserInputContainer}
+            value={form.expiration_date}
           />
           <UserInput
-            placeholder="CVV "
-            value={form.cvc}
+            error={errors?.card?.cvc}
             isNumeric={true}
             maxLength={4}
             onChangeText={(value: string) => {
               setForm({...form, cvc: value});
             }}
+            placeholder="CVV "
             style={styles.UserInputContainer}
+            value={form.cvc}
           />
         </View>
+        {hasError && (
+          <DefaultText style={styles.message}>
+            Los datos ingresados son incorrectos. Por favor verifícalos y vuelve
+            a intentarlo.
+          </DefaultText>
+        )}
       </ScrollView>
     </DefaultLayout>
   );

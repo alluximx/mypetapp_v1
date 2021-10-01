@@ -41,6 +41,12 @@ export interface Cart {
   total_item_price: number;
 }
 
+export interface ErrorResponse {
+  response: {
+    data: any;
+  };
+}
+
 export interface Option {
   label: string;
   value: string;
