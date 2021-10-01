@@ -56,8 +56,6 @@ export default ({navigation, route}): React.ReactElement => {
     addCardQuery.mutate(form, {
       onError: (error: ErrorResponse) => {
         const requestErrors = error.response.data;
-        console.log(requestErrors);
-
         setErrors(requestErrors);
         setIsLoading(false);
         setHasError(true);
