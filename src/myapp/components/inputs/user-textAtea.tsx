@@ -83,7 +83,7 @@ const UserTextArea = (props: UserInputProps): React.ReactElement => {
         textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
         value={props.value}
         multiline={true}
-        maxLength={160}
+        maxLength={100}
       />
     </View>
   );
