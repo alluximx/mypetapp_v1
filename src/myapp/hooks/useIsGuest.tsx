@@ -19,7 +19,7 @@ const useIsGuest = (): [boolean, () => void, () => React.ReactElement] => {
       <CustomModal
         labelAccept="Iniciar sesión"
         title="Inicio de sesión requerido"
-        text="Para realizar esta acción necesitas iniciar sesión"
+        text="Para realizar esta acción necesitas iniciar sesión o registrarte."
         onAccept={onLoginAccept}
         onCancel={() => setIsModalVisible(false)}
         showCancel={true}
