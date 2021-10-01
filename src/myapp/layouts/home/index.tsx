@@ -21,19 +21,22 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const servicesList = [
   {
-    serviceName: 'Veterinaria',
+    disabled: true,
     icon: require('../../assets/images/menu/vets.png'),
     route: 'Home',
+    serviceName: 'Veterinaria',
   },
   {
-    serviceName: 'Estética',
+    disabled: true,
     icon: require('../../assets/images/menu/pet-stylists.png'),
     route: 'Home',
+    serviceName: 'Estética',
   },
   {
-    serviceName: 'Productos',
+    disabled: false,
     icon: require('../../assets/images/menu/products.png'),
     route: 'ProductList',
+    serviceName: 'Productos',
   },
 ];
 
@@ -70,7 +73,13 @@ export default ({navigation}): React.ReactElement => {
 
   const renderServiceItem = (service) => (
     <TouchableOpacity
-      style={styles.serviceContainer}
+      disabled={service.disabled}
+      style={[
+        styles.serviceContainer,
+        service.disabled && {
+          opacity: 0.3,
+        },
+      ]}
       onPress={() => navigation.navigate(service.route, {})}>
       <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
         <Image style={styles.serviceIcon} source={service.icon} />
