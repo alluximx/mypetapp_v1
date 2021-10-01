@@ -35,7 +35,7 @@ export default ({navigation, route}): React.ReactElement => {
     date: null,
     content: `Tiempo de entrega estimado: \n${
       orderSale.delivery_time === null
-        ? 'Podras consultar el tiempo de entrega cuando el producto este en camino.'
+        ? 'Podrás consultar el tiempo de entrega cuando el producto este en camino.'
         : orderSale.delivery_time
     }`,
     images: null,
@@ -48,7 +48,7 @@ export default ({navigation, route}): React.ReactElement => {
     date: null,
     content:
       orderSale.tracking_number === null
-        ? 'Podras consultar el número de guía cuando el producto este en camino.'
+        ? 'Podrás consultar el número de guía cuando el producto este en camino.'
         : `#${orderSale.tracking_number}`,
     images: null,
     styleCard: {},
