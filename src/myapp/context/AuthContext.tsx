@@ -13,7 +13,7 @@ export interface AuthContextType {
 
 // Default function definitions.
 export const AuthContext = React.createContext<AuthContextType>({
-  isGuest: true,
+  isGuest: false,
   userId: null,
   goHomeAsGuest: async (data) => {
     return data;
