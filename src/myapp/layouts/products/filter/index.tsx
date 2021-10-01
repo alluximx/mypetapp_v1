@@ -29,7 +29,11 @@ export default ({navigation, route}): React.ReactElement => {
     brand,
   );
 
-  const [minAndMax, setMinAndMax] = useState([
+  const [currentMinAndMax, setCurrentMinAndMax] = useState([
+    productPrices.MIN_PRICE,
+    productPrices.MAX_PRICE,
+  ]);
+  const [minAndMaxOfAll, setMinAndMaxOfAll] = useState([
     productPrices.MIN_PRICE,
     productPrices.MAX_PRICE,
   ]);
@@ -41,33 +45,41 @@ export default ({navigation, route}): React.ReactElement => {
         prices[1] >= product.range_prices.price__max,
     ) ?? [];
 
+  const getMinAndMax = () => {
+    let minPrice = productPrices.MAX_PRICE;
+    let maxPrice = productPrices.MIN_PRICE;
+
+    for (const product of productsData?.data) {
+      if (product.range_prices.price__min < minPrice) {
+        minPrice = product.range_prices.price__min;
+      }
+      if (product.range_prices.price__max > maxPrice) {
+        maxPrice = product.range_prices.price__max;
+      }
+    }
+
+    return [minPrice, maxPrice];
+  };
+
   useEffect(() => {
     if (productsData?.data) {
-      let minPrice = productPrices.MAX_PRICE;
-      let maxPrice = productPrices.MIN_PRICE;
-
-      for (const product of productsData?.data) {
-        if (product.range_prices.price__min < minPrice) {
-          minPrice = product.range_prices.price__min;
-        }
-        if (product.range_prices.price__max > maxPrice) {
-          maxPrice = product.range_prices.price__max;
-        }
+      const newMinAndMax = getMinAndMax();
+      if (brand === '') {
+        setMinAndMaxOfAll(newMinAndMax);
       }
-
-      setMinAndMax([minPrice, maxPrice]);
-      setPrices([minPrice, maxPrice]);
+      setCurrentMinAndMax(newMinAndMax);
     }
-  }, [productsData]);
+  }, [productsData, brand]);
 
   useEffect(() => {
     route.params.setPrices(prices);
   }, [prices]);
 
   const clearFilters = () => {
-    setPrices(minAndMax);
     setBrand('');
     route.params.setBrand('');
+    setCurrentMinAndMax(minAndMaxOfAll);
+    setPrices(minAndMaxOfAll);
     setTimeout(() => {
       navigation.goBack();
     }, 500);
@@ -115,8 +127,8 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <TitleHeader>Rango de Precio</TitleHeader>
       <View style={styles.pricesBoundsContainer}>
-        <DefaultText>${minAndMax[0]}</DefaultText>
-        <DefaultText>${minAndMax[1]}</DefaultText>
+        <DefaultText>${currentMinAndMax[0]}</DefaultText>
+        <DefaultText>${currentMinAndMax[1]}</DefaultText>
       </View>
       <MultiSlider
         allowOverlap={false}
@@ -130,8 +142,8 @@ export default ({navigation, route}): React.ReactElement => {
         )}
         sliderLength={windowWidth - globalVars.outsidePadding * 2 - 20}
         snapped
-        min={minAndMax[0]}
-        max={minAndMax[1]}
+        min={currentMinAndMax[0]}
+        max={currentMinAndMax[1]}
         minMarkerOverlapDistance={70}
         onValuesChange={setPrices}
         markerOffsetX={10}
