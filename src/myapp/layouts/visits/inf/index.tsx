@@ -54,6 +54,7 @@ export default ({navigation, route}): React.ReactElement => {
               isEdit: false,
             })
           }
+          isSubmit
         />
       ),
     });

@@ -96,7 +96,9 @@ export default ({navigation}): React.ReactElement => {
               styles.petButtonContentContainerEmpty,
           ]}
           horizontal={true}
-          ListFooterComponent={() => <AddButton onAdd={onAddPetButtonPress} />}
+          ListFooterComponent={() => (
+            <AddButton onAdd={onAddPetButtonPress} isSubmit />
+          )}
           ListFooterComponentStyle={styles.addButtonContainer}
           data={data.pets}
           renderItem={renderPetButton}

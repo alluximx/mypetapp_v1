@@ -110,7 +110,7 @@ export default ({navigation}): React.ReactElement => {
           <TitleHeader style={styles.totalText}>Total</TitleHeader>
           <TitleHeader style={styles.totalText}>${totalAmount}</TitleHeader>
         </View>
-        <CustomButton isLight onPress={onPressPay}>
+        <CustomButton isLight onPress={onPressPay} isSubmit>
           Continuar con Pago
         </CustomButton>
       </View>

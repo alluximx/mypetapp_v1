@@ -126,7 +126,8 @@ export default ({navigation, route}): React.ReactElement => {
               navigation.navigate('AdoptionRequest', {
                 adoption: route.params.adoption,
               });
-            }}>
+            }}
+            isSubmit>
             Quiero Adoptar
           </CustomButton>
           <Text style={styles.finalText}>

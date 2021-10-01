@@ -74,13 +74,15 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
           additionalButtons: [
             <AnchorText
               onPress={() => onPressDelete(id)}
-              style={styles.buttonDelete}>
+              style={styles.buttonDelete}
+              isSubmit>
               Eliminar
             </AnchorText>,
             <AnchorText
               isDisabled={emptyStock}
               onPress={onPressEdit}
-              style={[styles.buttonEdit, emptyStock && styles.disabledEdit]}>
+              style={[styles.buttonEdit, emptyStock && styles.disabledEdit]}
+              isSubmit>
               Editar
             </AnchorText>,
           ],
