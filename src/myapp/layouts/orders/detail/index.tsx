@@ -8,6 +8,7 @@ import DefaultText from '../../../components/texts/default-text';
 import GenericCard from '../../../components/cards/generic-card';
 // Global Styles
 import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
 
 export default ({navigation, route}): React.ReactElement => {
   const orderSale = route.params.order;
@@ -39,10 +40,7 @@ export default ({navigation, route}): React.ReactElement => {
     }`,
     images: null,
     styleCard: {},
-    title:
-      orderSale.tracking_number === null
-        ? 'Estamos trabajando en tu pedido'
-        : `#${orderSale.tracking_number}`,
+    title: `#${orderSale.id}`,
   };
 
   const dataDelivery = {
@@ -109,9 +107,9 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout style={styles.container}>
       <TitleHeader style={{marginBottom: 24}}>Detalle de Pedido</TitleHeader>
-      <ScrollView>
+      <ScrollView style={styles.scrollView}>
         <GenericCard
           data={data}
           styleCard={{marginHorizontal: 0}}
@@ -165,6 +163,12 @@ export default ({navigation, route}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingRight: globalVars.outsidePadding / 2,
+  },
+  scrollView: {
+    paddingRight: globalVars.outsidePadding / 2,
+  },
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
