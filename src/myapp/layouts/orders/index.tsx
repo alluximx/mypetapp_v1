@@ -28,7 +28,7 @@ export default ({navigation}): React.ReactElement => {
     const status = order.item.status;
     const deliveryTime =
       order.item.delivery_time === null
-        ? 'Podrás consultar el tiempo de entrega cuando el producto este en camino.'
+        ? 'Podrás consultar el tiempo de entrega cuando el producto esté en camino.'
         : order.item.delivery_time;
     const data = {
       buttonAlign: 'left',
