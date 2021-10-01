@@ -6,22 +6,29 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types
 import {AnchorTextProps} from '../../types/components/texts';
+// Hooks
+import useIsGuest from '../../hooks/useIsGuest';
 
 const AnchorText = (props: AnchorTextProps): React.ReactElement => {
+  const [isGuest, showModal, renderAlert] = useIsGuest();
+  const shouldShowModal = props.isSubmit && isGuest;
   return (
-    <TouchableOpacity
-      disabled={props.isDisabled ?? false}
-      activeOpacity={0.8}
-      onPress={props.onPress}>
-      <Text
-        style={[
-          styles.anchorText,
-          props.isDisabled && styles.disabledText,
-          props.style,
-        ]}>
-        {props.children}
-      </Text>
-    </TouchableOpacity>
+    <>
+      {shouldShowModal && renderAlert()}
+      <TouchableOpacity
+        disabled={props.isDisabled ?? false}
+        activeOpacity={0.8}
+        onPress={shouldShowModal ? showModal : props.onPress}>
+        <Text
+          style={[
+            styles.anchorText,
+            props.isDisabled && styles.disabledText,
+            props.style,
+          ]}>
+          {props.children}
+        </Text>
+      </TouchableOpacity>
+    </>
   );
 };
 

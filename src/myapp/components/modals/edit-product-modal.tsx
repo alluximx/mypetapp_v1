@@ -111,7 +111,8 @@ const EditProductModal = (props: EditProductModalProps) => {
             <CustomButton
               isLoading={loading}
               onPress={onPressSave}
-              isDisabled={isDisabled}>
+              isDisabled={isDisabled}
+              isSubmit>
               Guardar
             </CustomButton>
             <TouchableOpacity activeOpacity={0.8} onPress={onPressCancel}>

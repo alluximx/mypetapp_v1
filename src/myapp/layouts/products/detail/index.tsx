@@ -222,7 +222,8 @@ export default ({route}): React.ReactElement => {
                 <CustomButton
                   isLoading={saveProductCart.isLoading}
                   isDisabled={isDisabledButton || amountValue === ''}
-                  onPress={actionButton}>
+                  onPress={actionButton}
+                  isSubmit>
                   Agregar al Carrito
                 </CustomButton>
               </Layout>

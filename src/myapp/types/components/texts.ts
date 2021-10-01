@@ -3,4 +3,5 @@ export interface AnchorTextProps {
   isDisabled?: boolean;
   onPress: () => void;
   style?: {};
+  isSubmit?: boolean;
 }

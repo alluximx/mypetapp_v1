@@ -47,6 +47,7 @@ export default ({navigation, route}): React.ReactElement => {
       buttonAlign: 'right',
       buttonColor: globalColors.red,
       buttonText: 'Eliminar',
+      buttonTextisSubmit: true,
       date: null,
       content: content,
       images: null,

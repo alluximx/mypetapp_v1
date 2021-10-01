@@ -119,6 +119,7 @@ export default ({navigation, route}): React.ReactElement => {
           onAdd={() =>
             navigation.navigate('AddVaccine', {petId: route.params.pet.id})
           }
+          isSubmit
         />
       ),
     });

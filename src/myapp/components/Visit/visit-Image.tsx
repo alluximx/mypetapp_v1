@@ -5,6 +5,7 @@ import useVisitImage from '../../hooks/visits/useVisitImage';
 // My Components.
 import GenericCard from '../cards/generic-card';
 import globalColors from '../../styles/colors';
+import AnchorText from '../texts/anchor-text';
 
 interface VisitCardImgProps {
   data: any;
@@ -29,18 +30,6 @@ const VisitCardImg = ({
     }
   }, [visitData]);
 
-  const newData = {
-    date: visit_date == null ? null : new Date(visit_date),
-    buttonAlign: 'right',
-    buttonColor: globalColors.greenSecondary,
-    buttonText: 'Editar',
-    content: details,
-    data: visit,
-    images,
-    styleCard: {},
-    title,
-  };
-
   const onEdit = () => {
     navigation.navigate('NewVisitMedical', {
       isEdit: true,
@@ -56,7 +45,21 @@ const VisitCardImg = ({
     });
   };
 
-  return !isLoading && <GenericCard data={newData} onClick={onEdit} />;
+  const newData = {
+    date: visit_date == null ? null : new Date(visit_date),
+    additionalButtons: [
+      <AnchorText onPress={onEdit} isSubmit>
+        Editar
+      </AnchorText>,
+    ],
+    content: details,
+    data: visit,
+    images,
+    styleCard: {},
+    title,
+  };
+
+  return !isLoading && <GenericCard data={newData} onClick={null} />;
 };
 
 export default VisitCardImg;

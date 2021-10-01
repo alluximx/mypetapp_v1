@@ -22,6 +22,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
     buttonAlign,
     buttonColor,
     buttonText,
+    buttonTextisSubmit,
     buttonClick,
     content,
     coverImage,
@@ -81,7 +82,8 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
           {buttonText && (
             <AnchorText
               onPress={buttonClick ? buttonClick : props.onClick}
-              style={[stylesCart.header, props.buttonStyle]}>
+              style={[stylesCart.header, props.buttonStyle]}
+              isSubmit={buttonTextisSubmit}>
               {buttonText}
             </AnchorText>
           )}

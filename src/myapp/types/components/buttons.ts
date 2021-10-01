@@ -5,4 +5,5 @@ export interface CustomButtonProps {
   onPress: () => void;
   isDisabled?: boolean;
   isLoading?: boolean;
+  isSubmit?: boolean;
 }

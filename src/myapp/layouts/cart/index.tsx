@@ -118,7 +118,7 @@ export default ({navigation}): React.ReactElement => {
             ${totalAmount.toFixed(2)}
           </TitleHeader>
         </View>
-        <CustomButton isLight onPress={onPressPay}>
+        <CustomButton isLight onPress={onPressPay} isSubmit>
           Continuar con Pago
         </CustomButton>
       </View>

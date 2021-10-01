@@ -16,40 +16,38 @@ const useMyNameAndPets = () => {
     pets: [],
   });
 
-  if (!authContext.isGuest) {
-    useEffect(() => {
+  useEffect(() => {
+    setData({
+      ...data,
+      isLoading: true,
+    });
+  }, []);
+
+  const profileQuery = useQuery('my-profile', () => auth_service.me());
+  const userId = profileQuery.data?.data.id;
+  authContext.setUserId(userId);
+  const petsQuery = useMyPets(userId);
+
+  useEffect(() => {
+    // Update profile data if success...
+    if (profileQuery.isSuccess) {
       setData({
         ...data,
-        isLoading: true,
+        userName: profileQuery.data?.data.name,
       });
-    }, []);
+    }
+  }, [profileQuery.data]);
 
-    const profileQuery = useQuery('my-profile', () => auth_service.me());
-    const userId = profileQuery.data?.data.id;
-    authContext.setUserId(userId);
-    const petsQuery = useMyPets(authContext.isGuest, userId);
-
-    useEffect(() => {
-      // Update profile data if success...
-      if (profileQuery.isSuccess) {
-        setData({
-          ...data,
-          userName: profileQuery.data?.data.name,
-        });
-      }
-    }, [profileQuery.data]);
-
-    useEffect(() => {
-      // Update pets data if sucess...
-      if (petsQuery.isSuccess) {
-        setData({
-          ...data,
-          pets: petsQuery.data?.data,
-          isLoading: false,
-        });
-      }
-    }, [petsQuery.data]);
-  }
+  useEffect(() => {
+    // Update pets data if sucess...
+    if (petsQuery.isSuccess) {
+      setData({
+        ...data,
+        pets: petsQuery.data?.data,
+        isLoading: false,
+      });
+    }
+  }, [petsQuery.data]);
 
   return data;
 };
