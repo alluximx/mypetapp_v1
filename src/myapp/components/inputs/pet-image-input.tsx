@@ -15,6 +15,7 @@ import {
   CameraOptions,
   ImagePickerResponse,
 } from 'react-native-image-picker';
+import {openPicker} from 'react-native-image-crop-picker';
 // My Components.
 import AddButton from '../buttons/add-button';
 
@@ -55,16 +56,32 @@ const PetImageInput = ({
         {
           text: 'Seleccionar desde mi galería',
           style: 'default',
-          onPress: () =>
-            launchImageLibrary(
-              galleryOptions,
-              (response: ImagePickerResponse) => {
-                if (!response.didCancel && !response.errorCode) {
-                  setImageResponse(response);
-                  setImage(response.assets[0]);
-                }
-              },
-            ),
+          onPress: () => {
+            if (Platform.OS === 'ios') {
+              openPicker({
+                width: 500,
+                height: 500,
+                cropping: false,
+                compressImageQuality: 0.5,
+              }).then((image) => {
+                const imageData = {
+                  fileName: image.filename,
+                  type: image.mime,
+                  uri: image.sourceURL,
+                };
+                setImage(imageData);
+              });
+            } else {
+              launchImageLibrary(
+                galleryOptions,
+                (response: ImagePickerResponse) => {
+                  if (!response.didCancel && !response.errorCode) {
+                    setImage(response.assets[0]);
+                  }
+                },
+              );
+            }
+          },
         },
         {
           text: 'Tomar una nueva foto',

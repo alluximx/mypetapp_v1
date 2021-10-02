@@ -15,6 +15,8 @@ import {
   launchCamera,
 } from 'react-native-image-picker';
 
+import {openPicker} from 'react-native-image-crop-picker';
+
 const galleryOptions: CameraOptions = {
   mediaType: 'photo',
   maxWidth: 500,
@@ -42,15 +44,32 @@ const useLaunchCamera = (setImage: (image: ImageSourcePropType) => void) => {
         {
           text: 'Seleccionar desde mi galería',
           style: 'default',
-          onPress: () =>
-            launchImageLibrary(
-              galleryOptions,
-              (response: ImagePickerResponse) => {
-                if (!response.didCancel && !response.errorCode) {
-                  setImage(response.assets[0]);
-                }
-              },
-            ),
+          onPress: () => {
+            if (Platform.OS === 'ios') {
+              openPicker({
+                width: 500,
+                height: 500,
+                cropping: false,
+                compressImageQuality: 0.5,
+              }).then((image) => {
+                const imageData = {
+                  fileName: image.filename,
+                  type: image.mime,
+                  uri: image.sourceURL,
+                };
+                setImage(imageData);
+              });
+            } else {
+              launchImageLibrary(
+                galleryOptions,
+                (response: ImagePickerResponse) => {
+                  if (!response.didCancel && !response.errorCode) {
+                    setImage(response.assets[0]);
+                  }
+                },
+              );
+            }
+          },
         },
         {
           text: 'Tomar una nueva foto',
