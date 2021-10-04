@@ -1,0 +1,181 @@
+import React from 'react';
+import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
+import {Dimensions, Image, Platform, TouchableOpacity} from 'react-native';
+// Env
+import environments from '../../../environments';
+// Global Styles
+import globalColors from '../../../styles/colors';
+import globalVars from '../../../styles/vars';
+// My Components
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import TitleHeader from '../../../components/texts/title-header';
+import GenericCard from '../../../components/cards/generic-card';
+import RatingCard from '../../../components/cards/rating-card';
+
+export default ({navigation, route}): React.ReactElement => {
+  const townName = 'Ecatepec de Morelos';
+  const stateName = 'México';
+  const styles = useStyleSheet(themedStyles);
+  // Get data from params
+  // const data = route.params.data;
+  const data = [
+    {
+      name: 'Veterinaria Arboledas',
+      address: 'Av.Arboledas 2120',
+      rating: '4.6',
+      distance: '1.5',
+      image: 'https://mpa-stage.s3.amazonaws.com/media/variants_images/300.jpg',
+    },
+    {
+      name: 'Dog Box',
+      address: 'Av.Arboledas 2120',
+      rating: '5',
+      distance: '6.3',
+      image:
+        'https://mpa-stage.s3.amazonaws.com/media/variants_images/300_port_UlUbBtd.jpg',
+    },
+    {
+      name: 'Care Pet',
+      address: 'Av.Arboledas 2120',
+      rating: '2.3',
+      distance: '4.6',
+      image:
+        'https://mpa-stage.s3.amazonaws.com/media/variants_images/200_vavVsMh_F1H9xW7.jpg',
+    },
+  ];
+  const routeParamsDataEmpty = [];
+
+  if (data.length > 0) {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            //Navigate
+          }}>
+          <Image
+            style={styles.locationImage}
+            source={require('../../../assets/images/icons/location.png')}
+          />
+        </TouchableOpacity>
+      ),
+    });
+  }
+
+  const renderServiceItem = (services) => {
+    const name = services.item.name;
+    const address = services.item.address;
+    const rating = services.item.rating;
+    const distance = services.item.distance;
+    const image = services.item.image;
+    return (
+      <GenericCard
+        contentTextStyle={styles.subtitleCard}
+        coverImageStyle={styles.coverImage}
+        styleCard={{marginHorizontal: 0}}
+        data={{
+          additionalContent: [
+            <RatingCard
+              rating={rating}
+              distance={distance}
+              styleCard={{marginTop: 8}}
+            />,
+          ],
+          content: address,
+          coverImage: image,
+          title: name,
+        }}
+        onClick={null}
+      />
+    );
+  };
+
+  return (
+    <DefaultLayout
+      statusBarStyle={'dark-content'}
+      style={[styles.container, {color: 'black'}]}>
+      {data.length > 0 ? (
+        <>
+          <TitleHeader>{data.length} Resultados</TitleHeader>
+          <DefaultText>
+            {townName}, {stateName}.
+          </DefaultText>
+          <List
+            style={styles.servicesContainer}
+            horizontal={false}
+            data={data}
+            renderItem={renderServiceItem}
+          />
+        </>
+      ) : (
+        <Layout style={{backgroundColor: globalColors.backgroundDefault}}>
+          <Image
+            style={styles.dogImage}
+            source={require('../../../assets/images/pets/petDirecciones.png')}
+          />
+          <Layout style={styles.layoutPort}>
+            <TitleHeader style={styles.title}>
+              No se encontraron resultados
+            </TitleHeader>
+            <DefaultText style={styles.subtitle}>
+              Al parecer aún no hay veterinarias disponibles por tu zona.
+            </DefaultText>
+          </Layout>
+        </Layout>
+      )}
+    </DefaultLayout>
+  );
+};
+
+const {width} = Dimensions.get('window');
+const themedStyles = StyleService.create({
+  container: {
+    flex: 1,
+    backgroundColor: globalColors.backgroundDefault,
+  },
+  layoutPort: {
+    marginLeft: 24,
+    marginRight: 24,
+    marginBottom: 45,
+    backgroundColor: globalColors.backgroundDefault,
+  },
+  dogImage: {
+    alignSelf: 'center',
+    resizeMode: 'contain',
+    height: 320,
+    maxHeight: width,
+    marginVertical: 5,
+  },
+  locationImage: {
+    height: 40,
+    width: 40,
+  },
+  servicesContainer: {
+    backgroundColor: 'transparent',
+    marginBottom: 15,
+    marginTop: 24,
+  },
+  cardImg: {
+    width: '100%',
+    height: '52%',
+    borderTopLeftRadius: 18,
+    borderTopRightRadius: 18,
+  },
+  title: {
+    textAlign: 'center',
+  },
+  subtitle: {
+    textAlign: 'center',
+    fontFamily: globalVars.fontBold,
+    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
+  },
+  subtitleCard: {
+    fontSize: 14,
+    marginTop: 0,
+  },
+  coverImage: {
+    height: 48,
+    width: 48,
+    borderRadius: 8,
+  },
+});
