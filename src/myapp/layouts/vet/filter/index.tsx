@@ -51,7 +51,6 @@ export default ({navigation, route}): React.ReactElement => {
 
     if (statusData) {
       // VetResult
-      console.log(data);
       navigation.navigate('Home', {
         filter: form,
         data: data,
@@ -83,7 +82,6 @@ export default ({navigation, route}): React.ReactElement => {
         currentValue={form.state}
         placeholder="Estado"
         setCurrentValue={(stateId) => {
-          //setForm({...form, state: stateId});
           stateId !== '' ? setStatus(false) : setStatus(true);
           stateId !== '' &&
             stateList.map((stateItem) => {
