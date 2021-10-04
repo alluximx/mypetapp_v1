@@ -51,7 +51,7 @@ export default ({navigation, route}): React.ReactElement => {
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {
-            //Navigate
+            // Navigate
           }}>
           <Image
             style={styles.locationImage}
