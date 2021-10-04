@@ -13,6 +13,7 @@ import {
 
 class Environments {
   getEnvironment() {
+    // TODO: Set env variable for test or production mode
     // var platform = getPlatform()
     return _Environments.development;
   }
