@@ -61,6 +61,8 @@ import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.compone
 // Visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
+// Vet
+import {VetFilterScreen} from '../myapp/scenes/vet/filter.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -261,6 +263,8 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             headerLeft: closeButton,
           }}
         />
+        {/* Vets */}
+        <HomeStack.Screen name="VetFilter" component={VetFilterScreen} />
       </HomeStack.Navigator>
     </Animated.View>
   );

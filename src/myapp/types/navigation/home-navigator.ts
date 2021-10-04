@@ -58,6 +58,8 @@ type HomeNavigatorParamList = {
   AddPaymentMethod: {
     data: any;
   };
+
+  VetFilter: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;
