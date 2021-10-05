@@ -61,6 +61,7 @@ type HomeNavigatorParamList = {
 
   VetResult: {};
   VetFilter: {};
+  VetDetail: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

@@ -23,25 +23,37 @@ export default ({navigation, route}): React.ReactElement => {
     {
       name: 'Veterinaria Arboledas',
       address: 'Av.Arboledas 2120',
+      address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
       rating: '4.6',
       distance: '1.5',
       image: 'https://mpa-stage.s3.amazonaws.com/media/variants_images/300.jpg',
+      schedule:
+        'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
+      priceConsult: 200,
     },
     {
       name: 'Dog Box',
       address: 'Av.Arboledas 2120',
+      address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
       rating: '5',
       distance: '6.3',
       image:
         'https://mpa-stage.s3.amazonaws.com/media/variants_images/300_port_UlUbBtd.jpg',
+      schedule:
+        'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
+      priceConsult: 200,
     },
     {
       name: 'Care Pet',
       address: 'Av.Arboledas 2120',
+      address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
       rating: '2.3',
       distance: '4.6',
       image:
         'https://mpa-stage.s3.amazonaws.com/media/variants_images/200_vavVsMh_F1H9xW7.jpg',
+      schedule:
+        'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
+      priceConsult: 200,
     },
   ];
 
@@ -62,6 +74,7 @@ export default ({navigation, route}): React.ReactElement => {
   }
 
   const renderServiceItem = (services) => {
+    const vet = services.item;
     const name = services.item.name;
     const address = services.item.address;
     const rating = services.item.rating;
@@ -84,7 +97,9 @@ export default ({navigation, route}): React.ReactElement => {
           coverImage: image,
           title: name,
         }}
-        onClick={null}
+        onClick={() => {
+          navigation.navigate('VetDetail', {data: vet});
+        }}
       />
     );
   };
