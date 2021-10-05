@@ -63,11 +63,11 @@ const PetImageInput = ({
                 height: 500,
                 cropping: false,
                 compressImageQuality: 0.5,
-              }).then((image) => {
+              }).then((newImage) => {
                 const imageData = {
-                  fileName: image.filename,
-                  type: image.mime,
-                  uri: image.sourceURL,
+                  fileName: newImage.filename,
+                  type: newImage.mime,
+                  uri: newImage.sourceURL,
                 };
                 setImage(imageData);
               });
