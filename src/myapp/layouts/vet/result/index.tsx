@@ -51,7 +51,6 @@ export default ({navigation, route}): React.ReactElement => {
         <TouchableOpacity
           onPress={() => {
             // Navigate
-            console.log('entre');
           }}>
           <Image
             style={styles.locationImage}
