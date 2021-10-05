@@ -102,7 +102,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/pet-stylists.png')}
           />
           <DrawerItem
-            urlKey="VetFilter"
+            urlKey="VetDate"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}
