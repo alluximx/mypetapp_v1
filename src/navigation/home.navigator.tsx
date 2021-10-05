@@ -64,6 +64,7 @@ import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 // Vets
 import {VetResultScreen} from '../myapp/scenes/vet/vet-list.component';
 import {VetFilterScreen} from '../myapp/scenes/vet/filter.component';
+import {VetDateScreen} from '../myapp/scenes/vet/date.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -267,6 +268,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         {/* Vets */}
         <HomeStack.Screen name="VetResult" component={VetResultScreen} />
         <HomeStack.Screen name="VetFilter" component={VetFilterScreen} />
+        <HomeStack.Screen name="VetDate" component={VetDateScreen} />
       </HomeStack.Navigator>
     </Animated.View>
   );
