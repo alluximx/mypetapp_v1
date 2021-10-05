@@ -40,14 +40,45 @@ export default ({navigation, route}): React.ReactElement => {
   }, [dataStates.data]);
 
   useEffect(() => {
-    // Aqui hay queobtener datos de hook que hace la busqueda
-    const data = {
-      name: 'Veterinaria Arboledas',
-      address: 'Av. Arboledas 2120',
-      rating: '4.5',
-      distance: '1.5',
-      image: 'https://mpa-stage.s3.amazonaws.com/media/variants_images/300.jpg',
-    };
+    // Aqui hay que obtener datos de hook que hace la busqueda
+    const data = [
+      {
+        name: 'Veterinaria Arboledas',
+        address: 'Av.Arboledas 2120',
+        address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
+        rating: '4.6',
+        distance: '1.5',
+        image:
+          'https://mpa-stage.s3.amazonaws.com/media/variants_images/arboledas.jpg',
+        schedule:
+          'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
+        priceConsult: 200,
+      },
+      {
+        name: 'Dog Box',
+        address: 'Av.Arboledas 2120',
+        address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
+        rating: '5',
+        distance: '6.3',
+        image:
+          'https://mpa-stage.s3.amazonaws.com/media/variants_images/dogbox.jpg',
+        schedule:
+          'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
+        priceConsult: 200,
+      },
+      {
+        name: 'Care Pet',
+        address: 'Av.Arboledas 2120',
+        address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
+        rating: '2.3',
+        distance: '4.6',
+        image:
+          'https://mpa-stage.s3.amazonaws.com/media/variants_images/carepet.jpg',
+        schedule:
+          'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
+        priceConsult: 200,
+      },
+    ];
 
     if (statusData) {
       navigation.navigate('VetResult', {
