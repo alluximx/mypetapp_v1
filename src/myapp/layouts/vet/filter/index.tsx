@@ -50,8 +50,7 @@ export default ({navigation, route}): React.ReactElement => {
     };
 
     if (statusData) {
-      // VetResult
-      navigation.navigate('Home', {
+      navigation.navigate('VetResult', {
         filter: form,
         data: data,
         filters: {},
