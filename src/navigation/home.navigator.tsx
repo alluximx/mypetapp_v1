@@ -63,6 +63,7 @@ import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 // Vets
 import {VetResultScreen} from '../myapp/scenes/vet/vet-list.component';
+import {VetDetailScreen} from '../myapp/scenes/vet/vet-detail.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -265,6 +266,25 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         />
         {/* Vets */}
         <HomeStack.Screen name="VetResult" component={VetResultScreen} />
+        <HomeStack.Screen
+          name="VetDetail"
+          component={VetDetailScreen}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
       </HomeStack.Navigator>
     </Animated.View>
   );
