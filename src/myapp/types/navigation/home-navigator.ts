@@ -63,6 +63,7 @@ type HomeNavigatorParamList = {
   VetResult: {};
   VetFilter: {};
   VetDetail: {};
+  VetDate: {};
 
   AestheticResult: {};
   AestheticFilter: {};

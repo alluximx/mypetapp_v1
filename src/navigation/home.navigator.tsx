@@ -66,6 +66,7 @@ import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 import {VetResultScreen} from '../myapp/scenes/vet/vet-list.component';
 import {VetFilterScreen} from '../myapp/scenes/vet/filter.component';
 import {VetDetailScreen} from '../myapp/scenes/vet/vet-detail.component';
+import {VetDateScreen} from '../myapp/scenes/vet/date.component';
 // Aesthetics
 import {AestheticFilterScreen} from '../myapp/scenes/aesthetic/filter.component';
 import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
@@ -280,6 +281,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         {/* Vets */}
         <HomeStack.Screen name="VetResult" component={VetResultScreen} />
         <HomeStack.Screen name="VetFilter" component={VetFilterScreen} />
+        <HomeStack.Screen name="VetDate" component={VetDateScreen} />
         <HomeStack.Screen
           name="VetDetail"
           component={VetDetailScreen}
