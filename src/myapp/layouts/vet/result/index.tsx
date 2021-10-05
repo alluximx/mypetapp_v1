@@ -44,7 +44,6 @@ export default ({navigation, route}): React.ReactElement => {
         'https://mpa-stage.s3.amazonaws.com/media/variants_images/200_vavVsMh_F1H9xW7.jpg',
     },
   ];
-  const routeParamsDataEmpty = [];
 
   if (data.length > 0) {
     navigation.setOptions({
@@ -52,6 +51,7 @@ export default ({navigation, route}): React.ReactElement => {
         <TouchableOpacity
           onPress={() => {
             // Navigate
+            console.log('entre');
           }}>
           <Image
             style={styles.locationImage}
@@ -154,12 +154,6 @@ const themedStyles = StyleService.create({
     backgroundColor: 'transparent',
     marginBottom: 15,
     marginTop: 24,
-  },
-  cardImg: {
-    width: '100%',
-    height: '52%',
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
   },
   title: {
     textAlign: 'center',
