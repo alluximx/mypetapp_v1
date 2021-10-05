@@ -26,7 +26,6 @@ export default ({navigation, route}): React.ReactElement => {
     {key: '6', value: 'Jue\n  6'},
     {key: '7', value: 'Vie\n  5'},
   ];
-  //setDays(arrayDays);
 
   return (
     <DefaultLayout>
