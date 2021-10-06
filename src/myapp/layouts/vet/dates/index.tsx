@@ -50,7 +50,6 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const renderOption = (service) => {
-    console.log(service);
     return (
       <View style={{marginRight: 10}}>
         <TitleHeader>{service.item.value}</TitleHeader>
