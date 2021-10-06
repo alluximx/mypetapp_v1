@@ -6,6 +6,8 @@ import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types.
 import {OptionSelectProps} from '../../types/components/inputs';
+// My components
+import TitleHeader from '../texts/title-header';
 
 const {width} = Dimensions.get('window');
 const OPTION_GAP = 16;
@@ -13,7 +15,7 @@ const LIST_ITEM_HEIGHT = 56;
 
 const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
   const renderOption = (option) => {
-    const {key, value} = option.item;
+    const {key, value, title} = option.item;
 
     return (
       <TouchableOpacity
@@ -34,10 +36,20 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         onPress={() => {
           props.setCurrentValue(key);
         }}>
+        {title && (
+          <TitleHeader
+            style={[
+              props.titleStyle,
+              props.currentValue === key && styles.optionTextSelected,
+            ]}>
+            {title}
+          </TitleHeader>
+        )}
         <Text
           style={[
             styles.optionText,
             props.currentValue === key && styles.optionTextSelected,
+            props.textStyle,
           ]}>
           {value}
         </Text>
@@ -55,7 +67,9 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
       })}
       horizontal={props.horizontal ?? false}
       renderItem={renderOption}
-      scrollEnabled={props.horizontal ? false : true}
+      scrollEnabled={
+        props.horizontal ? (props.enableScroll ? true : false) : true
+      }
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
       style={[styles.optionsContainer, props.style]}
     />
