@@ -27,10 +27,15 @@ export interface Option {
 export interface OptionSelectProps {
   currentValue: string | number;
   data: any[];
+  enableScroll?: boolean;
+  styleHorizontal?: boolean;
   horizontal?: boolean;
   optionStyle?: {};
   setCurrentValue: (key: string | number) => void;
   style?: {};
+  textStyle?: {};
+  titleStyle?: {};
+  title?: string;
 }
 
 export interface SearchInputProps {
