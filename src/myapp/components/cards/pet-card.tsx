@@ -14,9 +14,34 @@ import {useEffect} from 'react';
 interface PetCardProps {
   pet: Pet;
   onPress: (pet: Pet) => void;
+  profileButtonStyle?: any;
+  dogProfileImageStyle?: any;
+  petNameTextStyle?: any;
+  showAge?: boolean;
 }
 
-const PetCard = ({onPress, pet}: PetCardProps): React.ReactElement => {
+const defaultProps: PetCardProps = {
+  pet: null,
+  onPress: null,
+  profileButtonStyle: null,
+  dogProfileImageStyle: null,
+  petNameTextStyle: null,
+  showAge: true,
+};
+
+const PetCard = (props: PetCardProps): React.ReactElement => {
+  const petCardProps = {
+    ...defaultProps,
+    ...props,
+  };
+  const {
+    pet,
+    onPress,
+    profileButtonStyle,
+    dogProfileImageStyle,
+    petNameTextStyle,
+    showAge,
+  } = petCardProps;
   const [image, setImage] = useState<ImageSourcePropType>(null);
 
   const {data: petImage} = useMyPetImage(pet.id);
@@ -40,12 +65,17 @@ const PetCard = ({onPress, pet}: PetCardProps): React.ReactElement => {
     <Button
       activeOpacity={0.9}
       accessoryLeft={() => (
-        <Image style={styles.dogProfileImage} source={image} />
+        <Image
+          style={[styles.dogProfileImage, dogProfileImageStyle]}
+          source={image}
+        />
       )}
-      accessoryRight={() => <Text style={styles.ageText}>{formattedAge}</Text>}
-      style={styles.profileButton}
+      accessoryRight={() =>
+        showAge ? <Text style={styles.ageText}>{formattedAge}</Text> : null
+      }
+      style={[styles.profileButton, profileButtonStyle]}
       onPress={() => onPress(pet)}>
-      {() => <Text style={styles.petNameText}>{name}</Text>}
+      {() => <Text style={[styles.petNameText, petNameTextStyle]}>{name}</Text>}
     </Button>
   );
 };
