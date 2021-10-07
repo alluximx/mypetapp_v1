@@ -10,4 +10,6 @@ declare module 'react-native-dotenv-2' {
   export const GUEST_PASS_DEV: string;
   export const GUEST_USER_PROD: string;
   export const GUEST_PASS_PROD: string;
+  export const MAPS_API_DEV: string;
+  export const MAPS_API_PROD: string;
 }
