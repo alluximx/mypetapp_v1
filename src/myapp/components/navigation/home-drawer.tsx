@@ -26,6 +26,7 @@ export const HomeDrawer = (props): DrawerElement => {
     {name: 'Mi Perfil', ruta: 'MyProfile'},
     {name: 'Adopciones', ruta: 'AdoptionFilter'},
     {name: 'Productos', ruta: 'ProductList'},
+    {name: 'Veterinarias', ruta: 'VetFilter'},
   ];
   useEffect(() => {
     list.map((route) => {
