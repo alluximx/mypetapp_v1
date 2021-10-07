@@ -10,6 +10,8 @@ import {
   GUEST_PASS_DEV,
   GUEST_USER_PROD,
   GUEST_PASS_PROD,
+  MAPS_API_DEV,
+  MAPS_API_PROD,
 } from 'react-native-dotenv-2';
 
 class Environments {
@@ -31,6 +33,7 @@ const _Environments = {
     IMAGES_HOST: IMAGES_HOST_PROD,
     GUEST_USER: GUEST_USER_PROD,
     GUEST_PASS: GUEST_PASS_PROD,
+    MAPS_KEY: MAPS_API_PROD,
   },
   development: {
     BASE_URL: BASE_URL_DEV,
@@ -38,6 +41,7 @@ const _Environments = {
     IMAGES_HOST: IMAGES_HOST_DEV,
     GUEST_USER: GUEST_USER_DEV,
     GUEST_PASS: GUEST_PASS_DEV,
+    MAPS_KEY: MAPS_API_DEV,
   },
 };
 
