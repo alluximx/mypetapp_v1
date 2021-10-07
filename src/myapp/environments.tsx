@@ -1,4 +1,5 @@
 import {
+  MODE,
   BASE_URL_DEV,
   API_URL_DEV,
   BASE_URL_PROD,
@@ -13,9 +14,13 @@ import {
 
 class Environments {
   getEnvironment() {
-    // TODO: Set env variable for test or production mode
-    // var platform = getPlatform()
-    return _Environments.development;
+    let appMode = _Environments.development;
+
+    if (MODE === 'prod') {
+      appMode = _Environments.production;
+    }
+
+    return appMode;
   }
 }
 
