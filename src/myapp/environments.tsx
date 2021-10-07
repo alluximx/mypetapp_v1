@@ -10,6 +10,8 @@ import {
   GUEST_PASS_DEV,
   GUEST_USER_PROD,
   GUEST_PASS_PROD,
+  MAPS_API_DEV,
+  MAPS_API_PROD,
 } from 'react-native-dotenv-2';
 
 class Environments {
