@@ -49,6 +49,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Permitir acceso a la cámara</string>
+	<key>NSLocationWhenInUseUsageDescription </key>
+	<string>Permitir acceso a tu ubicación</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMainNibFile</key>
