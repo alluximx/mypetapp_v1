@@ -48,6 +48,7 @@ import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-met
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
+import {SelectPetScreen} from '../myapp/scenes/pets/select.component';
 // Products
 import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
@@ -210,6 +211,13 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen
           name="EditPet"
           component={EditPetScreen}
+          options={{
+            headerLeft: closeButton,
+          }}
+        />
+        <HomeStack.Screen
+          name="PetSelect"
+          component={SelectPetScreen}
           options={{
             headerLeft: closeButton,
           }}
