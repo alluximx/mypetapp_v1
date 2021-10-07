@@ -66,6 +66,7 @@ import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 import {VetResultScreen} from '../myapp/scenes/vet/vet-list.component';
 import {VetFilterScreen} from '../myapp/scenes/vet/filter.component';
 import {VetDetailScreen} from '../myapp/scenes/vet/vet-detail.component';
+import {VetMapsScreen} from '../myapp/scenes/vet/vet-maps.component';
 // Aesthetics
 import {AestheticFilterScreen} from '../myapp/scenes/aesthetic/filter.component';
 import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
@@ -299,6 +300,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             headerStyle: {backgroundColor: 'transparent'},
           }}
         />
+        <HomeStack.Screen name="VetMaps" component={VetMapsScreen} />
         {/* Aesthetics */}
         <HomeStack.Screen
           name="AestheticResult"
