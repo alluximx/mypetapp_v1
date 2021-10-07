@@ -33,10 +33,10 @@ export default ({navigation}): React.ReactElement => {
 
   useEffect(() => {
     if (dataSizes.data) {
-      const data = dataSizes.data.data.map((obj: any) => {
+      const dataFormatted = dataSizes.data.data.map((obj: any) => {
         return {key: obj.id, value: obj.name};
       });
-      setSizes(data);
+      setSizes(dataFormatted);
     }
   }, [dataSizes.data]);
 
