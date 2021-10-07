@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
-// UI Kitten
-import {List, ListItem} from '@ui-kitten/components';
+import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
+
 // My Components
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
@@ -9,12 +8,15 @@ import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import OptionSelect from '../../../components/inputs/option-select';
 import CustomButton from '../../../components/buttons/custom-button';
+import {QuestionCircleIcon} from '../../../components/icons';
+import CustomModal from '../../../components/modals/custom-modal';
 
 export default ({navigation, route}): React.ReactElement => {
   const [days, setDays] = useState([]);
   const [statusDay, setStatusDay] = useState(false);
   const [statusBtn, setStatusBtn] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [form, setForm] = useState({
     pet: '',
@@ -41,24 +43,45 @@ export default ({navigation, route}): React.ReactElement => {
     {key: '5', value: '12:00 PM'},
     {key: '6', value: '1:00 PM'},
     {key: '7', value: '2:00 PM'},
+    {key: '8', value: '1:00 PM'},
+    {key: '9', value: '2:00 PM'},
+    {key: '10', value: '1:00 PM'},
+    {key: '11', value: '3:00 PM'},
+    {key: '12', value: '4:00 PM'},
+    {key: '13', value: '5:00 PM'},
   ];
+
+  const numColumns = 4;
+
+  const textModal =
+    'Para generar una cita es necesario ' +
+    'seleccionar o agregar un método ' +
+    'de pago. La cita se cobrará al pasar ' +
+    'la fecha y el horario seleccionado\n' +
+    'Puedes cancelar hasta 3 horas ' +
+    'antes, de lo contrario se te cobrará ' +
+    'una penalización';
 
   const setValueForm = (day: string) => {
     setForm({...form, day});
     setStatusDay(true);
-    setStatusBtn(false);
   };
 
-  const renderOption = (service) => {
-    return (
-      <View style={{marginRight: 10}}>
-        <TitleHeader>{service.item.value}</TitleHeader>
-      </View>
-    );
+  const SetValueTime = (time: string) => {
+    setForm({...form, time});
+    setStatusBtn(false);
   };
 
   return (
     <DefaultLayout>
+      <CustomModal
+        labelAccept="Entendido"
+        title="Método de pago"
+        text={textModal}
+        onAccept={() => setIsModalVisible(false)}
+        showCancel={false}
+        visible={isModalVisible}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TitleHeader style={styles.header}>Generar cita</TitleHeader>
         <TitleHeader style={styles.normalHeader}>
@@ -87,13 +110,16 @@ export default ({navigation, route}): React.ReactElement => {
         </View>
 
         <TitleHeader style={styles.normalHeader}>Horario</TitleHeader>
-        <View style={{marginBottom: 30}}>
+        <View style={{flex: 1, marginBottom: 30}}>
           {statusDay ? (
-            <List
-              style={styles.servicesContainer}
+            <OptionSelect
+              currentValue={form.time}
+              setCurrentValue={(time: string) => SetValueTime(time)}
               data={arrayTime}
-              renderItem={renderOption}
-              numColumns={Math.ceil(arrayTime.length / 2)}
+              numColumns={numColumns}
+              style={styles.select}
+              optionStyle={styles.optionTime}
+              textStyle={styles.textOptionTime}
             />
           ) : (
             <View>
@@ -102,11 +128,19 @@ export default ({navigation, route}): React.ReactElement => {
             </View>
           )}
         </View>
-        <TitleHeader style={styles.normalHeader}> Método de pago</TitleHeader>
+        <View style={{flexDirection: 'row'}}>
+          <TitleHeader style={styles.normalHeader}> Método de pago</TitleHeader>
+          <TouchableOpacity
+            onPress={() => {
+              setIsModalVisible(true);
+            }}>
+            <QuestionCircleIcon style={{}} />
+          </TouchableOpacity>
+        </View>
         <View style={{marginBottom: 10}}>
           <NavigateButton
             placeholder="Slecciona el método de pago"
-            destination="Home"
+            destination="AddPaymentMethod"
           />
         </View>
         <View style={styles.totalContainer}>
@@ -155,10 +189,20 @@ const styles = StyleSheet.create({
   options: {
     width: null,
     height: 65,
-    fontSize: 1,
+  },
+  optionTime: {
+    minWidth: 87,
+    height: 40,
+    marginRight: 10,
+    marginBottom: 15,
+    padding: 15,
   },
   textOption: {
     alignSelf: 'center',
+    marginTop: -5,
+  },
+  textOptionTime: {
+    fontSize: 13,
     marginTop: -5,
   },
   titleOption: {
@@ -171,6 +215,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   servicesContainer: {
+    flex: 1,
     backgroundColor: 'transparent',
     marginBottom: 10,
   },

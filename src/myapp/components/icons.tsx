@@ -346,7 +346,12 @@ export const AssetTopNavigationDarkIcon = (style: ImageStyle): IconElement => (
 export const AddIconGreen = ({style}): IconElement => (
   <Icon style={[styles.addIconGreen, style]} name="plus-outline" />
 );
-
+export const QuestionCircleIcon = ({style}): IconElement => (
+  <Icon
+    style={[styles.questionCircleICon, style]}
+    name="question-mark-circle-outline"
+  />
+);
 const styles = StyleSheet.create({
   addIcon: {
     height: 25,
@@ -371,5 +376,10 @@ const styles = StyleSheet.create({
     tintColor: globalColors.greenSecondary,
     right: 10,
     top: 10,
+  },
+  questionCircleICon: {
+    height: 30,
+    width: 30,
+    tintColor: globalColors.greenSecondary,
   },
 });
