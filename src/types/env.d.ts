@@ -1,4 +1,5 @@
 declare module 'react-native-dotenv-2' {
+  export const MODE: string;
   export const BASE_URL_DEV: string;
   export const BASE_URL_PROD: string;
   export const API_URL_DEV: string;
