@@ -66,6 +66,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         index,
       })}
       horizontal={props.horizontal ?? false}
+      numColumns={props.numColumns && props.numColumns}
       renderItem={renderOption}
       scrollEnabled={
         props.horizontal ? (props.enableScroll ? true : false) : true

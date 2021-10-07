@@ -28,11 +28,12 @@ export interface OptionSelectProps {
   currentValue: string | number;
   data: any[];
   enableScroll?: boolean;
-  styleHorizontal?: boolean;
   horizontal?: boolean;
+  numColumns?: number;
   optionStyle?: {};
   setCurrentValue: (key: string | number) => void;
   style?: {};
+  styleHorizontal?: boolean;
   textStyle?: {};
   titleStyle?: {};
   title?: string;
