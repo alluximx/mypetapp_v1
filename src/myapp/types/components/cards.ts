@@ -32,3 +32,14 @@ export interface ImageInputCardProps {
   filledLabel?: string;
   setImage: (image: ImageURISource) => void;
 }
+
+export interface VetCardProps {
+  screen: string;
+  vet: {
+    name: string;
+    address: string;
+    rating: string;
+    distance: string;
+    image: string;
+  };
+}

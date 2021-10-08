@@ -9,9 +9,9 @@ import globalVars from '../../../styles/vars';
 // My Components
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import TitleHeader from '../../../components/texts/title-header';
 import GenericCard from '../../../components/cards/generic-card';
 import RatingCard from '../../../components/cards/rating-card';
+import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const stateName = route.params.filter.stateName;
