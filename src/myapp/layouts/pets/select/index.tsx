@@ -55,7 +55,7 @@ export default ({navigation}): React.ReactElement => {
 
   const onRightPress = () => {
     const submitData = {idPet: idPet, idSize: sizePet};
-    // saveData
+    // navigation.navigate('dateScreen', {pet:submitData})
   };
 
   const renderPetButton = (pet) => {
