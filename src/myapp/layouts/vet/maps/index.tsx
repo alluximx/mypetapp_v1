@@ -30,11 +30,6 @@ export default ({navigation, route}): React.ReactElement => {
   );
 
   useEffect(() => {
-    console.log('refreshed');
-    console.log('======');
-    console.log('======');
-    console.log(currentLocation);
-
     setRegion(currentLocation);
   }, [currentLocation]);
 
