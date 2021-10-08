@@ -21,15 +21,15 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const servicesList = [
   {
-    disabled: true,
+    disabled: false,
     icon: require('../../assets/images/menu/vets.png'),
-    route: 'Home',
+    route: 'VetFilter',
     serviceName: 'Veterinaria',
   },
   {
-    disabled: true,
+    disabled: false,
     icon: require('../../assets/images/menu/pet-stylists.png'),
-    route: 'Home',
+    route: 'AestheticFilter',
     serviceName: 'Estética',
   },
   {

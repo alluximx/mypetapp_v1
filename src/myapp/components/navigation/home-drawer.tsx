@@ -92,8 +92,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/products.png')}
           />
           <DrawerItem
-            isDisabled
-            urlKey="Home"
+            urlKey="AestheticFilter"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}
