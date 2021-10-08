@@ -11,8 +11,6 @@ const DEFAULT_LOCATION = {
 const useGeolocation = (initialLocation: LatLng) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
 
-  console.log(initialLocation);
-
   const handleSuccess = (position) => {
     const {latitude, longitude} = position.coords;
 
