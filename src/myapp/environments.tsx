@@ -20,18 +20,18 @@ class Environments {
 
 const _Environments = {
   production: {
-    BASE_URL: BASE_URL_PROD,
-    API_URL: API_URL_PROD,
-    IMAGES_HOST: IMAGES_HOST_PROD,
-    GUEST_USER: GUEST_USER_PROD,
-    GUEST_PASS: GUEST_PASS_PROD,
+    BASE_URL: 'https://api.dogitapp.com/',
+    API_URL: 'https://api.dogitapp.com/',
+    IMAGES_HOST: 'https://dogit-prod.s3.amazonaws.com/media/',
+    GUEST_USER: 'guest@email.com',
+    GUEST_PASS: '!6n2+kX6W4UTTkGB',
   },
   development: {
-    BASE_URL: BASE_URL_DEV,
-    API_URL: API_URL_DEV,
-    IMAGES_HOST: IMAGES_HOST_DEV,
-    GUEST_USER: GUEST_USER_DEV,
-    GUEST_PASS: GUEST_PASS_DEV,
+    BASE_URL: 'https://api.mypetapp.xyz/',
+    API_URL: 'https://api.mypetapp.xyz/',
+    IMAGES_HOST: 'https://mpa-stage.s3.amazonaws.com/media/',
+    GUEST_USER: 'guest@email.com',
+    GUEST_PASS: '!6n2+kX6W4UTTkGB',
   },
 };
 
