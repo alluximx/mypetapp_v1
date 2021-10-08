@@ -48,6 +48,10 @@ export default ({navigation, route}): React.ReactElement => {
         address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
         rating: '4.6',
         distance: '1.5',
+        location: {
+          latitude: 25.618644,
+          longitude: -100.276509,
+        },
         image:
           'https://mpa-stage.s3.amazonaws.com/media/variants_images/arboledas.jpg',
         schedule:
@@ -60,6 +64,10 @@ export default ({navigation, route}): React.ReactElement => {
         address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
         rating: '5',
         distance: '6.3',
+        location: {
+          latitude: 25.622549263868393,
+          longitude: -100.28028553768186,
+        },
         image:
           'https://mpa-stage.s3.amazonaws.com/media/variants_images/dogbox.jpg',
         schedule:
@@ -72,6 +80,10 @@ export default ({navigation, route}): React.ReactElement => {
         address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
         rating: '2.3',
         distance: '4.6',
+        location: {
+          latitude: 25.62390358650316,
+          longitude: -100.27453488177947,
+        },
         image:
           'https://mpa-stage.s3.amazonaws.com/media/variants_images/carepet.jpg',
         schedule:
