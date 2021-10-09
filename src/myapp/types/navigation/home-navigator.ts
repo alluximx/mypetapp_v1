@@ -8,6 +8,7 @@ type HomeNavigatorParamList = {
   AddPet: {};
   DetailPet: {};
   EditPet: {};
+  PetSelect: {};
 
   AddVisit: {};
   NewVisitMedical: {};
