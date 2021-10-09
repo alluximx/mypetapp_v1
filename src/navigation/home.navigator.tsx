@@ -65,6 +65,10 @@ import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
 import {VetResultScreen} from '../myapp/scenes/vet/vet-list.component';
 import {VetFilterScreen} from '../myapp/scenes/vet/filter.component';
 import {VetDetailScreen} from '../myapp/scenes/vet/vet-detail.component';
+// Aesthetics
+import {AestheticFilterScreen} from '../myapp/scenes/aesthetic/filter.component';
+import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
+import {AestheticDetailScreen} from '../myapp/scenes/aesthetic/detail.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -271,6 +275,34 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen
           name="VetDetail"
           component={VetDetailScreen}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
+        {/* Aesthetics */}
+        <HomeStack.Screen
+          name="AestheticResult"
+          component={AestheticResultScreen}
+        />
+        <HomeStack.Screen
+          name="AestheticFilter"
+          component={AestheticFilterScreen}
+        />
+        <HomeStack.Screen
+          name="AestheticDetail"
+          component={AestheticDetailScreen}
           options={{
             headerLeft: () => (
               <BackButton
