@@ -34,6 +34,8 @@ export default ({navigation, route}): React.ReactElement => {
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
+  const {screenToReturn} = route.params?.data ?? {};
+
   const [form, setForm] = useState({
     name: '',
     number: '',
@@ -41,6 +43,7 @@ export default ({navigation, route}): React.ReactElement => {
     cvc: '',
     exp_month: '',
     exp_year: '',
+    screenToReturn: '',
   });
 
   useEffect(() => {
@@ -48,6 +51,11 @@ export default ({navigation, route}): React.ReactElement => {
       setPaymentMethods(paymentQuery.data.data);
     }
   }, [paymentQuery.data]);
+
+  useEffect(() => {
+    const screen = screenToReturn ?? 'PaymentSummary';
+    setForm({...form, screenToReturn: screen});
+  }, [screenToReturn]);
 
   const onSavePress = () => {
     setHasError(true);
@@ -73,7 +81,7 @@ export default ({navigation, route}): React.ReactElement => {
     return (
       <NavigateButton
         data={{paymentMethod: auxData}}
-        destination={'PaymentSummary'}
+        destination={screenToReturn ?? 'PaymentSummary'}
         subtitle={cardLabel}
         title={cardBrand}
       />
@@ -124,7 +132,7 @@ export default ({navigation, route}): React.ReactElement => {
           </DefaultText>
         )}
 
-        <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
+        <TitleHeader style={styles.subtitle}>Nuevo método de pago</TitleHeader>
         <UserInput
           placeholder="Nombre del tarjetahabiente"
           value={form.name}
