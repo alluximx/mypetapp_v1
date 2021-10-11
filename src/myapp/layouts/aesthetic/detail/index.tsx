@@ -48,7 +48,11 @@ export default ({navigation, route}): React.ReactElement => {
             style={[globalStyles.highlightedText, {marginBottom: 32}]}>
             {'$' + data.priceConsult}
           </TitleHeader>
-          <NavigateButton destination="Home" placeholder="Generar Cita" />
+          <NavigateButton
+            destination="VetDate"
+            placeholder="Generar Cita"
+            data={{screenFrom: 'AestheticDate'}}
+          />
         </DefaultLayout>
       </ScrollView>
     </View>

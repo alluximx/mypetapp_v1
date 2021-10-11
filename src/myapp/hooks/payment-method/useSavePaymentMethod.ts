@@ -22,11 +22,12 @@ const useSavePaymentMethod = () => {
       const cardId = response.data.id;
       const cardLabel = '****' + response.data.last4;
       const screenToReturn = variables.screenToReturn;
+      const screenFrom = variables.screenFrom;
 
       const auxData = {cardBrand, cardId, cardLabel};
       // Save User Address
       navigation.navigate(screenToReturn, {
-        data: {paymentMethod: auxData},
+        data: {paymentMethod: auxData, screenFrom: screenFrom},
       });
       queryClient.invalidateQueries('user-card');
     },
