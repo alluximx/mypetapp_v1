@@ -20,10 +20,12 @@ export default ({navigation, route}): React.ReactElement => {
 
   const numColumns = 4;
 
-  const {paymentMethod} = route.params?.data ?? {};
+  const {screenFrom, petInfo, paymentMethod} = route.params?.data ?? {};
   // PaymentInfo
   const [cardTitle, setCardTitle] = useState('');
   const [cardContent, setCardContent] = useState('');
+  // PetInfo
+  const [petContent, setPetContent] = useState('');
 
   const [form, setForm] = useState({
     pet: '',
@@ -31,6 +33,7 @@ export default ({navigation, route}): React.ReactElement => {
     time: '',
     paymentMethod: '',
     card_id: '',
+    pet_id: '',
   });
 
   const arrayDays = [
@@ -60,13 +63,19 @@ export default ({navigation, route}): React.ReactElement => {
   ];
 
   useEffect(() => {
+    if (petInfo) {
+      const {namePet, idPet, idSize} = petInfo;
+      const complt = idSize ? ' - ' + idSize : '';
+      setPetContent(namePet + complt);
+      setForm({...form, pet_id: idPet});
+    }
     if (paymentMethod) {
       const {cardLabel, cardBrand, cardId} = paymentMethod;
       setCardTitle(cardBrand);
       setCardContent(cardLabel);
       setForm({...form, card_id: cardId});
     }
-  }, [paymentMethod]);
+  }, [petInfo, paymentMethod]);
 
   const textModal =
     'Para generar una cita es necesario ' +
@@ -105,9 +114,24 @@ export default ({navigation, route}): React.ReactElement => {
         <View style={{marginBottom: 10}}>
           <NavigateButton
             placeholder="Selecciona tu mascota"
-            destination="Home"
+            destination="PetSelect"
+            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+            title="Mascota"
+            subtitle={petContent}
           />
         </View>
+
+        {screenFrom && screenFrom === 'AestheticDate' && (
+          <View>
+            <TitleHeader style={styles.normalHeader}>
+              ¿Qué servicio necesita tu mascota?
+            </TitleHeader>
+            <NavigateButton
+              placeholder="Selecciona los servicios"
+              destination="Home"
+            />
+          </View>
+        )}
 
         <TitleHeader style={styles.normalHeader}>Día</TitleHeader>
         <View style={{marginBottom: 10}}>
@@ -156,7 +180,7 @@ export default ({navigation, route}): React.ReactElement => {
           <NavigateButton
             placeholder="Slecciona el método de pago"
             destination="AddPaymentMethod"
-            data={{screenToReturn: 'VetDate'}}
+            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
             subtitle={cardContent}
             title={cardTitle}
           />

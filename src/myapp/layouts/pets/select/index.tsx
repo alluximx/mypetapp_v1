@@ -6,7 +6,7 @@ import {
   Card,
   Text,
 } from '@ui-kitten/components';
-import {ScrollView} from 'react-native';
+import {ScrollView, View} from 'react-native';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -22,7 +22,7 @@ import OptionSelect from '../../../components/inputs/option-select';
 import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
 import useSizes from '../../../hooks/pets/useSizes';
 
-export default ({navigation}): React.ReactElement => {
+export default ({navigation, route}): React.ReactElement => {
   const data = useMyNameAndPets();
   const dataSizes = useSizes();
   const hasPets = data.pets.length !== 0;
@@ -30,6 +30,10 @@ export default ({navigation}): React.ReactElement => {
   const [sizes, setSizes] = useState([]);
   const [idPet, setIdPet] = useState();
   const [sizePet, setSizePet] = useState();
+  const [name, setName] = useState();
+
+  const {screenToReturn, screenFrom} = route.params?.data ?? {};
+  const isDisable = screenFrom === 'VetDate' ? !idPet : !idPet || !sizePet;
 
   useEffect(() => {
     if (dataSizes.data) {
@@ -44,7 +48,7 @@ export default ({navigation}): React.ReactElement => {
     headerRight: () => (
       <AnchorText
         style={styles.headerRight}
-        isDisabled={!idPet || !sizePet}
+        isDisabled={isDisable}
         onPress={() => {
           onRightPress();
         }}>
@@ -53,16 +57,29 @@ export default ({navigation}): React.ReactElement => {
     ),
   });
 
+  const setSubmitData = (id, name) => {
+    setIdPet(id);
+    setName(name);
+  };
+
   const onRightPress = () => {
-    const submitData = {idPet: idPet, idSize: sizePet};
-    // navigation.navigate('dateScreen', {pet:submitData})
+    const submitData =
+      screenFrom === 'VetDate'
+        ? {idPet: idPet, namePet: name}
+        : {idPet: idPet, namePet: name, idSize: sizePet};
+
+    navigation.navigate(screenToReturn, {
+      data: {petInfo: submitData, screenFrom: screenFrom},
+    });
   };
 
   const renderPetButton = (pet) => {
     return (
       <PetCard
         pet={pet.item}
-        onPress={() => setIdPet(pet.item.id)}
+        onPress={() => {
+          setSubmitData(pet.item.id, pet.item.name);
+        }}
         profileButtonStyle={
           pet.item.id === idPet ? styles.buttonPetSelected : styles.buttonPet
         }
@@ -101,17 +118,22 @@ export default ({navigation}): React.ReactElement => {
             </DefaultText>
           )}
         />
-        <TitleHeader style={{fontSize: 16, marginBottom: 16}}>
-          ¿Cuál es el tamaño actual de tu mascota?
-        </TitleHeader>
-        <OptionSelect
-          currentValue={sizePet}
-          setCurrentValue={(breed) => setSizePet(breed)}
-          horizontal={false}
-          data={sizes}
-          style={styles.select}
-          optionStyle={styles.options}
-        />
+        {screenFrom && screenFrom !== 'VetDate' && (
+          <View>
+            <TitleHeader style={{fontSize: 16, marginBottom: 16}}>
+              ¿Cuál es el tamaño actual de tu mascota?
+            </TitleHeader>
+
+            <OptionSelect
+              currentValue={sizePet}
+              setCurrentValue={(sizePet) => setSizePet(sizePet)}
+              horizontal={false}
+              data={sizes}
+              style={styles.select}
+              optionStyle={styles.options}
+            />
+          </View>
+        )}
       </ScrollView>
     </DefaultLayout>
   );

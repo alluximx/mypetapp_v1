@@ -34,7 +34,7 @@ export default ({navigation, route}): React.ReactElement => {
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
-  const {screenToReturn} = route.params?.data ?? {};
+  const {screenToReturn, screenFrom} = route.params?.data ?? {};
 
   const [form, setForm] = useState({
     name: '',
@@ -44,6 +44,7 @@ export default ({navigation, route}): React.ReactElement => {
     exp_month: '',
     exp_year: '',
     screenToReturn: '',
+    screenFrom: '',
   });
 
   useEffect(() => {
@@ -54,8 +55,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     const screen = screenToReturn ?? 'PaymentSummary';
-    setForm({...form, screenToReturn: screen});
-  }, [screenToReturn]);
+    setForm({...form, screenToReturn: screen, screenFrom: screenFrom});
+  }, [screenToReturn, screenFrom]);
 
   const onSavePress = () => {
     setHasError(true);
@@ -80,7 +81,7 @@ export default ({navigation, route}): React.ReactElement => {
 
     return (
       <NavigateButton
-        data={{paymentMethod: auxData}}
+        data={{paymentMethod: auxData, screenFrom: screenFrom}}
         destination={screenToReturn ?? 'PaymentSummary'}
         subtitle={cardLabel}
         title={cardBrand}
