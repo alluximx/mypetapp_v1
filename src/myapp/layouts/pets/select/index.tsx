@@ -57,9 +57,9 @@ export default ({navigation, route}): React.ReactElement => {
     ),
   });
 
-  const setSubmitData = (id, name) => {
-    setIdPet(id);
-    setName(name);
+  const setSubmitData = (petId, petName) => {
+    setIdPet(petId);
+    setName(petName);
   };
 
   const onRightPress = () => {
@@ -126,7 +126,7 @@ export default ({navigation, route}): React.ReactElement => {
 
             <OptionSelect
               currentValue={sizePet}
-              setCurrentValue={(sizePet) => setSizePet(sizePet)}
+              setCurrentValue={(newSizePet) => setSizePet(newSizePet)}
               horizontal={false}
               data={sizes}
               style={styles.select}
