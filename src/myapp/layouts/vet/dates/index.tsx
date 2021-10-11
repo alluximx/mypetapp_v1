@@ -18,11 +18,19 @@ export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const numColumns = 4;
+
+  const {paymentMethod} = route.params?.data ?? {};
+  // PaymentInfo
+  const [cardTitle, setCardTitle] = useState('');
+  const [cardContent, setCardContent] = useState('');
+
   const [form, setForm] = useState({
     pet: '',
     day: '',
     time: '',
     paymentMethod: '',
+    card_id: '',
   });
 
   const arrayDays = [
@@ -51,7 +59,14 @@ export default ({navigation, route}): React.ReactElement => {
     {key: '13', value: '5:00 PM'},
   ];
 
-  const numColumns = 4;
+  useEffect(() => {
+    if (paymentMethod) {
+      const {cardLabel, cardBrand, cardId} = paymentMethod;
+      setCardTitle(cardBrand);
+      setCardContent(cardLabel);
+      setForm({...form, card_id: cardId});
+    }
+  }, [paymentMethod]);
 
   const textModal =
     'Para generar una cita es necesario ' +
@@ -123,7 +138,7 @@ export default ({navigation, route}): React.ReactElement => {
             />
           ) : (
             <View>
-              <DefaultText>Por Favor Selecciona una fecha para ver</DefaultText>
+              <DefaultText>Por favor selecciona una fecha para ver</DefaultText>
               <DefaultText>los horarios disponibles</DefaultText>
             </View>
           )}
@@ -141,6 +156,9 @@ export default ({navigation, route}): React.ReactElement => {
           <NavigateButton
             placeholder="Slecciona el método de pago"
             destination="AddPaymentMethod"
+            data={{screenToReturn: 'VetDate'}}
+            subtitle={cardContent}
+            title={cardTitle}
           />
         </View>
         <View style={styles.totalContainer}>
@@ -166,7 +184,7 @@ export default ({navigation, route}): React.ReactElement => {
             onPress={() => {
               setIsLoading(true);
             }}>
-            Buscar
+            Generar cita
           </CustomButton>
         </View>
       </ScrollView>
