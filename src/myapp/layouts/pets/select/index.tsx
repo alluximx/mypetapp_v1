@@ -63,10 +63,16 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const onRightPress = () => {
+    const sizeName = sizePet
+      ? dataSizes.data.data.find((obj) => {
+          return obj.id === sizePet && obj.name;
+        })
+      : '';
+
     const submitData =
       screenFrom === 'VetDate'
         ? {idPet: idPet, namePet: name}
-        : {idPet: idPet, namePet: name, idSize: sizePet};
+        : {idPet: idPet, namePet: name, idSize: sizeName.name};
 
     navigation.navigate(screenToReturn, {
       data: {petInfo: submitData, screenFrom: screenFrom},

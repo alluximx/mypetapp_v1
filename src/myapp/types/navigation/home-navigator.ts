@@ -68,6 +68,8 @@ type HomeNavigatorParamList = {
   AestheticResult: {};
   AestheticFilter: {};
   AestheticDetail: {};
+
+  ServiceSelect: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

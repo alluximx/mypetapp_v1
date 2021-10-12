@@ -17,6 +17,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [statusBtn, setStatusBtn] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
 
   const numColumns = 4;
 
@@ -81,8 +82,17 @@ export default ({navigation, route}): React.ReactElement => {
     'Para generar una cita es necesario ' +
     'seleccionar o agregar un método ' +
     'de pago. La cita se cobrará al pasar ' +
-    'la fecha y el horario seleccionado\n' +
+    'la fecha y el horario seleccionado.\n' +
     'Puedes cancelar hasta 3 horas ' +
+    'antes, de lo contrario se te cobrará ' +
+    'una penalización.';
+
+  const textSubmitModal =
+    'Tu cita ha sido generada ' +
+    'exitósamente. Puedes acceder a ' +
+    'todos tus servicios programados ' +
+    'desde la sección de "Proximos ' +
+    'Servicios" en el menú principal. ' +
     'antes, de lo contrario se te cobrará ' +
     'una penalización';
 
@@ -106,6 +116,14 @@ export default ({navigation, route}): React.ReactElement => {
         showCancel={false}
         visible={isModalVisible}
       />
+      <CustomModal
+        labelAccept="Entendido"
+        title="Cita generada"
+        text={textSubmitModal}
+        onAccept={() => setIsModalSubmitVisible(false)}
+        showCancel={false}
+        visible={isModalSubmitVisible}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <TitleHeader style={styles.header}>Generar cita</TitleHeader>
         <TitleHeader style={styles.normalHeader}>
@@ -128,7 +146,8 @@ export default ({navigation, route}): React.ReactElement => {
             </TitleHeader>
             <NavigateButton
               placeholder="Selecciona los servicios"
-              destination="Home"
+              destination="ServiceSelect"
+              data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
             />
           </View>
         )}
@@ -207,6 +226,7 @@ export default ({navigation, route}): React.ReactElement => {
             isLoading={isLoading}
             onPress={() => {
               setIsLoading(true);
+              setIsModalSubmitVisible(true);
             }}>
             Generar cita
           </CustomButton>
