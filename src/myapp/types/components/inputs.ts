@@ -68,3 +68,11 @@ export interface UserInputProps {
   style?: {};
   value: string;
 }
+
+export interface IndiviudalOptionSelectProps {
+  value: string | number;
+  setCurrentValue: (key: string | number) => void;
+  style?: {};
+  title?: string;
+  subtitle?: string;
+}

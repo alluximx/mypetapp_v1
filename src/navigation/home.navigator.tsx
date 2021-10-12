@@ -72,6 +72,8 @@ import {VetDateScreen} from '../myapp/scenes/vet/date.component';
 import {AestheticFilterScreen} from '../myapp/scenes/aesthetic/filter.component';
 import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
 import {AestheticDetailScreen} from '../myapp/scenes/aesthetic/detail.component';
+// Services
+import {SelectServiceScreen} from '../myapp/scenes/service/select.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -330,6 +332,11 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             headerTranslucent: true,
             headerStyle: {backgroundColor: 'transparent'},
           }}
+        />
+        {/* Services */}
+        <HomeStack.Screen
+          name="ServiceSelect"
+          component={SelectServiceScreen}
         />
       </HomeStack.Navigator>
     </Animated.View>
