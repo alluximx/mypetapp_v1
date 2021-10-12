@@ -22,25 +22,25 @@ export default ({navigation, route}): React.ReactElement => {
   const isDisabled = false;
 
   const setData = (value) => {
-    console.log('Entro con');
-    console.log(value);
+    // console.log('Entro con');
+    // console.log(value);
     const exist = data.includes(value);
 
-    console.log(exist);
+    // console.log(exist);
 
     exist
       ? () => {
           const indx = data.indexOf(value);
-          console.log('indice');
-          console.log(indx);
+          // console.log('indice');
+          // console.log(indx);
           if (indx > -1) {
             data.splice(indx, 1);
           }
         }
       : data.push(value);
 
-    console.log('Array');
-    console.log(data);
+    // console.log('Array');
+    // console.log(data);
   };
 
   const onSubmit = () => {
