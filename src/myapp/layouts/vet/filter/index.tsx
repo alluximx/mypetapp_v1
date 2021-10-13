@@ -12,6 +12,7 @@ import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Hooks
 import useStates from '../../../hooks/util/useState';
+import useVets from '../../../hooks/vets/useVets';
 
 export default ({navigation, route}): React.ReactElement => {
   const [stateList, setStateList] = useState([]);
@@ -28,68 +29,36 @@ export default ({navigation, route}): React.ReactElement => {
     query: null,
   });
 
+  const data = useVets({
+    stateId: form.state,
+    municipalityId: form.town,
+    status: statusData,
+  });
+
   const dataStates = useStates();
 
   useEffect(() => {
     if (dataStates.data) {
-      const data = dataStates.data.data.map((obj: any) => {
+      const dataFormatted = dataStates.data.data.map((obj: any) => {
         return {value: obj.id, label: obj.name};
       });
-      setStateList(data);
+      setStateList(dataFormatted);
     }
   }, [dataStates.data]);
 
   useEffect(() => {
-    // Aqui hay que obtener datos de hook que hace la busqueda
-    const data = [
-      {
-        name: 'Veterinaria Arboledas',
-        address: 'Av.Arboledas 2120',
-        address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
-        rating: '4.6',
-        distance: '1.5',
-        image:
-          'https://mpa-stage.s3.amazonaws.com/media/variants_images/arboledas.jpg',
-        schedule:
-          'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
-        priceConsult: 200,
-      },
-      {
-        name: 'Dog Box',
-        address: 'Av.Arboledas 2120',
-        address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
-        rating: '5',
-        distance: '6.3',
-        image:
-          'https://mpa-stage.s3.amazonaws.com/media/variants_images/dogbox.jpg',
-        schedule:
-          'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
-        priceConsult: 200,
-      },
-      {
-        name: 'Care Pet',
-        address: 'Av.Arboledas 2120',
-        address2: 'Bosques de La Victoria, 44540 Ecatepec de Morelos, México.',
-        rating: '2.3',
-        distance: '4.6',
-        image:
-          'https://mpa-stage.s3.amazonaws.com/media/variants_images/carepet.jpg',
-        schedule:
-          'Lunes a Viernes - 8:00 am a 9:00 pm, Sábados y Domingos - 11:00 am a 5:00 pm.',
-        priceConsult: 200,
-      },
-    ];
-
-    if (statusData) {
-      navigation.navigate('VetResult', {
-        filter: form,
-        data: data,
-        filters: {},
-      });
-      setIsLoading(false);
-      setStatusData(false);
+    if (data.data) {
+      if (statusData) {
+        navigation.navigate('VetResult', {
+          filter: form,
+          data: data.data.data,
+          filters: {},
+        });
+        setIsLoading(false);
+        setStatusData(false);
+      }
     }
-  });
+  }, [data.data]);
 
   const changeMunicipality = (valor, name) => {
     valor === '' ? setStatusBtn(true) : setStatusBtn(false);
