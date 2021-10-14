@@ -17,7 +17,7 @@ const RatingCard = (props: RatingCardProps): React.ReactElement => {
           source={require('../../assets/images/icons/star.png')}
         />
       </View>
-      <DefaultText>{props.rating}</DefaultText>
+      <DefaultText> {props.rating}</DefaultText>
       <View style={{borderLeftWidth: 32}} />
       <View>
         <Image
@@ -25,7 +25,7 @@ const RatingCard = (props: RatingCardProps): React.ReactElement => {
           source={require('../../assets/images/icons/location.png')}
         />
       </View>
-      <DefaultText>{props.distance} km</DefaultText>
+      <DefaultText> {props.distance} km</DefaultText>
     </View>
   );
 };
@@ -33,7 +33,6 @@ const RatingCard = (props: RatingCardProps): React.ReactElement => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    flex: 1,
     alignItems: 'center',
   },
   image: {
