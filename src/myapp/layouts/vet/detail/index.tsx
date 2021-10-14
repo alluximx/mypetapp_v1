@@ -14,18 +14,29 @@ import NavigateButton from '../../../components/buttons/navigate-button';
 
 export default ({navigation, route}): React.ReactElement => {
   const data = route.params.data;
+  const name = data.name;
+  const street = data.street;
+  const number = data.exterior_number;
+  const rating = data.rating;
+  const image = data.logo;
+  const colony = data.colony;
+  const zipcode = data.zipcode;
+  const nameState = data.state.name;
+  const municipality = data.municipality.name;
+  const availability = data.availability;
+  const address = `${street} #${number}, ${colony},\n${zipcode} ${municipality}, ${nameState}.`;
   return (
-    <View style={styles.mainContainer}>
+    <>
       <View style={styles.containerImage}>
         <Image
           source={{
-            uri: data.image,
+            uri: image,
           }}
           style={styles.image}
         />
       </View>
       <View style={styles.titleCard}>
-        <TitleHeader style={styles.bottomSpace}>{data.name}</TitleHeader>
+        <TitleHeader style={styles.bottomSpace}>{name}</TitleHeader>
       </View>
       <ScrollView>
         <DefaultLayout
@@ -33,39 +44,31 @@ export default ({navigation, route}): React.ReactElement => {
           statusBarStyle={'light-content'}
           statusBarBackgroundColor={'transparent'}
           style={styles.container}>
-          <DefaultText
-            style={
-              styles.subtitle
-            }>{`${data.address}, ${data.address2}`}</DefaultText>
-          <DefaultText style={styles.subtitle}>{data.schedule}</DefaultText>
-          <RatingCard
-            rating={data.rating}
-            distance={data.distance}
-            styleCard={{marginTop: 8}}
-          />
+          <DefaultText style={styles.subtitle}>{address}</DefaultText>
+          <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
+          <RatingCard rating={rating} distance={'6'} />
           <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
           <TitleHeader
             style={[globalStyles.highlightedText, {marginBottom: 32}]}>
-            {'$' + data.priceConsult}
+            {'$' + 200}
           </TitleHeader>
           <NavigateButton destination="Home" placeholder="Generar Cita" />
         </DefaultLayout>
       </ScrollView>
-    </View>
+    </>
   );
 };
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: globalColors.backgroundDefault,
-    height: '100%',
-  },
   container: {
-    height: '50%',
+    height: height * 0.55,
   },
   subtitle: {
     marginTop: -8,
-    marginBottom: 32,
+    marginBottom: 24,
+  },
+  subtitle2: {
+    marginBottom: 24,
   },
   consult: {
     marginTop: 16,
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
   containerImage: {
     backgroundColor: 'transparent',
     position: 'relative',
-    height: '50%',
+    height: height * 0.5,
     marginBottom: '-20%',
   },
   image: {

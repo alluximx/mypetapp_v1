@@ -37,10 +37,10 @@ export default ({navigation, route}): React.ReactElement => {
   const renderServiceItem = (services) => {
     const aesthetic = services.item;
     const name = services.item.name;
-    const address = services.item.address;
+    const street = services.item.street;
+    const number = services.item.exterior_number;
     const rating = services.item.rating;
-    const distance = services.item.distance;
-    const image = services.item.image;
+    const image = services.item.logo;
     return (
       <GenericCard
         contentTextStyle={styles.subtitleCard}
@@ -50,11 +50,11 @@ export default ({navigation, route}): React.ReactElement => {
           additionalContent: [
             <RatingCard
               rating={rating}
-              distance={distance}
+              distance={'6'}
               styleCard={{marginTop: 8}}
             />,
           ],
-          content: address,
+          content: `${street} #${number}`,
           coverImage: image,
           title: name,
         }}
