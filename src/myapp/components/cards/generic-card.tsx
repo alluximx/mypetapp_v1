@@ -72,7 +72,6 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
             </TitleHeader>
             <DefaultText
               style={[styles.labelCard, props.contentTextStyle]}
-              numberOfLines={5}
               wrapText>
               {content}
             </DefaultText>
@@ -101,6 +100,7 @@ const themedStyles = StyleService.create({
   },
   labelCard: {
     marginTop: 4,
+    maxWidth: '90%',
   },
   productChangedText: {
     backgroundColor: globalColors.greenSecondary,

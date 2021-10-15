@@ -30,7 +30,7 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
             styleCard={styles.ratingCard}
           />,
         ],
-        content: ` ${street} #${exterior_number}`,
+        content: `${street} #${exterior_number}`,
         coverImage: logo,
         title: name,
       }}
