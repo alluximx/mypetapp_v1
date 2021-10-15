@@ -6,7 +6,11 @@ import {CustomMarkerProps} from '../../types/components/maps';
 
 const CustomMarker = (props: CustomMarkerProps) => {
   return (
-    <Marker coordinate={props.coordinate} onPress={props.onPress}>
+    <Marker
+      coordinate={props.coordinate}
+      identifier={props.id}
+      key={props.id}
+      onPress={props.onPress}>
       <Image
         source={
           props.isActive
