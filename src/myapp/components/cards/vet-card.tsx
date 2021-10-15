@@ -1,45 +1,47 @@
-import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
-import globalVars from '../../styles/vars';
-import {VetCardProps} from '../../types/components/cards';
+import {useNavigation} from '@react-navigation/native';
+import {StyleSheet} from 'react-native';
+// My Components
 import GenericCard from './generic-card';
 import RatingCard from './rating-card';
+// Types
+import {VetCardProps} from '../../types/components/cards';
+import useDistanceToPoint from '../../hooks/maps/useDistanceToPoint';
 
 const VetCard = (props: VetCardProps): React.ReactElement => {
   const navigation = useNavigation();
+  const distance = useDistanceToPoint({
+    ...props.location,
+    id: props.vet.id,
+    isVet: props.isVet,
+  });
+  const {exterior_number, logo, name, street, rating} = props.vet;
 
-  const {address, distance, image, name, rating} = props.vet;
   return (
     <GenericCard
       contentTextStyle={styles.subtitleCard}
       coverImageStyle={styles.coverImage}
-      styleCard={{
-        marginHorizontal: globalVars.outsidePadding,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        zIndex: 20,
-        width: width - globalVars.outsidePadding * 2,
-      }}
+      styleCard={props.styleCard}
       data={{
         additionalContent: [
           <RatingCard
             rating={rating}
-            distance={distance}
-            styleCard={{marginTop: 8}}
+            distance={distance.toFixed(1).toString()}
+            styleCard={styles.ratingCard}
           />,
         ],
-        content: address,
-        coverImage: image,
+        content: ` ${street} #${exterior_number}`,
+        coverImage: logo,
         title: name,
       }}
-      onClick={() => navigation.navigate(props.screen, {data: props.vet})}
+      onClick={() =>
+        navigation.navigate(props.isVet ? 'VetDetail' : 'VetDetail', {
+          data: props.vet,
+        })
+      }
     />
   );
 };
-
-const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   subtitleCard: {
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
     width: 48,
     borderRadius: 8,
   },
+  ratingCard: {marginTop: 8},
 });
 
 export default VetCard;

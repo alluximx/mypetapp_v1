@@ -1,4 +1,5 @@
 import {ImageURISource} from 'react-native';
+import {LatLng} from 'react-native-maps';
 
 export interface DatasGeneric {
   buttonStyle?: any;
@@ -34,12 +35,15 @@ export interface ImageInputCardProps {
 }
 
 export interface VetCardProps {
-  screen: string;
+  isVet: boolean;
+  location: LatLng;
+  styleCard?: any;
   vet: {
+    id: string;
+    logo: string;
     name: string;
-    address: string;
+    exterior_number: string;
     rating: string;
-    distance: string;
-    image: string;
+    street: string;
   };
 }

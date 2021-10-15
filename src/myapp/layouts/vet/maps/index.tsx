@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Image, Platform, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Dimensions, Image, Platform, View} from 'react-native';
 import {Button, StyleService, useStyleSheet} from '@ui-kitten/components';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MapView from 'react-native-maps';
@@ -15,29 +15,35 @@ import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import VetCard from '../../../components/cards/vet-card';
 
-const LOCATION_DELTA = 0.02;
+const LOCATION_DELTA = 0.025;
 
 export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
-  const [currentVet, setCurrentVet] = useState(null);
   const stateName = route.params.filter.stateName;
   const townName = route.params.filter.townName;
   const data = route.params.data;
-
   const currentLocation = useGeolocation(data[0]?.location);
-  const [region, setRegion] = useState(
-    data.length ? data[0].location : currentLocation,
-  );
 
-  useEffect(() => {
-    setRegion(currentLocation);
-  }, [currentLocation]);
+  const [currentVet, setCurrentVet] = useState(null);
+  const [region, setRegion] = useState(data[0].location);
 
+  const mapRef = useRef<MapView>();
+
+  // Call fitToSuppliedMarkers() method on the MapView after markers get updated
   useEffect(() => {
-    if (currentVet) {
-      setRegion(currentVet.location);
+    if (mapRef.current) {
+      // list of _id's must same that has been provided to the identifier props of the Marker
+      mapRef.current.fitToElements({
+        animated: true,
+        edgePadding: {
+          bottom: 400,
+          left: 10,
+          right: 10,
+          top: 300,
+        },
+      });
     }
-  }, [currentVet]);
+  }, [data]);
 
   navigation.setOptions({
     headerRight: () => (
@@ -67,7 +73,14 @@ export default ({navigation, route}): React.ReactElement => {
         </DefaultText>
       </View>
       <View style={styles.container}>
-        {currentVet && <VetCard screen="VetDetail" vet={currentVet} />}
+        {currentVet && (
+          <VetCard
+            isVet={true}
+            location={currentLocation}
+            styleCard={styles.styleCard}
+            vet={currentVet}
+          />
+        )}
         <Button
           activeOpacity={0.8}
           accessoryRight={() => (
@@ -86,12 +99,14 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.locationButton}
         />
         <MapView
-          region={{
+          moveOnMarkerPress
+          initialRegion={{
             latitude: region.latitude,
             longitude: region.longitude,
             latitudeDelta: LOCATION_DELTA,
             longitudeDelta: LOCATION_DELTA,
           }}
+          ref={mapRef}
           showsUserLocation
           showsMyLocationButton={false}
           loadingEnabled
@@ -103,7 +118,8 @@ export default ({navigation, route}): React.ReactElement => {
                 latitude: vet.location.latitude,
                 longitude: vet.location.longitude,
               }}
-              isActive={currentVet?.distance === vet.distance}
+              id={vet.id}
+              isActive={currentVet?.id === vet.id}
               onPress={() => setCurrentVet(vet)}
             />
           ))}
@@ -113,6 +129,7 @@ export default ({navigation, route}): React.ReactElement => {
   );
 };
 
+const {width} = Dimensions.get('window');
 const themedStyles = StyleService.create({
   container: {
     flex: 1,
@@ -150,5 +167,13 @@ const themedStyles = StyleService.create({
   locationButtonImage: {
     width: 40,
     height: 40,
+  },
+  styleCard: {
+    marginHorizontal: globalVars.outsidePadding,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    zIndex: 20,
+    width: width - globalVars.outsidePadding * 2,
   },
 });
