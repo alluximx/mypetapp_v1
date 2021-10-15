@@ -25,25 +25,21 @@ export default ({navigation, route}): React.ReactElement => {
   const currentLocation = useGeolocation(data[0]?.location);
 
   const [currentVet, setCurrentVet] = useState(null);
-  const [region, setRegion] = useState(data[0].location);
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   const mapRef = useRef<MapView>();
 
-  // Call fitToSuppliedMarkers() method on the MapView after markers get updated
   useEffect(() => {
-    if (mapRef.current) {
-      // list of _id's must same that has been provided to the identifier props of the Marker
-      mapRef.current.fitToElements({
-        animated: true,
-        edgePadding: {
-          bottom: 400,
-          left: 10,
-          right: 10,
-          top: 300,
-        },
-      });
-    }
-  }, [data]);
+    mapRef.current.fitToElements({
+      animated: true,
+      edgePadding: {
+        bottom: 50,
+        left: 50,
+        right: 50,
+        top: 300,
+      },
+    });
+  }, [data, mapLoaded]);
 
   navigation.setOptions({
     headerRight: () => (
@@ -61,6 +57,21 @@ export default ({navigation, route}): React.ReactElement => {
       </TouchableOpacity>
     ),
   });
+
+  const onLocationButtonPress = () => {
+    const myLocation = {
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
+    };
+    mapRef.current.animateToRegion(
+      {
+        ...myLocation,
+        latitudeDelta: LOCATION_DELTA,
+        longitudeDelta: LOCATION_DELTA,
+      },
+      700,
+    );
+  };
 
   return (
     <DefaultLayout
@@ -89,28 +100,23 @@ export default ({navigation, route}): React.ReactElement => {
               style={styles.locationButtonImage}
             />
           )}
-          onPress={() => {
-            const myLocation = {
-              latitude: currentLocation.latitude,
-              longitude: currentLocation.longitude,
-            };
-            setRegion(myLocation);
-          }}
+          onPress={onLocationButtonPress}
           style={styles.locationButton}
         />
         <MapView
-          moveOnMarkerPress
           initialRegion={{
-            latitude: region.latitude,
-            longitude: region.longitude,
+            latitude: data[0].location.latitude,
+            longitude: data[0].location.longitude,
             latitudeDelta: LOCATION_DELTA,
             longitudeDelta: LOCATION_DELTA,
           }}
+          loadingEnabled
+          moveOnMarkerPress
+          onMapLoaded={() => setMapLoaded(true)}
+          provider="google" // remove if not using Google Maps
           ref={mapRef}
           showsUserLocation
           showsMyLocationButton={false}
-          loadingEnabled
-          provider="google" // remove if not using Google Maps
           style={styles.map}>
           {data.map((vet) => (
             <CustomMarker
@@ -147,7 +153,6 @@ const themedStyles = StyleService.create({
   },
   map: {
     flex: 1,
-    paddingBottom: 0,
   },
   locationImage: {
     height: 40,
