@@ -21,12 +21,16 @@ export default ({navigation, route}): React.ReactElement => {
 
   const numColumns = 4;
 
-  const {screenFrom, petInfo, paymentMethod} = route.params?.data ?? {};
+  const {screenFrom, petInfo, paymentMethod, serviceData} =
+    route.params?.data ?? {};
   // PaymentInfo
   const [cardTitle, setCardTitle] = useState('');
   const [cardContent, setCardContent] = useState('');
   // PetInfo
   const [petContent, setPetContent] = useState('');
+  // Service Info
+  const [serviceContent, setServiceContent] = useState('');
+  // Service Info
 
   const [form, setForm] = useState({
     pet: '',
@@ -76,7 +80,13 @@ export default ({navigation, route}): React.ReactElement => {
       setCardContent(cardLabel);
       setForm({...form, card_id: cardId});
     }
-  }, [petInfo, paymentMethod]);
+    if (serviceData) {
+      // console.log(serviceData);
+      serviceData.length === 1
+        ? setServiceContent(serviceData[0].name)
+        : setServiceContent('Varios');
+    }
+  }, [petInfo, paymentMethod, serviceData]);
 
   const textModal =
     'Para generar una cita es necesario ' +
@@ -92,9 +102,7 @@ export default ({navigation, route}): React.ReactElement => {
     'exitósamente. Puedes acceder a ' +
     'todos tus servicios programados ' +
     'desde la sección de "Proximos ' +
-    'Servicios" en el menú principal. ' +
-    'antes, de lo contrario se te cobrará ' +
-    'una penalización';
+    'Servicios" en el menú principal. ';
 
   const setValueForm = (day: string) => {
     setForm({...form, day});
@@ -148,6 +156,8 @@ export default ({navigation, route}): React.ReactElement => {
               placeholder="Selecciona los servicios"
               destination="ServiceSelect"
               data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+              title="Servicio"
+              subtitle={serviceContent}
             />
           </View>
         )}
