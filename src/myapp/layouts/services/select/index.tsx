@@ -15,6 +15,8 @@ export default ({navigation, route}): React.ReactElement => {
   const auxData = [
     {id: '1', title: '$200.00', subtitle: 'Baño'},
     {id: '2', title: '$200.00', subtitle: 'Corte'},
+    {id: '3', title: '$200.00', subtitle: 'Uñas'},
+    {id: '4', title: '$200.00', subtitle: 'Peinado'},
   ];
 
   const {screenToReturn, screenFrom} = route.params?.data ?? {};
@@ -22,30 +24,30 @@ export default ({navigation, route}): React.ReactElement => {
   const isDisabled = false;
 
   const setData = (value) => {
-    // console.log('Entro con');
-    // console.log(value);
     const exist = data.includes(value);
+    exist ? removeFromArray(value) : data.push(value);
+  };
 
-    // console.log(exist);
-
-    exist
-      ? () => {
-          const indx = data.indexOf(value);
-          // console.log('indice');
-          // console.log(indx);
-          if (indx > -1) {
-            data.splice(indx, 1);
-          }
-        }
-      : data.push(value);
-
-    // console.log('Array');
-    // console.log(data);
+  const removeFromArray = (value) => {
+    const indx = data.indexOf(value);
+    if (indx > -1) {
+      data.splice(indx, 1);
+    }
   };
 
   const onSubmit = () => {
+    const dataSubmit = [];
+    data.forEach((selectElement) => {
+      auxData.forEach((element) => {
+        if (selectElement === element.id) {
+          const auxElement = {id: selectElement, name: element.subtitle};
+          dataSubmit.push(auxElement);
+        }
+      });
+    });
+
     navigation.navigate(screenToReturn, {
-      data: {serviceData: auxData, screenFrom: screenFrom},
+      data: {serviceData: dataSubmit, screenFrom: screenFrom},
     });
   };
 
