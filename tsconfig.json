@@ -17,7 +17,18 @@
     "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "paths": {
+      "@eva-design/*": [
+        "../node_modules/@eva-design/packages/*"
+      ],
+      "@ui-kitten/*": [
+        "../node_modules/@ui-kitten/*"
+      ],
+      "@kitten/*": [
+        "../node_modules/@ui-kitten/components/*"
+      ]
+    }
   },
   "exclude": [
     "./node_modules",

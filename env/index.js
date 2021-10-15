@@ -6,5 +6,5 @@ module.exports = {
     __dirname,
     '../node_modules/@ui-kitten',
   ),
-  EVA_PACKAGES_PATH: path.resolve(__dirname, '../node_modules/@eva-design'),
+  EVA_PACKAGES_PATH: path.resolve(__dirname, '../../node_modules/@eva-design'),
 };
