@@ -1,4 +1,5 @@
 import {
+  MODE,
   BASE_URL_DEV,
   API_URL_DEV,
   BASE_URL_PROD,
@@ -9,6 +10,8 @@ import {
   GUEST_PASS_DEV,
   GUEST_USER_PROD,
   GUEST_PASS_PROD,
+  MAPS_API_DEV,
+  MAPS_API_PROD,
 } from 'react-native-dotenv-2';
 
 class Environments {

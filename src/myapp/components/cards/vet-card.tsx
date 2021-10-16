@@ -1,0 +1,59 @@
+import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {StyleSheet} from 'react-native';
+// My Components
+import GenericCard from './generic-card';
+import RatingCard from './rating-card';
+// Types
+import {VetCardProps} from '../../types/components/cards';
+import useDistanceToPoint from '../../hooks/maps/useDistanceToPoint';
+
+const VetCard = (props: VetCardProps): React.ReactElement => {
+  const navigation = useNavigation();
+  const distance = useDistanceToPoint({
+    ...props.location,
+    id: props.vet.id,
+    isVet: props.isVet,
+  });
+  const {exterior_number, logo, name, street, rating} = props.vet;
+
+  return (
+    <GenericCard
+      contentTextStyle={styles.subtitleCard}
+      coverImageStyle={styles.coverImage}
+      styleCard={props.styleCard}
+      data={{
+        additionalContent: [
+          <RatingCard
+            rating={rating}
+            distance={distance.toFixed(1).toString()}
+            styleCard={styles.ratingCard}
+          />,
+        ],
+        content: `${street} #${exterior_number}`,
+        coverImage: logo,
+        title: name,
+      }}
+      onClick={() =>
+        navigation.navigate(props.isVet ? 'VetDetail' : 'VetDetail', {
+          data: props.vet,
+        })
+      }
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  subtitleCard: {
+    fontSize: 14,
+    marginTop: 0,
+  },
+  coverImage: {
+    height: 48,
+    width: 48,
+    borderRadius: 8,
+  },
+  ratingCard: {marginTop: 8},
+});
+
+export default VetCard;
