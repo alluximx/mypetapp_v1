@@ -54,8 +54,8 @@ export default ({navigation, route}): React.ReactElement => {
           {/* <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
           <TitleHeader
             style={[globalStyles.highlightedText, {marginBottom: 32}]}>
-            {'$' + 200}
-          </TitleHeader> */}
+            {'$' + data.priceConsult}
+        </TitleHeader>*/}
           <NavigateButton
             destination="VetDate"
             placeholder="Generar Cita"
