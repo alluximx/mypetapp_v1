@@ -49,7 +49,7 @@ export default ({navigation, route}): React.ReactElement => {
             {townName}, {stateName}.
           </DefaultText>
           <List
-            style={styles.servicesContainer}
+            style={styles.listContainer}
             horizontal={false}
             data={data}
             renderItem={({item}) => (
@@ -87,6 +87,7 @@ const themedStyles = StyleService.create({
   container: {
     flex: 1,
     backgroundColor: globalColors.backgroundDefault,
+    paddingRight: globalVars.outsidePadding / 2,
   },
   layoutPort: {
     marginLeft: 24,
@@ -105,10 +106,11 @@ const themedStyles = StyleService.create({
     height: 40,
     width: 40,
   },
-  servicesContainer: {
+  listContainer: {
     backgroundColor: 'transparent',
     marginBottom: 15,
     marginTop: 24,
+    paddingRight: globalVars.outsidePadding / 2,
   },
   title: {
     textAlign: 'center',

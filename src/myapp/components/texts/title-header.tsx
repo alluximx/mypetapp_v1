@@ -5,7 +5,14 @@ import {Text} from '@ui-kitten/components';
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
 
-const TitleHeader = (props): React.ReactElement => {
+interface TitleHeaderProps {
+  children: any;
+  numberOfLines?: number;
+  style?: any;
+  wrapText?: boolean;
+}
+
+const TitleHeader = (props: TitleHeaderProps): React.ReactElement => {
   if (props.wrapText) {
     return (
       <Text
