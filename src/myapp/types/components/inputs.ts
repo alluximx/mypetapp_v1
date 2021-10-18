@@ -27,10 +27,16 @@ export interface Option {
 export interface OptionSelectProps {
   currentValue: string | number;
   data: any[];
+  enableScroll?: boolean;
   horizontal?: boolean;
+  numColumns?: number;
   optionStyle?: {};
   setCurrentValue: (key: string | number) => void;
   style?: {};
+  styleHorizontal?: boolean;
+  textStyle?: {};
+  titleStyle?: {};
+  title?: string;
 }
 
 export interface SearchInputProps {
@@ -61,4 +67,12 @@ export interface UserInputProps {
   placeholder: string;
   style?: {};
   value: string;
+}
+
+export interface IndiviudalOptionSelectProps {
+  value: string | number;
+  setCurrentValue: (key: string | number) => void;
+  style?: {};
+  title?: string;
+  subtitle?: string;
 }

@@ -54,9 +54,13 @@ export default ({navigation, route}): React.ReactElement => {
           {/* <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
           <TitleHeader
             style={[globalStyles.highlightedText, {marginBottom: 32}]}>
-            {'$' + 200}
-          </TitleHeader> */}
-          <NavigateButton destination="Home" placeholder="Generar Cita" />
+            {'$' + data.priceConsult}
+        </TitleHeader>*/}
+          <NavigateButton
+            destination="VetDate"
+            placeholder="Generar Cita"
+            data={{screenFrom: 'AestheticDate'}}
+          />
         </DefaultLayout>
       </ScrollView>
     </>
