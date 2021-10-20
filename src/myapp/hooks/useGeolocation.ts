@@ -39,6 +39,8 @@ const useGeolocation = (initialLocation: LatLng) => {
         } catch (err) {
           console.warn(err);
         }
+      } else {
+        Geolocation.getCurrentPosition(handleSuccess, handleError);
       }
     };
 
