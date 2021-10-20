@@ -1,10 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions, Image} from 'react-native';
-// Env
-import environments from '../../../environments';
 // Global Styles.
 import globalColors from '../../../styles/colors';
-import globalStyles from '../../../styles/style';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
@@ -14,23 +11,27 @@ import NavigateButton from '../../../components/buttons/navigate-button';
 
 export default ({navigation, route}): React.ReactElement => {
   const data = route.params.data;
-  const name = data.name;
-  const street = data.street;
-  const number = data.exterior_number;
-  const rating = data.rating;
-  const image = data.logo;
-  const colony = data.colony;
-  const zipcode = data.zipcode;
+  const {
+    availability,
+    colony,
+    distance,
+    exterior_number,
+    logo,
+    name,
+    rating,
+    street,
+    zipcode,
+  } = data;
+
   const nameState = data.state.name;
   const municipality = data.municipality.name;
-  const availability = data.availability;
-  const address = `${street} #${number}, ${colony},\n${zipcode} ${municipality}, ${nameState}.`;
+  const address = `${street} #${exterior_number}, ${colony},\n${zipcode} ${municipality}, ${nameState}.`;
   return (
     <>
       <View style={styles.containerImage}>
         <Image
           source={{
-            uri: image,
+            uri: logo,
           }}
           style={styles.image}
         />
@@ -48,7 +49,7 @@ export default ({navigation, route}): React.ReactElement => {
           <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
           <RatingCard
             rating={rating}
-            distance={'6'}
+            distance={distance}
             styleCard={{marginBottom: 32}}
           />
           {/* <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
