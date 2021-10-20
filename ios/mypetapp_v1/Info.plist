@@ -49,6 +49,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>DogIt requiere acceso a la cámara para tomar una foto de tu mascota.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>DogIt require acceso a tu ubicación para localizar servicios cercanos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>DogIt require acceso a tu ubicación para localizar servicios cercanos.</string>
 	<key>NSMainNibFile</key>
@@ -61,6 +63,10 @@
 	<array>
 		<string>Montserrat-Bold.ttf</string>
 		<string>Montserrat-Medium.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

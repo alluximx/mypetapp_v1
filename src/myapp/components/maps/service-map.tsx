@@ -1,7 +1,7 @@
 import {Button} from '@ui-kitten/components';
 import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
-import MapView from 'react-native-maps';
+import {Dimensions, Image, Platform, StyleSheet, View} from 'react-native';
+import MapView, {MapEvent} from 'react-native-maps';
 // Global Styles
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
@@ -39,6 +39,7 @@ const ServiceMap = (props: ServiceMapProps) => {
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
     };
+
     mapRef.current.animateToRegion(
       {
         ...myLocation,
@@ -79,6 +80,15 @@ const ServiceMap = (props: ServiceMapProps) => {
         }}
         loadingEnabled
         moveOnMarkerPress
+        onMarkerPress={(event: MapEvent) => {
+          if (Platform.OS === 'ios') {
+            mapRef.current.animateToRegion({
+              ...event.nativeEvent.coordinate,
+              latitudeDelta: LOCATION_DELTA,
+              longitudeDelta: LOCATION_DELTA,
+            });
+          }
+        }}
         onMapLoaded={() => setMapLoaded(true)}
         provider="google" // remove if not using Google Maps
         ref={mapRef}
