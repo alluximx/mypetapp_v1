@@ -8,6 +8,7 @@ type HomeNavigatorParamList = {
   AddPet: {};
   DetailPet: {};
   EditPet: {};
+  PetSelect: {};
 
   AddVisit: {};
   NewVisitMedical: {};
@@ -58,6 +59,18 @@ type HomeNavigatorParamList = {
   AddPaymentMethod: {
     data: any;
   };
+
+  VetResult: {};
+  VetFilter: {};
+  VetDetail: {};
+  VetMaps: {};
+  VetDate: {};
+
+  AestheticResult: {};
+  AestheticFilter: {};
+  AestheticDetail: {};
+
+  ServiceSelect: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;

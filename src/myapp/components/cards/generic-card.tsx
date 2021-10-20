@@ -67,12 +67,11 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
                 {formattedDate}
               </DefaultText>
             )}
-            <TitleHeader style={[styles.title, props.titleStyle]}>
+            <TitleHeader style={[styles.title, props.titleStyle]} wrapText>
               {title}
             </TitleHeader>
             <DefaultText
               style={[styles.labelCard, props.contentTextStyle]}
-              numberOfLines={5}
               wrapText>
               {content}
             </DefaultText>
@@ -98,9 +97,11 @@ const themedStyles = StyleService.create({
   title: {
     fontSize: 16,
     marginBottom: 4,
+    maxWidth: '90%',
   },
   labelCard: {
     marginTop: 4,
+    maxWidth: '90%',
   },
   productChangedText: {
     backgroundColor: globalColors.greenSecondary,

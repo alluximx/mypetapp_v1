@@ -48,6 +48,7 @@ import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-met
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
 import {EditPetScreen} from '../myapp/scenes/pets/edit.component';
+import {SelectPetScreen} from '../myapp/scenes/pets/select.component';
 // Products
 import {ProductDescriptionScreen} from '../myapp/scenes/products/product-detail.component';
 import {ProductFilterScreen} from '../myapp/scenes/products/product-filter.component';
@@ -61,6 +62,18 @@ import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.compone
 // Visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
+// Vets
+import {VetResultScreen} from '../myapp/scenes/vet/vet-list.component';
+import {VetFilterScreen} from '../myapp/scenes/vet/filter.component';
+import {VetDetailScreen} from '../myapp/scenes/vet/vet-detail.component';
+import {VetMapsScreen} from '../myapp/scenes/vet/vet-maps.component';
+import {VetDateScreen} from '../myapp/scenes/vet/date.component';
+// Aesthetics
+import {AestheticFilterScreen} from '../myapp/scenes/aesthetic/filter.component';
+import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
+import {AestheticDetailScreen} from '../myapp/scenes/aesthetic/detail.component';
+// Services
+import {SelectServiceScreen} from '../myapp/scenes/service/select.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -210,6 +223,13 @@ const Screens = ({navigation, route, style, setRouteName}) => {
             headerLeft: closeButton,
           }}
         />
+        <HomeStack.Screen
+          name="PetSelect"
+          component={SelectPetScreen}
+          options={{
+            headerLeft: closeButton,
+          }}
+        />
         {/* Product */}
         <HomeStack.Screen name="ProductList" component={ProductListScreen} />
         <HomeStack.Screen
@@ -260,6 +280,63 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           options={{
             headerLeft: closeButton,
           }}
+        />
+        {/* Vets */}
+        <HomeStack.Screen name="VetResult" component={VetResultScreen} />
+        <HomeStack.Screen name="VetFilter" component={VetFilterScreen} />
+        <HomeStack.Screen name="VetDate" component={VetDateScreen} />
+        <HomeStack.Screen
+          name="VetDetail"
+          component={VetDetailScreen}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
+        <HomeStack.Screen name="VetMaps" component={VetMapsScreen} />
+        {/* Aesthetics */}
+        <HomeStack.Screen
+          name="AestheticResult"
+          component={AestheticResultScreen}
+        />
+        <HomeStack.Screen
+          name="AestheticFilter"
+          component={AestheticFilterScreen}
+        />
+        <HomeStack.Screen
+          name="AestheticDetail"
+          component={AestheticDetailScreen}
+          options={{
+            headerLeft: () => (
+              <BackButton
+                style={{
+                  backgroundColor: globalColors.backgroundDefault,
+                  borderRadius: 100,
+                  marginTop: 2,
+                }}
+                navigation={navigation}
+              />
+            ),
+            headerTopInsetEnabled: true,
+            headerTranslucent: true,
+            headerStyle: {backgroundColor: 'transparent'},
+          }}
+        />
+        {/* Services */}
+        <HomeStack.Screen
+          name="ServiceSelect"
+          component={SelectServiceScreen}
         />
       </HomeStack.Navigator>
     </Animated.View>

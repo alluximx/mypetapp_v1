@@ -26,6 +26,7 @@ export const HomeDrawer = (props): DrawerElement => {
     {name: 'Mi Perfil', ruta: 'MyProfile'},
     {name: 'Adopciones', ruta: 'AdoptionFilter'},
     {name: 'Productos', ruta: 'ProductList'},
+    {name: 'Veterinarias', ruta: 'VetFilter'},
   ];
   useEffect(() => {
     list.map((route) => {
@@ -92,8 +93,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/products.png')}
           />
           <DrawerItem
-            isDisabled
-            urlKey="Home"
+            urlKey="AestheticFilter"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}
@@ -102,8 +102,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/pet-stylists.png')}
           />
           <DrawerItem
-            isDisabled
-            urlKey="Home"
+            urlKey="VetFilter"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}

@@ -17,15 +17,17 @@ const useSavePaymentMethod = () => {
   const queryClient = useQueryClient();
 
   return useMutation((data: any) => postPaymentMethod(data), {
-    onSuccess: (response) => {
+    onSuccess: (response, variables) => {
       const cardBrand = response.data.brand;
       const cardId = response.data.id;
       const cardLabel = '****' + response.data.last4;
+      const screenToReturn = variables.screenToReturn;
+      const screenFrom = variables.screenFrom;
 
       const auxData = {cardBrand, cardId, cardLabel};
       // Save User Address
-      navigation.navigate('PaymentSummary', {
-        data: {paymentMethod: auxData},
+      navigation.navigate(screenToReturn, {
+        data: {paymentMethod: auxData, screenFrom: screenFrom},
       });
       queryClient.invalidateQueries('user-card');
     },
