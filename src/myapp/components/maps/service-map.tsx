@@ -17,7 +17,6 @@ const LOCATION_DELTA = 0.025;
 
 const ServiceMap = (props: ServiceMapProps) => {
   const currentLocation = useGeolocation(props.data[0]?.location);
-  console.log(currentLocation);
 
   const [currentVet, setCurrentVet] = useState(null);
   const [mapLoaded, setMapLoaded] = useState(false);

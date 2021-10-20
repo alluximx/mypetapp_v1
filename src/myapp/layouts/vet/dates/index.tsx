@@ -81,7 +81,6 @@ export default ({navigation, route}): React.ReactElement => {
       setForm({...form, card_id: cardId});
     }
     if (serviceData) {
-      // console.log(serviceData);
       serviceData.length === 1
         ? setServiceContent(serviceData[0].name)
         : setServiceContent('Varios');
