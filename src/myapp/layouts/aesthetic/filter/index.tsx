@@ -9,12 +9,13 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import CustomButton from '../../../components/buttons/custom-button';
 // Global styles
 import globalColors from '../../../styles/colors';
-import globalVars from '../../../styles/vars';
 // Hooks
+import useGeolocation from '../../../hooks/useGeolocation';
 import useStates from '../../../hooks/util/useState';
 import useAesthetics from '../../../hooks/aesthetics/useAesthetics';
 
 export default ({navigation, route}): React.ReactElement => {
+  useGeolocation();
   const [stateList, setStateList] = useState([]);
   const [status, setStatus] = useState(true);
   const [statusBtn, setStatusBtn] = useState(true);

@@ -49,7 +49,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
           {
             top: focusAnim.interpolate({
               inputRange: [0, 1],
-              outputRange: [6, 16],
+              outputRange: [6, Platform.OS === 'ios' ? 20 : 16],
             }),
             fontSize: focusAnim.interpolate({
               inputRange: [0, 1],
