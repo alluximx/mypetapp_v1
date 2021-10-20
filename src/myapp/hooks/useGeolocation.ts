@@ -8,7 +8,7 @@ const DEFAULT_LOCATION = {
   longitude: -100.31363678043556,
 };
 
-const useGeolocation = (initialLocation: LatLng) => {
+const useGeolocation = (initialLocation: LatLng = null) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
 
   const handleSuccess = (position) => {

@@ -10,10 +10,12 @@ import CustomButton from '../../../components/buttons/custom-button';
 // Global styles
 import globalColors from '../../../styles/colors';
 // Hooks
+import useGeolocation from '../../../hooks/useGeolocation';
 import useStates from '../../../hooks/util/useState';
 import useVets from '../../../hooks/vets/useVets';
 
 export default ({navigation, route}): React.ReactElement => {
+  useGeolocation();
   const [stateList, setStateList] = useState([]);
   const [status, setStatus] = useState(true);
   const [statusBtn, setStatusBtn] = useState(true);
