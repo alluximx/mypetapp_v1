@@ -27,6 +27,7 @@ export default ({navigation, route}): React.ReactElement => {
             navigation.navigate('VetMaps', {
               data,
               filter: {stateName, townName},
+              type: 'Vet',
             });
           }}>
           <Image

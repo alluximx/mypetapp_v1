@@ -1,3 +1,5 @@
+import {LatLng} from 'react-native-maps';
+
 interface AdoptionImage {
   id: string;
   is_cover: boolean;
@@ -107,6 +109,10 @@ export interface Variant extends BaseModel {
   images: {image: string}[];
   price: number;
   stock: number;
+}
+
+export interface Vet extends BaseModel {
+  location: LatLng;
 }
 
 export interface Visit {

@@ -24,6 +24,11 @@ export default ({navigation, route}): React.ReactElement => {
         <TouchableOpacity
           onPress={() => {
             // Navigate
+            navigation.navigate('VetMaps', {
+              data,
+              filter: {stateName, townName},
+              type: 'Salon',
+            });
           }}>
           <Image
             style={styles.locationImage}
