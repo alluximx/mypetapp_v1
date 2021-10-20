@@ -4,24 +4,26 @@ import {Marker} from 'react-native-maps';
 // Types
 import {CustomMarkerProps} from '../../types/components/maps';
 
-const CustomMarker = (props: CustomMarkerProps) => {
-  return (
-    <Marker
-      coordinate={props.coordinate}
-      identifier={props.id}
-      key={props.id}
-      onPress={props.onPress}>
-      <Image
-        source={
-          props.isActive
+const CustomMarker = (props: CustomMarkerProps) => (
+  <Marker
+    coordinate={props.coordinate}
+    identifier={props.id}
+    key={props.id}
+    onPress={props.onPress}>
+    <Image
+      source={
+        props.type === 'Vet'
+          ? props.isActive
             ? require('../assets/selected-vet-marker.png')
             : require('../assets/vet-marker.png')
-        }
-        style={styles.marker}
-      />
-    </Marker>
-  );
-};
+          : props.isActive
+          ? require('../assets/selected-salon-marker.png')
+          : require('../assets/salon-marker.png')
+      }
+      style={styles.marker}
+    />
+  </Marker>
+);
 
 const styles = StyleSheet.create({
   marker: {

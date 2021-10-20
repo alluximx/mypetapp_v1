@@ -1,29 +1,34 @@
 import React from 'react';
 import {Layout, StyleService, useStyleSheet, List} from '@ui-kitten/components';
 import {Dimensions, Image, Platform, TouchableOpacity} from 'react-native';
-// Env
-import environments from '../../../environments';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
+// Hooks
+import useGeolocation from '../../../hooks/useGeolocation';
 // My Components
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
-import GenericCard from '../../../components/cards/generic-card';
-import RatingCard from '../../../components/cards/rating-card';
+import VetCard from '../../../components/cards/vet-card';
 
 export default ({navigation, route}): React.ReactElement => {
   const stateName = route.params.filter.stateName;
   const townName = route.params.filter.townName;
   const styles = useStyleSheet(themedStyles);
   const data = route.params.data;
+  const currentLocation = useGeolocation(data[0]?.location);
+
   if (data.length > 0) {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {
-            // Navigate
+            navigation.navigate('VetMaps', {
+              data,
+              filter: {stateName, townName},
+              type: 'Salon',
+            });
           }}>
           <Image
             style={styles.locationImage}
@@ -33,37 +38,6 @@ export default ({navigation, route}): React.ReactElement => {
       ),
     });
   }
-
-  const renderServiceItem = (services) => {
-    const aesthetic = services.item;
-    const name = services.item.name;
-    const street = services.item.street;
-    const number = services.item.exterior_number;
-    const rating = services.item.rating;
-    const image = services.item.logo;
-    return (
-      <GenericCard
-        contentTextStyle={styles.subtitleCard}
-        coverImageStyle={styles.coverImage}
-        styleCard={{marginHorizontal: 0}}
-        data={{
-          additionalContent: [
-            <RatingCard
-              rating={rating}
-              distance={'6'}
-              styleCard={{marginTop: 8}}
-            />,
-          ],
-          content: `${street} #${number}`,
-          coverImage: image,
-          title: name,
-        }}
-        onClick={() => {
-          navigation.navigate('AestheticDetail', {data: aesthetic});
-        }}
-      />
-    );
-  };
 
   return (
     <DefaultLayout
@@ -76,10 +50,17 @@ export default ({navigation, route}): React.ReactElement => {
             {townName}, {stateName}.
           </DefaultText>
           <List
-            style={styles.servicesContainer}
+            style={styles.listContainer}
             horizontal={false}
             data={data}
-            renderItem={renderServiceItem}
+            renderItem={({item}) => (
+              <VetCard
+                isVet={false}
+                location={currentLocation}
+                styleCard={styles.styleCard}
+                vet={item}
+              />
+            )}
           />
         </>
       ) : (
@@ -125,10 +106,11 @@ const themedStyles = StyleService.create({
     height: 40,
     width: 40,
   },
-  servicesContainer: {
+  listContainer: {
     backgroundColor: 'transparent',
     marginBottom: 15,
     marginTop: 24,
+    paddingRight: globalVars.outsidePadding / 2,
   },
   title: {
     textAlign: 'center',
@@ -146,5 +128,9 @@ const themedStyles = StyleService.create({
     height: 48,
     width: 48,
     borderRadius: 8,
+  },
+  styleCard: {
+    marginLeft: 0,
+    marginRight: 0,
   },
 });

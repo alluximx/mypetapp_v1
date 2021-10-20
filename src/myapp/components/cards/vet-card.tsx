@@ -15,6 +15,7 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
     id: props.vet.id,
     isVet: props.isVet,
   });
+  const currentDistance = distance.toFixed(1).toString();
   const {exterior_number, logo, name, street, rating} = props.vet;
 
   return (
@@ -26,7 +27,7 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
         additionalContent: [
           <RatingCard
             rating={rating}
-            distance={distance.toFixed(1).toString()}
+            distance={currentDistance}
             styleCard={styles.ratingCard}
           />,
         ],
@@ -35,8 +36,11 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
         title: name,
       }}
       onClick={() =>
-        navigation.navigate(props.isVet ? 'VetDetail' : 'VetDetail', {
-          data: props.vet,
+        navigation.navigate(props.isVet ? 'VetDetail' : 'AestheticDetail', {
+          data: {
+            ...props.vet,
+            distance: currentDistance,
+          },
         })
       }
     />

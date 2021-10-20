@@ -21,7 +21,7 @@ const useDistanceToPoint = (data: any) => {
 
       setDistance(response.data?.distance);
     })();
-  }, [data.latitude, data.longitude]);
+  }, [data.latitude, data.longitude, data.id]);
 
   return distance;
 };
