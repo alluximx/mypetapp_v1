@@ -53,7 +53,7 @@ const ServiceMap = (props: ServiceMapProps) => {
     <View style={styles.container}>
       {currentVet && (
         <VetCard
-          isVet={true}
+          isVet={props.type === 'Vet'}
           location={currentLocation}
           styleCard={styles.styleCard}
           vet={currentVet}
@@ -63,7 +63,7 @@ const ServiceMap = (props: ServiceMapProps) => {
         activeOpacity={0.8}
         accessoryRight={() => (
           <Image
-            source={require('../../../assets/images/icons/current-location.png')}
+            source={require('../../assets/images/icons/current-location.png')}
             style={styles.locationButtonImage}
           />
         )}

@@ -1,16 +1,14 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View, Dimensions, Image} from 'react-native';
-// Env
-import environments from '../../../environments';
 // Global Styles.
 import globalColors from '../../../styles/colors';
 import globalStyles from '../../../styles/style';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import TitleHeader from '../../../components/texts/title-header';
-import RatingCard from '../../../components/cards/rating-card';
 import NavigateButton from '../../../components/buttons/navigate-button';
+import RatingCard from '../../../components/cards/rating-card';
+import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const data = route.params.data;

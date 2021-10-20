@@ -36,7 +36,7 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
         title: name,
       }}
       onClick={() =>
-        navigation.navigate(props.isVet ? 'VetDetail' : 'VetDetail', {
+        navigation.navigate(props.isVet ? 'VetDetail' : 'AestheticDetail', {
           data: {
             ...props.vet,
             distance: currentDistance,
