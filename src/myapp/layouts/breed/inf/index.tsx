@@ -18,6 +18,7 @@ import globalVars from '../../../styles/vars';
 import useBreedsInformation from '../../../hooks/breed/useBreedsInformation';
 // My Components
 import DefaultLayout from '../../../components/layouts/default-layout';
+import TitleHeader from '../../../components/texts/title-header';
 
 const InfBreedScreen = ({navigation}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
@@ -68,7 +69,7 @@ const InfBreedScreen = ({navigation}): React.ReactElement => {
   return (
     <DefaultLayout style={styles.container}>
       <Layout style={styles.formContainer}>
-        <Text style={styles.title}>Características de Razas</Text>
+        <TitleHeader style={styles.title}>Características de Razas</TitleHeader>
         <Layout style={styles.filter}>
           <Input
             placeholder="Nombre"
@@ -117,11 +118,9 @@ const themedStyles = StyleService.create({
     backgroundColor: globalColors.backgroundDefault,
   },
   title: {
-    marginTop: 16,
     marginLeft: 24,
-    fontFamily: globalVars.fontBold,
-    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
-    fontSize: 20,
+    marginTop: 16,
+    marginBottom: 0,
   },
   filter: {
     marginVertical: 24,
