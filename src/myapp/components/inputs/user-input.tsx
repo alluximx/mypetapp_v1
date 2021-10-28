@@ -76,7 +76,7 @@ const UserInput = (props: UserInputProps): React.ReactElement => {
         }}
         maxLength={props.maxLength ?? null}
         onFocus={() => setIsFocused(true)}
-        secureTextEntry={props.isPassword ? secureTextEntry : null}
+        secureTextEntry={props.isPassword ? secureTextEntry : false}
         style={[
           styles.inputValue,
           {
