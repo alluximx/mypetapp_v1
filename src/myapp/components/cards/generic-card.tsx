@@ -97,11 +97,9 @@ const themedStyles = StyleService.create({
   title: {
     fontSize: 16,
     marginBottom: 4,
-    maxWidth: '90%',
   },
   labelCard: {
     marginTop: 4,
-    maxWidth: '90%',
   },
   productChangedText: {
     backgroundColor: globalColors.greenSecondary,
@@ -131,6 +129,7 @@ const themedStyles = StyleService.create({
   },
   cardContentContainer: {
     flexGrow: 1,
+    flexShrink: 1,
     marginLeft: 6,
   },
   cardContentContainer2: {
@@ -153,6 +152,7 @@ const defaultStyle = (type, color) =>
       textAlign: type,
       marginTop: 16,
       color: color,
+      width: '100%',
     },
   });
 
