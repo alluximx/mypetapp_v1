@@ -67,12 +67,16 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
                 {formattedDate}
               </DefaultText>
             )}
-            <TitleHeader style={[styles.title, props.titleStyle]} wrapText>
+            <TitleHeader
+              style={[styles.title, props.titleStyle]}
+              wrapText={props.wrapTitle ?? true}
+              numberOfLines={props.wrapTitle ? 2 : 1}>
               {title}
             </TitleHeader>
             <DefaultText
               style={[styles.labelCard, props.contentTextStyle]}
-              wrapText>
+              wrapText={props.wrapContent ?? true}
+              numberOfLines={props.wrapContent ? 5 : 1}>
               {content}
             </DefaultText>
             <View style={styles.additionalContentRow}>{additionalContent}</View>
@@ -97,11 +101,9 @@ const themedStyles = StyleService.create({
   title: {
     fontSize: 16,
     marginBottom: 4,
-    maxWidth: '90%',
   },
   labelCard: {
     marginTop: 4,
-    maxWidth: '90%',
   },
   productChangedText: {
     backgroundColor: globalColors.greenSecondary,
@@ -131,6 +133,7 @@ const themedStyles = StyleService.create({
   },
   cardContentContainer: {
     flexGrow: 1,
+    flexShrink: 1,
     marginLeft: 6,
   },
   cardContentContainer2: {

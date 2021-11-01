@@ -48,6 +48,8 @@ export default ({navigation}): React.ReactElement => {
           const itemOrder = order.item;
           navigation.navigate('OrdersDetail', {order: itemOrder});
         }}
+        wrapContent
+        wrapTitle
       />
     );
   };

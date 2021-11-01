@@ -114,12 +114,16 @@ export default ({navigation, route}): React.ReactElement => {
           data={data}
           styleCard={{marginHorizontal: 0}}
           onClick={null}
+          wrapContent
+          wrapTitle
         />
         <TitleHeader style={styles.titleText}>Número de guía</TitleHeader>
         <GenericCard
           data={dataDelivery}
           styleCard={{marginHorizontal: 0}}
           onClick={null}
+          wrapContent
+          wrapTitle
         />
         <TitleHeader style={styles.titleText}>Artículos</TitleHeader>
         <List
@@ -132,6 +136,8 @@ export default ({navigation, route}): React.ReactElement => {
           data={dataAddress}
           styleCard={{marginHorizontal: 0}}
           onClick={null}
+          wrapContent
+          wrapTitle
         />
         <TitleHeader style={styles.titleText}>Método de pago</TitleHeader>
         <GenericCard

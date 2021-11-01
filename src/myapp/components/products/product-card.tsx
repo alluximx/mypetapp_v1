@@ -24,6 +24,7 @@ const ProductCard = (props: ProductCardProps): React.ReactElement => {
       onClick={onPress}
       buttonStyle={styles.price}
       contentTextStyle={styles.subtitle}
+      wrapTitle={true}
     />
   );
 };

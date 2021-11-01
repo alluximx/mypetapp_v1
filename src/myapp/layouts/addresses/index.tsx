@@ -70,6 +70,8 @@ export default ({navigation, route}): React.ReactElement => {
         isDisabled={true}
         styleCard={{marginHorizontal: 0}}
         onClick={() => {}}
+        wrapContent
+        wrapTitle
       />
     );
   };
