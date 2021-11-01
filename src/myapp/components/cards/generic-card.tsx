@@ -156,6 +156,7 @@ const defaultStyle = (type, color) =>
       textAlign: type,
       marginTop: 16,
       color: color,
+      width: '100%',
     },
   });
 
