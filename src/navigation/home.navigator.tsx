@@ -76,6 +76,7 @@ import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
 import {AestheticDetailScreen} from '../myapp/scenes/aesthetic/detail.component';
 // Services
 import {SelectServiceScreen} from '../myapp/scenes/service/select.component';
+import useFCM from '../myapp/hooks/fcm/useFCM';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -86,6 +87,8 @@ const Screens = ({navigation, route, style, setRouteName}) => {
   const backButton = () => <BackButton navigation={navigation} />;
   const routeNames = getFocusedRouteNameFromRoute(route) ?? 'Home';
   setRouteName(routeNames);
+
+  const fcm = useFCM();
 
   return (
     <Animated.View style={[styles.stack, style]}>
