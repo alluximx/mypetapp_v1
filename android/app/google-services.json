@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808768744755",
+    "project_id": "dogit-dev",
+    "storage_bucket": "dogit-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808768744755:android:5215f326579b48550ae246",
+        "android_client_info": {
+          "package_name": "com.mypetapp_v1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808768744755-tgd6m7f4qk1p0qo8q23090he2heinkmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB8s-7sm5AT8c2mkXsbQIm9W4A2Thh-44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808768744755-tgd6m7f4qk1p0qo8q23090he2heinkmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
