@@ -44,7 +44,7 @@ const useFCM = () => {
     // Define message handler when opening notification from
     // background state.
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
+      console.info(
         'Notification caused app to open from background state:',
         remoteMessage.notification,
       );
@@ -58,7 +58,7 @@ const useFCM = () => {
       .getInitialNotification()
       .then((remoteMessage) => {
         if (remoteMessage) {
-          console.log(
+          console.info(
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           );
