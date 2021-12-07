@@ -10,7 +10,7 @@ class FCMService {
         await AsyncStorage.setItem('fcmToken', fcmToken);
       }
     }
-    console.log('fcm-token', fcmToken);
+    console.info('fcm-token', fcmToken);
 
     return fcmToken;
   };
