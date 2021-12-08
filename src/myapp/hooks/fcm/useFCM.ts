@@ -34,7 +34,7 @@ const useFCM = () => {
         android: {
           channelId,
           color: '#13b048',
-          smallIcon: 'ic_notification', // optional, defaults to 'ic_launcher'.
+          smallIcon: 'ic_notification',
           sound: 'default',
         },
         remote: true,
@@ -48,7 +48,7 @@ const useFCM = () => {
         'Notification caused app to open from background state:',
         remoteMessage.notification,
       );
-
+      // TODO: Replace with deep linking routing
       navigation.navigate(remoteMessage.data.link);
     });
 
