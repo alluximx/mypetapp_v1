@@ -13,7 +13,7 @@ export default ({navigation, route}): React.ReactElement => {
   const {form, setForm} = useContext(AddPetContext);
 
   useLayoutEffect(() => {
-    const isDisabled = form.name === '' || form.image === null;
+    const isDisabled = form.name === '';
 
     navigation.setOptions({
       headerRight: () =>

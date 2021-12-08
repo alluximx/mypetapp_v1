@@ -170,7 +170,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   return (
     <DefaultLayout>
-      <TitleHeader>Envio</TitleHeader>
+      <TitleHeader>Envío</TitleHeader>
       <ScrollView>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
