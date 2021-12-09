@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {List} from '@ui-kitten/components';
+import env from '../../../environments';
 // My components
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
@@ -98,7 +99,7 @@ export default ({navigation, route}): React.ReactElement => {
             </TitleHeader>,
           ],
           content: variantName,
-          coverImage: `https://mpa-stage.s3.amazonaws.com/media/${productImage}`,
+          coverImage: `${env.IMAGES_HOST}${productImage}`,
           title: productName,
         }}
         onClick={null}
