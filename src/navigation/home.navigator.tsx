@@ -45,6 +45,7 @@ import {OrdersDetailScreen} from '../myapp/scenes/orders/orders-detail.component
 import {PaymentSummaryScreen} from '../myapp/scenes/payment/payment-summary.component';
 // Payment Method
 import {AddPaymentMethodScreen} from '../myapp/scenes/payment-method/add.component';
+import {AddPaymentMethodFromIndexScreen} from '../myapp/scenes/payment-method/add-from-index.component';
 import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
@@ -200,6 +201,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="AddPaymentMethod"
           component={AddPaymentMethodScreen}
           initialParams={{data: {}}}
+        />
+        <HomeStack.Screen
+          name="AddPaymentMethodFromIndex"
+          component={AddPaymentMethodFromIndexScreen}
         />
         {/* Pets */}
         <HomeStack.Screen

@@ -60,6 +60,9 @@ type HomeNavigatorParamList = {
   AddPaymentMethod: {
     data: any;
   };
+  AddPaymentMethodFromIndex: {
+    data: any;
+  };
 
   VetResult: {};
   VetFilter: {};

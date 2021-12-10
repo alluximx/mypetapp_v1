@@ -29,16 +29,20 @@ export default ({navigation, route}): React.ReactElement => {
         <AddButton
           style={{backgroundColor: globalColors.backgroundDefault}}
           iconStyle={{
-            tintColor: globalColors.greenSecondary,
+            tintColor:
+              cards.length === 3
+                ? globalColors.darkGray
+                : globalColors.greenSecondary,
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddPaymentMethod')}
+          isDisabled={cards.length === 3}
+          onAdd={() => navigation.navigate('AddPaymentMethodFromIndex')}
           isSubmit
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, cards]);
 
   useEffect(() => {
     if (paymentQuery.data) {
