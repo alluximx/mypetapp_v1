@@ -2,18 +2,18 @@ import React, {useState, useEffect} from 'react';
 import {List, StyleService} from '@ui-kitten/components';
 import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
-import TitleHeader from '../../../components/texts/title-header';
+import AddressForm from '../../../components/addresses/address-form';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import ReminderInput from '../../../components/inputs/reminder-input';
 import NavigateButton from '../../../components/buttons/navigate-button';
+import ReminderInput from '../../../components/inputs/reminder-input';
+import TitleHeader from '../../../components/texts/title-header';
 // Hook.
 import useGetAddresses from '../../../hooks/address/useGetAddresses';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
 // Global Styles
 import globalColors from '../../../styles/colors';
-import AddressForm from '../../../components/addresses/address-form';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
@@ -171,7 +171,7 @@ export default ({navigation, route}): React.ReactElement => {
               No hay direcciones guardadas
             </DefaultText>
           )}
-
+          <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
           <AddressForm
             addresses={addresses}
             form={form}

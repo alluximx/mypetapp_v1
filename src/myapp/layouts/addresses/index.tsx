@@ -33,7 +33,7 @@ export default ({navigation, route}): React.ReactElement => {
             height: 35,
             width: 35,
           }}
-          onAdd={() => navigation.navigate('AddAddress')}
+          onAdd={() => navigation.navigate('AddAddressFromIndex')}
           isSubmit
         />
       ),

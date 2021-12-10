@@ -10,6 +10,7 @@ import useSaveAddress from '../../../hooks/address/useSaveAddress';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import AddressForm from '../../../components/addresses/address-form';
+import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
@@ -36,12 +37,20 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [addressQuery.data]);
 
-  const onSavePress = () =>
+  const onSavePress = () => {
+    setIsLoading(false);
     addAddressQuery.mutate(form, {
       onSuccess: () => {
         navigation.goBack();
       },
+      onError: (error) => {
+        console.log(error.response.data);
+      },
+      onSettled: () => {
+        setIsLoading(false);
+      },
     });
+  };
 
   const isDisabled =
     form.street === '' ||
@@ -67,6 +76,7 @@ export default ({navigation, route}): React.ReactElement => {
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
           contentContainerStyle={styles.container}>
+          <TitleHeader style={styles.title}>Nueva dirección</TitleHeader>
           <AddressForm addresses={addresses} form={form} setForm={setForm} />
         </KeyboardAvoidingView>
       </ScrollView>
@@ -75,29 +85,11 @@ export default ({navigation, route}): React.ReactElement => {
 };
 
 const styles = StyleService.create({
-  subtitle: {
-    marginTop: 10,
-    marginBottom: 15,
-    fontSize: 16,
-  },
-  message: {
-    marginTop: 10,
-    marginBottom: 15,
-    fontSize: 14,
-    color: globalColors.red,
-  },
-  servicesContainer: {
-    backgroundColor: 'transparent',
-    marginBottom: 10,
-  },
-  select: {
-    marginBottom: 16,
-  },
-  options: {
-    marginTop: 15,
-    height: 100,
-  },
   container: {
     flex: 1,
+  },
+  title: {
+    marginTop: 8,
+    marginBottom: 24,
   },
 });

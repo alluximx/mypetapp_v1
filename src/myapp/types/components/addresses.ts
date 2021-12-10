@@ -1,4 +1,4 @@
-export interface AddressForm {
+export interface AddressFormProps {
   addresses: any[];
   form: AddressFormContent;
   setForm: (form: AddressFormContent) => void;

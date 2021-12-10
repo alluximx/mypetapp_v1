@@ -8,12 +8,11 @@ import useStates from '../../hooks/util/useState';
 import DefaultText from '../texts/default-text';
 import DropdownPicker from '../inputs/dropdown-picker';
 import MunicipalityDrop from '../adoption/municipality-drop';
-import TitleHeader from '../texts/title-header';
 import UserInput from '../inputs/user-input';
 // Types
-import {AddressForm} from '../../types/components/addresses';
+import {AddressFormProps} from '../../types/components/addresses';
 
-const AddressForm = (props: AddressForm) => {
+const AddressForm = (props: AddressFormProps) => {
   const [stateList, setStateList] = useState([]);
   const dataStates = useStates();
 
@@ -36,7 +35,6 @@ const AddressForm = (props: AddressForm) => {
 
   return (
     <View>
-      <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
       <UserInput
         placeholder="Calle"
         value={props.form.street}
@@ -97,7 +95,7 @@ const AddressForm = (props: AddressForm) => {
               : (props.setForm({...props.form, municipality: valor}),
                 props.setNameMunicipality(name));
           } else {
-            props.setForm({...props.form, municipality: ''});
+            props.setForm({...props.form, municipality: valor});
           }
         }}
       />
@@ -121,7 +119,6 @@ const AddressForm = (props: AddressForm) => {
           Solo puedes guardar 3 direcciones
         </DefaultText>
       )}
-      );
     </View>
   );
 };
