@@ -56,7 +56,11 @@ const useLaunchCamera = (setImage: (image: ImageSourcePropType) => void) => {
                 compressImageMaxWidth: 500,
               }).then((newImage) => {
                 const imageData = {
-                  fileName: newImage.filename.split('.HEIC')[0] + '.jpg',
+                  fileName:
+                    Date.now() +
+                    '-' +
+                    newImage.filename.split('.HEIC')[0] +
+                    '.jpg',
                   type: newImage.mime,
                   uri: newImage.path,
                 };
