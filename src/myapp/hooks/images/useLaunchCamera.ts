@@ -47,10 +47,12 @@ const useLaunchCamera = (setImage: (image: ImageSourcePropType) => void) => {
           onPress: () => {
             if (Platform.OS === 'ios') {
               openPicker({
-                width: 500,
-                height: 500,
                 cropping: false,
                 compressImageQuality: 0.5,
+                mediaType: 'photo',
+                forceJpg: true,
+                compressImageMaxHeight: 500,
+                compressImageMaxWidth: 500,
               }).then((newImage) => {
                 const imageData = {
                   fileName: newImage.filename,
