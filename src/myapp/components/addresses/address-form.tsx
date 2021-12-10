@@ -5,7 +5,6 @@ import globalColors from '../../styles/colors';
 // Hooks
 import useStates from '../../hooks/util/useState';
 // My Components
-import DefaultText from '../texts/default-text';
 import DropdownPicker from '../inputs/dropdown-picker';
 import MunicipalityDrop from '../adoption/municipality-drop';
 import UserInput from '../inputs/user-input';
@@ -49,11 +48,6 @@ const AddressForm = (props: AddressFormProps) => {
 
   return (
     <View>
-      {props.addresses.length > 2 && (
-        <DefaultText style={styles.message}>
-          Solo puedes guardar 3 direcciones
-        </DefaultText>
-      )}
       <UserInput
         placeholder="Calle"
         value={props.form.street}

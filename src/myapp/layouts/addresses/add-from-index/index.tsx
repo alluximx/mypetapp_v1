@@ -5,7 +5,6 @@ import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
 import DefaultLayout from '../../../components/layouts/default-layout';
 // Hook.
-import useGetAddresses from '../../../hooks/address/useGetAddresses';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
 // Global Styles
@@ -13,10 +12,8 @@ import AddressForm from '../../../components/addresses/address-form';
 import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [addresses, setAddresses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const addressQuery = useGetAddresses();
   const addAddressQuery = useSaveAddress();
 
   const [form, setForm] = useState({
@@ -31,12 +28,6 @@ export default ({navigation, route}): React.ReactElement => {
     zipcode: '',
     is_saved: true,
   });
-
-  useEffect(() => {
-    if (addressQuery.data) {
-      setAddresses(addressQuery.data.data);
-    }
-  }, [addressQuery.data]);
 
   const onSavePress = () => {
     addAddressQuery.mutate(form, {
@@ -77,12 +68,7 @@ export default ({navigation, route}): React.ReactElement => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
           contentContainerStyle={styles.container}>
           <TitleHeader style={styles.title}>Nueva dirección</TitleHeader>
-          <AddressForm
-            addresses={addresses}
-            error={error}
-            form={form}
-            setForm={setForm}
-          />
+          <AddressForm error={error} form={form} setForm={setForm} />
         </KeyboardAvoidingView>
       </ScrollView>
     </DefaultLayout>

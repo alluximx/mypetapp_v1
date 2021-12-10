@@ -181,13 +181,17 @@ export default ({navigation, route}): React.ReactElement => {
           )}
           <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
           <AddressForm
-            addresses={addresses}
             error={error}
             form={form}
             setForm={setForm}
             setNameMunicipality={setNameMunicipality}
             setNameState={setNameState}
           />
+          {addresses.length > 2 && (
+            <DefaultText style={styles.message}>
+              Solo puedes guardar 3 direcciones
+            </DefaultText>
+          )}
           <ReminderInput
             isActive={isReminderActive}
             setIsActive={changeValue}
