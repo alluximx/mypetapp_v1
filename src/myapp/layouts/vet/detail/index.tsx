@@ -49,7 +49,7 @@ export default ({navigation, route}): React.ReactElement => {
           <DefaultText style={styles.subtitle}>{address}</DefaultText>
           <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
           <RatingCard rating={rating} distance={distance} />
-          <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
+          {/* <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
           <TitleHeader
             style={[globalStyles.highlightedText, {marginBottom: 32}]}>
             {'$' + 200}
@@ -58,7 +58,7 @@ export default ({navigation, route}): React.ReactElement => {
             destination="VetDate"
             placeholder="Generar Cita"
             data={{screenFrom: 'VetDate'}}
-          />
+          /> */}
         </DefaultLayout>
       </ScrollView>
     </>

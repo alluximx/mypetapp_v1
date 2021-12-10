@@ -141,7 +141,9 @@ export default ({route}): React.ReactElement => {
               globalStyles.highlightedText,
               {marginTop: 15, marginBottom: 15},
             ]}>
-            {variant ? '$' + variant.price : '$0.00'}
+            {variant
+              ? '$' + variant.price.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              : '$0.00'}
           </TitleHeader>
           <DefaultText>{route.params.description}</DefaultText>
           <DropdownPicker

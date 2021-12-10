@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {Image, Platform, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
 // My components
+import AddButton from '../../components/buttons/add-button';
 import DefaultLayout from '../../components/layouts/default-layout';
 import TitleHeader from '../../components/texts/title-header';
 import DefaultText from '../../components/texts/default-text';
@@ -21,6 +22,27 @@ export default ({navigation, route}): React.ReactElement => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const paymentQuery = useGetPaymentMethod();
   const deleteQuery = useDeletePaymentMethod();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AddButton
+          style={{backgroundColor: globalColors.backgroundDefault}}
+          iconStyle={{
+            tintColor:
+              cards.length === 3
+                ? globalColors.darkGray
+                : globalColors.greenSecondary,
+            height: 35,
+            width: 35,
+          }}
+          isDisabled={cards.length === 3}
+          onAdd={() => navigation.navigate('AddPaymentMethodFromIndex')}
+          isSubmit
+        />
+      ),
+    });
+  }, [navigation, cards]);
 
   useEffect(() => {
     if (paymentQuery.data) {

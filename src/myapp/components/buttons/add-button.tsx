@@ -10,6 +10,7 @@ import useIsGuest from '../../hooks/useIsGuest';
 
 interface AddButtonProps {
   iconStyle?: {};
+  isDisabled?: boolean;
   style?: {};
   onAdd: (props?: {}) => void;
   isSubmit?: boolean;
@@ -23,6 +24,7 @@ const AddButton = (props: AddButtonProps): React.ReactElement => {
     <>
       {shouldShowModal && renderAlert()}
       <Button
+        disabled={props.isDisabled || false}
         activeOpacity={0.8}
         style={[styles.addButton, style]}
         accessoryLeft={(accessoryProps) => (

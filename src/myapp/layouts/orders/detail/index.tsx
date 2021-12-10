@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {List} from '@ui-kitten/components';
+import environments from '../../../environments';
 // My components
 import DefaultLayout from '../../../components/layouts/default-layout';
 import TitleHeader from '../../../components/texts/title-header';
@@ -98,7 +99,7 @@ export default ({navigation, route}): React.ReactElement => {
             </TitleHeader>,
           ],
           content: variantName,
-          coverImage: `https://mpa-stage.s3.amazonaws.com/media/${productImage}`,
+          coverImage: `${environments.IMAGES_HOST}${productImage}`,
           title: productName,
         }}
         onClick={null}
@@ -114,12 +115,16 @@ export default ({navigation, route}): React.ReactElement => {
           data={data}
           styleCard={{marginHorizontal: 0}}
           onClick={null}
+          wrapContent
+          wrapTitle
         />
         <TitleHeader style={styles.titleText}>Número de guía</TitleHeader>
         <GenericCard
           data={dataDelivery}
           styleCard={{marginHorizontal: 0}}
           onClick={null}
+          wrapContent
+          wrapTitle
         />
         <TitleHeader style={styles.titleText}>Artículos</TitleHeader>
         <List
@@ -132,6 +137,8 @@ export default ({navigation, route}): React.ReactElement => {
           data={dataAddress}
           styleCard={{marginHorizontal: 0}}
           onClick={null}
+          wrapContent
+          wrapTitle
         />
         <TitleHeader style={styles.titleText}>Método de pago</TitleHeader>
         <GenericCard
