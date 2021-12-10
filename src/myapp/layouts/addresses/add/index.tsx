@@ -1,17 +1,15 @@
 import React, {useState, useEffect} from 'react';
+import {AxiosError} from 'axios';
 import {List, StyleService} from '@ui-kitten/components';
 import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
-import TitleHeader from '../../../components/texts/title-header';
+import AddressForm from '../../../components/addresses/address-form';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
-import UserInput from '../../../components/inputs/user-input';
-import DropdownPicker from '../../../components/inputs/dropdown-picker';
-import ReminderInput from '../../../components/inputs/reminder-input';
-import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import NavigateButton from '../../../components/buttons/navigate-button';
+import ReminderInput from '../../../components/inputs/reminder-input';
+import TitleHeader from '../../../components/texts/title-header';
 // Hook.
-import useStates from '../../../hooks/util/useState';
 import useGetAddresses from '../../../hooks/address/useGetAddresses';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
@@ -19,14 +17,13 @@ import useSaveAddress from '../../../hooks/address/useSaveAddress';
 import globalColors from '../../../styles/colors';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [stateList, setStateList] = useState([]);
   const [addresses, setAddresses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [nameState, setNameState] = useState('');
   const [nameMunicipality, setNameMunicipality] = useState('');
-  const dataStates = useStates();
+  const [error, setError] = useState();
   const addressQuery = useGetAddresses();
   const addAddressQuery = useSaveAddress();
 
@@ -42,19 +39,6 @@ export default ({navigation, route}): React.ReactElement => {
     zipcode: '',
     is_saved: false,
   });
-
-  useEffect(() => {
-    if (dataStates.data) {
-      const aux = [];
-      dataStates.data.data.forEach((element) => {
-        aux.push({
-          value: element.id,
-          label: element.name,
-        });
-      });
-      setStateList(aux);
-    }
-  }, [dataStates.data, dataStates.isFetched]);
 
   useEffect(() => {
     if (addressQuery.data) {
@@ -147,6 +131,12 @@ export default ({navigation, route}): React.ReactElement => {
           },
         });
       },
+      onError: (responseError: AxiosError) => {
+        setError(responseError.response.data);
+      },
+      onSettled: () => {
+        setIsLoading(false);
+      },
     });
   };
 
@@ -170,7 +160,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   return (
     <DefaultLayout>
-      <TitleHeader>Envio</TitleHeader>
+      <TitleHeader>Envío</TitleHeader>
       <ScrollView>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
@@ -189,78 +179,13 @@ export default ({navigation, route}): React.ReactElement => {
               No hay direcciones guardadas
             </DefaultText>
           )}
-
           <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
-          <UserInput
-            placeholder="Calle"
-            value={form.street}
-            onChangeText={(value: string) => {
-              setForm({...form, street: value});
-            }}
-          />
-          <UserInput
-            placeholder="Número"
-            value={form.number}
-            onChangeText={(value: string) => {
-              setForm({...form, number: value});
-            }}
-          />
-          <UserInput
-            placeholder="Número Interior"
-            value={form.int_number}
-            onChangeText={(value: string) => {
-              setForm({...form, int_number: value});
-            }}
-          />
-          <UserInput
-            placeholder="Referencia"
-            value={form.reference}
-            onChangeText={(value: string) => {
-              setForm({...form, reference: value});
-            }}
-          />
-          <UserInput
-            placeholder="Colonia"
-            value={form.colony}
-            onChangeText={(value: string) => {
-              setForm({...form, colony: value});
-            }}
-          />
-          <DropdownPicker
-            data={stateList}
-            currentValue={form.state}
-            placeholder="Estado"
-            setCurrentValue={(stateId) => {
-              const stateObj = stateList.find((item) => item.value === stateId);
-              stateObj ? setNameState(stateObj.label) : setNameState('');
-              setForm({...form, state: stateId});
-            }}
-          />
-          <MunicipalityDrop
-            status={false}
-            id={form.state}
-            change={(valor, name) => {
-              valor === ''
-                ? (setForm({...form, municipality: ''}),
-                  setNameMunicipality(''))
-                : (setForm({...form, municipality: valor}),
-                  setNameMunicipality(name));
-            }}
-          />
-          <UserInput
-            placeholder="Ciudad"
-            value={form.city}
-            onChangeText={(value: string) => {
-              setForm({...form, city: value});
-            }}
-          />
-          <UserInput
-            placeholder="Codigo Postal"
-            value={form.zipcode}
-            maxLength={5}
-            onChangeText={(value: string) => {
-              setForm({...form, zipcode: value});
-            }}
+          <AddressForm
+            error={error}
+            form={form}
+            setForm={setForm}
+            setNameMunicipality={setNameMunicipality}
+            setNameState={setNameState}
           />
           {addresses.length > 2 && (
             <DefaultText style={styles.message}>

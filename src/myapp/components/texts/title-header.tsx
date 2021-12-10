@@ -17,7 +17,7 @@ const TitleHeader = (props: TitleHeaderProps): React.ReactElement => {
     return (
       <Text
         ellipsizeMode="tail"
-        numberOfLines={1}
+        numberOfLines={props.numberOfLines ?? 1}
         style={[styles.titleHeader, props.style]}
         category="h1">
         {props.children}

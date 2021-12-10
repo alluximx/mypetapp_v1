@@ -19,6 +19,7 @@ import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
  ***************/
 // Address
 import {AddAddressScreen} from '../myapp/scenes/addresses/add.component';
+import {AddAddressFromIndexScreen} from '../myapp/scenes/addresses/add-from-index.component';
 import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
 // Adoption
 import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
@@ -44,6 +45,7 @@ import {OrdersDetailScreen} from '../myapp/scenes/orders/orders-detail.component
 import {PaymentSummaryScreen} from '../myapp/scenes/payment/payment-summary.component';
 // Payment Method
 import {AddPaymentMethodScreen} from '../myapp/scenes/payment-method/add.component';
+import {AddPaymentMethodFromIndexScreen} from '../myapp/scenes/payment-method/add-from-index.component';
 import {paymentMethodComponent} from '../myapp/scenes/payment-method/payment-method.component';
 // Pets
 import {DetailPetScreen} from '../myapp/scenes/pets/detail.component';
@@ -102,6 +104,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="AddAddress"
           component={AddAddressScreen}
           initialParams={{data: {}}}
+        />
+        <HomeStack.Screen
+          name="AddAddressFromIndex"
+          component={AddAddressFromIndexScreen}
         />
         <HomeStack.Screen name="AddressInfo" component={AddressInfScreen} />
         {/*Adoption */}
@@ -195,6 +201,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="AddPaymentMethod"
           component={AddPaymentMethodScreen}
           initialParams={{data: {}}}
+        />
+        <HomeStack.Screen
+          name="AddPaymentMethodFromIndex"
+          component={AddPaymentMethodFromIndexScreen}
         />
         {/* Pets */}
         <HomeStack.Screen

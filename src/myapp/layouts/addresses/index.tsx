@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {Image, Platform, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
 // My components
+import AddButton from '../../components/buttons/add-button';
 import DefaultLayout from '../../components/layouts/default-layout';
 import CustomModal from '../../components/modals/custom-modal';
 import TitleHeader from '../../components/texts/title-header';
@@ -21,6 +22,27 @@ export default ({navigation, route}): React.ReactElement => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const addressQuery = useGetAddresses();
   const deleteQuery = useDeleteAddress();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AddButton
+          iconStyle={{
+            tintColor:
+              addresses.length === 3
+                ? globalColors.darkGray
+                : globalColors.greenSecondary,
+            height: 35,
+            width: 35,
+          }}
+          isDisabled={addresses.length === 3}
+          onAdd={() => navigation.navigate('AddAddressFromIndex')}
+          isSubmit
+          style={{backgroundColor: globalColors.backgroundDefault}}
+        />
+      ),
+    });
+  }, [navigation, addresses]);
 
   useEffect(() => {
     if (addressQuery.data) {
@@ -70,6 +92,8 @@ export default ({navigation, route}): React.ReactElement => {
         isDisabled={true}
         styleCard={{marginHorizontal: 0}}
         onClick={() => {}}
+        wrapContent
+        wrapTitle
       />
     );
   };

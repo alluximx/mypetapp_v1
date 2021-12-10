@@ -25,6 +25,8 @@ export interface DatasGeneric {
   onClick: (data?: any) => void;
   styleCard?: any;
   titleStyle?: any;
+  wrapContent?: boolean;
+  wrapTitle?: boolean;
 }
 
 export interface ImageInputCardProps {

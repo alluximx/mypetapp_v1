@@ -47,21 +47,17 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.container}>
           <DefaultText style={styles.subtitle}>{address}</DefaultText>
           <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
-          <RatingCard
-            rating={rating}
-            distance={distance}
-            styleCard={{marginBottom: 32}}
-          />
+          <RatingCard rating={rating} distance={distance} />
           {/* <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
           <TitleHeader
             style={[globalStyles.highlightedText, {marginBottom: 32}]}>
             {'$' + data.priceConsult}
-        </TitleHeader>*/}
+        </TitleHeader>
           <NavigateButton
             destination="VetDate"
             placeholder="Generar Cita"
             data={{screenFrom: 'AestheticDate'}}
-          />
+        />*/}
         </DefaultLayout>
       </ScrollView>
     </>

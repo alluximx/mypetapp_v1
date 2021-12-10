@@ -43,6 +43,8 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
           },
         })
       }
+      wrapTitle
+      wrapContent
     />
   );
 };
