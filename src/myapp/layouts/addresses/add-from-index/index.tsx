@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {AxiosError} from 'axios';
 import {StyleService} from '@ui-kitten/components';
 import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
@@ -8,13 +9,13 @@ import useGetAddresses from '../../../hooks/address/useGetAddresses';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
 // Global Styles
-import globalColors from '../../../styles/colors';
 import AddressForm from '../../../components/addresses/address-form';
 import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const addressQuery = useGetAddresses();
   const addAddressQuery = useSaveAddress();
 
@@ -28,7 +29,7 @@ export default ({navigation, route}): React.ReactElement => {
     state: '',
     municipality: '',
     zipcode: '',
-    is_saved: false,
+    is_saved: true,
   });
 
   useEffect(() => {
@@ -43,8 +44,8 @@ export default ({navigation, route}): React.ReactElement => {
       onSuccess: () => {
         navigation.goBack();
       },
-      onError: (error) => {
-        console.log(error.response.data);
+      onError: (error: AxiosError) => {
+        setError(error.response.data);
       },
       onSettled: () => {
         setIsLoading(false);
@@ -77,7 +78,12 @@ export default ({navigation, route}): React.ReactElement => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
           contentContainerStyle={styles.container}>
           <TitleHeader style={styles.title}>Nueva dirección</TitleHeader>
-          <AddressForm addresses={addresses} form={form} setForm={setForm} />
+          <AddressForm
+            addresses={addresses}
+            error={error}
+            form={form}
+            setForm={setForm}
+          />
         </KeyboardAvoidingView>
       </ScrollView>
     </DefaultLayout>

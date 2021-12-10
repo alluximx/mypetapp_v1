@@ -15,6 +15,16 @@ import {AddressFormProps} from '../../types/components/addresses';
 const AddressForm = (props: AddressFormProps) => {
   const [stateList, setStateList] = useState([]);
   const dataStates = useStates();
+  const [formErrors, setFormErrors] = useState({
+    street: '',
+    number: '',
+    int_number: '',
+    reference: '',
+    colony: '',
+    municipality: '',
+    city: '',
+    zipcode: '',
+  });
 
   /***************
    *** Effects ***
@@ -33,6 +43,10 @@ const AddressForm = (props: AddressFormProps) => {
     }
   }, [dataStates.data, dataStates.isFetched]);
 
+  useEffect(() => {
+    setFormErrors({...formErrors, ...props.error});
+  }, [props.error]);
+
   return (
     <View>
       <UserInput
@@ -41,6 +55,7 @@ const AddressForm = (props: AddressFormProps) => {
         onChangeText={(value: string) => {
           props.setForm({...props.form, street: value});
         }}
+        error={formErrors.street}
       />
       <UserInput
         placeholder="Número"
@@ -48,6 +63,7 @@ const AddressForm = (props: AddressFormProps) => {
         onChangeText={(value: string) => {
           props.setForm({...props.form, number: value});
         }}
+        error={formErrors.number}
       />
       <UserInput
         placeholder="Número Interior"
@@ -55,6 +71,7 @@ const AddressForm = (props: AddressFormProps) => {
         onChangeText={(value: string) => {
           props.setForm({...props.form, int_number: value});
         }}
+        error={formErrors.int_number}
       />
       <UserInput
         placeholder="Referencia"
@@ -62,6 +79,7 @@ const AddressForm = (props: AddressFormProps) => {
         onChangeText={(value: string) => {
           props.setForm({...props.form, reference: value});
         }}
+        error={formErrors.reference}
       />
       <UserInput
         placeholder="Colonia"
@@ -69,10 +87,11 @@ const AddressForm = (props: AddressFormProps) => {
         onChangeText={(value: string) => {
           props.setForm({...props.form, colony: value});
         }}
+        error={formErrors.colony}
       />
       <DropdownPicker
-        data={stateList}
         currentValue={props.form.state}
+        data={stateList}
         placeholder="Estado"
         setCurrentValue={(stateId) => {
           if (props.setNameState) {
@@ -85,6 +104,7 @@ const AddressForm = (props: AddressFormProps) => {
         }}
       />
       <MunicipalityDrop
+        error={formErrors.municipality}
         status={false}
         id={props.form.state}
         change={(valor, name) => {
@@ -100,6 +120,7 @@ const AddressForm = (props: AddressFormProps) => {
         }}
       />
       <UserInput
+        error={formErrors.city}
         placeholder="Ciudad"
         value={props.form.city}
         onChangeText={(value: string) => {
@@ -107,6 +128,7 @@ const AddressForm = (props: AddressFormProps) => {
         }}
       />
       <UserInput
+        error={formErrors.zipcode}
         placeholder="Codigo Postal"
         value={props.form.zipcode}
         maxLength={5}
