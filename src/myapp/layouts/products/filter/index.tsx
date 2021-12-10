@@ -127,8 +127,14 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <TitleHeader>Rango de Precio</TitleHeader>
       <View style={styles.pricesBoundsContainer}>
-        <DefaultText>${currentMinAndMax[0]}</DefaultText>
-        <DefaultText>${currentMinAndMax[1]}</DefaultText>
+        <DefaultText>
+          $
+          {currentMinAndMax[0].toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        </DefaultText>
+        <DefaultText>
+          $
+          {currentMinAndMax[1].toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+        </DefaultText>
       </View>
       <MultiSlider
         allowOverlap={false}

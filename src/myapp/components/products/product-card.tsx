@@ -15,7 +15,9 @@ const ProductCard = (props: ProductCardProps): React.ReactElement => {
   return (
     <GenericCard
       data={{
-        buttonText: `$${price.toFixed(2)}`,
+        buttonText: `$${price
+          .toFixed(2)
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
         buttonAlign: 'right',
         content: brand,
         coverImage: cover_image,
