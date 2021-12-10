@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {AxiosError} from 'axios';
 import {List, StyleService} from '@ui-kitten/components';
 import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
@@ -22,6 +23,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [isReminderActive, setIsReminderActive] = useState(false);
   const [nameState, setNameState] = useState('');
   const [nameMunicipality, setNameMunicipality] = useState('');
+  const [error, setError] = useState();
   const addressQuery = useGetAddresses();
   const addAddressQuery = useSaveAddress();
 
@@ -129,6 +131,12 @@ export default ({navigation, route}): React.ReactElement => {
           },
         });
       },
+      onError: (error: AxiosError) => {
+        setError(error.response.data);
+      },
+      onSettled: () => {
+        setIsLoading(false);
+      },
     });
   };
 
@@ -174,6 +182,7 @@ export default ({navigation, route}): React.ReactElement => {
           <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
           <AddressForm
             addresses={addresses}
+            error={error}
             form={form}
             setForm={setForm}
             setNameMunicipality={setNameMunicipality}

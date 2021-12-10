@@ -27,18 +27,22 @@ export default ({navigation, route}): React.ReactElement => {
     navigation.setOptions({
       headerRight: () => (
         <AddButton
-          style={{backgroundColor: globalColors.backgroundDefault}}
           iconStyle={{
-            tintColor: globalColors.greenSecondary,
+            tintColor:
+              addresses.length === 3
+                ? globalColors.darkGray
+                : globalColors.greenSecondary,
             height: 35,
             width: 35,
           }}
+          isDisabled={addresses.length === 3}
           onAdd={() => navigation.navigate('AddAddressFromIndex')}
           isSubmit
+          style={{backgroundColor: globalColors.backgroundDefault}}
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, addresses]);
 
   useEffect(() => {
     if (addressQuery.data) {

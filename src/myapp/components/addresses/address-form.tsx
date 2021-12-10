@@ -49,6 +49,11 @@ const AddressForm = (props: AddressFormProps) => {
 
   return (
     <View>
+      {props.addresses.length > 2 && (
+        <DefaultText style={styles.message}>
+          Solo puedes guardar 3 direcciones
+        </DefaultText>
+      )}
       <UserInput
         placeholder="Calle"
         value={props.form.street}
@@ -136,11 +141,6 @@ const AddressForm = (props: AddressFormProps) => {
           props.setForm({...props.form, zipcode: value});
         }}
       />
-      {props.addresses.length > 2 && (
-        <DefaultText style={styles.message}>
-          Solo puedes guardar 3 direcciones
-        </DefaultText>
-      )}
     </View>
   );
 };
@@ -152,8 +152,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   message: {
-    marginTop: 10,
-    marginBottom: 15,
+    marginTop: 0,
+    marginBottom: 18,
     fontSize: 14,
     color: globalColors.red,
   },

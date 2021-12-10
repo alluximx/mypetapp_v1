@@ -39,7 +39,6 @@ export default ({navigation, route}): React.ReactElement => {
   }, [addressQuery.data]);
 
   const onSavePress = () => {
-    setIsLoading(false);
     addAddressQuery.mutate(form, {
       onSuccess: () => {
         navigation.goBack();
