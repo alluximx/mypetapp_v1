@@ -43,8 +43,8 @@ export default ({navigation, route}): React.ReactElement => {
       onSuccess: () => {
         navigation.goBack();
       },
-      onError: (error: AxiosError) => {
-        setError(error.response.data);
+      onError: (responseError: AxiosError) => {
+        setError(responseError.response.data);
       },
       onSettled: () => {
         setIsLoading(false);
