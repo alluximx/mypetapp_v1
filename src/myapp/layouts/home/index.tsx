@@ -191,7 +191,6 @@ const styles = StyleSheet.create({
   },
   addButtonContainer: {
     alignSelf: 'center',
-    marginRight: 24,
   },
   servicesContainer: {
     backgroundColor: 'transparent',

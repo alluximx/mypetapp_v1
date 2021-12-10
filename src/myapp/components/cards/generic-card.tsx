@@ -133,8 +133,8 @@ const themedStyles = StyleService.create({
   },
   cardContentContainer: {
     flexGrow: 1,
-    flexShrink: 1,
     marginLeft: 6,
+    flexShrink: 1,
   },
   cardContentContainer2: {
     flexGrow: 1,
