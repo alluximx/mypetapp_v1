@@ -47,9 +47,9 @@ const PetCard = (props: PetCardProps): React.ReactElement => {
   const {data: petImage} = useMyPetImage(pet.id);
 
   useEffect(() => {
-    if (petImage) {
+    if (petImage?.data[0]?.file) {
       setImage({
-        uri: petImage.data[0].file,
+        uri: petImage?.data[0]?.file,
       });
     }
   }, [petImage]);
@@ -67,7 +67,9 @@ const PetCard = (props: PetCardProps): React.ReactElement => {
       accessoryLeft={() => (
         <Image
           style={[styles.dogProfileImage, dogProfileImageStyle]}
-          source={image}
+          source={
+            image ?? require('../../assets/images/pets/add-pet-image.png')
+          }
         />
       )}
       accessoryRight={() =>

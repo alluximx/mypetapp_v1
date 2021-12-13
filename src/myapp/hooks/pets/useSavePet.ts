@@ -21,19 +21,24 @@ const useSavePet = () => {
   return useMutation((data: any) => postPet(data), {
     onSuccess: (response, variables) => {
       // Save Pet image.
-      savePetImageQuery.mutate(
-        {
-          pet_image: response.data.id,
-          file: variables.image,
-        },
-        {
-          // Only after the pet image has been created...
-          onSuccess: () => {
-            navigation.navigate('Home');
-            queryClient.invalidateQueries(['my-pets', variables.owner_user]);
+      if (variables.image) {
+        savePetImageQuery.mutate(
+          {
+            pet_image: response.data.id,
+            file: variables.image,
           },
-        },
-      );
+          {
+            // Only after the pet image has been created...
+            onSuccess: () => {
+              navigation.navigate('Home');
+              queryClient.invalidateQueries(['my-pets', variables.owner_user]);
+            },
+          },
+        );
+      } else {
+        navigation.navigate('Home');
+        queryClient.invalidateQueries(['my-pets', variables.owner_user]);
+      }
     },
   });
 };
