@@ -56,7 +56,7 @@ export default ({navigation, route}): React.ReactElement => {
   const reminderDate = useGetVaccineReminder(id);
 
   useEffect(() => {
-    if (petImage) {
+    if (petImage?.data[0]?.file) {
       setImage({
         uri: petImage?.data[0]?.file,
       });
@@ -131,7 +131,12 @@ export default ({navigation, route}): React.ReactElement => {
   return (
     <DefaultLayout style={styles.container}>
       <View style={styles.petImageContainer}>
-        <PreviewableImage source={image} style={styles.petImage} />
+        <PreviewableImage
+          source={
+            image ?? require('../../../assets/images/pets/add-pet-image.png')
+          }
+          style={styles.petImage}
+        />
         <View style={styles.petDataContainer}>
           <TitleHeader style={styles.whiteText}>{name}</TitleHeader>
           <DefaultText style={styles.whiteText}>{breed.name}</DefaultText>

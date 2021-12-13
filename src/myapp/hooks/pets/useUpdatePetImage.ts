@@ -18,6 +18,8 @@ const putPetImage = (data) => {
       data: RNFetchBlob.wrap(realPath),
     },
   ];
+  console.log(newData);
+
   return api.put(`api/v1/pets_images/${data.id}/`, newData, true, true);
 };
 
