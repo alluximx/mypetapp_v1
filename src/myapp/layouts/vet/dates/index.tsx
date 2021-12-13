@@ -82,7 +82,7 @@ export default ({navigation, route}): React.ReactElement => {
     }
     if (serviceData) {
       serviceData.length === 1
-        ? setServiceContent(serviceData[0].name)
+        ? setServiceContent(serviceData[0]?.name)
         : setServiceContent('Varios');
     }
   }, [petInfo, paymentMethod, serviceData]);

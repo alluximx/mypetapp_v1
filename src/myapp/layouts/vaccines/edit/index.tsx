@@ -184,7 +184,7 @@ export default ({navigation, route}): React.ReactElement => {
         form.next_vaccine_date === vaccineData.data?.data.next_vaccine_date &&
         form.reminder === vaccineData.data?.data.reminder;
       const isImageEqual = imageQuery.data?.data[0]
-        ? etiquetteImage?.uri === imageQuery.data?.data[0].file
+        ? etiquetteImage?.uri === imageQuery.data?.data[0]?.file
         : etiquetteImage === null;
       const isEqual = isFormEqual && isImageEqual;
 

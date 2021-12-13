@@ -24,7 +24,7 @@ const VaccineImage = (props): React.ReactElement => {
   return vaccinesImageQuery.isLoading ? null : vaccineImage.length > 0 ? (
     <PreviewableImage
       style={styles.imgStyle}
-      source={{uri: vaccineImage[0].img}}
+      source={{uri: vaccineImage[0]?.img}}
     />
   ) : (
     <TouchableOpacity style={styles.notificationIcon}>

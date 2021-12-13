@@ -38,13 +38,13 @@ export default ({navigation, route}): React.ReactElement => {
   });
 
   const [additional1, setAdditional1] = useState<ImageURISource>(
-    additionalImages[0] ? {uri: additionalImages[0].file} : null,
+    additionalImages[0] ? {uri: additionalImages[0]?.file} : null,
   );
   const [additional2, setAdditional2] = useState<ImageURISource>(
-    additionalImages[1] ? {uri: additionalImages[1].file} : null,
+    additionalImages[1] ? {uri: additionalImages[1]?.file} : null,
   );
   const [additional3, setAdditional3] = useState<ImageURISource>(
-    additionalImages[2] ? {uri: additionalImages[2].file} : null,
+    additionalImages[2] ? {uri: additionalImages[2]?.file} : null,
   );
 
   const addQuery = useAddMedicalVisit();

@@ -49,7 +49,7 @@ const PetCard = (props: PetCardProps): React.ReactElement => {
   useEffect(() => {
     if (petImage) {
       setImage({
-        uri: petImage.data[0].file,
+        uri: petImage?.data[0]?.file,
       });
     }
   }, [petImage]);
