@@ -48,6 +48,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const [form, setForm] = useState({
     id: id,
+    initialImage: route.params.petImage,
     image: route.params.petImage,
     imageId: route.params.petImageId,
     imageChanged: false,
