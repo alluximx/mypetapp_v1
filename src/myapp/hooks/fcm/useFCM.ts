@@ -44,12 +44,10 @@ const useFCM = () => {
     });
 
     notifee.onForegroundEvent(({type, detail}) => {
-      console.log('PRESIONÓ LA NOTIF');
       if (type === 1) {
-        console.log(detail);
-        console.log(detail.notification);
-        if (detail.notification?.data?.link)
+        if (detail.notification?.data?.link) {
           Linking.openURL(detail.notification.data.link);
+        }
       }
     });
 
