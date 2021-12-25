@@ -19,10 +19,7 @@ const useDeepLinks = (prefixes: string[], screensConfig: any) => {
     // Custom function to subscribe to incoming links
     subscribe(listener) {
       // First, you may want to do the default deep link handling
-      const onReceiveURL = ({url}: {url: string}) => {
-        console.log(url);
-        listener(url);
-      };
+      const onReceiveURL = ({url}: {url: string}) => listener(url);
 
       // Listen to incoming links from deep linking
       Linking.addEventListener('url', onReceiveURL);
