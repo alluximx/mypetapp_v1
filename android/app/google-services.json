@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "808768744755",
-    "project_id": "dogit-dev",
-    "storage_bucket": "dogit-dev.appspot.com"
+    "project_number": "779405092066",
+    "project_id": "dogit-dev-9a556",
+    "storage_bucket": "dogit-dev-9a556.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:808768744755:android:5215f326579b48550ae246",
+        "mobilesdk_app_id": "1:779405092066:android:2b205f9d6c2683fc95eabb",
         "android_client_info": {
           "package_name": "com.mypetapp_v1"
         }
       },
       "oauth_client": [
         {
-          "client_id": "808768744755-tgd6m7f4qk1p0qo8q23090he2heinkmd.apps.googleusercontent.com",
+          "client_id": "779405092066-cs8j8vkjvrovk0ljjcb6favudvot9i38.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mypetapp_v1",
+            "certificate_hash": "dd21f557c2e9c224fd760a7f687be781867666ad"
+          }
+        },
+        {
+          "client_id": "779405092066-2tpjcd380mnmai0na1pndkgfqcs2dtm7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCB8s-7sm5AT8c2mkXsbQIm9W4A2Thh-44"
+          "current_key": "AIzaSyC3MJAPAHNKHphBQOHKo7CbdMhwlFPHBD0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "808768744755-tgd6m7f4qk1p0qo8q23090he2heinkmd.apps.googleusercontent.com",
+              "client_id": "779405092066-2tpjcd380mnmai0na1pndkgfqcs2dtm7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

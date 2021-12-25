@@ -1,9 +1,10 @@
 import React from 'react';
 import messaging from '@react-native-firebase/messaging';
-import notifee, {AndroidImportance} from '@notifee/react-native';
+import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
 // Services
 import fcmService from '../../services/fcm-service';
 import {useNavigation} from '@react-navigation/native';
+import {Linking} from 'react-native';
 
 const useFCM = () => {
   const navigation = useNavigation();
@@ -37,8 +38,19 @@ const useFCM = () => {
           smallIcon: 'ic_notification',
           sound: 'default',
         },
+        data: remoteMessage.data,
         remote: true,
       });
+    });
+
+    notifee.onForegroundEvent(({type, detail}) => {
+      console.log('PRESIONÓ LA NOTIF');
+      if (type === 1) {
+        console.log(detail);
+        console.log(detail.notification);
+        if (detail.notification?.data?.link)
+          Linking.openURL(detail.notification.data.link);
+      }
     });
 
     // Define message handler when opening notification from
@@ -47,9 +59,10 @@ const useFCM = () => {
       console.info(
         'Notification caused app to open from background state:',
         remoteMessage.notification,
+        remoteMessage,
       );
       // TODO: Replace with deep linking routing
-      navigation.navigate(remoteMessage.data.link);
+      // navigation.navigate(remoteMessage.data.link);
     });
 
     // Define message handler when opening notification from
@@ -62,6 +75,8 @@ const useFCM = () => {
             'Notification caused app to open from quit state:',
             remoteMessage.notification,
           );
+          console.info('CONTENIDO DE LA NOTIF:');
+          console.info(remoteMessage);
           setInitialRoute(remoteMessage.data.link); // e.g. "Settings"
         }
       });

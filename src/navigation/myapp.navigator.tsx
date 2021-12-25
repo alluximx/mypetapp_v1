@@ -24,6 +24,7 @@ import {reducer, initialState} from '../../src/reducer';
 import RootStackParamList from '../myapp/types/navigation/root-stack';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
+import useDeepLinks from '../myapp/hooks/fcm/useDeepLinks';
 enableScreens(true);
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -110,9 +111,24 @@ export const MyAppNavigator = (): React.ReactElement => {
   );
 
   const backButton = () => <BackButton navigation={navigationRef} />;
+  const screenConfig = {
+    initialRouteName: 'HomeNavigator',
+    // Deep link configuration
+    screens: {
+      HomeNavigator: {
+        screens: {
+          MyProfile: 'profile',
+          PaymentMethod: 'payment-method',
+        },
+      },
+      AuthNavigator: 'auth',
+    },
+  };
+  const prefixes = ['dogit://', 'https://dogit/'];
+  const linking = useDeepLinks(prefixes, screenConfig);
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer linking={linking} ref={navigationRef}>
       <QueryClientProvider client={queryClient}>
         <AuthContext.Provider value={authContext}>
           <RootStack.Navigator

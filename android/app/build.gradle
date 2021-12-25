@@ -132,8 +132,8 @@ android {
         applicationId "com.mypetapp_v1"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName '1.8.2'
+        versionCode 13
+        versionName '1.8.3'
     }
     splits {
         abi {
@@ -195,6 +195,7 @@ dependencies {
     // Add the dependency for the Firebase SDK for Google Analytics
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics'
+    // implementation 'com.google.firebase:firebase-dynamic-links'
 
 
 
