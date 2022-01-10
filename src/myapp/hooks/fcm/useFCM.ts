@@ -53,13 +53,8 @@ const useFCM = () => {
     // Define message handler when opening notification from
     // background state.
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
       if (remoteMessage?.data) {
         const link: string = remoteMessage.data.link;
-        console.log(link);
         if (link) Linking.openURL(link);
       }
     });
