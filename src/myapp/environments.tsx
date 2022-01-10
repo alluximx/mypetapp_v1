@@ -17,7 +17,7 @@ import {
 class Environments {
   getEnvironment() {
     // var platform = getPlatform()
-    return _Environments.production;
+    return _Environments.development;
   }
 }
 
