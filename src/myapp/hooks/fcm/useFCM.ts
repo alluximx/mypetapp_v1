@@ -45,8 +45,9 @@ const useFCM = () => {
 
     notifee.onForegroundEvent(({type, detail}) => {
       if (type === EventType.PRESS) {
-        if (detail.notification?.data?.link)
+        if (detail.notification?.data?.link) {
           Linking.openURL(detail.notification.data.link);
+        }
       }
     });
 
@@ -55,7 +56,9 @@ const useFCM = () => {
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (remoteMessage?.data) {
         const link: string = remoteMessage.data.link;
-        if (link) Linking.openURL(link);
+        if (link) {
+          Linking.openURL(link);
+        }
       }
     });
 
@@ -64,7 +67,9 @@ const useFCM = () => {
       .then((remoteMessage) => {
         if (remoteMessage?.data) {
           const link: string = remoteMessage.data.link;
-          if (link) Linking.openURL(link); // e.g. "Settings"
+          if (link) {
+            Linking.openURL(link); // e.g. "Settings"
+          }
         }
       });
 
