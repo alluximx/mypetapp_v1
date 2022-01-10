@@ -112,16 +112,24 @@ export const MyAppNavigator = (): React.ReactElement => {
 
   const backButton = () => <BackButton navigation={navigationRef} />;
   const screenConfig = {
-    initialRouteName: 'HomeNavigator',
     // Deep link configuration
     screens: {
       HomeNavigator: {
         screens: {
-          MyProfile: 'profile',
-          PaymentMethod: 'payment-method',
+          Screens: {
+            initialRouteName: 'MyProfile',
+            screens: {
+              MyProfile: 'profile',
+              Orders: {
+                path: 'orders',
+              },
+              OrderDetail: {
+                path: 'orders/:id',
+              },
+            },
+          },
         },
       },
-      AuthNavigator: 'auth',
     },
   };
   const prefixes = ['dogit://', 'https://dogit/'];

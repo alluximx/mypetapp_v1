@@ -58,7 +58,7 @@ export default ({navigation, route}): React.ReactElement => {
   useEffect(() => {
     if (petImage) {
       setImage({
-        uri: petImage.data[0].file,
+        uri: petImage.data[0]?.file,
       });
     }
   }, [petImage]);
@@ -78,7 +78,7 @@ export default ({navigation, route}): React.ReactElement => {
             navigation.navigate('EditPet', {
               pet: route.params.pet,
               petImage: image,
-              petImageId: petImage.data[0].id,
+              petImageId: petImage.data[0]?.id,
             })
           }
           isSubmit>

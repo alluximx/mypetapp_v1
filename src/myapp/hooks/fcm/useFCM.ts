@@ -44,38 +44,32 @@ const useFCM = () => {
     });
 
     notifee.onForegroundEvent(({type, detail}) => {
-      if (type === 1) {
-        if (detail.notification?.data?.link) {
+      if (type === EventType.PRESS) {
+        if (detail.notification?.data?.link)
           Linking.openURL(detail.notification.data.link);
-        }
       }
     });
 
     // Define message handler when opening notification from
     // background state.
     messaging().onNotificationOpenedApp((remoteMessage) => {
-      console.info(
+      console.log(
         'Notification caused app to open from background state:',
         remoteMessage.notification,
-        remoteMessage,
       );
-      // TODO: Replace with deep linking routing
-      // navigation.navigate(remoteMessage.data.link);
+      if (remoteMessage?.data) {
+        const link: string = remoteMessage.data.link;
+        console.log(link);
+        if (link) Linking.openURL(link);
+      }
     });
 
-    // Define message handler when opening notification from
-    // killed state.
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
-        if (remoteMessage) {
-          console.info(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
-          console.info('CONTENIDO DE LA NOTIF:');
-          console.info(remoteMessage);
-          setInitialRoute(remoteMessage.data.link); // e.g. "Settings"
+        if (remoteMessage?.data) {
+          const link: string = remoteMessage.data.link;
+          if (link) Linking.openURL(link); // e.g. "Settings"
         }
       });
 
