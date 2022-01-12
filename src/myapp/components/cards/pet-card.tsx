@@ -51,6 +51,8 @@ const PetCard = (props: PetCardProps): React.ReactElement => {
       setImage({
         uri: petImage?.data[0]?.file,
       });
+    } else {
+      setImage(null);
     }
   }, [petImage]);
 
