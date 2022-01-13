@@ -11706,6 +11706,11 @@
   dependencies:
     "punycode" "^2.1.0"
 
+"uri-scheme@1.0.112":
+  "integrity" "sha512-x7edcRVg/Ej7/ZMr18Ll95xaEm3IyKrYQPs+qljTX2j7VloAO8ET5SaEsrRp/lYaz4M9LSnifnxMsLKK/uqpig=="
+  "resolved" "https://registry.npmjs.org/uri-scheme/-/uri-scheme-1.0.112.tgz"
+  "version" "1.0.112"
+
 "urix@^0.1.0":
   "integrity" "sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI="
   "resolved" "https://registry.npmjs.org/urix/-/urix-0.1.0.tgz"
