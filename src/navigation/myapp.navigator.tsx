@@ -117,14 +117,17 @@ export const MyAppNavigator = (): React.ReactElement => {
       HomeNavigator: {
         screens: {
           Screens: {
-            initialRouteName: 'MyProfile',
+            initialRouteName: 'profile',
             screens: {
               MyProfile: 'profile',
               Orders: {
                 path: 'orders',
               },
-              OrderDetail: {
+              OrdersDetail: {
                 path: 'orders/:id',
+              },
+              DetailPet: {
+                path: 'pets/:id',
               },
             },
           },
