@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {Dimensions, Platform, StyleSheet} from 'react-native';
+import {Dimensions, Linking, Platform, StyleSheet} from 'react-native';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
@@ -76,6 +76,11 @@ import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
 import {AestheticDetailScreen} from '../myapp/scenes/aesthetic/detail.component';
 // Services
 import {SelectServiceScreen} from '../myapp/scenes/service/select.component';
+import useFCM from '../myapp/hooks/fcm/useFCM';
+
+// Notifications
+import notifee, {AndroidImportance} from '@notifee/react-native';
+import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -86,6 +91,48 @@ const Screens = ({navigation, route, style, setRouteName}) => {
   const backButton = () => <BackButton navigation={navigation} />;
   const routeNames = getFocusedRouteNameFromRoute(route) ?? 'Home';
   setRouteName(routeNames);
+
+  const onMessage = async (remoteMessage) => {
+    // Create a channel
+    const channelId = await notifee.createChannel({
+      id: 'dog-it-default-notification-channel',
+      name: 'Default Channel',
+      importance: AndroidImportance.DEFAULT,
+    });
+
+    // Display the notification on foreground.
+    await notifee.displayNotification({
+      title: remoteMessage.notification.title,
+      body: remoteMessage.notification.body,
+      android: {
+        channelId,
+        color: '#13b048',
+        smallIcon: 'ic_notification',
+        sound: 'default',
+      },
+      data: remoteMessage.data,
+      remote: true,
+    });
+  };
+
+  const onOpenNotification = (
+    remoteMessage: FirebaseMessagingTypes.RemoteMessage,
+  ) => {
+    if (remoteMessage?.data) {
+      const link: string = remoteMessage.data.link;
+      if (link) {
+        Linking.openURL(link);
+      }
+    }
+  };
+
+  const fcm = useFCM(onMessage, onOpenNotification);
+
+  useEffect(() => {
+    if (route.params?.initialRoute) {
+      Linking.openURL(route.params.initialRoute);
+    }
+  }, [route.params?.initialRoute]);
 
   return (
     <Animated.View style={[styles.stack, style]}>

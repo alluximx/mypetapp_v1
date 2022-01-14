@@ -6,12 +6,13 @@ import {reminderOptions} from '../../../constants';
 // Global Colors.
 import globalColors from '../../../styles/colors';
 // Hooks.
-import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+import useDeleteVaccine from '../../../hooks/vaccines/useDeleteVaccine';
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
+import useGetVaccineImage from '../../../hooks/vaccines/useGetVaccineImage';
 import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
+import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useUpdateVaccine from '../../../hooks/vaccines/useUpdateVaccine';
 import useVaccineDetail from '../../../hooks/vaccines/useVaccineDetail';
-import useDeleteVaccine from '../../../hooks/vaccines/useDeleteVaccine';
-import useGetVaccineImage from '../../../hooks/vaccines/useGetVaccineImage';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
@@ -96,6 +97,8 @@ export default ({navigation, route}): React.ReactElement => {
     onRightPress: onSavePress,
     data: {...form, etiquetteImage},
   });
+
+  useEnforceScreenOnBack('VaccinesIndex', {pet: {id: form.user_pet}});
 
   /******************************
    *** Post data load effects ***

@@ -1,62 +1,82 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {List} from '@ui-kitten/components';
 import environments from '../../../environments';
+// Hooks
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
+import useGetSaleOrder from '../../../hooks/orders/useGetSaleOrder';
 // My components
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import GenericCard from '../../../components/cards/generic-card';
+import TitleHeader from '../../../components/texts/title-header';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 
 export default ({navigation, route}): React.ReactElement => {
-  const orderSale = route.params.order;
-  const addressOrder = orderSale.delivery_address;
-  const paymentOrder = orderSale.card_id;
-  const OrderSalesDetail = orderSale.sales_detail;
+  const [orderSale, setOrderSale] = useState(route.params.order);
+
+  const {data: orderData, isLoading, isSuccess} = useGetSaleOrder(
+    route.params.id,
+    route.params.order ? true : false,
+  );
+
+  useEnforceScreenOnBack('Orders');
+
+  useEffect(() => {
+    if (!route.params.order) {
+      if (isSuccess) {
+        setOrderSale(orderData?.data);
+      }
+    }
+  }, [isSuccess]);
+
+  const addressOrder = orderSale?.delivery_address;
+  const paymentOrder = orderSale?.card_id;
+  const OrderSalesDetail = orderSale?.sales_detail;
 
   const contentAddress =
-    addressOrder.street +
+    addressOrder?.street +
     ' #' +
-    addressOrder.number +
+    addressOrder?.number +
     '\n' +
-    addressOrder.zipcode +
+    addressOrder?.zipcode +
     ', ' +
-    addressOrder.city +
+    addressOrder?.city +
     ' ' +
-    addressOrder.state.name +
+    addressOrder?.state?.name +
     '.';
 
   const data = {
     buttonAlign: 'left',
     buttonColor: globalColors.greenPrimary,
-    buttonText: orderSale.status,
+    buttonText: orderSale?.status,
     date: null,
     content: `Tiempo de entrega estimado: \n${
-      orderSale.delivery_time === null
+      orderSale?.delivery_time === null
         ? 'Podrás consultar el tiempo de entrega cuando el producto esté en camino.'
-        : orderSale.delivery_time
+        : orderSale?.delivery_time
     }`,
     images: null,
     styleCard: {},
-    title: `#${orderSale.id}`,
+    title: `#${orderSale?.id}`,
   };
 
   const dataDelivery = {
     buttonText: null,
     date: null,
     content:
-      orderSale.tracking_number === null
+      orderSale?.tracking_number === null
         ? 'Podrás consultar el número de guía cuando el producto esté en camino.'
-        : `#${orderSale.tracking_number}`,
+        : `#${orderSale?.tracking_number}`,
     images: null,
     styleCard: {},
     title:
-      orderSale.delivery_company === null
+      orderSale?.delivery_company === null
         ? 'Estamos trabajando en tu pedido'
-        : orderSale.delivery_company,
+        : orderSale?.delivery_company,
   };
 
   const dataAddress = {
@@ -65,16 +85,16 @@ export default ({navigation, route}): React.ReactElement => {
     content: contentAddress,
     images: null,
     styleCard: {},
-    title: addressOrder.user_address.name,
+    title: addressOrder?.user_address?.name,
   };
 
   const dataPayment = {
     buttonText: null,
     date: null,
-    content: `****${paymentOrder.last4}`,
+    content: `****${paymentOrder?.last4}`,
     images: null,
     styleCard: {},
-    title: paymentOrder.brand,
+    title: paymentOrder?.brand,
   };
 
   const renderItem = (product) => {
@@ -107,7 +127,9 @@ export default ({navigation, route}): React.ReactElement => {
     );
   };
 
-  return (
+  return isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout style={styles.container}>
       <TitleHeader style={{marginBottom: 24}}>Detalle de Pedido</TitleHeader>
       <ScrollView style={styles.scrollView}>
@@ -154,13 +176,13 @@ export default ({navigation, route}): React.ReactElement => {
           </View>
           <View style={styles.infoSummary2}>
             <DefaultText style={styles.defaultText}>
-              ${orderSale.total_price}
+              ${orderSale?.total_price}
             </DefaultText>
             <DefaultText style={styles.defaultText}>
-              ${orderSale.delivery_price}
+              ${orderSale?.delivery_price}
             </DefaultText>
             <TitleHeader style={styles.defaultText}>
-              ${orderSale.total.toFixed(2)}
+              ${orderSale?.total.toFixed(2)}
             </TitleHeader>
           </View>
         </View>
