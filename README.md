@@ -54,3 +54,11 @@ and
   }
 }
 ```
+
+## Deep links for the Push Notifications
+
+| Screen           | Link                                              |
+|------------------|---------------------------------------------------|
+| Orders Detail    | dogit://orders/{{order_id}}                       |
+| Vaccine Detail   | dogit://pets/{{pet_id}}/vaccines/{{vaccine_id}}   |
+| Deworming Detail | dogit://pets/{{pet_id}}/dewormings/{{vaccine_id}} |
