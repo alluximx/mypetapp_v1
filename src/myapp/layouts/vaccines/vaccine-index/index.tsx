@@ -13,8 +13,8 @@ import globalVars from '../../../styles/vars';
 // UI Kitten
 import {List} from '@ui-kitten/components';
 // Hook.
-import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
 
 export default ({navigation, route}): React.ReactElement => {
   const [vaccines, setVaccines] = useState([]);

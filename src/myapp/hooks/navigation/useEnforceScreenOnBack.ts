@@ -9,7 +9,7 @@ const useEnforceScreenOnBack = (screenName: string, params = {}) => {
     if (isFocused) {
       navigation.dispatch(insertBeforeLast(screenName, params));
     }
-  }, [isFocused]);
+  }, [isFocused, params]);
 };
 
 export default useEnforceScreenOnBack;
