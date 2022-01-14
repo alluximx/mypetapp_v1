@@ -5,6 +5,7 @@ import moment from 'moment';
 import globalColors from '../../../styles/colors';
 // Hooks.
 import useDeleteVaccine from '../../../hooks/vaccines/useDeleteVaccine';
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
 import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useUpdateVaccine from '../../../hooks/vaccines/useUpdateVaccine';
@@ -79,6 +80,8 @@ export default ({navigation, route}): React.ReactElement => {
     onRightPress: onSavePress,
     data: form,
   });
+
+  useEnforceScreenOnBack('DewormingHistory', {pet: {id: form.user_pet}});
 
   useEffect(() => {
     if (!vaccineLoading) {

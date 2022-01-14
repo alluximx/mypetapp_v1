@@ -47,16 +47,16 @@ export default ({navigation, route}): React.ReactElement => {
 
   const {data: petData, isLoading, isSuccess} = useGetPet(
     route.params.petId,
-    route.params.pet ? true : false,
+    route.params.petId !== null ? false : true,
   );
 
   useEffect(() => {
-    if (!route.params.pet) {
-      if (isSuccess) {
-        setPet(petData?.data);
+    if (route.params.petId) {
+      if (petData?.data) {
+        setPet(petData.data);
       }
     }
-  }, [isSuccess]);
+  }, [isSuccess, route.params]);
 
   const {id, breed, name, pet_age, sex} = pet || {};
   const {years, months} = pet_age || {};

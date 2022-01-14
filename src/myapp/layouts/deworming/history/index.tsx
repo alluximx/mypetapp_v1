@@ -4,6 +4,7 @@ import {Image, Dimensions, Platform} from 'react-native';
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Hook.
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 // My Components.
 import AddButton from '../../../components/buttons/add-button';
@@ -18,6 +19,8 @@ import {Layout, StyleService, List} from '@ui-kitten/components';
 export default ({navigation, route}): React.ReactElement => {
   const [dewormings, setDewormings] = useState([]);
   const dewormingQuery = useGetVaccineIndex(route.params.pet.id, false);
+
+  useEnforceScreenOnBack('DetailPet', {petId: route.params.pet.id});
 
   useEffect(() => {
     if (dewormingQuery.data) {
