@@ -120,15 +120,11 @@ export const MyAppNavigator = (): React.ReactElement => {
             initialRouteName: 'profile',
             screens: {
               MyProfile: 'profile',
-              Orders: {
-                path: 'orders',
-              },
-              OrdersDetail: {
-                path: 'orders/:id',
-              },
-              DetailPet: {
-                path: 'pets/:id',
-              },
+              Orders: 'orders',
+              OrdersDetail: 'orders/:id',
+              DetailPet: 'pets/:id',
+              EditVaccine: 'pets/:petId/vaccines/:vaccineId',
+              EditDeworming: 'pets/:petId/dewormings/:vaccineId',
             },
           },
         },

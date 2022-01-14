@@ -6,10 +6,12 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Hooks.
+import useGetPet from '../../../hooks/user/useGetPet';
 import useMyPetImage from '../../../hooks/pets/useMyPetImage';
 import useGetVaccineReminder from '../../../hooks/vaccines/useGetVaccineReminder';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import PetDataCard from '../../../components/cards/pet-data-card';
@@ -41,8 +43,23 @@ const sexDirectory = {
 };
 
 export default ({navigation, route}): React.ReactElement => {
-  const {id, breed, name, pet_age, sex} = route.params.pet;
-  const {years, months} = pet_age;
+  const [pet, setPet] = useState(route.params.pet);
+
+  const {data: petData, isLoading, isSuccess} = useGetPet(
+    route.params.petId,
+    route.params.pet ? true : false,
+  );
+
+  useEffect(() => {
+    if (!route.params.pet) {
+      if (isSuccess) {
+        setPet(petData?.data);
+      }
+    }
+  }, [isSuccess]);
+
+  const {id, breed, name, pet_age, sex} = pet || {};
+  const {years, months} = pet_age || {};
   // Format age.
   const monthsMessage = `${months} ${months === 1 ? 'Mes' : 'Meses'}`;
   const yearsMessage = `${years} ${years === 1 ? 'Año' : 'Años'}`;
@@ -76,7 +93,7 @@ export default ({navigation, route}): React.ReactElement => {
           style={styles.headerRight}
           onPress={() =>
             navigation.navigate('EditPet', {
-              pet: route.params.pet,
+              pet,
               petImage: image,
               petImageId: petImage.data[0]?.id,
             })
@@ -92,7 +109,7 @@ export default ({navigation, route}): React.ReactElement => {
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={() => {
-        navigation.navigate(service.item.screen, {pet: route.params.pet});
+        navigation.navigate(service.item.screen, {pet});
       }}
       style={styles.serviceContainer}>
       <Card activeOpacity={0.8} style={styles.serviceIconContainer}>
@@ -128,13 +145,15 @@ export default ({navigation, route}): React.ReactElement => {
 
   reminders.sort(customSort);
 
-  return (
+  return isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout style={styles.container}>
       <View style={styles.petImageContainer}>
         <PreviewableImage source={image} style={styles.petImage} />
         <View style={styles.petDataContainer}>
           <TitleHeader style={styles.whiteText}>{name}</TitleHeader>
-          <DefaultText style={styles.whiteText}>{breed.name}</DefaultText>
+          <DefaultText style={styles.whiteText}>{breed?.name}</DefaultText>
         </View>
       </View>
       <View style={styles.petDataCards}>
