@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Hooks
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
 import useGetSaleOrder from '../../../hooks/orders/useGetSaleOrder';
 // My components
 import CustomSpinner from '../../../components/custom-spinner';
@@ -20,6 +21,8 @@ export default ({navigation, route}): React.ReactElement => {
     route.params.id,
     route.params.order ? true : false,
   );
+
+  useEnforceScreenOnBack('Orders');
 
   useEffect(() => {
     if (!route.params.order) {

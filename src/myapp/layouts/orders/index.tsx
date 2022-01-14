@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Image, Platform, StyleSheet} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Hooks
+import useEnforceScreenOnBack from '../../hooks/navigation/useEnforceScreenOnBack';
 import useSalesOrders from '../../hooks/orders/useSalesOrders';
 // My components
 import CustomSpinner from '../../components/custom-spinner';
@@ -16,6 +17,8 @@ import globalVars from '../../styles/vars';
 export default ({navigation}): React.ReactElement => {
   const [salesOrders, setSalesOrders] = useState([]);
   const myOrders = useSalesOrders();
+
+  useEnforceScreenOnBack('MyProfile');
 
   useEffect(() => {
     if (myOrders.data) {
