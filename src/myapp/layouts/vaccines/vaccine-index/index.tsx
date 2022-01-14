@@ -13,11 +13,14 @@ import globalVars from '../../../styles/vars';
 // UI Kitten
 import {List} from '@ui-kitten/components';
 // Hook.
+import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
 import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 
 export default ({navigation, route}): React.ReactElement => {
   const [vaccines, setVaccines] = useState([]);
   const vaccinesQuery = useGetVaccineIndex(route.params.pet.id, 'true');
+
+  useEnforceScreenOnBack('DetailPet', {petId: route.params.pet.id});
 
   useEffect(() => {
     if (vaccinesQuery.data) {
