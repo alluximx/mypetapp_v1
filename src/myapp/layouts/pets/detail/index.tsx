@@ -47,12 +47,12 @@ export default ({navigation, route}): React.ReactElement => {
 
   const {data: petData, isLoading, isSuccess} = useGetPet(
     route.params.petId,
-    route.params.petId !== null ? false : true,
+    route.params.pet === undefined ? false : true,
   );
 
   useEffect(() => {
-    if (route.params.petId) {
-      if (petData?.data) {
+    if (route.params.pet === undefined) {
+      if (isSuccess && petData?.data) {
         setPet(petData.data);
       }
     }
