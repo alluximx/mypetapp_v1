@@ -1,7 +1,12 @@
+import {LinkingOptions} from '@react-navigation/native';
 import React from 'react';
 import {Linking} from 'react-native';
 
-const useDeepLinks = (prefixes: string[], screensConfig: any) => {
+const useDeepLinks = (
+  prefixes: string[],
+  screensConfig: any,
+): [LinkingOptions, string] => {
+  const [initialLink, setInitialLink] = React.useState(null);
   const linking = {
     prefixes: prefixes,
 
@@ -12,7 +17,8 @@ const useDeepLinks = (prefixes: string[], screensConfig: any) => {
       const url = await Linking.getInitialURL();
 
       if (url != null) {
-        return url;
+        setInitialLink(url);
+        return null;
       }
     },
 
@@ -32,7 +38,7 @@ const useDeepLinks = (prefixes: string[], screensConfig: any) => {
 
     config: screensConfig,
   };
-  return linking;
+  return [linking, initialLink];
 };
 
 export default useDeepLinks;

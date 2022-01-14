@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createNativeStackNavigator} from 'react-native-screens/native-stack';
 import {Dimensions, Linking, Platform, StyleSheet} from 'react-native';
@@ -77,11 +77,7 @@ import {SelectServiceScreen} from '../myapp/scenes/service/select.component';
 import useFCM from '../myapp/hooks/fcm/useFCM';
 
 // Notifications
-import notifee, {
-  AndroidChannel,
-  AndroidImportance,
-  EventType,
-} from '@notifee/react-native';
+import notifee, {AndroidImportance} from '@notifee/react-native';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
 
 const Drawer = createDrawerNavigator();
@@ -129,6 +125,12 @@ const Screens = ({navigation, route, style, setRouteName}) => {
   };
 
   const fcm = useFCM(onMessage, onOpenNotification);
+
+  useEffect(() => {
+    if (route.params?.initialRoute) {
+      Linking.openURL(route.params.initialRoute);
+    }
+  }, [route.params?.initialRoute]);
 
   return (
     <Animated.View style={[styles.stack, style]}>

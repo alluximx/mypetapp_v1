@@ -136,7 +136,7 @@ export const MyAppNavigator = (): React.ReactElement => {
     },
   };
   const prefixes = ['dogit://', 'https://dogit/'];
-  const linking = useDeepLinks(prefixes, screenConfig);
+  const [linking, initialRoute] = useDeepLinks(prefixes, screenConfig);
 
   return (
     <NavigationContainer linking={linking} ref={navigationRef}>
@@ -170,6 +170,7 @@ export const MyAppNavigator = (): React.ReactElement => {
                 }}
                 initialParams={{
                   isGuest: false,
+                  initialRoute: initialRoute,
                 }}
               />
             ) : (
