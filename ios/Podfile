@@ -1,4 +1,4 @@
-platform :ios, '13.0'
+platform :ios, '14.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 def add_flipper_pods!
@@ -72,6 +72,12 @@ target 'mypetapp_v1' do
   # add_flipper_pods!
   post_install do |installer|
     # flipper_post_install(installer)
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+      end
+    end
 
     ## Fix for XCode 12.5
     find_and_replace("../node_modules/react native/React/CxxBridge/RCTCxxBridge.mm", "_initializeModules:(NSArray<id<RCTBridgeModule>> *)modules", "_initializeModules:(NSArray<Class> *)modules")
