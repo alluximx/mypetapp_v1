@@ -86,3 +86,17 @@ export const productPrices = {
   MIN_PRICE: 0,
   MAX_PRICE: 2000,
 };
+
+/****************
+ *** SERVICES ***
+ ****************/
+export const servicesTabs = [
+  {
+    id: 'active',
+    name: 'Próximos',
+  },
+  {
+    id: 'history',
+    name: 'Historial',
+  },
+];

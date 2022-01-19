@@ -81,6 +81,7 @@ import useFCM from '../myapp/hooks/fcm/useFCM';
 // Notifications
 import notifee, {AndroidImportance} from '@notifee/react-native';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
+import {NextServicesScreen} from '../myapp/scenes/service/next-services.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -391,6 +392,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           }}
         />
         {/* Services */}
+        <HomeStack.Screen name="NextServices" component={NextServicesScreen} />
         <HomeStack.Screen
           name="ServiceSelect"
           component={SelectServiceScreen}

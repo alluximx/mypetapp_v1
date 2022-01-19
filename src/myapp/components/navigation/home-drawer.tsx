@@ -66,8 +66,7 @@ export const HomeDrawer = (props): DrawerElement => {
             image={require('../../assets/images/menu/my-pets.png')}
           />
           <DrawerItem
-            isDisabled
-            urlKey="Home"
+            urlKey="NextServices"
             params={{}}
             onPressOption={navigateToScreen}
             currentTab={currentTab}
