@@ -132,7 +132,9 @@ export default ({navigation, route}): React.ReactElement => {
         visible={isModalSubmitVisible}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TitleHeader style={styles.header}>Generar cita</TitleHeader>
+        <TitleHeader style={styles.header}>
+          {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
+        </TitleHeader>
         <TitleHeader style={styles.normalHeader}>
           ¿Para quién es la cita?
         </TitleHeader>

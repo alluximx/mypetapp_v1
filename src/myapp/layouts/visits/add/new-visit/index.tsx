@@ -20,7 +20,7 @@ import DefaultLayout from '../../../../components/layouts/default-layout';
 import ImageInputCard from '../../../../components/cards/image-input-card';
 import TitleHeader from '../../../../components/texts/title-header';
 import UserInput from '../../../../components/inputs/user-input';
-import UserTextArea from '../../../../components/inputs/user-textAtea';
+import UserTextArea from '../../../../components/inputs/user-text-area';
 
 export default ({navigation, route}): React.ReactElement => {
   const {date, details, idVisit, images, title, user_pet} = route.params.visit;

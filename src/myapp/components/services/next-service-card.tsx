@@ -22,7 +22,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
     props.setShowEditModal(true);
   };
   const onPressRate = () => {
-    navigation.navigate('Home');
+    navigation.navigate('RateService');
   };
 
   return (

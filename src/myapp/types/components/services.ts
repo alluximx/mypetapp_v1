@@ -25,3 +25,8 @@ export interface NextServiceCardProps {
   setShowEditModal?: Dispatch<SetStateAction<boolean>>;
   setShowDeleteModal?: Dispatch<SetStateAction<boolean>>;
 }
+
+export interface RateServiceInputProps {
+  value: number;
+  setValue: (value: number) => void;
+}
