@@ -41,7 +41,7 @@ const UserTextArea = (props: UserInputProps): React.ReactElement => {
   }, [isFocused]);
 
   return (
-    <View style={styles.inputContainer}>
+    <View style={[styles.inputContainer, props.style]}>
       <Animated.Text
         style={[
           styles.inputLabel,
@@ -80,10 +80,14 @@ const UserTextArea = (props: UserInputProps): React.ReactElement => {
           },
           props.error && props.error !== '' && styles.errorOutline,
         ]}
-        textStyle={[styles.inputValueText, {paddingTop: inputPadding}]}
+        textStyle={[
+          styles.inputValueText,
+          {paddingTop: inputPadding},
+          props.inputStyle,
+        ]}
         value={props.value}
         multiline={true}
-        maxLength={100}
+        maxLength={props.maxLength ?? 100}
       />
     </View>
   );

@@ -59,6 +59,7 @@ export interface ReminderInputProps {
 export interface UserInputProps {
   autoCapitalize?: boolean;
   error?: string;
+  inputStyle?: {};
   isNumeric?: boolean;
   isPassword?: boolean;
   maxLength?: number;
