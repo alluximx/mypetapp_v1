@@ -74,6 +74,7 @@ type HomeNavigatorParamList = {
   AestheticFilter: {};
   AestheticDetail: {};
 
+  NextServices: {};
   ServiceSelect: {};
 };
 
