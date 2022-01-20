@@ -6,6 +6,8 @@ import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import Animated from 'react-native-reanimated';
 // Global Styles.
 import globalColors from '../myapp/styles/colors';
+// Hooks.
+import useFCM from '../myapp/hooks/fcm/useFCM';
 // My Components.
 import {HomeDrawer} from '../myapp/components/navigation/home-drawer';
 import BackButton from '../myapp/components/buttons/back-button';
@@ -75,13 +77,13 @@ import {AestheticFilterScreen} from '../myapp/scenes/aesthetic/filter.component'
 import {AestheticResultScreen} from '../myapp/scenes/aesthetic/list.component';
 import {AestheticDetailScreen} from '../myapp/scenes/aesthetic/detail.component';
 // Services
+import {NextServicesScreen} from '../myapp/scenes/service/next-services.component';
+import {RateServiceScreen} from '../myapp/scenes/service/rate-service.component';
 import {SelectServiceScreen} from '../myapp/scenes/service/select.component';
-import useFCM from '../myapp/hooks/fcm/useFCM';
 
 // Notifications
 import notifee, {AndroidImportance} from '@notifee/react-native';
 import {FirebaseMessagingTypes} from '@react-native-firebase/messaging';
-import {NextServicesScreen} from '../myapp/scenes/service/next-services.component';
 
 const Drawer = createDrawerNavigator();
 const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
@@ -342,7 +344,13 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         {/* Vets */}
         <HomeStack.Screen name="VetResult" component={VetResultScreen} />
         <HomeStack.Screen name="VetFilter" component={VetFilterScreen} />
-        <HomeStack.Screen name="VetDate" component={VetDateScreen} />
+        <HomeStack.Screen
+          name="VetDate"
+          component={VetDateScreen}
+          initialParams={{
+            isEdit: false,
+          }}
+        />
         <HomeStack.Screen
           name="VetDetail"
           component={VetDetailScreen}
@@ -392,6 +400,11 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           }}
         />
         {/* Services */}
+        <HomeStack.Screen
+          name="RateService"
+          component={RateServiceScreen}
+          options={{headerLeft: closeButton}}
+        />
         <HomeStack.Screen name="NextServices" component={NextServicesScreen} />
         <HomeStack.Screen
           name="ServiceSelect"

@@ -68,12 +68,15 @@ type HomeNavigatorParamList = {
   VetFilter: {};
   VetDetail: {};
   VetMaps: {};
-  VetDate: {};
+  VetDate: {
+    isEdit: boolean;
+  };
 
   AestheticResult: {};
   AestheticFilter: {};
   AestheticDetail: {};
 
+  RateService: {};
   NextServices: {};
   ServiceSelect: {};
 };

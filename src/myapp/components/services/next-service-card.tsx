@@ -22,7 +22,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
     props.setShowEditModal(true);
   };
   const onPressRate = () => {
-    navigation.navigate('Home');
+    navigation.navigate('RateService');
   };
 
   return (
@@ -69,7 +69,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
         title: moment(props.service.date).format('DD/MM/YYYY, HH:mm A'),
         coverImage: props.service.petImage.file,
       }}
-      onClick={onPressEdit}
+      onClick={props.tab === servicesTabs[0].id ? onPressEdit : onPressRate}
       wrapTitle
       wrapContent
     />

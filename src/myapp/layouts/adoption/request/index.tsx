@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, ScrollView, StyleSheet} from 'react-native';
+// Global Styles
+import globalVars from '../../../styles/vars';
+import globalColors from '../../../styles/colors';
 // Hooks
 import useAdoption from '../../../hooks/adoption/useAdoption';
 import useStates from '../../../hooks/util/useState';
@@ -14,11 +17,9 @@ import MunicipalityDrop from '../../../components/adoption/municipality-drop';
 import OptionSelect from '../../../components/inputs/option-select';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
-import UserTextArea from '../../../components/inputs/user-textAtea';
+import UserTextArea from '../../../components/inputs/user-text-area';
 // Types
 import {BaseModel, ErrorResponse} from '../../../types/models';
-import globalVars from '../../../styles/vars';
-import globalColors from '../../../styles/colors';
 
 const initialErrors = {
   cp: '',
