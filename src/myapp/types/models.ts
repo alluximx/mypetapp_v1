@@ -49,13 +49,30 @@ export interface ErrorResponse {
   };
 }
 
+export interface Appointment {
+  date: string;
+  vet: string;
+  pet: {
+    name: string;
+  };
+  petImage: {
+    file: string;
+  };
+  services: BaseModel[];
+  appointmentInfo?: {
+    editingAttemptsLeft: number;
+    maxEditingAttempts: number;
+    showDeletePenalty: boolean;
+  };
+  penaltyData?: {
+    timeLimit: number;
+    amount: number;
+  };
+}
+
 export interface Option {
   label: string;
   value: string;
-}
-
-export interface VariantOption extends Option {
-  stock: number;
 }
 
 export interface Pet extends BaseModel {
@@ -108,6 +125,10 @@ export interface VaccineHistory {
 export interface Variant extends BaseModel {
   images: {image: string}[];
   price: number;
+  stock: number;
+}
+
+export interface VariantOption extends Option {
   stock: number;
 }
 

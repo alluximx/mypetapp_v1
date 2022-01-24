@@ -2,6 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+// Constants
+import {servicesTabs} from '../../constants';
 // Global Styles
 import globalColors from '../../styles/colors';
 // My Components
@@ -10,17 +12,12 @@ import DefaultText from '../texts/default-text';
 import GenericCard from '../cards/generic-card';
 // Types
 import {NextServiceCardProps} from '../../types/components/services';
-import {servicesTabs} from '../../constants';
 
 const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
   const navigation = useNavigation();
 
-  const onPressDelete = () => {
-    props.setShowDeleteModal(true);
-  };
-  const onPressEdit = () => {
-    props.setShowEditModal(true);
-  };
+  const onPressDelete = () => props.onPressDeleteModal();
+  const onPressEdit = () => props.onPressEditModal();
   const onPressRate = () => {
     navigation.navigate('RateService');
   };
@@ -37,7 +34,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
               {props.service.pet.name}
             </DefaultText>
             <DefaultText style={styles.serviceName}>
-              {props.service.services.join(', ')}
+              {props.service.services.map((service) => service.name).join(', ')}
             </DefaultText>
           </View>,
         ],
