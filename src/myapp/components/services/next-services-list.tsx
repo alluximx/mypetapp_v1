@@ -153,13 +153,22 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const getEditMessage = (): string => {
     switch (editAttempts) {
       case 1:
-        return `Puedes modificar la fecha de tu cita una vez más sin ninguna penalización. 
-        Si intentas editar tu cita una tercera ocasión, se te hará un recargo por la cantidad de $${penaltyData.amount} pesos.`;
+        return (
+          `Puedes modificar la fecha de tu cita una vez más sin ninguna penalización.` +
+          `Si intentas editar tu cita una tercera ocasión, se te hará un recargo por ` +
+          `la cantidad de $${penaltyData.amount} pesos.`
+        );
       case 2:
-        return `Para modificar la fecha de tu cita es necesario pagar una penalización de $${penaltyData.amount} pesos.`;
+        return (
+          `Para modificar la fecha de tu cita es necesario pagar una penalización` +
+          ` de $${penaltyData.amount} pesos.`
+        );
       default:
-        return `Puedes modificar la fecha de tu cita dos veces sin ninguna penalización. 
-        Si intentas editar tu cita una tercera ocasión, se te hará un recargo por la cantidad de $${penaltyData.amount} pesos.`;
+        return (
+          `Puedes modificar la fecha de tu cita dos veces sin ninguna penalización. ` +
+          `Si intentas editar tu cita una tercera ocasión, se te hará un recargo por ` +
+          `la cantidad de $${penaltyData.amount} pesos.`
+        );
     }
   };
 
