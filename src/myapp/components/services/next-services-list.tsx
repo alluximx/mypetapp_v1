@@ -14,10 +14,10 @@ import CustomSpinner from '../custom-spinner';
 import NextServiceCard from './next-service-card';
 import NextServicesEmpty from './next-services-empty';
 // Types.
-import {NextService} from '../../types/models';
+import {Appointment} from '../../types/models';
 import {NextServicesListProps} from '../../types/components/services';
 
-const exampleNextData = [
+const exampleNextData: Appointment[] = [
   {
     date: '2021-05-01 17:00:00',
     vet: 'Estética Canina',
@@ -38,8 +38,13 @@ const exampleNextData = [
       },
     ],
     appointmentInfo: {
-      editingAttempts: 0,
+      editingAttemptsLeft: 2,
+      maxEditingAttempts: 2,
       showDeletePenalty: false,
+    },
+    penaltyData: {
+      amount: 50.0,
+      timeLimit: 3,
     },
   },
   {
@@ -58,8 +63,13 @@ const exampleNextData = [
       },
     ],
     appointmentInfo: {
-      editingAttempts: 1,
+      editingAttemptsLeft: 2,
+      maxEditingAttempts: 3,
       showDeletePenalty: false,
+    },
+    penaltyData: {
+      amount: 50.0,
+      timeLimit: 3,
     },
   },
   {
@@ -78,8 +88,38 @@ const exampleNextData = [
       },
     ],
     appointmentInfo: {
-      editingAttempts: 2,
+      editingAttemptsLeft: 1,
+      maxEditingAttempts: 3,
       showDeletePenalty: true,
+    },
+    penaltyData: {
+      amount: 50.0,
+      timeLimit: 3,
+    },
+  },
+  {
+    date: '2021-06-04 12:00:00',
+    vet: 'Veterinaria Jiménez',
+    pet: {
+      name: 'Valerio',
+    },
+    petImage: {
+      file: 'https://images.dog.ceo/breeds/terrier-cairn/n02096177_342.jpg',
+    },
+    services: [
+      {
+        id: 'consulta',
+        name: 'Consulta',
+      },
+    ],
+    appointmentInfo: {
+      editingAttemptsLeft: 0,
+      maxEditingAttempts: 3,
+      showDeletePenalty: true,
+    },
+    penaltyData: {
+      amount: 150.0,
+      timeLimit: 2,
     },
   },
 ];
@@ -125,19 +165,15 @@ const exampleHistoricData = [
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
-  const [data, setData] = useState<NextService[]>(exampleNextData);
+  const [data, setData] = useState<Appointment[]>(exampleNextData);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editAttempts, setEditAttempts] = useState(0);
+  const [
+    selectedAppointment,
+    setSelectedAppointment,
+  ] = useState<Appointment | null>(null);
   const [editMessage, setEditMessage] = useState('');
   const [deleteMessage, setDeleteMessage] = useState('');
-  const [shouldApplyDeletePenalty, setShouldApplyDeletePenalty] = useState(
-    false,
-  );
-  const penaltyData = {
-    timeLimit: '3 horas',
-    amount: 50.0,
-  };
 
   const onDeleteAccept = () => {
     // Delete call to api.
@@ -150,32 +186,40 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     setShowEditModal(false);
   };
 
-  const getEditMessage = (): string => {
-    switch (editAttempts) {
+  const getEditMessage = (appointment: Appointment): string => {
+    const {editingAttemptsLeft, maxEditingAttempts} =
+      appointment?.appointmentInfo || {};
+    const penaltyAmount = appointment?.penaltyData?.amount?.toFixed(2) || 0;
+
+    switch (editingAttemptsLeft) {
       case 1:
         return (
-          `Puedes modificar la fecha de tu cita una vez más sin ninguna penalización.` +
-          `Si intentas editar tu cita una tercera ocasión, se te hará un recargo por ` +
-          `la cantidad de $${penaltyData.amount} pesos.`
+          `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
+          `penalización. Si intentas editar tu cita más de ${maxEditingAttempts} veces, ` +
+          `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`
         );
-      case 2:
+      case 0:
         return (
-          `Para modificar la fecha de tu cita es necesario pagar una penalización` +
-          ` de $${penaltyData.amount} pesos.`
+          `Para modificar la fecha de tu cita es necesario pagar una ` +
+          `penalización de $${penaltyAmount} pesos.`
         );
       default:
         return (
-          `Puedes modificar la fecha de tu cita dos veces sin ninguna penalización. ` +
-          `Si intentas editar tu cita una tercera ocasión, se te hará un recargo por ` +
-          `la cantidad de $${penaltyData.amount} pesos.`
+          `Puedes modificar la fecha de tu cita ${editingAttemptsLeft} veces ` +
+          `más sin ninguna penalización. Si intentas editar tu cita más de ${maxEditingAttempts} veces, se te hará un recargo por ` +
+          `la cantidad de $${penaltyAmount} pesos.`
         );
     }
   };
 
-  const getDeleteMessage = (): string =>
-    shouldApplyDeletePenalty
-      ? `Estas eliminadno una cita con menos de ${penaltyData.timeLimit} de anticipación, si la cancelas o no asistes se te cobrará una penalización de $${penaltyData.amount} pesos.`
+  const getDeleteMessage = (appointment: Appointment): string => {
+    const {amount, timeLimit} = appointment?.penaltyData || {};
+    return appointment?.appointmentInfo?.showDeletePenalty
+      ? `Estás eliminando una cita con menos de ${timeLimit} horas de ` +
+          `anticipación, si la cancelas o no asistes se te cobrará una ` +
+          `penalización de $${amount.toFixed(2)} pesos.`
       : '¿Estás seguro de que quieres eliminar esta cita?';
+  };
 
   /***************
    *** Effects ***
@@ -188,11 +232,11 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   }, [props.tab]);
 
   useEffect(() => {
-    setEditMessage(getEditMessage());
-  }, [editAttempts]);
+    setEditMessage(getEditMessage(selectedAppointment));
+  }, [selectedAppointment]);
 
   useEffect(() => {
-    setDeleteMessage(getDeleteMessage());
+    setDeleteMessage(getDeleteMessage(selectedAppointment));
   }, [showDeleteModal]);
 
   return (
@@ -207,7 +251,11 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         visible={showDeleteModal}
       />
       <CustomModal
-        labelAccept={editAttempts === 2 ? 'Pagar y Editar' : 'Editar Cita'}
+        labelAccept={
+          selectedAppointment?.appointmentInfo?.editingAttemptsLeft === 0
+            ? 'Pagar y Editar'
+            : 'Editar Cita'
+        }
         title="Editar Cita"
         text={editMessage}
         onAccept={onEditAccept}
@@ -219,16 +267,14 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         data={data}
         ListEmptyComponent={<NextServicesEmpty tab={props.tab} />}
         scrollEnabled={data.length ? true : false}
-        renderItem={({item}: {item: NextService}) => (
+        renderItem={({item}: {item: Appointment}) => (
           <NextServiceCard
             onPressEditModal={() => {
-              setEditAttempts(item.appointmentInfo.editingAttempts);
+              setSelectedAppointment(item);
               setShowEditModal(true);
             }}
             onPressDeleteModal={() => {
-              setShouldApplyDeletePenalty(
-                item.appointmentInfo.showDeletePenalty,
-              );
+              setSelectedAppointment(item);
               setShowDeleteModal(true);
             }}
             service={item}

@@ -49,7 +49,7 @@ export interface ErrorResponse {
   };
 }
 
-export interface NextService {
+export interface Appointment {
   date: string;
   vet: string;
   pet: {
@@ -60,8 +60,13 @@ export interface NextService {
   };
   services: BaseModel[];
   appointmentInfo?: {
-    editingAttempts: number;
+    editingAttemptsLeft: number;
+    maxEditingAttempts: number;
     showDeletePenalty: boolean;
+  };
+  penaltyData?: {
+    timeLimit: number;
+    amount: number;
   };
 }
 

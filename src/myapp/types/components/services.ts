@@ -1,5 +1,5 @@
 import {Dispatch, SetStateAction} from 'react';
-import {BaseModel, NextService} from '../models';
+import {BaseModel, Appointment} from '../models';
 
 export interface NextServicesListProps {
   tab: string;
@@ -12,7 +12,7 @@ export interface NextServicesEmptyProps {
 export interface NextServiceCardProps {
   tab: string;
   styleCard?: any;
-  service: NextService;
+  service: Appointment;
   onPressEditModal?: () => void;
   onPressDeleteModal?: () => void;
 }

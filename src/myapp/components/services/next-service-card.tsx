@@ -2,6 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+// Constants
+import {servicesTabs} from '../../constants';
 // Global Styles
 import globalColors from '../../styles/colors';
 // My Components
@@ -10,7 +12,6 @@ import DefaultText from '../texts/default-text';
 import GenericCard from '../cards/generic-card';
 // Types
 import {NextServiceCardProps} from '../../types/components/services';
-import {servicesTabs} from '../../constants';
 
 const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
   const navigation = useNavigation();
