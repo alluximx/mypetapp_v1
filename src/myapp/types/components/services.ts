@@ -1,4 +1,5 @@
 import {Dispatch, SetStateAction} from 'react';
+import {BaseModel, NextService} from '../models';
 
 export interface NextServicesListProps {
   tab: string;
@@ -11,19 +12,9 @@ export interface NextServicesEmptyProps {
 export interface NextServiceCardProps {
   tab: string;
   styleCard?: any;
-  service: {
-    date: string;
-    vet: string;
-    pet: {
-      name: string;
-    };
-    petImage: {
-      file: string;
-    };
-    services: string[];
-  };
-  setShowEditModal?: Dispatch<SetStateAction<boolean>>;
-  setShowDeleteModal?: Dispatch<SetStateAction<boolean>>;
+  service: NextService;
+  onPressEditModal?: () => void;
+  onPressDeleteModal?: () => void;
 }
 
 export interface RateServiceInputProps {
