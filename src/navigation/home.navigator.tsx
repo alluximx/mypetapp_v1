@@ -95,7 +95,7 @@ const Screens = ({navigation, route, style, setRouteName}) => {
   const routeNames = getFocusedRouteNameFromRoute(route) ?? 'Home';
   setRouteName(routeNames);
 
-  const onMessage = async remoteMessage => {
+  const onMessage = async (remoteMessage) => {
     // Create a channel
     const channelId = await notifee.createChannel({
       id: 'dog-it-default-notification-channel',
@@ -444,12 +444,12 @@ export const HomeNavigator = ({route}): React.ReactElement => {
         gestureEnabled: true,
       }}
       sceneContainerStyle={styles.background}
-      drawerContent={props => {
+      drawerContent={(props) => {
         setProgress(props.progress);
         return <HomeDrawer {...props} routeName={routeName} />;
       }}>
       <Drawer.Screen name="Screens" initialParams={route.params}>
-        {props => (
+        {(props) => (
           <Screens
             {...props}
             style={animatedStyle}

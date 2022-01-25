@@ -11,7 +11,7 @@ const DEFAULT_LOCATION = {
 const useGeolocation = (initialLocation: LatLng = null) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
 
-  const handleSuccess = position => {
+  const handleSuccess = (position) => {
     const {latitude, longitude} = position.coords;
 
     setLocation({
@@ -20,7 +20,7 @@ const useGeolocation = (initialLocation: LatLng = null) => {
     });
   };
 
-  const handleError = error => {
+  const handleError = (error) => {
     console.warn(error);
   };
 
@@ -40,7 +40,10 @@ const useGeolocation = (initialLocation: LatLng = null) => {
           console.warn(err);
         }
       } else {
-        Geolocation.getCurrentPosition(handleSuccess, handleError);
+        const permission = await Geolocation.requestAuthorization('whenInUse');
+        if (permission === 'granted') {
+          Geolocation.getCurrentPosition(handleSuccess, handleError);
+        }
       }
     };
 

@@ -46,10 +46,10 @@ export default ({navigation}): React.ReactElement => {
   const data = useMyNameAndPets();
   const hasPets = data.pets.length !== 0;
 
-  const onAddPetButtonPress = pet =>
+  const onAddPetButtonPress = (pet) =>
     navigation && navigation.navigate('AddPet', {pet: pet});
 
-  const onDetailPetButtonPress = pet =>
+  const onDetailPetButtonPress = (pet) =>
     navigation && navigation.navigate('DetailPet', {pet: pet});
 
   const renderHeader = () => (
@@ -72,7 +72,7 @@ export default ({navigation}): React.ReactElement => {
     <PetCard pet={item} key={item.id} onPress={onDetailPetButtonPress} />
   );
 
-  const renderServiceItem = service => (
+  const renderServiceItem = (service) => (
     <TouchableOpacity
       disabled={service.disabled}
       key={service.serviceName}
@@ -129,7 +129,7 @@ export default ({navigation}): React.ReactElement => {
         </TitleHeader>
 
         <View style={styles.servicesContentContainer}>
-          {servicesList.map(item => {
+          {servicesList.map((item) => {
             return renderServiceItem(item);
           })}
         </View>
