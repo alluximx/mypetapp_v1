@@ -38,6 +38,7 @@
     "@react-native-async-storage/async-storage": "1.15.17",
     "@react-native-firebase/app": "^13.1.0",
     "@react-native-firebase/messaging": "^13.1.0",
+    "@react-native-picker/picker": "2.2.1",
     "@react-navigation/bottom-tabs": "^5.11.7",
     "@react-navigation/drawer": "^5.12.3",
     "@react-navigation/material-top-tabs": "^5.3.13",

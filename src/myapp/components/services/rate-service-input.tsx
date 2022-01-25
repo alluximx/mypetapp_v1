@@ -9,9 +9,6 @@ import {
 import {List} from '@ui-kitten/components';
 // Global Styles.
 import globalColors from '../../styles/colors';
-// My Components.
-import DefaultText from '../texts/default-text';
-import TitleHeader from '../texts/title-header';
 // Types.
 import {RateServiceInputProps} from '../../types/components/services';
 

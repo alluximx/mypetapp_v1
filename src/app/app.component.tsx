@@ -19,10 +19,7 @@ const defaultConfig: {mapping: Mapping; theme: Theme} = {
   theme: 'light',
 };
 
-LogBox.ignoreLogs([
-  'Require cycle:',
-  'Setting a timer for a long period of time',
-]);
+// LogBox.ignoreAllLogs(true);
 
 const App = ({mapping, theme}): React.ReactElement => {
   const [mappingContext, currentMapping] = Theming.useMapping(
