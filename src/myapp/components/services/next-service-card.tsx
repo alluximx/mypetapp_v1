@@ -27,6 +27,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
       contentTextStyle={styles.subtitleCard}
       coverImageStyle={styles.coverImage}
       styleCard={props.styleCard}
+      key={props.service.date}
       data={{
         additionalContent: [
           <View>
@@ -34,7 +35,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
               {props.service.pet.name}
             </DefaultText>
             <DefaultText style={styles.serviceName}>
-              {props.service.services.map((service) => service.name).join(', ')}
+              {props.service.services.map(service => service.name).join(', ')}
             </DefaultText>
           </View>,
         ],

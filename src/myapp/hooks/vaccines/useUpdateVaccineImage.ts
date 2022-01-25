@@ -1,9 +1,9 @@
 import {Platform} from 'react-native';
 import {useMutation} from 'react-query';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import api from '../../services/app-services';
 
-const putVaccineImage = (data) => {
+const putVaccineImage = data => {
   const realPath =
     Platform.OS === 'ios'
       ? decodeURIComponent(data.file.uri.replace('file://', ''))
@@ -14,7 +14,7 @@ const putVaccineImage = (data) => {
       name: 'file',
       filename: data.file.fileName,
       type: data.file.type,
-      data: RNFetchBlob.wrap(realPath),
+      data: ReactNativeBlobUtil.wrap(realPath),
     },
   ];
 

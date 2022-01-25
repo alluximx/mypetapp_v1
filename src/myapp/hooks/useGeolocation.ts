@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {LatLng} from 'react-native-maps';
 import {PermissionsAndroid, Platform} from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 const DEFAULT_LOCATION = {
   latitude: 25.678300366047267,
@@ -11,7 +11,7 @@ const DEFAULT_LOCATION = {
 const useGeolocation = (initialLocation: LatLng = null) => {
   const [location, setLocation] = useState(DEFAULT_LOCATION);
 
-  const handleSuccess = (position) => {
+  const handleSuccess = position => {
     const {latitude, longitude} = position.coords;
 
     setLocation({
@@ -20,7 +20,7 @@ const useGeolocation = (initialLocation: LatLng = null) => {
     });
   };
 
-  const handleError = (error) => {
+  const handleError = error => {
     console.warn(error);
   };
 

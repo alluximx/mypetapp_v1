@@ -1,10 +1,10 @@
 import {useMutation, useQueryClient} from 'react-query';
 import {useNavigation} from '@react-navigation/native';
 import api from '../../services/app-services';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import {Platform} from 'react-native';
 
-const putPetImage = (data) => {
+const putPetImage = data => {
   const realPath =
     Platform.OS === 'ios'
       ? decodeURIComponent(data.file.uri.replace('file://', ''))
@@ -15,7 +15,7 @@ const putPetImage = (data) => {
       name: 'file',
       filename: data.file.fileName,
       type: data.file.type,
-      data: RNFetchBlob.wrap(realPath),
+      data: ReactNativeBlobUtil.wrap(realPath),
     },
   ];
 

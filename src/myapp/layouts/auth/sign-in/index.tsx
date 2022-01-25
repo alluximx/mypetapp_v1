@@ -32,8 +32,8 @@ export default ({navigation}): React.ReactElement => {
     navigation.dispatch(insertBeforeLast('Start'));
   }, []);
 
-  const insertBeforeLast = (routeName) => (state) => {
-    const exists = state.routes.find((obj) => obj.name === 'Start');
+  const insertBeforeLast = routeName => state => {
+    const exists = state.routes.find(obj => obj.name === 'Start');
     let routes = [];
     if (!exists) {
       routes = [

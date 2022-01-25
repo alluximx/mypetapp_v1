@@ -1,5 +1,4 @@
 import React from 'react';
-import {AppearanceProvider} from 'react-native-appearance';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
 import {AppLoading} from './app-loading.component';
 import {appMappings, appThemes} from './app-theming';
@@ -13,15 +12,14 @@ import {SplashScreen} from '../myapp/scenes/splash/splash.component';
 
 import * as eva from '@eva-design/eva';
 import {default as customTheme} from '../theme/custom-theme.json';
-import {YellowBox} from 'react-native';
+import {LogBox} from 'react-native';
 
 const defaultConfig: {mapping: Mapping; theme: Theme} = {
   mapping: 'eva',
   theme: 'light',
 };
 
-console.disableYellowBox = true;
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   'Require cycle:',
   'Setting a timer for a long period of time',
 ]);
@@ -40,19 +38,17 @@ const App = ({mapping, theme}): React.ReactElement => {
   return (
     <>
       <IconRegistry icons={[EvaIconsPack]} />
-      <AppearanceProvider>
-        <ApplicationProvider
-          {...currentMapping}
-          theme={{...eva.light, ...customTheme}}>
-          <Theming.MappingContext.Provider value={mappingContext}>
-            <Theming.ThemeContext.Provider value={themeContext}>
-              <SafeAreaProvider>
-                <MyAppNavigator />
-              </SafeAreaProvider>
-            </Theming.ThemeContext.Provider>
-          </Theming.MappingContext.Provider>
-        </ApplicationProvider>
-      </AppearanceProvider>
+      <ApplicationProvider
+        {...currentMapping}
+        theme={{...eva.light, ...customTheme}}>
+        <Theming.MappingContext.Provider value={mappingContext}>
+          <Theming.ThemeContext.Provider value={themeContext}>
+            <SafeAreaProvider>
+              <MyAppNavigator />
+            </SafeAreaProvider>
+          </Theming.ThemeContext.Provider>
+        </Theming.MappingContext.Provider>
+      </ApplicationProvider>
     </>
   );
 };
@@ -65,6 +61,6 @@ const Splash = ({loading}): React.ReactElement => {
 
 export default (): React.ReactElement => (
   <AppLoading initialConfig={defaultConfig} placeholder={Splash}>
-    {(props) => <App {...props} />}
+    {props => <App {...props} />}
   </AppLoading>
 );

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import enviroments from '../environments';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -49,7 +49,7 @@ class AppServices {
         },
       });
     } else {
-      return RNFetchBlob.fetch(
+      return ReactNativeBlobUtil.fetch(
         'POST',
         api_url + url,
         {
@@ -76,7 +76,7 @@ class AppServices {
         },
       });
     } else {
-      return RNFetchBlob.fetch(
+      return ReactNativeBlobUtil.fetch(
         'PUT',
         api_url + url,
         {
