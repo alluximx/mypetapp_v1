@@ -419,15 +419,15 @@ export const HomeNavigator = ({route}): React.ReactElement => {
   const [progress, setProgress] = React.useState<Animated.Node<number>>(
     new Animated.Value(0),
   );
-  const scale = Animated.interpolate(progress, {
+  const scale = Animated.interpolateNode(progress, {
     inputRange: [0, 1],
     outputRange: [1, 0.7],
   });
-  const translateX = Animated.interpolate(progress, {
+  const translateX = Animated.interpolateNode(progress, {
     inputRange: [0, 1],
     outputRange: [0, -width / 5],
   });
-  const borderRadius = Animated.interpolate(progress, {
+  const borderRadius = Animated.interpolateNode(progress, {
     inputRange: [0, 1],
     outputRange: [0, 20],
   });

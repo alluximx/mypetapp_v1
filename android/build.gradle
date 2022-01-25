@@ -7,10 +7,11 @@ buildscript {
         compileSdkVersion = 31
         targetSdkVersion = 31
         androidMapsUtilsVersion = "2.2.6"
+        ndkVersion = "23.1.7779620"
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath('com.android.tools.build:gradle:3.4.3')
@@ -22,7 +23,6 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
@@ -35,8 +35,15 @@ allprojects {
             // Notifee
             url "$rootDir/../node_modules/@notifee/react-native/android/libs"
         }
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup "com.facebook.react"
+            }
+        }
         google()
-        jcenter()
+
         maven { url 'https://www.jitpack.io' }
     }
 }

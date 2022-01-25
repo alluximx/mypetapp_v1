@@ -18,6 +18,7 @@ import useMyNameAndPets from '../../hooks/user/useMyNameAndPets';
 // Types
 import {HomeRouteParams} from '../../types/navigation/home-navigator';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {Pet} from '../../types/models';
 
 const servicesList = [
   {
@@ -67,13 +68,14 @@ export default ({navigation}): React.ReactElement => {
     </View>
   );
 
-  const renderPetButton = (pet) => (
-    <PetCard pet={pet.item} onPress={onDetailPetButtonPress} />
+  const renderPetButton = ({item}: {item: Pet}) => (
+    <PetCard pet={item} key={item.id} onPress={onDetailPetButtonPress} />
   );
 
   const renderServiceItem = (service) => (
     <TouchableOpacity
       disabled={service.disabled}
+      key={service.serviceName}
       style={[
         styles.serviceContainer,
         service.disabled && {
@@ -112,7 +114,7 @@ export default ({navigation}): React.ReactElement => {
           data={data.pets}
           renderItem={renderPetButton}
           ListEmptyComponent={() => (
-            <DefaultText style={styles.emptyText}>
+            <DefaultText key="empty-pet" style={styles.emptyText}>
               Agrega tu primera mascota
             </DefaultText>
           )}

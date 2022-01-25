@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import {useMutation, useQueryClient} from 'react-query';
-import RNFetchBlob from 'rn-fetch-blob';
+import ReactNativeBlobUtil from 'react-native-blob-util';
 import api from '../../services/app-services';
 
 const postVisitImage = (data: any) => {
@@ -14,7 +14,7 @@ const postVisitImage = (data: any) => {
       name: 'file',
       filename: data.file.fileName,
       type: data.file.type,
-      data: RNFetchBlob.wrap(realPath),
+      data: ReactNativeBlobUtil.wrap(realPath),
     },
     {name: 'is_prescription', data: data.isPrescription},
   ];

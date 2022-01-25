@@ -98,7 +98,7 @@ export default ({route}): React.ReactElement => {
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    marginTop: height / 2 - 100,
+    marginTop: height / 2 - 180,
     paddingTop: 32,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
