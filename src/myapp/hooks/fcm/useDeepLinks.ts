@@ -28,11 +28,11 @@ const useDeepLinks = (
       const onReceiveURL = ({url}: {url: string}) => listener(url);
 
       // Listen to incoming links from deep linking
-      Linking.addEventListener('url', onReceiveURL);
+      const subscribeToEvent = Linking.addEventListener('url', onReceiveURL);
 
       return () => {
         // Clean up the event listeners
-        Linking.removeEventListener('url', onReceiveURL);
+        subscribeToEvent.remove();
       };
     },
 

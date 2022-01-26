@@ -123,9 +123,9 @@ export class Theming {
         );
         setCurrentTheme(appearanceTheme);
       };
-      Appearance.addChangeListener(listener);
+      const subscribe = Appearance.addChangeListener(listener);
 
-      return () => Appearance.removeChangeListener(listener);
+      return () => subscribe.remove();
     }, []);
 
     const isDarkMode = (): boolean => {
@@ -141,7 +141,7 @@ export class Theming {
 
     const themeContext: ThemeContextValue = {
       currentTheme,
-      setCurrentTheme: nextTheme => {
+      setCurrentTheme: (nextTheme) => {
         AppStorage.setTheme(nextTheme);
         setCurrentTheme(nextTheme);
       },

@@ -444,10 +444,13 @@ export const HomeNavigator = ({route}): React.ReactElement => {
         gestureEnabled: true,
       }}
       sceneContainerStyle={styles.background}
-      drawerContent={(props) => {
-        setProgress(props.progress);
-        return <HomeDrawer {...props} routeName={routeName} />;
-      }}>
+      drawerContent={(props) => (
+        <HomeDrawer
+          {...props}
+          setProgress={setProgress}
+          routeName={routeName}
+        />
+      )}>
       <Drawer.Screen name="Screens" initialParams={route.params}>
         {(props) => (
           <Screens

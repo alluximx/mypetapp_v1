@@ -57,6 +57,7 @@ export const MyAppNavigator = (): React.ReactElement => {
     };
     bootstrapAsync();
   }, []);
+
   const authContext = useMemo(
     (): AuthContextType => ({
       isGuest: state.isGuest,
@@ -151,11 +152,11 @@ export const MyAppNavigator = (): React.ReactElement => {
             {loading ? (
               <RootStack.Screen
                 name="Loading"
-                component={() => <CustomSpinner />}
                 options={{
                   headerShown: false,
-                }}
-              />
+                }}>
+                {() => <CustomSpinner />}
+              </RootStack.Screen>
             ) : state.userToken || state.isGuest ? (
               <RootStack.Screen
                 name="HomeNavigator"

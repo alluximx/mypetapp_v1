@@ -34,9 +34,9 @@ export default ({navigation}): React.ReactElement => {
   };
 
   useEffect(() => {
-    AppState.addEventListener('change', refetchOnReopenApp);
+    const subscribe = AppState.addEventListener('change', refetchOnReopenApp);
     return () => {
-      AppState.removeEventListener('change', refetchOnReopenApp);
+      subscribe.remove();
     };
   }, []);
 
