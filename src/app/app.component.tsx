@@ -19,7 +19,10 @@ const defaultConfig: {mapping: Mapping; theme: Theme} = {
   theme: 'light',
 };
 
-// LogBox.ignoreAllLogs(true);
+LogBox.ignoreLogs([
+  'Require cycle:',
+  'Warning: Cannot update a component (`MyAppNavigator`)',
+]);
 
 const App = ({mapping, theme}): React.ReactElement => {
   const [mappingContext, currentMapping] = Theming.useMapping(
@@ -58,6 +61,6 @@ const Splash = ({loading}): React.ReactElement => {
 
 export default (): React.ReactElement => (
   <AppLoading initialConfig={defaultConfig} placeholder={Splash}>
-    {props => <App {...props} />}
+    {(props) => <App {...props} />}
   </AppLoading>
 );
