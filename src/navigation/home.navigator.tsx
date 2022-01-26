@@ -93,7 +93,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
   const routeNames = getFocusedRouteNameFromRoute(route) ?? 'Home';
-  setRouteName(routeNames);
+
+  useEffect(() => {
+    setRouteName(routeNames);
+  }, [routeNames]);
 
   const onMessage = async (remoteMessage) => {
     // Create a channel

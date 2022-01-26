@@ -20,7 +20,7 @@ import {useRoute} from '@react-navigation/native';
 import {AuthRouteParams} from '../../types/navigation/root-stack';
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
-export const AuthNavigator = ({navigation, props}): React.ReactElement => {
+export const AuthNavigator = ({navigation}): React.ReactElement => {
   const route = useRoute<AuthRouteParams>();
   const isSignOutGuest = route.params.isSignoutGuest;
   const closeButton = () => <CloseButton navigation={navigation} />;
