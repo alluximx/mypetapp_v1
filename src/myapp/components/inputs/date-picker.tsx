@@ -19,11 +19,11 @@ const DatepickerInput = (props: DatePickerProps) => {
 
   const focusAnim = useRef<Animated.Value>(new Animated.Value(0)).current;
   const minDate = props.minDate
-    ? new Date(props.minDate)
-    : new Date('Jan 01 1990');
+    ? moment(props.minDate).toDate()
+    : moment('1990-01-01').toDate();
   const maxDate = props.maxDate
-    ? new Date(props.maxDate)
-    : new Date('Dec 31 2050');
+    ? moment(props.maxDate).toDate()
+    : moment('2050-12-31').toDate();
 
   useEffect(() => {
     Animated.timing(focusAnim, {

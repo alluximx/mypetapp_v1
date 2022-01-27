@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {KeyboardAvoidingView, StyleSheet} from 'react-native';
 import {useQuery} from 'react-query';
+import moment from 'moment';
 // Constants.
 import {sexOptions} from '../../../../constants';
 // Global Styles.
@@ -88,8 +89,8 @@ export default ({navigation, route}): React.ReactElement => {
           currentValue={form.birthday}
           onSelect={(birthday) => setForm({...form, birthday})}
           placeholder="DD/MM/AAAA"
-          minDate={new Date('Jan 01 1990')}
-          maxDate={new Date()}
+          minDate={moment('1990-01-01').toDate()}
+          maxDate={moment().toDate()}
         />
         <TitleHeader style={[styles.bottomSpace, styles.topSpace]}>
           ¿De qué tamaño es?

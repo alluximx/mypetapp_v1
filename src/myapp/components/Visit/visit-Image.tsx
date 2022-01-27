@@ -46,7 +46,7 @@ const VisitCardImg = ({
   };
 
   const newData = {
-    date: visit_date == null ? null : new Date(visit_date),
+    date: visit_date == null ? null : moment(visit_date).toDate(),
     additionalButtons: [
       <AnchorText key={`edit-${visit?.id}`} onPress={onEdit} isSubmit>
         Editar

@@ -20,6 +20,7 @@ import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import PetImageInput from '../../../components/inputs/pet-image-input';
 import TitleHeader from '../../../components/texts/title-header';
 import UserInput from '../../../components/inputs/user-input';
+import moment from 'moment';
 
 export default ({navigation, route}): React.ReactElement => {
   const {birthday, breed, id, name, owner_user, sex, size} = route.params.pet;
@@ -32,7 +33,7 @@ export default ({navigation, route}): React.ReactElement => {
     return !queryData
       ? [
           {
-            value: null,
+            value: '',
             label: 'Cargando...',
           },
         ]
@@ -139,8 +140,8 @@ export default ({navigation, route}): React.ReactElement => {
           currentValue={form.birthday}
           onSelect={(petBirthday) => setForm({...form, birthday: petBirthday})}
           placeholder="Cumpleaños"
-          minDate={new Date('Jan 01 1990')}
-          maxDate={new Date()}
+          minDate={moment('1990-01-01').toDate()}
+          maxDate={moment().toDate()}
         />
       </View>
       <DropdownPicker
