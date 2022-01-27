@@ -30,17 +30,14 @@ const AddressForm = (props: AddressFormProps) => {
    ***************/
 
   useEffect(() => {
-    if (dataStates.data) {
-      const aux = [];
-      dataStates.data.data.forEach((element) => {
-        aux.push({
-          value: element.id,
-          label: element.name,
-        });
-      });
-      setStateList(aux);
+    if (dataStates.isSuccess && dataStates.data) {
+      const formattedStates = dataStates.data.data.map((element) => ({
+        value: element.id,
+        label: element.name,
+      }));
+      setStateList(formattedStates);
     }
-  }, [dataStates.data, dataStates.isFetched]);
+  }, [dataStates.isSuccess]);
 
   useEffect(() => {
     setFormErrors({...formErrors, ...props.error});
@@ -104,7 +101,7 @@ const AddressForm = (props: AddressFormProps) => {
       />
       <MunicipalityDrop
         error={formErrors.municipality}
-        status={false}
+        status={props.form.state ? false : true}
         id={props.form.state}
         change={(valor, name) => {
           if (props.setNameMunicipality) {
