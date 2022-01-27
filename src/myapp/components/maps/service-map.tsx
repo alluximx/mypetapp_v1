@@ -103,6 +103,7 @@ const ServiceMap = (props: ServiceMapProps) => {
             }}
             id={vet.id}
             isActive={currentVet?.id === vet.id}
+            key={vet.id}
             onPress={() => setCurrentVet(vet)}
             type={props.type}
           />

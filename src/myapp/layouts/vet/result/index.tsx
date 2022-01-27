@@ -56,6 +56,7 @@ export default ({navigation, route}): React.ReactElement => {
             renderItem={({item}) => (
               <VetCard
                 isVet={true}
+                key={item.id}
                 location={currentLocation}
                 styleCard={styles.styleCard}
                 vet={item}
