@@ -31,7 +31,7 @@ export default ({navigation, route}): React.ReactElement => {
   const sizesList = !sizes
     ? [
         {
-          value: null,
+          value: '',
           label: 'Cargando...',
         },
       ]
