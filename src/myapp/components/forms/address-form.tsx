@@ -9,7 +9,7 @@ import DropdownPicker from '../inputs/dropdown-picker';
 import MunicipalityDrop from '../adoption/municipality-drop';
 import UserInput from '../inputs/user-input';
 // Types
-import {AddressFormProps} from '../../types/components/addresses';
+import {AddressFormProps} from '../../types/components/forms';
 
 const AddressForm = (props: AddressFormProps) => {
   const [stateList, setStateList] = useState([]);
@@ -128,6 +128,7 @@ const AddressForm = (props: AddressFormProps) => {
         placeholder="Codigo Postal"
         value={props.form.zipcode}
         maxLength={5}
+        isNumeric={true}
         onChangeText={(value: string) => {
           props.setForm({...props.form, zipcode: value});
         }}

@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {AxiosError} from 'axios';
 import {List, StyleService} from '@ui-kitten/components';
-import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
-import AddressForm from '../../../components/addresses/address-form';
+import AddressForm from '../../../components/forms/address-form';
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
@@ -15,7 +15,6 @@ import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationH
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
 // Global Styles
 import globalColors from '../../../styles/colors';
-import CustomSpinner from '../../../components/custom-spinner';
 
 export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
