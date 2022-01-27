@@ -22,6 +22,8 @@ const defaultConfig: {mapping: Mapping; theme: Theme} = {
 LogBox.ignoreLogs([
   'Require cycle:',
   'Warning: Cannot update a component (`MyAppNavigator`)',
+  'Non-serializable values were found in the navigation state.',
+  'Warning: This synthetic event is reused for performance reasons',
 ]);
 
 const App = ({mapping, theme}): React.ReactElement => {
