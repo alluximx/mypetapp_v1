@@ -137,6 +137,11 @@ export interface Vet extends BaseModel {
   location: LatLng;
 }
 
+export interface VetSettings {
+  base_charge: number;
+  is_configured: boolean;
+}
+
 export interface Visit {
   details: string;
   id: string;
