@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
   },
   baseCharge: {
     ...globalStyles.highlightedText,
+    fontSize: 18,
     marginBottom: 32,
   },
   bottomSpace: {

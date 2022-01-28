@@ -25,6 +25,7 @@ export interface Option {
 }
 
 export interface OptionSelectProps {
+  containerStyle?: {};
   currentValue: string | number;
   data: any[];
   enableScroll?: boolean;

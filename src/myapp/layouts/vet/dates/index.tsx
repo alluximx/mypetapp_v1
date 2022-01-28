@@ -10,6 +10,7 @@ import OptionSelect from '../../../components/inputs/option-select';
 import CustomButton from '../../../components/buttons/custom-button';
 import {QuestionCircleIcon} from '../../../components/icons';
 import CustomModal from '../../../components/modals/custom-modal';
+import globalVars from '../../../styles/vars';
 
 export default ({navigation, route}): React.ReactElement => {
   const [days, setDays] = useState([]);
@@ -114,7 +115,7 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout style={styles.container}>
       <CustomModal
         labelAccept="Entendido"
         title="Método de pago"
@@ -132,115 +133,123 @@ export default ({navigation, route}): React.ReactElement => {
         visible={isModalSubmitVisible}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <TitleHeader style={styles.header}>
-          {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
-        </TitleHeader>
-        <TitleHeader style={styles.normalHeader}>
-          ¿Para quién es la cita?
-        </TitleHeader>
-        <View style={{marginBottom: 10}}>
-          <NavigateButton
-            placeholder="Selecciona tu mascota"
-            destination="PetSelect"
-            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
-            title="Mascota"
-            subtitle={petContent}
-          />
-        </View>
-
-        {screenFrom && screenFrom === 'AestheticDate' && (
-          <View>
-            <TitleHeader style={styles.normalHeader}>
-              ¿Qué servicio necesita tu mascota?
-            </TitleHeader>
+        <View style={styles.horizontalPadding}>
+          <TitleHeader style={styles.header}>
+            {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
+          </TitleHeader>
+          <TitleHeader style={styles.normalHeader}>
+            ¿Para quién es la cita?
+          </TitleHeader>
+          <View style={{marginBottom: 10}}>
             <NavigateButton
-              placeholder="Selecciona los servicios"
-              destination="ServiceSelect"
+              placeholder="Selecciona tu mascota"
+              destination="PetSelect"
               data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
-              title="Servicio"
-              subtitle={serviceContent}
+              title="Mascota"
+              subtitle={petContent}
             />
           </View>
-        )}
 
-        <TitleHeader style={styles.normalHeader}>Día</TitleHeader>
-        <View style={{marginBottom: 10}}>
-          <OptionSelect
-            currentValue={form.day}
-            setCurrentValue={(day: string) => setValueForm(day)}
-            enableScroll={true}
-            horizontal={true}
-            data={arrayDays}
-            style={styles.select}
-            optionStyle={styles.options}
-            textStyle={styles.textOption}
-            titleStyle={styles.titleOption}
-          />
-        </View>
-
-        <TitleHeader style={styles.normalHeader}>Horario</TitleHeader>
-        <View style={{flex: 1, marginBottom: 30}}>
-          {statusDay ? (
-            <OptionSelect
-              currentValue={form.time}
-              setCurrentValue={(time: string) => SetValueTime(time)}
-              data={arrayTime}
-              numColumns={numColumns}
-              style={styles.select}
-              optionStyle={styles.optionTime}
-              textStyle={styles.textOptionTime}
-            />
-          ) : (
+          {screenFrom && screenFrom === 'AestheticDate' && (
             <View>
-              <DefaultText>Por favor selecciona una fecha para ver</DefaultText>
-              <DefaultText>los horarios disponibles</DefaultText>
+              <TitleHeader style={styles.normalHeader}>
+                ¿Qué servicio necesita tu mascota?
+              </TitleHeader>
+              <NavigateButton
+                placeholder="Selecciona los servicios"
+                destination="ServiceSelect"
+                data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+                title="Servicio"
+                subtitle={serviceContent}
+              />
             </View>
           )}
+
+          <TitleHeader style={styles.normalHeader}>Día</TitleHeader>
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <TitleHeader style={styles.normalHeader}> Método de pago</TitleHeader>
-          <TouchableOpacity
-            onPress={() => {
-              setIsModalVisible(true);
-            }}>
-            <QuestionCircleIcon style={{}} />
-          </TouchableOpacity>
-        </View>
-        <View style={{marginBottom: 10}}>
-          <NavigateButton
-            placeholder="Slecciona el método de pago"
-            destination="AddPaymentMethod"
-            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
-            subtitle={cardContent}
-            title={cardTitle}
-          />
-        </View>
-        <View style={styles.totalContainer}>
-          <DefaultText style={{justifyContent: 'flex-start'}}>
-            Consulta
-          </DefaultText>
-          <DefaultText style={{justifyContent: 'flex-end'}}>
-            $200.00
-          </DefaultText>
-        </View>
-        <View style={styles.totalContainer}>
-          <TitleHeader style={{justifyContent: 'flex-start'}}>
-            Total
-          </TitleHeader>
-          <TitleHeader style={{justifyContent: 'flex-end'}}>
-            $200.00
-          </TitleHeader>
-        </View>
-        <View style={{marginBottom: 20}}>
-          <CustomButton
-            isDisabled={statusBtn}
-            isLoading={isLoading}
-            onPress={() => {
-              setIsLoading(true);
-              setIsModalSubmitVisible(true);
-            }}>
-            Generar cita
-          </CustomButton>
+        <OptionSelect
+          containerStyle={styles.selectContainer}
+          currentValue={form.day}
+          setCurrentValue={(day: string) => setValueForm(day)}
+          enableScroll={true}
+          horizontal={true}
+          data={arrayDays}
+          style={styles.select}
+          optionStyle={styles.options}
+          textStyle={styles.textOption}
+          titleStyle={styles.titleOption}
+        />
+
+        <View style={styles.horizontalPadding}>
+          <TitleHeader style={styles.normalHeader}>Horario</TitleHeader>
+          <View style={styles.hourList}>
+            {statusDay ? (
+              <OptionSelect
+                currentValue={form.time}
+                setCurrentValue={(time: string) => SetValueTime(time)}
+                data={arrayTime}
+                numColumns={numColumns}
+                style={styles.select}
+                optionStyle={styles.optionTime}
+                textStyle={styles.textOptionTime}
+              />
+            ) : (
+              <View style={styles.hourListEmptyContainer}>
+                <DefaultText>
+                  Por favor selecciona una fecha para ver
+                </DefaultText>
+                <DefaultText>los horarios disponibles</DefaultText>
+              </View>
+            )}
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <TitleHeader style={styles.normalHeader}>
+              {' '}
+              Método de pago
+            </TitleHeader>
+            <TouchableOpacity
+              onPress={() => {
+                setIsModalVisible(true);
+              }}>
+              <QuestionCircleIcon style={styles.icon} />
+            </TouchableOpacity>
+          </View>
+          <View style={{marginBottom: 10}}>
+            <NavigateButton
+              placeholder="Slecciona el método de pago"
+              destination="AddPaymentMethod"
+              data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+              subtitle={cardContent}
+              title={cardTitle}
+            />
+          </View>
+          <View style={styles.totalContainer}>
+            <DefaultText style={{justifyContent: 'flex-start'}}>
+              Consulta
+            </DefaultText>
+            <DefaultText style={{justifyContent: 'flex-end'}}>
+              $200.00
+            </DefaultText>
+          </View>
+          <View style={styles.totalContainer}>
+            <TitleHeader style={{justifyContent: 'flex-start'}}>
+              Total
+            </TitleHeader>
+            <TitleHeader style={{justifyContent: 'flex-end'}}>
+              $200.00
+            </TitleHeader>
+          </View>
+          <View style={{marginBottom: 20}}>
+            <CustomButton
+              isDisabled={statusBtn}
+              isLoading={isLoading}
+              onPress={() => {
+                setIsLoading(true);
+                setIsModalSubmitVisible(true);
+              }}>
+              Generar cita
+            </CustomButton>
+          </View>
         </View>
       </ScrollView>
     </DefaultLayout>
@@ -248,6 +257,12 @@ export default ({navigation, route}): React.ReactElement => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 0,
+  },
+  horizontalPadding: {
+    paddingHorizontal: globalVars.outsidePadding,
+  },
   header: {
     fontSize: 20,
     marginBottom: 20,
@@ -256,11 +271,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 18,
   },
+  hourList: {
+    flex: 1,
+  },
+  icon: {
+    marginLeft: 10,
+  },
   select: {
     marginBottom: 16,
   },
+  selectContainer: {
+    paddingLeft: globalVars.outsidePadding,
+    paddingRight: globalVars.outsidePadding / 2,
+    marginBottom: 16,
+  },
   options: {
-    width: null,
+    width: 'auto',
     height: 65,
   },
   optionTime: {
@@ -277,6 +303,9 @@ const styles = StyleSheet.create({
   textOptionTime: {
     fontSize: 13,
     marginTop: -5,
+  },
+  hourListEmptyContainer: {
+    marginBottom: 24,
   },
   titleOption: {
     fontSize: 15,
