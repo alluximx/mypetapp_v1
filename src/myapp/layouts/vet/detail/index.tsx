@@ -22,10 +22,12 @@ export default ({navigation, route}): React.ReactElement => {
   });
 
   const {
+    admin_is_configured,
     availability,
     colony,
     distance,
     exterior_number,
+    has_admin,
     id,
     logo,
     name,
@@ -33,7 +35,12 @@ export default ({navigation, route}): React.ReactElement => {
     street,
     zipcode,
   } = data;
-  const {data: settings, isLoading, isSuccess} = useVetSettings(id);
+
+  const shouldCallSettings = admin_is_configured && has_admin;
+  const {data: settings, isLoading, isSuccess} = useVetSettings(
+    id,
+    shouldCallSettings,
+  );
 
   useEffect(() => {
     if (settings?.data) {
