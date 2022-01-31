@@ -74,7 +74,7 @@ export default ({navigation, route}): React.ReactElement => {
           <DefaultText style={styles.subtitle}>{address}</DefaultText>
           <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
           <RatingCard rating={rating} distance={distance} />
-          {!isLoading && vetSettings.is_configured && (
+          {!isLoading && shouldCallSettings && (
             <>
               <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
               <TitleHeader style={styles.baseCharge}>
