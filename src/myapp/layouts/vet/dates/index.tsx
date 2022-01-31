@@ -1,24 +1,98 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
+import 'moment/locale/es';
+import moment from 'moment';
+import _ from 'lodash';
 
+// Constants
+import {stripeDaysForTransaction} from '../../../constants';
+// Global Styles
+import globalVars from '../../../styles/vars';
 // My Components
+import CustomButton from '../../../components/buttons/custom-button';
+import CustomModal from '../../../components/modals/custom-modal';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import OptionSelect from '../../../components/inputs/option-select';
-import CustomButton from '../../../components/buttons/custom-button';
+import TitleHeader from '../../../components/texts/title-header';
 import {QuestionCircleIcon} from '../../../components/icons';
-import CustomModal from '../../../components/modals/custom-modal';
-import globalVars from '../../../styles/vars';
+// Utils
+import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
+// Types
+import {Option} from '../../../types/components/inputs';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [days, setDays] = useState([]);
+  const [days, setDays] = useState<Option[]>([]);
+  const [hours, setHours] = useState<Option[]>([]);
   const [statusDay, setStatusDay] = useState(false);
   const [statusBtn, setStatusBtn] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
+  const [form, setForm] = useState({
+    pet: '',
+    day: '',
+    time: '',
+    paymentMethod: '',
+    card_id: '',
+    pet_id: '',
+  });
+
+  /***************
+   *** Effects ***
+   ***************/
+
+  useEffect(() => {
+    moment.locale('es');
+    // Get next available days
+    const nextDaysList: Option[] = [];
+    for (let i = 0; i <= stripeDaysForTransaction; i++) {
+      const currentNextDay = moment().add(i, 'days');
+      const currentNextDayName = currentNextDay.format('ddd');
+      const currentNextDayNumber = currentNextDay.format('D');
+      const currentNextDayWeekIndex = Number(currentNextDay.format('d'));
+      const isDayEnabled = checkIfDayIsEnabledInVetSettings(
+        currentNextDayWeekIndex,
+        route.params.data,
+      );
+
+      nextDaysList.push({
+        key: currentNextDayWeekIndex + currentNextDayName,
+        title: _.capitalize(currentNextDayName),
+        value: currentNextDayNumber,
+        isDisabled: !isDayEnabled,
+      });
+    }
+    setDays(nextDaysList);
+  }, []);
+
+  useEffect(() => {
+    const currentDay = moment().format('YYYY-MM-DD');
+    const {end_time, start_time, time_slots} = route.params.data;
+    const startTime = moment(currentDay + ' ' + start_time);
+    const endTime = moment(currentDay + ' ' + end_time);
+    // Load hours.
+    const allHours: Option[] = [];
+
+    let hasReachedEndTime = false;
+    while (!hasReachedEndTime) {
+      // Add amount of minutes to start time.
+      const currentTime = startTime
+        .add(time_slots, 'minutes')
+        .format('hh:mm A');
+
+      allHours.push({
+        key: currentTime,
+        value: currentTime,
+      });
+
+      if (startTime.isSameOrAfter(endTime)) {
+        hasReachedEndTime = true;
+      }
+    }
+    setHours(allHours);
+  }, [form.day]);
 
   const numColumns = 4;
 
@@ -31,42 +105,6 @@ export default ({navigation, route}): React.ReactElement => {
   const [petContent, setPetContent] = useState('');
   // Service Info
   const [serviceContent, setServiceContent] = useState('');
-  // Service Info
-
-  const [form, setForm] = useState({
-    pet: '',
-    day: '',
-    time: '',
-    paymentMethod: '',
-    card_id: '',
-    pet_id: '',
-  });
-
-  const arrayDays = [
-    {key: '3', title: 'Lun', value: '3'},
-    {key: '4', title: 'Mar', value: '4'},
-    {key: '5', title: 'Mie', value: '5'},
-    {key: '6', title: 'Jue', value: '6'},
-    {key: '7', title: 'Vie', value: '7'},
-    {key: '8', title: 'Sab', value: '8'},
-    {key: '9', title: 'Lun', value: '9'},
-  ];
-
-  const arrayTime = [
-    {key: '1', value: '8:00 AM'},
-    {key: '2', value: '9:00 AM'},
-    {key: '3', value: '10:00 AM'},
-    {key: '4', value: '11:00 AM'},
-    {key: '5', value: '12:00 PM'},
-    {key: '6', value: '1:00 PM'},
-    {key: '7', value: '2:00 PM'},
-    {key: '8', value: '1:00 PM'},
-    {key: '9', value: '2:00 PM'},
-    {key: '10', value: '1:00 PM'},
-    {key: '11', value: '3:00 PM'},
-    {key: '12', value: '4:00 PM'},
-    {key: '13', value: '5:00 PM'},
-  ];
 
   useEffect(() => {
     if (petInfo) {
@@ -173,7 +211,7 @@ export default ({navigation, route}): React.ReactElement => {
           setCurrentValue={(day: string) => setValueForm(day)}
           enableScroll={true}
           horizontal={true}
-          data={arrayDays}
+          data={days}
           style={styles.select}
           optionStyle={styles.options}
           textStyle={styles.textOption}
@@ -187,7 +225,7 @@ export default ({navigation, route}): React.ReactElement => {
               <OptionSelect
                 currentValue={form.time}
                 setCurrentValue={(time: string) => SetValueTime(time)}
-                data={arrayTime}
+                data={hours}
                 numColumns={numColumns}
                 style={styles.select}
                 optionStyle={styles.optionTime}
@@ -216,7 +254,7 @@ export default ({navigation, route}): React.ReactElement => {
           </View>
           <View style={{marginBottom: 10}}>
             <NavigateButton
-              placeholder="Slecciona el método de pago"
+              placeholder="Selecciona el método de pago"
               destination="AddPaymentMethod"
               data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
               subtitle={cardContent}
@@ -287,7 +325,8 @@ const styles = StyleSheet.create({
   },
   options: {
     width: 'auto',
-    height: 65,
+    height: 70,
+    borderRadius: 16,
   },
   optionTime: {
     minWidth: 87,

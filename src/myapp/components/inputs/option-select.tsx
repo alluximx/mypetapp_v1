@@ -5,7 +5,7 @@ import {List} from '@ui-kitten/components';
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types.
-import {OptionSelectProps} from '../../types/components/inputs';
+import {Option, OptionSelectProps} from '../../types/components/inputs';
 // My components
 import TitleHeader from '../texts/title-header';
 
@@ -14,12 +14,13 @@ const OPTION_GAP = 16;
 const LIST_ITEM_HEIGHT = 56;
 
 const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
-  const renderOption = (option) => {
-    const {key, value, title} = option.item;
+  const renderOption = ({item}: {item: Option}) => {
+    const {isDisabled, key, title, value} = item;
 
     return (
       <TouchableOpacity
         activeOpacity={0.8}
+        disabled={isDisabled}
         key={key}
         style={[
           styles.option,
@@ -31,6 +32,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
               globalVars.outsidePadding * 2 +
               OPTION_GAP,
           },
+          isDisabled && styles.optionDisabled,
           props.optionStyle,
         ]}
         onPress={() => {
@@ -99,6 +101,9 @@ const styles = StyleSheet.create({
   },
   optionTextSelected: {
     color: globalColors.white,
+  },
+  optionDisabled: {
+    backgroundColor: globalColors.lightGray,
   },
 });
 

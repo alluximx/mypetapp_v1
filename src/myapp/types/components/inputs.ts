@@ -22,6 +22,8 @@ export interface DropdownPickerProps {
 export interface Option {
   key: string;
   value: string;
+  title?: string;
+  isDisabled?: boolean;
 }
 
 export interface OptionSelectProps {

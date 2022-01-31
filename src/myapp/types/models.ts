@@ -140,6 +140,13 @@ export interface Vet extends BaseModel {
 export interface VetSettings {
   base_charge: number;
   is_configured: boolean;
+  monday: boolean;
+  tuesday: boolean;
+  wednesday: boolean;
+  thursday: boolean;
+  friday: boolean;
+  saturday: boolean;
+  sunday: boolean;
 }
 
 export interface Visit {

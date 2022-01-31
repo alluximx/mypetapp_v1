@@ -87,6 +87,8 @@ export const productPrices = {
   MAX_PRICE: 2000,
 };
 
+export const stripeDaysForTransaction = 7;
+
 /****************
  *** SERVICES ***
  ****************/

@@ -83,7 +83,10 @@ export default ({navigation, route}): React.ReactElement => {
               <NavigateButton
                 destination="VetDate"
                 placeholder="Generar Cita"
-                data={{screenFrom: 'VetDate'}}
+                data={{
+                  screenFrom: 'VetDate',
+                  ...vetSettings,
+                }}
               />
             </>
           )}
