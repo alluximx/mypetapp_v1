@@ -9,8 +9,8 @@ import {Option, OptionSelectProps} from '../../types/components/inputs';
 // My components
 import TitleHeader from '../texts/title-header';
 
+export const OPTION_GAP = 16;
 const {width} = Dimensions.get('window');
-const OPTION_GAP = 16;
 const LIST_ITEM_HEIGHT = 56;
 
 const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
@@ -61,6 +61,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
 
   return (
     <List
+      contentContainerStyle={props.containerStyle}
       data={props.data}
       getItemLayout={(data, index) => ({
         length: LIST_ITEM_HEIGHT,
@@ -68,13 +69,16 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         index,
       })}
       horizontal={props.horizontal ?? false}
+      ListEmptyComponent={props.emptyComponent}
+      ListFooterComponent={props.footerComponent}
+      ListHeaderComponent={props.headerComponent}
       numColumns={props.numColumns && props.numColumns}
       renderItem={renderOption}
       scrollEnabled={
         props.horizontal ? (props.enableScroll ? true : false) : true
       }
+      columnWrapperStyle={props.columnWrapperStyle ?? null}
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
-      contentContainerStyle={props.containerStyle}
       style={[styles.optionsContainer, props.style]}
     />
   );
