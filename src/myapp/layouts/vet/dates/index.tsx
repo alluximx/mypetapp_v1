@@ -29,6 +29,9 @@ import {QuestionCircleIcon} from '../../../components/icons';
 import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
 // Types
 import {Option} from '../../../types/components/inputs';
+import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+
+const NUM_COLUMNS = 4;
 
 export default ({navigation, route}): React.ReactElement => {
   const [days, setDays] = useState<Option[]>([]);
@@ -38,14 +41,52 @@ export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
+  // const vetAppointments = useVetAppointments(route.params.data.admin);
+
+  const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
+    route.params?.data ?? {};
+  const baseCharge = Number(base_charge).toFixed(2);
+
   const [form, setForm] = useState({
-    pet: '',
-    day: '',
-    time: '',
-    paymentMethod: '',
     card_id: '',
+    day: '',
+    paymentMethod: '',
     pet_id: '',
+    pet: '',
+    time: '',
   });
+
+  // PaymentInfo
+  const [cardTitle, setCardTitle] = useState('');
+  const [cardContent, setCardContent] = useState('');
+  // PetInfo
+  const [petContent, setPetContent] = useState('');
+  // Service Info
+  const [serviceContent, setServiceContent] = useState('');
+
+  const timeBeforePenalization =
+    route.params.data?.minimum_time_for_cancel / 60;
+
+  const textModal =
+    'Para generar una cita es necesario seleccionar o agregar un método ' +
+    'de pago. La cita se cobrará al pasar la fecha y el horario ' +
+    `seleccionado.\n Puedes cancelar hasta ${timeBeforePenalization} horas ` +
+    'antes, de lo contrario se te cobrará una penalización.';
+
+  const textSubmitModal =
+    'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
+    'todos tus servicios programados desde la sección de' +
+    '"Proximos Servicios" en el menú principal. ';
+
+  const setValueForm = (day: string) => {
+    setForm({...form, day});
+    setStatusDay(true);
+  };
+
+  const setValueTime = (time: string) => {
+    setForm({...form, time});
+    setStatusBtn(false);
+  };
 
   /***************
    *** Effects ***
@@ -100,18 +141,6 @@ export default ({navigation, route}): React.ReactElement => {
     setHours(allHours);
   }, [form.day]);
 
-  const numColumns = 4;
-
-  const {screenFrom, petInfo, paymentMethod, serviceData} =
-    route.params?.data ?? {};
-  // PaymentInfo
-  const [cardTitle, setCardTitle] = useState('');
-  const [cardContent, setCardContent] = useState('');
-  // PetInfo
-  const [petContent, setPetContent] = useState('');
-  // Service Info
-  const [serviceContent, setServiceContent] = useState('');
-
   useEffect(() => {
     if (petInfo) {
       const {namePet, idPet, idSize} = petInfo;
@@ -132,31 +161,9 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [petInfo, paymentMethod, serviceData]);
 
-  const textModal =
-    'Para generar una cita es necesario ' +
-    'seleccionar o agregar un método ' +
-    'de pago. La cita se cobrará al pasar ' +
-    'la fecha y el horario seleccionado.\n' +
-    'Puedes cancelar hasta 3 horas ' +
-    'antes, de lo contrario se te cobrará ' +
-    'una penalización.';
-
-  const textSubmitModal =
-    'Tu cita ha sido generada ' +
-    'exitósamente. Puedes acceder a ' +
-    'todos tus servicios programados ' +
-    'desde la sección de "Proximos ' +
-    'Servicios" en el menú principal. ';
-
-  const setValueForm = (day: string) => {
-    setForm({...form, day});
-    setStatusDay(true);
-  };
-
-  const SetValueTime = (time: string) => {
-    setForm({...form, time});
-    setStatusBtn(false);
-  };
+  /**********************
+   *** Render Methods ***
+   **********************/
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
@@ -219,8 +226,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   const renderFooter = (
     <View style={styles.horizontalPadding}>
-      <View style={{flexDirection: 'row'}}>
-        <TitleHeader style={styles.normalHeader}> Método de pago</TitleHeader>
+      <View style={styles.paymentMethodTitle}>
+        <TitleHeader style={styles.normalHeader}>Método de pago</TitleHeader>
         <TouchableOpacity
           onPress={() => {
             setIsModalVisible(true);
@@ -238,14 +245,12 @@ export default ({navigation, route}): React.ReactElement => {
         />
       </View>
       <View style={styles.totalContainer}>
-        <DefaultText style={{justifyContent: 'flex-start'}}>
-          Consulta
-        </DefaultText>
-        <DefaultText style={{justifyContent: 'flex-end'}}>$200.00</DefaultText>
+        <DefaultText style={styles.leftSide}>Consulta</DefaultText>
+        <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
       </View>
       <View style={styles.totalContainer}>
-        <TitleHeader style={{justifyContent: 'flex-start'}}>Total</TitleHeader>
-        <TitleHeader style={{justifyContent: 'flex-end'}}>$200.00</TitleHeader>
+        <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+        <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
       </View>
       <View style={{marginBottom: 20}}>
         <CustomButton
@@ -285,10 +290,10 @@ export default ({navigation, route}): React.ReactElement => {
         emptyComponent={renderEmpty}
         footerComponent={renderFooter}
         headerComponent={renderHeader}
-        numColumns={numColumns}
+        numColumns={NUM_COLUMNS}
         columnWrapperStyle={styles.columnWrapper}
         optionStyle={styles.optionTime}
-        setCurrentValue={(time: string) => SetValueTime(time)}
+        setCurrentValue={(time: string) => setValueTime(time)}
         style={styles.select}
         textStyle={styles.textOptionTime}
       />
@@ -361,6 +366,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: -5,
   },
+  paymentMethodTitle: {flexDirection: 'row', marginTop: 16},
   totalContainer: {
     marginBottom: 10,
     justifyContent: 'space-between',
@@ -371,4 +377,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     marginBottom: 10,
   },
+  leftSide: {justifyContent: 'flex-start'},
+  rightSide: {justifyContent: 'flex-end'},
 });

@@ -43,6 +43,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
             style={[
               props.titleStyle,
               props.currentValue === key && styles.optionTextSelected,
+              isDisabled && styles.optionDisabledText,
             ]}>
             {title}
           </TitleHeader>
@@ -52,6 +53,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
             styles.optionText,
             props.currentValue === key && styles.optionTextSelected,
             props.textStyle,
+            isDisabled && styles.optionDisabledText,
           ]}>
           {value}
         </Text>
@@ -108,6 +110,9 @@ const styles = StyleSheet.create({
   },
   optionDisabled: {
     backgroundColor: globalColors.lightGray,
+  },
+  optionDisabledText: {
+    color: globalColors.darkGray,
   },
 });
 
