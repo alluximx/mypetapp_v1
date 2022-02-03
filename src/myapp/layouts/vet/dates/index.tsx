@@ -28,20 +28,21 @@ import {QuestionCircleIcon} from '../../../components/icons';
 // Utils
 import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
 // Types
-import {Option} from '../../../types/components/inputs';
+import {Option, OptionDate} from '../../../types/components/inputs';
+import {Appointment} from '../../../types/models';
 import useVetAppointments from '../../../hooks/vets/useVetAppointments';
 
 const NUM_COLUMNS = 4;
 
 export default ({navigation, route}): React.ReactElement => {
-  const [days, setDays] = useState<Option[]>([]);
+  const [days, setDays] = useState<OptionDate[]>([]);
   const [hours, setHours] = useState<Option[]>([]);
   const [statusDay, setStatusDay] = useState(false);
   const [statusBtn, setStatusBtn] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-  // const vetAppointments = useVetAppointments(route.params.data.admin);
+  const vetAppointments = useVetAppointments(route.params.data.admin);
 
   const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
     route.params?.data ?? {};
@@ -95,7 +96,7 @@ export default ({navigation, route}): React.ReactElement => {
   useEffect(() => {
     moment.locale('es');
     // Get next available days
-    const nextDaysList: Option[] = [];
+    const nextDaysList: OptionDate[] = [];
     for (let i = 0; i <= stripeDaysForTransaction; i++) {
       const currentNextDay = moment().add(i, 'days');
       const currentNextDayName = currentNextDay.format('ddd');
@@ -107,8 +108,9 @@ export default ({navigation, route}): React.ReactElement => {
       );
 
       nextDaysList.push({
-        key: currentNextDayWeekIndex + currentNextDayName,
+        key: currentNextDayWeekIndex + '-' + currentNextDayName,
         title: _.capitalize(currentNextDayName),
+        fullDate: currentNextDay.format('YYYY-MM-DD'),
         value: currentNextDayNumber,
         isDisabled: !isDayEnabled,
       });
@@ -117,28 +119,58 @@ export default ({navigation, route}): React.ReactElement => {
   }, []);
 
   useEffect(() => {
-    const currentDay = moment().format('YYYY-MM-DD');
-    const {end_time, start_time, time_slots} = route.params.data;
-    const startTime = moment(currentDay + ' ' + start_time);
-    const endTime = moment(currentDay + ' ' + end_time);
-    // Load hours.
-    const allHours: Option[] = [];
+    if (form.day) {
+      const {end_time, start_time, time_slots} = route.params.data;
+      // Get the currently selected date.
+      const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
 
-    let hasReachedEndTime = false;
-    while (!hasReachedEndTime) {
-      // Add amount of minutes to start time.
-      const currentTime = startTime.add(time_slots, 'minutes').format('h:mm A');
+      const startTime = moment(selectedDate + ' ' + start_time).subtract(
+        time_slots,
+        'minutes',
+      );
+      const endTime = moment(selectedDate + ' ' + end_time).subtract(
+        time_slots,
+        'minutes',
+      );
+      const allHours: Option[] = [];
 
-      allHours.push({
-        key: currentTime,
-        value: currentTime,
-      });
+      // Format appointments
+      const formattedAppointments: Appointment[] =
+        vetAppointments?.data?.data?.map((appointment: Appointment) => ({
+          full_start_time: appointment.full_start_time,
+          full_end_time: appointment.full_end_time,
+        })) ?? [];
 
-      if (startTime.isSameOrAfter(endTime)) {
-        hasReachedEndTime = true;
+      // Load hours.
+      let hasReachedEndTime = false;
+      while (!hasReachedEndTime) {
+        // Add amount of minutes to start time.
+        const currentTime = startTime.add(time_slots, 'minutes');
+        const currentFormattedTime = currentTime.format('h:mm A');
+
+        // Check if the current time is not blocked by any same day appointments.
+        const isOccupied = formattedAppointments.some((appointment) => {
+          const auxTime = currentTime;
+          const auxStartTime = moment(appointment.full_start_time).utc();
+          const auxEndTime = moment(appointment.full_end_time).utc();
+          return auxTime.isBetween(auxStartTime, auxEndTime, 'minutes', '[)');
+        });
+
+        if (!isOccupied) {
+          allHours.push({
+            key: currentFormattedTime,
+            value: currentFormattedTime,
+          });
+        }
+
+        // Exit if already is endtime
+        if (startTime.isSameOrAfter(endTime)) {
+          hasReachedEndTime = true;
+        }
       }
+
+      setHours(allHours);
     }
-    setHours(allHours);
   }, [form.day]);
 
   useEffect(() => {
@@ -167,8 +199,9 @@ export default ({navigation, route}): React.ReactElement => {
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
-      <DefaultText>Por favor selecciona una fecha para ver</DefaultText>
-      <DefaultText>los horarios disponibles</DefaultText>
+      <DefaultText>
+        Por favor selecciona una fecha para ver los horarios disponibles
+      </DefaultText>
     </View>
   );
 

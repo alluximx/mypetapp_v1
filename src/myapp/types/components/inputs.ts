@@ -26,6 +26,10 @@ export interface Option {
   isDisabled?: boolean;
 }
 
+export interface OptionDate extends Option {
+  fullDate?: string;
+}
+
 export interface OptionSelectProps {
   columnWrapperStyle?: {};
   containerStyle?: {};

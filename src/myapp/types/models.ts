@@ -69,6 +69,8 @@ export interface Appointment {
     timeLimit: number;
     amount: number;
   };
+  full_start_time?: string;
+  full_end_time?: string;
 }
 
 export interface Option {
