@@ -31,6 +31,8 @@ import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
 import {Appointment} from '../../../types/models';
 import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import {getAvailableDays, getAvailableHours} from './utils';
+import CustomSpinner from '../../../components/custom-spinner';
 
 const NUM_COLUMNS = 4;
 
@@ -39,15 +41,19 @@ export default ({navigation, route}): React.ReactElement => {
   const [hours, setHours] = useState<Option[]>([]);
   const [statusDay, setStatusDay] = useState(false);
   const [statusBtn, setStatusBtn] = useState(true);
+  // Loading
   const [isLoading, setIsLoading] = useState(false);
+  // Modals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-  const vetAppointments = useVetAppointments(route.params.data.admin);
+  const [cardTitle, setCardTitle] = useState('');
+  const [cardContent, setCardContent] = useState('');
+  const [emptyText, setEmptyText] = useState(
+    'Por favor selecciona una fecha para ver los horarios disponibles.',
+  );
 
-  const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
-    route.params?.data ?? {};
-  const baseCharge = Number(base_charge).toFixed(2);
-
+  const [petContent, setPetContent] = useState('');
+  const [serviceContent, setServiceContent] = useState('');
   const [form, setForm] = useState({
     card_id: '',
     day: '',
@@ -57,27 +63,9 @@ export default ({navigation, route}): React.ReactElement => {
     time: '',
   });
 
-  // PaymentInfo
-  const [cardTitle, setCardTitle] = useState('');
-  const [cardContent, setCardContent] = useState('');
-  // PetInfo
-  const [petContent, setPetContent] = useState('');
-  // Service Info
-  const [serviceContent, setServiceContent] = useState('');
-
-  const timeBeforePenalization =
-    route.params.data?.minimum_time_for_cancel / 60;
-
-  const textModal =
-    'Para generar una cita es necesario seleccionar o agregar un método ' +
-    'de pago. La cita se cobrará al pasar la fecha y el horario ' +
-    `seleccionado.\n Puedes cancelar hasta ${timeBeforePenalization} horas ` +
-    'antes, de lo contrario se te cobrará una penalización.';
-
-  const textSubmitModal =
-    'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
-    'todos tus servicios programados desde la sección de' +
-    '"Proximos Servicios" en el menú principal. ';
+  const vetAppointments = useVetAppointments(route.params.data.admin);
+  const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
+    route.params?.data ?? {};
 
   const setValueForm = (day: string) => {
     setForm({...form, day});
@@ -95,80 +83,24 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     moment.locale('es');
-    // Get next available days
-    const nextDaysList: OptionDate[] = [];
-    for (let i = 0; i <= stripeDaysForTransaction; i++) {
-      const currentNextDay = moment().add(i, 'days');
-      const currentNextDayName = currentNextDay.format('ddd');
-      const currentNextDayNumber = currentNextDay.format('D');
-      const currentNextDayWeekIndex = Number(currentNextDay.format('d'));
-      const isDayEnabled = checkIfDayIsEnabledInVetSettings(
-        currentNextDayWeekIndex,
-        route.params.data,
-      );
-
-      nextDaysList.push({
-        key: currentNextDayWeekIndex + '-' + currentNextDayName,
-        title: _.capitalize(currentNextDayName),
-        fullDate: currentNextDay.format('YYYY-MM-DD'),
-        value: currentNextDayNumber,
-        isDisabled: !isDayEnabled,
-      });
-    }
+    const nextDaysList = getAvailableDays(route.params.data);
     setDays(nextDaysList);
   }, []);
 
   useEffect(() => {
     if (form.day) {
-      const {end_time, start_time, time_slots} = route.params.data;
-      // Get the currently selected date.
+      setHours([]);
       const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
-
-      const startTime = moment(selectedDate + ' ' + start_time).subtract(
-        time_slots,
-        'minutes',
+      const appointments = vetAppointments?.data?.data ?? [];
+      const allHours = getAvailableHours(
+        route.params.data,
+        selectedDate,
+        appointments,
       );
-      const endTime = moment(selectedDate + ' ' + end_time).subtract(
-        time_slots,
-        'minutes',
-      );
-      const allHours: Option[] = [];
-
-      // Format appointments
-      const formattedAppointments: Appointment[] =
-        vetAppointments?.data?.data?.map((appointment: Appointment) => ({
-          full_start_time: appointment.full_start_time,
-          full_end_time: appointment.full_end_time,
-        })) ?? [];
-
-      // Load hours.
-      let hasReachedEndTime = false;
-      while (!hasReachedEndTime) {
-        // Add amount of minutes to start time.
-        const currentTime = startTime.add(time_slots, 'minutes');
-        const currentFormattedTime = currentTime.format('h:mm A');
-
-        // Check if the current time is not blocked by any same day appointments.
-        const isOccupied = formattedAppointments.some((appointment) => {
-          const auxTime = currentTime;
-          const auxStartTime = moment(appointment.full_start_time).utc();
-          const auxEndTime = moment(appointment.full_end_time).utc();
-          return auxTime.isBetween(auxStartTime, auxEndTime, 'minutes', '[)');
-        });
-
-        if (!isOccupied) {
-          allHours.push({
-            key: currentFormattedTime,
-            value: currentFormattedTime,
-          });
-        }
-
-        // Exit if already is endtime
-        if (startTime.isSameOrAfter(endTime)) {
-          hasReachedEndTime = true;
-        }
-      }
-
+      !allHours.length &&
+        setEmptyText('No quedan horarios disponibles en este día.');
+      // setAreHoursLoading(false);
+      setForm({...form, time: ''});
       setHours(allHours);
     }
   }, [form.day]);
@@ -197,11 +129,24 @@ export default ({navigation, route}): React.ReactElement => {
    *** Render Methods ***
    **********************/
 
+  const baseCharge = Number(base_charge).toFixed(2);
+  const timeBeforePenalization =
+    route.params.data?.minimum_time_for_cancel / 60;
+
+  const textModal =
+    'Para generar una cita es necesario seleccionar o agregar un método ' +
+    'de pago. La cita se cobrará al pasar la fecha y el horario ' +
+    `seleccionado.\n Puedes cancelar hasta ${timeBeforePenalization} horas ` +
+    'antes, de lo contrario se te cobrará una penalización.';
+
+  const textSubmitModal =
+    'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
+    'todos tus servicios programados desde la sección de' +
+    '"Proximos Servicios" en el menú principal. ';
+
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
-      <DefaultText>
-        Por favor selecciona una fecha para ver los horarios disponibles
-      </DefaultText>
+      <DefaultText>{emptyText}</DefaultText>
     </View>
   );
 
@@ -319,7 +264,7 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <OptionSelect
         currentValue={form.time}
-        data={form.day ? hours : []}
+        data={hours}
         emptyComponent={renderEmpty}
         footerComponent={renderFooter}
         headerComponent={renderHeader}
@@ -327,7 +272,7 @@ export default ({navigation, route}): React.ReactElement => {
         columnWrapperStyle={styles.columnWrapper}
         optionStyle={styles.optionTime}
         setCurrentValue={(time: string) => setValueTime(time)}
-        style={styles.select}
+        style={styles.selectHours}
         textStyle={styles.textOptionTime}
       />
     </DefaultLayout>
@@ -360,15 +305,21 @@ const styles = StyleSheet.create({
   select: {
     marginBottom: 16,
   },
+  selectHours: {
+    marginBottom: 0,
+  },
   selectContainer: {
     paddingLeft: globalVars.outsidePadding,
     paddingRight: globalVars.outsidePadding / 2,
     marginBottom: 16,
   },
   options: {
-    width: 'auto',
+    width: 64,
     height: 70,
     borderRadius: 16,
+    padding: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   columnWrapper: {
     paddingHorizontal: globalVars.outsidePadding,
