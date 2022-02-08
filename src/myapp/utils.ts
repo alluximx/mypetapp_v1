@@ -47,7 +47,9 @@ export const checkIfDayIsEnabledInVetSettings = (
   index: number,
   settings: VetSettings,
 ): boolean => {
-  if (!settings) return false;
+  if (!settings) {
+    return false;
+  }
 
   switch (index) {
     case 0:

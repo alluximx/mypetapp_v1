@@ -81,8 +81,8 @@ export default ({navigation, route}): React.ReactElement => {
   const onSubmit = () => {
     setIsLoading(true);
     addAppointmentQuery.mutate(form, {
-      onError: (error: AxiosError) => {
-        const requestError = error.response.data;
+      onError: (responseError: AxiosError) => {
+        const requestError = responseError.response.data;
         setError(requestError);
         setIsLoading(false);
       },
@@ -112,7 +112,6 @@ export default ({navigation, route}): React.ReactElement => {
       setHours([]);
       const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
       const appointments = vetAppointments?.data?.data ?? [];
-      console.log(appointments);
       const allHours = getAvailableHours(
         route.params,
         selectedDate,
