@@ -10,12 +10,12 @@ import useDeliveryInformation from '../../../hooks/delivery/useDeliveryInformati
 import useMyProfile from '../../../hooks/user/useMyProfile';
 // My Components
 import CustomButton from '../../../components/buttons/custom-button';
+import CustomModal from '../../../components/modals/custom-modal';
 import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import TitleHeader from '../../../components/texts/title-header';
-import CustomModal from '../../../components/modals/custom-modal';
 
 export default ({navigation, route}): React.ReactElement => {
   // Hook Calls
@@ -24,7 +24,7 @@ export default ({navigation, route}): React.ReactElement => {
   const {data: deliveryMessage, isLoading} = useDeliveryInformation();
 
   const {subtotal} = route.params;
-  const {address, paymentMethod} = route.params?.data ?? {};
+  const {address, paymentMethod} = route.params ?? {};
   // Modals & Loading
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);

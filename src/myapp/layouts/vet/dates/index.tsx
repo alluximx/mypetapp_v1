@@ -1,16 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
 import 'moment/locale/es';
+import {AxiosError} from 'axios';
 import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
 import moment from 'moment';
 
 // Global Styles
 import globalVars from '../../../styles/vars';
+import globalColors from '../../../styles/colors';
+// Hooks
+import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import useAddVetAppointment from '../../../hooks/vets/useAddVetAppointment';
 // My Components
 import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
 import CustomModal from '../../../components/modals/custom-modal';
-import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
@@ -21,10 +25,6 @@ import TitleHeader from '../../../components/texts/title-header';
 // Types
 import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
-import useVetAppointments from '../../../hooks/vets/useVetAppointments';
-import useAddVetAppointment from '../../../hooks/vets/useAddVetAppointment';
-import {AxiosError} from 'axios';
-import globalColors from '../../../styles/colors';
 
 const NUM_COLUMNS = 4;
 

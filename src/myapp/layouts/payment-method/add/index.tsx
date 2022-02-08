@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {List, StyleService} from '@ui-kitten/components';
 // My components
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
@@ -14,7 +15,6 @@ import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationH
 import globalColors from '../../../styles/colors';
 // Types
 import {ErrorResponse} from '../../../types/models';
-import CustomSpinner from '../../../components/custom-spinner';
 
 const initialErrors = {
   card: {
@@ -33,7 +33,7 @@ export default ({navigation, route}): React.ReactElement => {
   const addCardQuery = useSavePaymentMethod();
   const paymentQuery = useGetPaymentMethod();
 
-  const {screenToReturn, screenFrom} = route.params?.data ?? {};
+  const {screenToReturn, screenFrom} = route.params ?? {};
 
   const [form, setForm] = useState({
     name: '',
