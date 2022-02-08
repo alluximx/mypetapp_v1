@@ -1,22 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-import 'moment/locale/es';
-import moment from 'moment';
 import _ from 'lodash';
+import 'moment/locale/es';
+import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
+import moment from 'moment';
 
-// Constants
-import {stripeDaysForTransaction} from '../../../constants';
 // Global Styles
 import globalVars from '../../../styles/vars';
 // My Components
+import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
 import CustomModal from '../../../components/modals/custom-modal';
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
@@ -24,57 +18,83 @@ import OptionSelect, {
   OPTION_GAP,
 } from '../../../components/inputs/option-select';
 import TitleHeader from '../../../components/texts/title-header';
-import {QuestionCircleIcon} from '../../../components/icons';
-// Utils
-import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
 // Types
-import {Option, OptionDate} from '../../../types/components/inputs';
-import {Appointment} from '../../../types/models';
-import useVetAppointments from '../../../hooks/vets/useVetAppointments';
 import {getAvailableDays, getAvailableHours} from './utils';
-import CustomSpinner from '../../../components/custom-spinner';
+import {Option, OptionDate} from '../../../types/components/inputs';
+import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import useAddVetAppointment from '../../../hooks/vets/useAddVetAppointment';
+import {AxiosError} from 'axios';
+import globalColors from '../../../styles/colors';
 
 const NUM_COLUMNS = 4;
 
 export default ({navigation, route}): React.ReactElement => {
   const [days, setDays] = useState<OptionDate[]>([]);
   const [hours, setHours] = useState<Option[]>([]);
-  const [statusDay, setStatusDay] = useState(false);
-  const [statusBtn, setStatusBtn] = useState(true);
   // Loading
   const [isLoading, setIsLoading] = useState(false);
   // Modals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-  const [cardTitle, setCardTitle] = useState('');
+  // Render vars
   const [cardContent, setCardContent] = useState('');
+  const [cardTitle, setCardTitle] = useState('');
   const [emptyText, setEmptyText] = useState(
     'Por favor selecciona una fecha para ver los horarios disponibles.',
   );
-
+  const [error, setError] = useState({
+    error: '',
+  });
   const [petContent, setPetContent] = useState('');
   const [serviceContent, setServiceContent] = useState('');
+  const {admin, base_charge, screenFrom, serviceData, time_slots} =
+    route.params ?? {};
+
   const [form, setForm] = useState({
+    admin,
     card_id: '',
     day: '',
+    date: '',
     paymentMethod: '',
     pet_id: '',
     pet: '',
     time: '',
+    start_time: '',
+    end_time: '',
   });
 
-  const vetAppointments = useVetAppointments(route.params.data.admin);
-  const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
-    route.params?.data ?? {};
+  // Hook calls
+  const vetAppointments = useVetAppointments(admin);
+  const addAppointmentQuery = useAddVetAppointment(admin);
 
-  const setValueForm = (day: string) => {
-    setForm({...form, day});
-    setStatusDay(true);
-  };
-
+  // Functions
+  const setValueForm = (day: string) => setForm({...form, day});
   const setValueTime = (time: string) => {
-    setForm({...form, time});
-    setStatusBtn(false);
+    const formattedTime = moment(time, 'h:mm A');
+    setForm({
+      ...form,
+      start_time: formattedTime.format('HH:mm'),
+      end_time: formattedTime.add(time_slots, 'minutes').format('HH:mm'),
+      time,
+    });
+  };
+  const onSubmit = () => {
+    setIsLoading(true);
+    addAppointmentQuery.mutate(form, {
+      onError: (error: AxiosError) => {
+        const requestError = error.response.data;
+        setError(requestError);
+        setIsLoading(false);
+      },
+      onSuccess: () => {
+        setIsModalSubmitVisible(true);
+      },
+    });
+  };
+  const onAcceptSubmit = () => {
+    setIsLoading(false);
+    setIsModalSubmitVisible(false);
+    navigation.navigate('NextServices');
   };
 
   /***************
@@ -83,7 +103,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     moment.locale('es');
-    const nextDaysList = getAvailableDays(route.params.data);
+    const nextDaysList = getAvailableDays(route.params);
     setDays(nextDaysList);
   }, []);
 
@@ -92,46 +112,57 @@ export default ({navigation, route}): React.ReactElement => {
       setHours([]);
       const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
       const appointments = vetAppointments?.data?.data ?? [];
+      console.log(appointments);
       const allHours = getAvailableHours(
-        route.params.data,
+        route.params,
         selectedDate,
         appointments,
       );
       !allHours.length &&
         setEmptyText('No quedan horarios disponibles en este día.');
-      // setAreHoursLoading(false);
-      setForm({...form, time: ''});
+      setForm({...form, date: selectedDate, time: ''});
       setHours(allHours);
     }
-  }, [form.day]);
+  }, [form.day, error?.error]);
 
   useEffect(() => {
-    if (petInfo) {
-      const {namePet, idPet, idSize} = petInfo;
+    if (route.params?.petInfo) {
+      const {namePet, idPet, idSize} = route.params?.petInfo;
       const complt = idSize ? ' - ' + idSize : '';
       setPetContent(namePet + complt);
       setForm({...form, pet_id: idPet});
     }
-    if (paymentMethod) {
-      const {cardLabel, cardBrand, cardId} = paymentMethod;
+  }, [route.params?.petInfo]);
+
+  useEffect(() => {
+    if (route.params?.paymentMethod) {
+      const {cardLabel, cardBrand, cardId} = route.params?.paymentMethod;
       setCardTitle(cardBrand);
       setCardContent(cardLabel);
       setForm({...form, card_id: cardId});
     }
+  }, [route.params?.paymentMethod]);
+
+  useEffect(() => {
     if (serviceData) {
       serviceData.length === 1
         ? setServiceContent(serviceData[0].name)
         : setServiceContent('Varios');
     }
-  }, [petInfo, paymentMethod, serviceData]);
+  }, [serviceData]);
 
   /**********************
    *** Render Methods ***
    **********************/
 
+  const isDisabled =
+    form.date === '' ||
+    form.time === '' ||
+    form.pet_id === '' ||
+    form.card_id === '';
+
   const baseCharge = Number(base_charge).toFixed(2);
-  const timeBeforePenalization =
-    route.params.data?.minimum_time_for_cancel / 60;
+  const timeBeforePenalization = route.params?.minimum_time_for_cancel / 60;
 
   const textModal =
     'Para generar una cita es necesario seleccionar o agregar un método ' +
@@ -141,8 +172,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   const textSubmitModal =
     'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
-    'todos tus servicios programados desde la sección de' +
-    '"Proximos Servicios" en el menú principal. ';
+    'todos tus servicios programados desde la sección de ' +
+    '"Proximos Servicios" en el menú principal.';
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
@@ -154,7 +185,7 @@ export default ({navigation, route}): React.ReactElement => {
     <>
       <View style={styles.horizontalPadding}>
         <TitleHeader style={styles.header}>
-          {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
+          {route.params?.isEdit ? 'Editar cita' : 'Generar cita'}
         </TitleHeader>
         <TitleHeader style={styles.normalHeader}>
           ¿Para quién es la cita?
@@ -163,7 +194,10 @@ export default ({navigation, route}): React.ReactElement => {
           <NavigateButton
             placeholder="Selecciona tu mascota"
             destination="PetSelect"
-            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+            data={{
+              screenToReturn: 'VetDate',
+              screenFrom: screenFrom,
+            }}
             title="Mascota"
             subtitle={petContent}
           />
@@ -176,7 +210,10 @@ export default ({navigation, route}): React.ReactElement => {
             <NavigateButton
               placeholder="Selecciona los servicios"
               destination="ServiceSelect"
-              data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+              data={{
+                screenToReturn: 'VetDate',
+                screenFrom: screenFrom,
+              }}
               title="Servicio"
               subtitle={serviceContent}
             />
@@ -230,14 +267,14 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader style={styles.leftSide}>Total</TitleHeader>
         <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
       </View>
+      <DefaultText style={error?.error && styles.error}>
+        {error?.error}
+      </DefaultText>
       <View style={{marginBottom: 20}}>
         <CustomButton
-          isDisabled={statusBtn}
+          isDisabled={isDisabled}
           isLoading={isLoading}
-          onPress={() => {
-            setIsLoading(true);
-            setIsModalSubmitVisible(true);
-          }}>
+          onPress={onSubmit}>
           Generar cita
         </CustomButton>
       </View>
@@ -258,7 +295,7 @@ export default ({navigation, route}): React.ReactElement => {
         labelAccept="Entendido"
         title="Cita generada"
         text={textSubmitModal}
-        onAccept={() => setIsModalSubmitVisible(false)}
+        onAccept={onAcceptSubmit}
         showCancel={false}
         visible={isModalSubmitVisible}
       />
@@ -271,7 +308,7 @@ export default ({navigation, route}): React.ReactElement => {
         numColumns={NUM_COLUMNS}
         columnWrapperStyle={styles.columnWrapper}
         optionStyle={styles.optionTime}
-        setCurrentValue={(time: string) => setValueTime(time)}
+        setCurrentValue={setValueTime}
         style={styles.selectHours}
         textStyle={styles.textOptionTime}
       />
@@ -355,6 +392,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  error: {
+    color: globalColors.red,
+    marginBottom: 16,
   },
   servicesContainer: {
     flex: 1,
