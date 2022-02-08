@@ -50,12 +50,16 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
         </DefaultText>
       )}
       <View style={styles.contentWrapper}>
-        {coverImage && (
-          <PreviewableImage
-            source={{uri: coverImage}}
-            style={[styles.coverImage, props.coverImageStyle]}
-          />
-        )}
+        {coverImage !== undefined &&
+          coverImage !== null &&
+          coverImage !== '' && (
+            <PreviewableImage
+              source={
+                typeof coverImage === 'string' ? {uri: coverImage} : coverImage
+              }
+              style={[styles.coverImage, props.coverImageStyle]}
+            />
+          )}
         <View style={styles.cardContentContainer}>
           <TouchableOpacity
             activeOpacity={0.6}

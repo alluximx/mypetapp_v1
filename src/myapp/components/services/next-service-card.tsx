@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import moment from 'moment';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -6,6 +6,9 @@ import {useNavigation} from '@react-navigation/native';
 import {servicesTabs} from '../../constants';
 // Global Styles
 import globalColors from '../../styles/colors';
+// Hooks
+import useMyPetImage from '../../hooks/pets/useMyPetImage';
+import useGetPet from '../../hooks/user/useGetPet';
 // My Components
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
@@ -15,12 +18,25 @@ import {NextServiceCardProps} from '../../types/components/services';
 
 const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
   const navigation = useNavigation();
+  const petQuery = useGetPet(props.service.pet);
+  const petImage = useMyPetImage(props.service.pet);
+  const [petData, setPetData] = React.useState({
+    name: '',
+    image: '',
+  });
+
+  useEffect(() => {
+    if (petImage.isSuccess && petQuery.isSuccess) {
+      setPetData({
+        image: petImage.data?.data[0]?.file,
+        name: petQuery.data?.data?.name,
+      });
+    }
+  }, [petImage.data?.data, petQuery.data?.data]);
 
   const onPressDelete = () => props.onPressDeleteModal();
   const onPressEdit = () => props.onPressEditModal();
-  const onPressRate = () => {
-    navigation.navigate('RateService');
-  };
+  const onPressRate = () => navigation.navigate('RateService');
 
   return (
     <GenericCard
@@ -34,13 +50,17 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
             <DefaultText
               key={`petName-${props.service.id}`}
               style={styles.petName}>
-              {props.service.pet.name}
+              {petData.name}
             </DefaultText>
-            <DefaultText
-              key={`services-${props.service.id}`}
-              style={styles.serviceName}>
-              {props.service.services.map((service) => service.name).join(', ')}
-            </DefaultText>
+            {props.service?.services && (
+              <DefaultText
+                key={`services-${props.service.id}`}
+                style={styles.serviceName}>
+                {props.service.services
+                  ?.map((service) => service.name)
+                  .join(', ')}
+              </DefaultText>
+            )}
           </View>,
         ],
         additionalButtons:
@@ -71,8 +91,12 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
                 </AnchorText>,
               ],
         content: props.service.vet,
-        title: moment(props.service.date).format('DD/MM/YYYY, HH:mm A'),
-        coverImage: props.service.petImage.file,
+        title: moment(
+          props.service.date + ' ' + props.service.start_time,
+        ).format('DD/MM/YYYY, h:mm A'),
+        coverImage:
+          petData.image ??
+          require('../../assets/images/pets/add-pet-image.png'),
       }}
       onClick={props.tab === servicesTabs[0].id ? onPressEdit : onPressRate}
       wrapTitle

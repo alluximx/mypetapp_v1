@@ -1,13 +1,11 @@
-import {List, Text} from '@ui-kitten/components';
+import {List} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-// Constants.
-import {servicesTabs} from '../../constants';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
-// import useProductsList from '../../hooks/products/useProductsList';
+import useAppointments from '../../hooks/vets/useAppointments';
 // My Components.
 import CustomModal from '../modals/custom-modal';
 import CustomSpinner from '../custom-spinner';
@@ -16,162 +14,14 @@ import NextServicesEmpty from './next-services-empty';
 // Types.
 import {Appointment} from '../../types/models';
 import {NextServicesListProps} from '../../types/components/services';
-
-const exampleNextData: Appointment[] = [
-  {
-    id: '1',
-    date: '2021-05-01 17:00:00',
-    vet: 'Estética Canina',
-    pet: {
-      name: 'Valerio',
-    },
-    petImage: {
-      file: 'https://images.dog.ceo/breeds/terrier-cairn/n02096177_342.jpg',
-    },
-    services: [
-      {
-        id: 'corte',
-        name: 'Corte',
-      },
-      {
-        id: 'baño',
-        name: 'Baño',
-      },
-    ],
-    appointmentInfo: {
-      editingAttemptsLeft: 2,
-      maxEditingAttempts: 2,
-      showDeletePenalty: false,
-    },
-    penaltyData: {
-      amount: 50.0,
-      timeLimit: 3,
-    },
-  },
-  {
-    id: '2',
-    date: '2021-04-12 12:30:00',
-    vet: 'Veterinaria Arboledas',
-    pet: {
-      name: 'Charo',
-    },
-    petImage: {
-      file: 'https://images.dog.ceo/breeds/hound-plott/hhh-23456.jpeg',
-    },
-    services: [
-      {
-        id: 'consulta',
-        name: 'Consulta',
-      },
-    ],
-    appointmentInfo: {
-      editingAttemptsLeft: 2,
-      maxEditingAttempts: 3,
-      showDeletePenalty: false,
-    },
-    penaltyData: {
-      amount: 50.0,
-      timeLimit: 3,
-    },
-  },
-  {
-    id: '3',
-    date: '2021-06-04 12:00:00',
-    vet: 'Veterinaria Arboledas',
-    pet: {
-      name: 'Valerio',
-    },
-    petImage: {
-      file: 'https://images.dog.ceo/breeds/terrier-cairn/n02096177_342.jpg',
-    },
-    services: [
-      {
-        id: 'consulta',
-        name: 'Consulta',
-      },
-    ],
-    appointmentInfo: {
-      editingAttemptsLeft: 1,
-      maxEditingAttempts: 3,
-      showDeletePenalty: true,
-    },
-    penaltyData: {
-      amount: 50.0,
-      timeLimit: 3,
-    },
-  },
-  {
-    id: '4',
-    date: '2021-06-04 12:00:00',
-    vet: 'Veterinaria Jiménez',
-    pet: {
-      name: 'Valerio',
-    },
-    petImage: {
-      file: 'https://images.dog.ceo/breeds/terrier-cairn/n02096177_342.jpg',
-    },
-    services: [
-      {
-        id: 'consulta',
-        name: 'Consulta',
-      },
-    ],
-    appointmentInfo: {
-      editingAttemptsLeft: 0,
-      maxEditingAttempts: 3,
-      showDeletePenalty: true,
-    },
-    penaltyData: {
-      amount: 150.0,
-      timeLimit: 2,
-    },
-  },
-];
-
-const exampleHistoricData: Appointment[] = [
-  {
-    id: '5',
-    date: '2020-05-23 17:00:00',
-    vet: 'Estética Canina',
-    pet: {
-      name: 'Bruno',
-    },
-    petImage: {
-      file: 'https://images.dog.ceo/breeds/bluetick/n02088632_2805.jpg',
-    },
-    services: [
-      {
-        id: 'corte',
-        name: 'Corte',
-      },
-      {
-        id: 'baño',
-        name: 'Baño',
-      },
-    ],
-  },
-  {
-    id: '6',
-    date: '2020-01-24 09:00:00',
-    vet: 'Veterinaria Arboledas',
-    pet: {
-      name: 'Valerio',
-    },
-    petImage: {
-      file: 'https://images.dog.ceo/breeds/terrier-cairn/n02096177_342.jpg',
-    },
-    services: [
-      {
-        id: 'consulta',
-        name: 'Consulta',
-      },
-    ],
-  },
-];
+import useDeleteAppointment from '../../hooks/vets/useDeleteVetAppointment';
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
-  const [data, setData] = useState<Appointment[]>(exampleNextData);
+  const appointments = useAppointments();
+  const deleteQuery = useDeleteAppointment();
+
+  const [data, setData] = useState<Appointment[]>([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [
@@ -183,6 +33,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
   const onDeleteAccept = () => {
     // Delete call to api.
+    deleteQuery.mutate(selectedAppointment.id);
     setShowDeleteModal(false);
   };
   const onEditAccept = () => {
@@ -220,10 +71,10 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
   const getDeleteMessage = (appointment: Appointment): string => {
     const {amount, timeLimit} = appointment?.penaltyData || {};
-    return appointment?.appointmentInfo?.showDeletePenalty
-      ? `Estás eliminando una cita con menos de ${timeLimit} horas de ` +
+    return appointment?.has_penalty
+      ? `Estás eliminando una cita con menos de ${timeLimit ?? 1} hora de ` +
           `anticipación, si la cancelas o no asistes se te cobrará una ` +
-          `penalización de $${amount.toFixed(2)} pesos.`
+          `penalización de $${amount ? amount?.toFixed(2) : 0.0} pesos.`
       : '¿Estás seguro de que quieres eliminar esta cita?';
   };
 
@@ -248,9 +99,15 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
    ***************/
 
   useEffect(() => {
-    setData(
-      props.tab === servicesTabs[0].id ? exampleNextData : exampleHistoricData,
-    );
+    if (appointments.isSuccess) {
+      setData(appointments.data?.data);
+    }
+  }, [appointments]);
+
+  useEffect(() => {
+    // setData(
+    //   props.tab === servicesTabs[0].id ? exampleNextData : exampleHistoricData,
+    // );
   }, [props.tab]);
 
   useEffect(() => {
@@ -261,13 +118,15 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     setDeleteMessage(getDeleteMessage(selectedAppointment));
   }, [showDeleteModal]);
 
-  return (
+  return appointments.isLoading ? (
+    <CustomSpinner />
+  ) : (
     <>
       <CustomModal
         labelAccept="Eliminar Cita"
         title="Eliminar Cita"
         text={deleteMessage}
-        onAccept={() => setShowDeleteModal(false)}
+        onAccept={onDeleteAccept}
         onCancel={() => setShowDeleteModal(false)}
         showCancel
         visible={showDeleteModal}
