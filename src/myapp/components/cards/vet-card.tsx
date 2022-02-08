@@ -23,9 +23,11 @@ const VetCard = (props: VetCardProps): React.ReactElement => {
       contentTextStyle={styles.subtitleCard}
       coverImageStyle={styles.coverImage}
       styleCard={props.styleCard}
+      key={props.vet.id}
       data={{
         additionalContent: [
           <RatingCard
+            key={'rating' + props.vet.id}
             rating={rating}
             distance={currentDistance}
             styleCard={styles.ratingCard}

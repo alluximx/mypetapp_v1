@@ -93,7 +93,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
   const closeButton = () => <CloseButton navigation={navigation} />;
   const backButton = () => <BackButton navigation={navigation} />;
   const routeNames = getFocusedRouteNameFromRoute(route) ?? 'Home';
-  setRouteName(routeNames);
+
+  useEffect(() => {
+    setRouteName(routeNames);
+  }, [routeNames]);
 
   const onMessage = async (remoteMessage) => {
     // Create a channel
@@ -444,10 +447,13 @@ export const HomeNavigator = ({route}): React.ReactElement => {
         gestureEnabled: true,
       }}
       sceneContainerStyle={styles.background}
-      drawerContent={(props) => {
-        setProgress(props.progress);
-        return <HomeDrawer {...props} routeName={routeName} />;
-      }}>
+      drawerContent={(props) => (
+        <HomeDrawer
+          {...props}
+          setProgress={setProgress}
+          routeName={routeName}
+        />
+      )}>
       <Drawer.Screen name="Screens" initialParams={route.params}>
         {(props) => (
           <Screens

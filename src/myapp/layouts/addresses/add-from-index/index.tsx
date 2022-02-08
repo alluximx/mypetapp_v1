@@ -1,15 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {AxiosError} from 'axios';
+import {ScrollView} from 'react-native';
 import {StyleService} from '@ui-kitten/components';
-import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
+import AddressForm from '../../../components/forms/address-form';
 import DefaultLayout from '../../../components/layouts/default-layout';
-// Hook.
+import TitleHeader from '../../../components/texts/title-header';
+// Hooks
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useSaveAddress from '../../../hooks/address/useSaveAddress';
-// Global Styles
-import AddressForm from '../../../components/addresses/address-form';
-import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
@@ -62,14 +61,10 @@ export default ({navigation, route}): React.ReactElement => {
   });
 
   return (
-    <DefaultLayout>
+    <DefaultLayout style={styles.container}>
       <ScrollView>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-          contentContainerStyle={styles.container}>
-          <TitleHeader style={styles.title}>Nueva dirección</TitleHeader>
-          <AddressForm error={error} form={form} setForm={setForm} />
-        </KeyboardAvoidingView>
+        <TitleHeader style={styles.title}>Nueva dirección</TitleHeader>
+        <AddressForm error={error} form={form} setForm={setForm} />
       </ScrollView>
     </DefaultLayout>
   );

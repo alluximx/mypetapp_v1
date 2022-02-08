@@ -34,9 +34,9 @@ export default ({navigation}): React.ReactElement => {
   };
 
   useEffect(() => {
-    AppState.addEventListener('change', refetchOnReopenApp);
+    const subscribe = AppState.addEventListener('change', refetchOnReopenApp);
     return () => {
-      AppState.removeEventListener('change', refetchOnReopenApp);
+      subscribe.remove();
     };
   }, []);
 
@@ -94,6 +94,7 @@ export default ({navigation}): React.ReactElement => {
               id={item.id}
               isLastOne={data?.data?.length === 1}
               itemId={item.item.id}
+              key={item.id}
               productId={item.item.product.id}
               productName={item.item.product.name}
               quantity={item.quantity}

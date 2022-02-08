@@ -43,8 +43,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   const [form, setForm] = useState({
     user_pet: vaccineData.data?.data.user_pet ?? '',
-    vaccine_date: vaccineData.data?.data.vaccine_date ?? new Date(),
-    next_vaccine_date: vaccineData.data?.data.next_vaccine_date ?? new Date(),
+    vaccine_date: vaccineData.data?.data.vaccine_date ?? moment(),
+    next_vaccine_date: vaccineData.data?.data.next_vaccine_date ?? moment(),
     reminder: vaccineData.data?.data.reminder ?? null,
     vaccine_registered: vaccineData.data?.data.vaccine_registered.id ?? '',
     vaccine_image_id: '',

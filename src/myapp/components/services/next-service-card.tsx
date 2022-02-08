@@ -27,15 +27,19 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
       contentTextStyle={styles.subtitleCard}
       coverImageStyle={styles.coverImage}
       styleCard={props.styleCard}
-      key={props.service.date}
+      key={props.service.id}
       data={{
         additionalContent: [
-          <View>
-            <DefaultText style={styles.petName}>
+          <View key={`petData-${props.service.id}`}>
+            <DefaultText
+              key={`petName-${props.service.id}`}
+              style={styles.petName}>
               {props.service.pet.name}
             </DefaultText>
-            <DefaultText style={styles.serviceName}>
-              {props.service.services.map(service => service.name).join(', ')}
+            <DefaultText
+              key={`services-${props.service.id}`}
+              style={styles.serviceName}>
+              {props.service.services.map((service) => service.name).join(', ')}
             </DefaultText>
           </View>,
         ],
@@ -43,12 +47,14 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
           props.tab === servicesTabs[0].id
             ? [
                 <AnchorText
+                  key={`delete-${props.service.id}`}
                   onPress={() => onPressDelete()}
                   style={styles.buttonDelete}
                   isSubmit>
                   Eliminar
                 </AnchorText>,
                 <AnchorText
+                  key={`edit-${props.service.id}`}
                   onPress={onPressEdit}
                   style={styles.buttonEdit}
                   isSubmit>
@@ -57,6 +63,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
               ]
             : [
                 <AnchorText
+                  key={`rate-${props.service.id}`}
                   onPress={onPressRate}
                   style={styles.buttonEdit}
                   isSubmit>

@@ -60,8 +60,13 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
-  const renderServiceItem = (service) => (
-    <VisitCardImg data={service.item} navigation={navigation} route={route} />
+  const renderItem = ({item}) => (
+    <VisitCardImg
+      data={item}
+      key={item.id}
+      navigation={navigation}
+      route={route}
+    />
   );
 
   return isLoading ? (
@@ -77,7 +82,7 @@ export default ({navigation, route}): React.ReactElement => {
         <List
           style={styles.servicesContainer}
           data={visits}
-          renderItem={renderServiceItem}
+          renderItem={renderItem}
         />
       </View>
     </DefaultLayout>

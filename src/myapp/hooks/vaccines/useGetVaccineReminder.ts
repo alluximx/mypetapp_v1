@@ -8,7 +8,7 @@ const useGetVaccineReminder = (petId) => {
       'api/v1/vaccines-history/?user_pet=' +
         petId +
         '&reminder__gte=' +
-        moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+        moment(moment()).format('YYYY-MM-DD hh:mm:ss'),
       true,
     ),
   );

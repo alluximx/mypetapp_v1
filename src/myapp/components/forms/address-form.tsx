@@ -9,7 +9,7 @@ import DropdownPicker from '../inputs/dropdown-picker';
 import MunicipalityDrop from '../adoption/municipality-drop';
 import UserInput from '../inputs/user-input';
 // Types
-import {AddressFormProps} from '../../types/components/addresses';
+import {AddressFormProps} from '../../types/components/forms';
 
 const AddressForm = (props: AddressFormProps) => {
   const [stateList, setStateList] = useState([]);
@@ -30,17 +30,14 @@ const AddressForm = (props: AddressFormProps) => {
    ***************/
 
   useEffect(() => {
-    if (dataStates.data) {
-      const aux = [];
-      dataStates.data.data.forEach((element) => {
-        aux.push({
-          value: element.id,
-          label: element.name,
-        });
-      });
-      setStateList(aux);
+    if (dataStates.isSuccess && dataStates.data) {
+      const formattedStates = dataStates.data.data.map((element) => ({
+        value: element.id,
+        label: element.name,
+      }));
+      setStateList(formattedStates);
     }
-  }, [dataStates.data, dataStates.isFetched]);
+  }, [dataStates.isSuccess]);
 
   useEffect(() => {
     setFormErrors({...formErrors, ...props.error});
@@ -104,7 +101,7 @@ const AddressForm = (props: AddressFormProps) => {
       />
       <MunicipalityDrop
         error={formErrors.municipality}
-        status={false}
+        status={props.form.state ? false : true}
         id={props.form.state}
         change={(valor, name) => {
           if (props.setNameMunicipality) {
@@ -131,6 +128,7 @@ const AddressForm = (props: AddressFormProps) => {
         placeholder="Codigo Postal"
         value={props.form.zipcode}
         maxLength={5}
+        isNumeric={true}
         onChangeText={(value: string) => {
           props.setForm({...props.form, zipcode: value});
         }}

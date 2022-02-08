@@ -1,3 +1,11 @@
+export interface AddButtonProps {
+  iconStyle?: {};
+  isDisabled?: boolean;
+  style?: {};
+  onAdd: (props?: {}) => void;
+  isSubmit?: boolean;
+}
+
 export interface CustomButtonProps {
   isLight?: boolean;
   style?: {};

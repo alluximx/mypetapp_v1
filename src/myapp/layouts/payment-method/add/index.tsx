@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {ScrollView, View} from 'react-native';
 import {List, StyleService} from '@ui-kitten/components';
 // My components
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
+import PaymentMethodForm from '../../../components/forms/payment-method-form';
 import TitleHeader from '../../../components/texts/title-header';
-import UserInput from '../../../components/inputs/user-input';
 // Hooks
 import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
 import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMethod';
@@ -72,23 +71,6 @@ export default ({navigation, route}): React.ReactElement => {
     });
   };
 
-  const renderServiceItem = ({item}) => {
-    const cardBrand = item.brand;
-    const cardId = item.id;
-    const cardLabel = '****' + item.last4;
-
-    const auxData = {cardBrand, cardId, cardLabel};
-
-    return (
-      <NavigateButton
-        data={{paymentMethod: auxData, screenFrom: screenFrom}}
-        destination={screenToReturn ?? 'PaymentSummary'}
-        subtitle={cardLabel}
-        title={cardBrand}
-      />
-    );
-  };
-
   const isDisabled =
     paymentMethods.length > 2 ||
     form.name === '' ||
@@ -106,111 +88,69 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form},
   });
 
+  /************************
+   *** Render functions ***
+   ************************/
+
+  const renderPaymentMethod = ({item}) => {
+    const cardBrand = item.brand;
+    const cardId = item.id;
+    const cardLabel = '****' + item.last4;
+
+    const auxData = {cardBrand, cardId, cardLabel};
+
+    return (
+      <NavigateButton
+        data={{paymentMethod: auxData, screenFrom: screenFrom}}
+        destination={screenToReturn ?? 'PaymentSummary'}
+        subtitle={cardLabel}
+        title={cardBrand}
+      />
+    );
+  };
+
+  const renderHeader = (
+    <TitleHeader style={styles.subtitle}>Métodos de pago guardados</TitleHeader>
+  );
+
+  const renderEmpty = (
+    <DefaultText style={styles.subtitle}>
+      No hay métodos de pago guardados
+    </DefaultText>
+  );
+
+  const renderFooter = (
+    <>
+      {paymentMethods.length > 2 && (
+        <DefaultText style={styles.message}>
+          Solo puedes guardar 3 métodos de pago
+        </DefaultText>
+      )}
+
+      <TitleHeader style={styles.subtitle}>Nuevo método de pago</TitleHeader>
+
+      <PaymentMethodForm
+        errors={errors}
+        form={form}
+        hasError={hasError}
+        setForm={setForm}
+      />
+    </>
+  );
+
   return paymentQuery.isLoading || isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout>
       <TitleHeader>Método de pago</TitleHeader>
-      <ScrollView>
-        <TitleHeader style={styles.subtitle}>
-          Métodos de pago guardados
-        </TitleHeader>
-        {paymentMethods && paymentMethods.length > 0 ? (
-          <List
-            style={styles.servicesContainer}
-            data={paymentMethods}
-            renderItem={renderServiceItem}
-          />
-        ) : (
-          <DefaultText style={styles.subtitle}>
-            No hay métodos de pago guardados
-          </DefaultText>
-        )}
-
-        {paymentMethods.length > 2 && (
-          <DefaultText style={styles.message}>
-            Solo puedes guardar 3 métodos de pago
-          </DefaultText>
-        )}
-
-        <TitleHeader style={styles.subtitle}>Nuevo método de pago</TitleHeader>
-        <UserInput
-          placeholder="Nombre del tarjetahabiente"
-          value={form.name}
-          onChangeText={(value: string) => {
-            setForm({...form, name: value});
-          }}
-        />
-        <UserInput
-          error={errors?.card?.number}
-          isNumeric={true}
-          maxLength={19}
-          onChangeText={(value: string) => {
-            let result = value.split(' ').join('');
-
-            if (result.length > 4 && result.length <= 8) {
-              result = [result.slice(0, 4), result.slice(4)].join(' ');
-            } else if (result.length > 8 && result.length <= 12) {
-              result = [
-                result.slice(0, 4),
-                result.slice(4, 8),
-                result.slice(8),
-              ].join(' ');
-            } else if (result.length > 12) {
-              result = [
-                result.slice(0, 4),
-                result.slice(4, 8),
-                result.slice(8, 12),
-                result.slice(12, 16),
-              ].join(' ');
-            }
-
-            setForm({...form, number: result});
-          }}
-          placeholder="Número de tarjeta"
-          value={form.number}
-        />
-
-        <View style={styles.horizontalContainer}>
-          <UserInput
-            error={errors?.card?.exp_month || errors?.card?.exp_year}
-            isNumeric={true}
-            maxLength={5}
-            onChangeText={(value: string) => {
-              let result = value.replace('/', '');
-
-              if (result.length > 2) {
-                result = [result.slice(0, 2), '/', result.slice(2)].join('');
-              }
-
-              const exp_month = result.substring(0, 2);
-              const exp_year = result.substring(3, 5);
-
-              setForm({...form, expiration_date: result, exp_month, exp_year});
-            }}
-            placeholder="Expiración"
-            style={styles.UserInputContainer}
-            value={form.expiration_date}
-          />
-          <UserInput
-            error={errors?.card?.cvc}
-            isNumeric={true}
-            maxLength={4}
-            onChangeText={(value: string) => {
-              setForm({...form, cvc: value});
-            }}
-            placeholder="CVV "
-            style={styles.UserInputContainer}
-            value={form.cvc}
-          />
-        </View>
-        {hasError && (
-          <DefaultText style={styles.message}>
-            Los datos ingresados son incorrectos. Por favor verifícalos y vuelve
-            a intentarlo.
-          </DefaultText>
-        )}
-      </ScrollView>
+      <List
+        style={styles.servicesContainer}
+        data={paymentMethods}
+        ListHeaderComponent={renderHeader}
+        renderItem={renderPaymentMethod}
+        ListFooterComponent={renderFooter}
+        ListEmptyComponent={renderEmpty}
+      />
     </DefaultLayout>
   );
 };
@@ -220,18 +160,6 @@ const styles = StyleService.create({
     marginTop: 10,
     marginBottom: 15,
     fontSize: 16,
-  },
-  horizontalContainer: {
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  UserInputContainer: {
-    flexBasis: '48%',
-    height: 60,
-    backgroundColor: globalColors.lightGreen,
-    borderRadius: 10,
-    marginBottom: 16,
   },
   servicesContainer: {
     backgroundColor: 'transparent',

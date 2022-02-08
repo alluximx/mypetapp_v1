@@ -50,6 +50,7 @@ export interface ErrorResponse {
 }
 
 export interface Appointment {
+  id: string;
   date: string;
   vet: string;
   pet: {

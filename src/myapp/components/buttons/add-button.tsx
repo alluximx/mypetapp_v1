@@ -3,18 +3,12 @@ import {Button} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 // Global styles.
 import globalColors from '../../styles/colors';
+// Hooks.
+import useIsGuest from '../../hooks/useIsGuest';
 // My Components.
 import {AddIcon} from '../icons';
-// Hooks
-import useIsGuest from '../../hooks/useIsGuest';
-
-interface AddButtonProps {
-  iconStyle?: {};
-  isDisabled?: boolean;
-  style?: {};
-  onAdd: (props?: {}) => void;
-  isSubmit?: boolean;
-}
+// Types.
+import {AddButtonProps} from '../../types/components/buttons';
 
 const AddButton = (props: AddButtonProps): React.ReactElement => {
   const [isGuest, showModal, renderAlert] = useIsGuest();

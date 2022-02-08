@@ -23,6 +23,7 @@ const PreviewableImageList = (props: PreviewableImageListProps) => {
 
   const renderImageItem = (image: {index: number; item: ImageURISource}) => (
     <TouchableOpacity
+      key={image.index + image.item.uri}
       onPress={() => {
         setImageIndex(image.index);
         setVisible(true);

@@ -19,6 +19,7 @@ import {NextServicesListProps} from '../../types/components/services';
 
 const exampleNextData: Appointment[] = [
   {
+    id: '1',
     date: '2021-05-01 17:00:00',
     vet: 'Estética Canina',
     pet: {
@@ -48,6 +49,7 @@ const exampleNextData: Appointment[] = [
     },
   },
   {
+    id: '2',
     date: '2021-04-12 12:30:00',
     vet: 'Veterinaria Arboledas',
     pet: {
@@ -73,6 +75,7 @@ const exampleNextData: Appointment[] = [
     },
   },
   {
+    id: '3',
     date: '2021-06-04 12:00:00',
     vet: 'Veterinaria Arboledas',
     pet: {
@@ -98,6 +101,7 @@ const exampleNextData: Appointment[] = [
     },
   },
   {
+    id: '4',
     date: '2021-06-04 12:00:00',
     vet: 'Veterinaria Jiménez',
     pet: {
@@ -124,8 +128,9 @@ const exampleNextData: Appointment[] = [
   },
 ];
 
-const exampleHistoricData = [
+const exampleHistoricData: Appointment[] = [
   {
+    id: '5',
     date: '2020-05-23 17:00:00',
     vet: 'Estética Canina',
     pet: {
@@ -146,6 +151,7 @@ const exampleHistoricData = [
     ],
   },
   {
+    id: '6',
     date: '2020-01-24 09:00:00',
     vet: 'Veterinaria Arboledas',
     pet: {
@@ -221,6 +227,22 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       : '¿Estás seguro de que quieres eliminar esta cita?';
   };
 
+  const renderItem = ({item}: {item: Appointment}) => (
+    <NextServiceCard
+      key={item.id}
+      onPressEditModal={() => {
+        setSelectedAppointment(item);
+        setShowEditModal(true);
+      }}
+      onPressDeleteModal={() => {
+        setSelectedAppointment(item);
+        setShowDeleteModal(true);
+      }}
+      service={item}
+      tab={props.tab}
+    />
+  );
+
   /***************
    *** Effects ***
    ***************/
@@ -267,20 +289,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         data={data}
         ListEmptyComponent={<NextServicesEmpty tab={props.tab} />}
         scrollEnabled={data.length ? true : false}
-        renderItem={({item}: {item: Appointment}) => (
-          <NextServiceCard
-            onPressEditModal={() => {
-              setSelectedAppointment(item);
-              setShowEditModal(true);
-            }}
-            onPressDeleteModal={() => {
-              setSelectedAppointment(item);
-              setShowDeleteModal(true);
-            }}
-            service={item}
-            tab={props.tab}
-          />
-        )}
+        renderItem={renderItem}
         style={styles.container}
       />
     </>

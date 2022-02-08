@@ -46,9 +46,9 @@ const VisitCardImg = ({
   };
 
   const newData = {
-    date: visit_date == null ? null : new Date(visit_date),
+    date: visit_date == null ? null : moment(visit_date).toDate(),
     additionalButtons: [
-      <AnchorText onPress={onEdit} isSubmit>
+      <AnchorText key={`edit-${visit?.id}`} onPress={onEdit} isSubmit>
         Editar
       </AnchorText>,
     ],
@@ -59,7 +59,11 @@ const VisitCardImg = ({
     title,
   };
 
-  return !isLoading && <GenericCard data={newData} onClick={null} />;
+  return (
+    !isLoading && (
+      <GenericCard key={newData.data?.id} data={newData} onClick={null} />
+    )
+  );
 };
 
 export default VisitCardImg;

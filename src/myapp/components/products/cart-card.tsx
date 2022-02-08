@@ -70,15 +70,18 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
         buttonStyle={styles.price}
         contentTextStyle={styles.subtitle}
         coverImageStyle={styles.coverImage}
+        key={id}
         data={{
           additionalButtons: [
             <AnchorText
+              key={`${id}-delete`}
               onPress={() => onPressDelete(id)}
               style={styles.buttonDelete}
               isSubmit>
               Eliminar
             </AnchorText>,
             <AnchorText
+              key={`${id}-edit`}
               isDisabled={emptyStock}
               onPress={onPressEdit}
               style={[styles.buttonEdit, emptyStock && styles.disabledEdit]}
@@ -87,10 +90,10 @@ const CartCard = (props: CartCardProps): React.ReactElement => {
             </AnchorText>,
           ],
           additionalContent: [
-            <DefaultText style={styles.quantity}>
+            <DefaultText key={`${id}-quantity`} style={styles.quantity}>
               Cantidad: {quantity}
             </DefaultText>,
-            <TitleHeader style={styles.price}>
+            <TitleHeader key={`${id}-price`} style={styles.price}>
               ${totalItemPrice.toFixed(2)}
             </TitleHeader>,
           ],

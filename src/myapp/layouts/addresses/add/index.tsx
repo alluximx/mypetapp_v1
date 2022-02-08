@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {AxiosError} from 'axios';
 import {List, StyleService} from '@ui-kitten/components';
-import {ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 // My components
-import AddressForm from '../../../components/addresses/address-form';
+import AddressForm from '../../../components/forms/address-form';
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
@@ -20,7 +20,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [addresses, setAddresses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisable, setIsDisable] = useState(false);
-  const [isReminderActive, setIsReminderActive] = useState(false);
+  const [saveAddressEnabled, setSaveAddressEnabled] = useState(false);
   const [nameState, setNameState] = useState('');
   const [nameMunicipality, setNameMunicipality] = useState('');
   const [error, setError] = useState();
@@ -41,64 +41,23 @@ export default ({navigation, route}): React.ReactElement => {
   });
 
   useEffect(() => {
-    if (addressQuery.data) {
+    if (addressQuery.isSuccess && addressQuery.data) {
       setAddresses(addressQuery.data.data);
     }
-  }, [addressQuery.data]);
+  }, [addressQuery.isSuccess]);
 
   const changeValue = () => {
-    setIsReminderActive(!isReminderActive);
-    setForm({...form, is_saved: !isReminderActive});
+    setSaveAddressEnabled(!saveAddressEnabled);
+    setForm({...form, is_saved: !saveAddressEnabled});
   };
 
   useEffect(() => {
-    !isReminderActive && setForm({...form, is_saved: isReminderActive});
-  }, [isReminderActive]);
+    !saveAddressEnabled && setForm({...form, is_saved: saveAddressEnabled});
+  }, [saveAddressEnabled]);
 
   useEffect(() => {
     addresses.length > 2 && setIsDisable(true);
   }, [addresses.length]);
-
-  const renderServiceItem = ({item}) => {
-    const street = item.street;
-    const number = item.number;
-    const zipcode = item.zipcode;
-    const city = item.city;
-    const state = item.state.name;
-    const title = item.user_address.name;
-
-    const auxData = {
-      city,
-      colony: item.colony,
-      int_number: item.int_number,
-      addressId: item.id,
-      is_saved: item.is_saved,
-      municipality: {
-        id_municipality: item.municipality.id,
-        name_municipality: item.municipality.name,
-      },
-      number,
-      reference: item.reference,
-      state: {
-        id_state: item.state.id,
-        name_state: state,
-      },
-      street,
-      zipcode,
-    };
-
-    const content =
-      street + ' #' + number + '\n' + zipcode + ', ' + city + ' ' + state;
-
-    return (
-      <NavigateButton
-        title={title}
-        subtitle={content}
-        destination={'PaymentSummary'}
-        data={{address: auxData}}
-      />
-    );
-  };
 
   const onSavePress = () => {
     const auxData = {
@@ -158,51 +117,101 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form},
   });
 
-  return (
-    <DefaultLayout>
+  /***************************
+   *** Rendering functions ***
+   ***************************/
+
+  const renderAddress = ({item}) => {
+    const street = item.street;
+    const number = item.number;
+    const zipcode = item.zipcode;
+    const city = item.city;
+    const state = item.state.name;
+    const title = item.user_address.name;
+
+    const auxData = {
+      city,
+      colony: item.colony,
+      int_number: item.int_number,
+      addressId: item.id,
+      is_saved: item.is_saved,
+      municipality: {
+        id_municipality: item.municipality.id,
+        name_municipality: item.municipality.name,
+      },
+      number,
+      reference: item.reference,
+      state: {
+        id_state: item.state.id,
+        name_state: state,
+      },
+      street,
+      zipcode,
+    };
+
+    const content =
+      street + ' #' + number + '\n' + zipcode + ', ' + city + ' ' + state;
+
+    return (
+      <NavigateButton
+        title={title}
+        subtitle={content}
+        destination={'PaymentSummary'}
+        data={{address: auxData}}
+      />
+    );
+  };
+
+  const renderHeader = (
+    <TitleHeader style={styles.subtitle}>Direcciones guardadas</TitleHeader>
+  );
+
+  const renderFooter = (
+    <>
+      <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
+      <AddressForm
+        error={error}
+        form={form}
+        setForm={setForm}
+        setNameMunicipality={setNameMunicipality}
+        setNameState={setNameState}
+      />
+      {addresses.length > 2 && (
+        <DefaultText style={styles.message}>
+          Solo puedes guardar 3 direcciones
+        </DefaultText>
+      )}
+      <ReminderInput
+        isActive={saveAddressEnabled}
+        setIsActive={changeValue}
+        setValue={null}
+        value={null}
+        text={'Guardar dirección'}
+        isDisable={isDisable}
+        isNotReminder={true}
+      />
+    </>
+  );
+
+  const renderEmpty = (
+    <DefaultText style={styles.subtitle}>
+      No hay direcciones guardadas
+    </DefaultText>
+  );
+
+  return addressQuery.isLoading ? (
+    <CustomSpinner />
+  ) : (
+    <DefaultLayout style={styles.container}>
       <TitleHeader>Envío</TitleHeader>
-      <ScrollView>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
-          contentContainerStyle={styles.container}>
-          <TitleHeader style={styles.subtitle}>
-            Direcciones guardadas
-          </TitleHeader>
-          {addresses && addresses.length > 0 ? (
-            <List
-              style={styles.servicesContainer}
-              data={addresses}
-              renderItem={renderServiceItem}
-            />
-          ) : (
-            <DefaultText style={styles.subtitle}>
-              No hay direcciones guardadas
-            </DefaultText>
-          )}
-          <TitleHeader style={styles.subtitle}>Nueva dirección</TitleHeader>
-          <AddressForm
-            error={error}
-            form={form}
-            setForm={setForm}
-            setNameMunicipality={setNameMunicipality}
-            setNameState={setNameState}
-          />
-          {addresses.length > 2 && (
-            <DefaultText style={styles.message}>
-              Solo puedes guardar 3 direcciones
-            </DefaultText>
-          )}
-          <ReminderInput
-            isActive={isReminderActive}
-            setIsActive={changeValue}
-            setValue={null}
-            value={null}
-            text={'Guardar dirección'}
-            isDisable={isDisable}
-            isNotReminder={true}
-          />
-        </KeyboardAvoidingView>
-      </ScrollView>
+      <List
+        style={styles.servicesContainer}
+        data={addresses}
+        ListHeaderComponent={renderHeader}
+        renderItem={renderAddress}
+        ListEmptyComponent={renderEmpty}
+        ListFooterComponent={renderFooter}
+      />
     </DefaultLayout>
   );
 };

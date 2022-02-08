@@ -1,5 +1,6 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Image, Dimensions, Platform} from 'react-native';
+import moment from 'moment';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -85,8 +86,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   const renderServiceItem = (service) => {
     const is_unique = service.item.is_unique;
-    const next_vaccine_date = new Date(service.item.next_deworming_date);
-    const notification = new Date(service.item.reminder);
+    const next_vaccine_date = moment(service.item.next_deworming_date).toDate();
+    const notification = moment(service.item.reminder).toDate();
     const substrac = next_vaccine_date.getTime() - notification.getTime();
     const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24) + 1);
     const auxData = {
@@ -95,7 +96,9 @@ export default ({navigation, route}): React.ReactElement => {
       notification:
         !is_unique && service.item.reminder ? notificationDays : null,
       status:
-        is_unique || next_vaccine_date > new Date() ? 'Activa' : 'Vencida',
+        is_unique || next_vaccine_date > moment().toDate()
+          ? 'Activa'
+          : 'Vencida',
       vaccineDates: service.item.dewormings,
     };
     return (

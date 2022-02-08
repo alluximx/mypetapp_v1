@@ -1,8 +1,12 @@
 import {useQuery} from 'react-query';
 import api from '../../services/app-services';
 const useMunicipality = (id) => {
-  return useQuery(['general-municipality', id], () =>
-    api.get('api/v1/municipality/?state=' + id, true),
+  return useQuery(
+    ['general-municipality', id],
+    () => api.get('api/v1/municipality/?state=' + id, true),
+    {
+      enabled: id ? true : false,
+    },
   );
 };
 export default useMunicipality;

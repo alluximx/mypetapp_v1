@@ -18,41 +18,11 @@ import PawBreed from '../../../components/utils/paw-breed';
 import TitleHeader from '../../../components/texts/title-header';
 
 export default ({route}): React.ReactElement => {
-  const data = [route.params.breed];
+  const data = route.params.breed;
   const image = require('../assets/dog-notFound.jpg');
-  const renderDataItem = ({item}) => {
-    return (
-      <View style={styles.servicesContainer}>
-        <Text style={styles.subtitulo}>Descripción general</Text>
-        <Text style={styles.label}>{item.description}</Text>
-        <Text style={styles.subtitulo}>Tamaño</Text>
-        <Text style={styles.label}>{item.size.name}</Text>
-        <Text style={styles.subtitulo}>Peso</Text>
-        <Text style={styles.label}>
-          Entre de {item.min_weight} y {item.max_weight} kg
-        </Text>
-        <Text style={styles.subtitulo}>Altura</Text>
-        <Text style={styles.label}>
-          Entre de {item.min_height} y {item.max_height} cm
-        </Text>
-        <Text style={styles.subtitulo}>Esperanza de vida</Text>
-        <Text style={styles.label}>{item.life_expectancy} años</Text>
-        <Text style={styles.subtitulo}>Principales características</Text>
-        <Text style={styles.label}>{item.main_characteristics}</Text>
-        <Text style={styles.subtitulo}>Nivel energético</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.energy_level, 10)} />
-        <Text style={styles.subtitulo}>Tendencia a babear</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.slobber_level, 10)} />
-        <Text style={styles.subtitulo}>Tendencia a ladrar</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.barking_level, 10)} />
-        <Text style={styles.subtitulo}>Necesidad de atención</Text>
-        <PawBreed numberTteam={5} number={parseInt(item.attention_level, 10)} />
-      </View>
-    );
-  };
   return (
     <>
-      {data[0].image == null ? (
+      {data.image == null ? (
         <ImageBackground
           source={image}
           resizeMode="cover"
@@ -60,7 +30,7 @@ export default ({route}): React.ReactElement => {
         />
       ) : (
         <ImageBackground
-          source={{uri: data[0].image}}
+          source={{uri: data.image}}
           resizeMode="cover"
           style={styles.petImageContainer}
         />
@@ -70,7 +40,7 @@ export default ({route}): React.ReactElement => {
           flex: 1,
           justifyContent: 'flex-start',
           position: 'relative',
-          marginTop: 92,
+          marginTop: 124,
         }}></View>
       <View style={{marginBottom: 50, borderRadius: 40, overflow: 'hidden'}}>
         <ScrollView stickyHeaderIndices={[0]}>
@@ -84,11 +54,44 @@ export default ({route}): React.ReactElement => {
             statusBarStyle={'dark-content'}
             statusBarBackgroundColor={'rgba(230,240,233,0.50)'}
             style={styles.container}>
-            <List
-              style={styles.servicesContainer}
-              data={data}
-              renderItem={renderDataItem}
-            />
+            <View style={styles.servicesContainer}>
+              <Text style={styles.subtitulo}>Descripción general</Text>
+              <Text style={styles.label}>{data.description}</Text>
+              <Text style={styles.subtitulo}>Tamaño</Text>
+              <Text style={styles.label}>{data.size.name}</Text>
+              <Text style={styles.subtitulo}>Peso</Text>
+              <Text style={styles.label}>
+                Entre de {data.min_weight} y {data.max_weight} kg
+              </Text>
+              <Text style={styles.subtitulo}>Altura</Text>
+              <Text style={styles.label}>
+                Entre de {data.min_height} y {data.max_height} cm
+              </Text>
+              <Text style={styles.subtitulo}>Esperanza de vida</Text>
+              <Text style={styles.label}>{data.life_expectancy} años</Text>
+              <Text style={styles.subtitulo}>Principales características</Text>
+              <Text style={styles.label}>{data.main_characteristics}</Text>
+              <Text style={styles.subtitulo}>Nivel energético</Text>
+              <PawBreed
+                numberTteam={5}
+                number={parseInt(data.energy_level, 10)}
+              />
+              <Text style={styles.subtitulo}>Tendencia a babear</Text>
+              <PawBreed
+                numberTteam={5}
+                number={parseInt(data.slobber_level, 10)}
+              />
+              <Text style={styles.subtitulo}>Tendencia a ladrar</Text>
+              <PawBreed
+                numberTteam={5}
+                number={parseInt(data.barking_level, 10)}
+              />
+              <Text style={styles.subtitulo}>Necesidad de atención</Text>
+              <PawBreed
+                numberTteam={5}
+                number={parseInt(data.attention_level, 10)}
+              />
+            </View>
           </DefaultLayout>
         </ScrollView>
       </View>
@@ -98,11 +101,11 @@ export default ({route}): React.ReactElement => {
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    marginTop: height / 2 - 180,
+    marginTop: height / 2 - 210,
     paddingTop: 32,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    marginBottom: 30,
+    marginBottom: 60,
   },
   petDataCards: {
     flexDirection: 'row',
@@ -133,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: globalVars.fontBold,
     fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
-    marginTop: 32,
+    marginTop: 16,
   },
   label: {
     fontSize: 16,
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     paddingLeft: 24,
     paddingTop: 32,
     position: 'absolute',
-    top: height / 2 - 135,
+    top: height / 2 - 170,
     width: '100%',
   },
 });

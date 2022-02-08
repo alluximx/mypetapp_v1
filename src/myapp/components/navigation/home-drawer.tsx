@@ -34,6 +34,9 @@ export const HomeDrawer = (props): DrawerElement => {
       route.ruta === props.routeName && setCurrentTab(route.name);
     });
   }, [props.routeName]);
+  useEffect(() => {
+    props.setProgress(props.progress);
+  }, [props.progress]);
 
   const navigateToScreen = (urlKey: string, params: {}) => {
     props.navigation.navigate(urlKey, params);

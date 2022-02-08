@@ -25,8 +25,8 @@ import RootStackParamList from '../myapp/types/navigation/root-stack';
 // Native screens.
 import {enableScreens} from 'react-native-screens';
 import useDeepLinks from '../myapp/hooks/fcm/useDeepLinks';
-enableScreens(true);
 
+enableScreens(true);
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 const queryClient = new QueryClient();
 
@@ -51,12 +51,14 @@ export const MyAppNavigator = (): React.ReactElement => {
         dispatch({type: 'RESTORE_IS_GUEST', isGuest: typeUser});
       } catch (e) {
         // Restoring token failed
+        dispatch({type: 'SIGN_OUT'});
       }
 
       setLoading(false);
     };
     bootstrapAsync();
   }, []);
+
   const authContext = useMemo(
     (): AuthContextType => ({
       isGuest: state.isGuest,
@@ -151,11 +153,11 @@ export const MyAppNavigator = (): React.ReactElement => {
             {loading ? (
               <RootStack.Screen
                 name="Loading"
-                component={() => <CustomSpinner />}
                 options={{
                   headerShown: false,
-                }}
-              />
+                }}>
+                {() => <CustomSpinner />}
+              </RootStack.Screen>
             ) : state.userToken || state.isGuest ? (
               <RootStack.Screen
                 name="HomeNavigator"
