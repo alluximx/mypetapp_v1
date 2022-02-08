@@ -1,4 +1,5 @@
 import {CommonActions, NavigationState} from '@react-navigation/native';
+import {VetSettings} from './types/models';
 
 /**
  * Method used to add a screen before the current one.
@@ -40,4 +41,28 @@ export const insertBeforeLast = (routeName: string, params = {}) => (
     routes,
     index: routes.length - 1,
   });
+};
+
+export const checkIfDayIsEnabledInVetSettings = (
+  index: number,
+  settings: VetSettings,
+): boolean => {
+  switch (index) {
+    case 0:
+      return settings.sunday;
+    case 1:
+      return settings.monday;
+    case 2:
+      return settings.tuesday;
+    case 3:
+      return settings.wednesday;
+    case 4:
+      return settings.thursday;
+    case 5:
+      return settings.friday;
+    case 6:
+      return settings.saturday;
+    default:
+      return false;
+  }
 };

@@ -5,21 +5,22 @@ import {List} from '@ui-kitten/components';
 import globalColors from '../../styles/colors';
 import globalVars from '../../styles/vars';
 // Types.
-import {OptionSelectProps} from '../../types/components/inputs';
+import {Option, OptionSelectProps} from '../../types/components/inputs';
 // My components
 import TitleHeader from '../texts/title-header';
 
+export const OPTION_GAP = 16;
 const {width} = Dimensions.get('window');
-const OPTION_GAP = 16;
 const LIST_ITEM_HEIGHT = 56;
 
 const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
-  const renderOption = (option) => {
-    const {key, value, title} = option.item;
+  const renderOption = ({item}: {item: Option}) => {
+    const {isDisabled, key, title, value} = item;
 
     return (
       <TouchableOpacity
         activeOpacity={0.8}
+        disabled={isDisabled}
         key={key}
         style={[
           styles.option,
@@ -31,6 +32,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
               globalVars.outsidePadding * 2 +
               OPTION_GAP,
           },
+          isDisabled && styles.optionDisabled,
           props.optionStyle,
         ]}
         onPress={() => {
@@ -41,6 +43,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
             style={[
               props.titleStyle,
               props.currentValue === key && styles.optionTextSelected,
+              isDisabled && styles.optionDisabledText,
             ]}>
             {title}
           </TitleHeader>
@@ -50,6 +53,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
             styles.optionText,
             props.currentValue === key && styles.optionTextSelected,
             props.textStyle,
+            isDisabled && styles.optionDisabledText,
           ]}>
           {value}
         </Text>
@@ -59,6 +63,7 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
 
   return (
     <List
+      contentContainerStyle={props.containerStyle}
       data={props.data}
       getItemLayout={(data, index) => ({
         length: LIST_ITEM_HEIGHT,
@@ -66,11 +71,15 @@ const OptionSelect = (props: OptionSelectProps): React.ReactElement => {
         index,
       })}
       horizontal={props.horizontal ?? false}
+      ListEmptyComponent={props.emptyComponent}
+      ListFooterComponent={props.footerComponent}
+      ListHeaderComponent={props.headerComponent}
       numColumns={props.numColumns && props.numColumns}
       renderItem={renderOption}
       scrollEnabled={
         props.horizontal ? (props.enableScroll ? true : false) : true
       }
+      columnWrapperStyle={props.columnWrapperStyle ?? null}
       showsHorizontalScrollIndicator={props.horizontal ? false : true}
       style={[styles.optionsContainer, props.style]}
     />
@@ -98,6 +107,12 @@ const styles = StyleSheet.create({
   },
   optionTextSelected: {
     color: globalColors.white,
+  },
+  optionDisabled: {
+    backgroundColor: globalColors.lightGray,
+  },
+  optionDisabledText: {
+    color: globalColors.darkGray,
   },
 });
 

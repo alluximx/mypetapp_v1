@@ -1,22 +1,34 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View, Dimensions, Image} from 'react-native';
 // Global Styles.
 import globalColors from '../../../styles/colors';
 import globalStyles from '../../../styles/style';
+// Hooks.
+import useVetSettings from '../../../hooks/vets/useVetSettings';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import RatingCard from '../../../components/cards/rating-card';
 import TitleHeader from '../../../components/texts/title-header';
+// Types.
+import {VetSettings} from '../../../types/models';
 
 export default ({navigation, route}): React.ReactElement => {
   const data = route.params.data;
+  const [vetSettings, setVetSettings] = useState<VetSettings>({
+    base_charge: 0,
+    is_configured: false,
+  });
+
   const {
+    admin_is_configured,
     availability,
     colony,
     distance,
     exterior_number,
+    has_admin,
+    id,
     logo,
     name,
     rating,
@@ -24,9 +36,22 @@ export default ({navigation, route}): React.ReactElement => {
     zipcode,
   } = data;
 
+  const shouldCallSettings = admin_is_configured && has_admin;
+  const {data: settings, isLoading, isSuccess} = useVetSettings(
+    id,
+    shouldCallSettings,
+  );
+
+  useEffect(() => {
+    if (settings?.data) {
+      setVetSettings({...settings?.data[0]});
+    }
+  }, [isSuccess]);
+
   const nameState = data.state.name;
   const municipality = data.municipality.name;
   const address = `${street} #${exterior_number}, ${colony},\n${zipcode} ${municipality}, ${nameState}.`;
+
   return (
     <>
       <View style={styles.containerImage}>
@@ -49,16 +74,22 @@ export default ({navigation, route}): React.ReactElement => {
           <DefaultText style={styles.subtitle}>{address}</DefaultText>
           <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
           <RatingCard rating={rating} distance={distance} />
-          {/* <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
-          <TitleHeader
-            style={[globalStyles.highlightedText, {marginBottom: 32}]}>
-            {'$' + 200}
-          </TitleHeader>
-          <NavigateButton
-            destination="VetDate"
-            placeholder="Generar Cita"
-            data={{screenFrom: 'VetDate'}}
-          /> */}
+          {!isLoading && shouldCallSettings && (
+            <>
+              <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
+              <TitleHeader style={styles.baseCharge}>
+                {'$' + vetSettings.base_charge}
+              </TitleHeader>
+              <NavigateButton
+                destination="VetDate"
+                placeholder="Generar Cita"
+                data={{
+                  screenFrom: 'VetDate',
+                  ...vetSettings,
+                }}
+              />
+            </>
+          )}
         </DefaultLayout>
       </ScrollView>
     </>
@@ -80,6 +111,11 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 4,
     fontSize: 18,
+  },
+  baseCharge: {
+    ...globalStyles.highlightedText,
+    fontSize: 18,
+    marginBottom: 32,
   },
   bottomSpace: {
     marginBottom: 5,

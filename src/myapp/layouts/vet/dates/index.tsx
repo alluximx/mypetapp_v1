@@ -1,71 +1,109 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
+import 'moment/locale/es';
+import moment from 'moment';
+import _ from 'lodash';
 
+// Constants
+import {stripeDaysForTransaction} from '../../../constants';
+// Global Styles
+import globalVars from '../../../styles/vars';
 // My Components
+import CustomButton from '../../../components/buttons/custom-button';
+import CustomModal from '../../../components/modals/custom-modal';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
 import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
-import OptionSelect from '../../../components/inputs/option-select';
-import CustomButton from '../../../components/buttons/custom-button';
+import OptionSelect, {
+  OPTION_GAP,
+} from '../../../components/inputs/option-select';
+import TitleHeader from '../../../components/texts/title-header';
 import {QuestionCircleIcon} from '../../../components/icons';
-import CustomModal from '../../../components/modals/custom-modal';
+// Utils
+import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
+// Types
+import {Option, OptionDate} from '../../../types/components/inputs';
+import {Appointment} from '../../../types/models';
+import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import {getAvailableDays, getAvailableHours} from './utils';
+import CustomSpinner from '../../../components/custom-spinner';
+
+const NUM_COLUMNS = 4;
 
 export default ({navigation, route}): React.ReactElement => {
-  const [days, setDays] = useState([]);
+  const [days, setDays] = useState<OptionDate[]>([]);
+  const [hours, setHours] = useState<Option[]>([]);
   const [statusDay, setStatusDay] = useState(false);
   const [statusBtn, setStatusBtn] = useState(true);
+  // Loading
   const [isLoading, setIsLoading] = useState(false);
+  // Modals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-
-  const numColumns = 4;
-
-  const {screenFrom, petInfo, paymentMethod, serviceData} =
-    route.params?.data ?? {};
-  // PaymentInfo
   const [cardTitle, setCardTitle] = useState('');
   const [cardContent, setCardContent] = useState('');
-  // PetInfo
-  const [petContent, setPetContent] = useState('');
-  // Service Info
-  const [serviceContent, setServiceContent] = useState('');
-  // Service Info
+  const [emptyText, setEmptyText] = useState(
+    'Por favor selecciona una fecha para ver los horarios disponibles.',
+  );
 
+  const [petContent, setPetContent] = useState('');
+  const [serviceContent, setServiceContent] = useState('');
   const [form, setForm] = useState({
-    pet: '',
-    day: '',
-    time: '',
-    paymentMethod: '',
     card_id: '',
+    day: '',
+    paymentMethod: '',
     pet_id: '',
+    pet: '',
+    time: '',
   });
 
-  const arrayDays = [
-    {key: '3', title: 'Lun', value: '3'},
-    {key: '4', title: 'Mar', value: '4'},
-    {key: '5', title: 'Mie', value: '5'},
-    {key: '6', title: 'Jue', value: '6'},
-    {key: '7', title: 'Vie', value: '7'},
-    {key: '8', title: 'Sab', value: '8'},
-    {key: '9', title: 'Lun', value: '9'},
-  ];
+  const vetAppointments = useVetAppointments(route.params.data.admin);
+  const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
+    route.params?.data ?? {};
 
-  const arrayTime = [
-    {key: '1', value: '8:00 AM'},
-    {key: '2', value: '9:00 AM'},
-    {key: '3', value: '10:00 AM'},
-    {key: '4', value: '11:00 AM'},
-    {key: '5', value: '12:00 PM'},
-    {key: '6', value: '1:00 PM'},
-    {key: '7', value: '2:00 PM'},
-    {key: '8', value: '1:00 PM'},
-    {key: '9', value: '2:00 PM'},
-    {key: '10', value: '1:00 PM'},
-    {key: '11', value: '3:00 PM'},
-    {key: '12', value: '4:00 PM'},
-    {key: '13', value: '5:00 PM'},
-  ];
+  const setValueForm = (day: string) => {
+    setForm({...form, day});
+    setStatusDay(true);
+  };
+
+  const setValueTime = (time: string) => {
+    setForm({...form, time});
+    setStatusBtn(false);
+  };
+
+  /***************
+   *** Effects ***
+   ***************/
+
+  useEffect(() => {
+    moment.locale('es');
+    const nextDaysList = getAvailableDays(route.params.data);
+    setDays(nextDaysList);
+  }, []);
+
+  useEffect(() => {
+    if (form.day) {
+      setHours([]);
+      const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
+      const appointments = vetAppointments?.data?.data ?? [];
+      const allHours = getAvailableHours(
+        route.params.data,
+        selectedDate,
+        appointments,
+      );
+      !allHours.length &&
+        setEmptyText('No quedan horarios disponibles en este día.');
+      // setAreHoursLoading(false);
+      setForm({...form, time: ''});
+      setHours(allHours);
+    }
+  }, [form.day]);
 
   useEffect(() => {
     if (petInfo) {
@@ -87,34 +125,127 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [petInfo, paymentMethod, serviceData]);
 
+  /**********************
+   *** Render Methods ***
+   **********************/
+
+  const baseCharge = Number(base_charge).toFixed(2);
+  const timeBeforePenalization =
+    route.params.data?.minimum_time_for_cancel / 60;
+
   const textModal =
-    'Para generar una cita es necesario ' +
-    'seleccionar o agregar un método ' +
-    'de pago. La cita se cobrará al pasar ' +
-    'la fecha y el horario seleccionado.\n' +
-    'Puedes cancelar hasta 3 horas ' +
-    'antes, de lo contrario se te cobrará ' +
-    'una penalización.';
+    'Para generar una cita es necesario seleccionar o agregar un método ' +
+    'de pago. La cita se cobrará al pasar la fecha y el horario ' +
+    `seleccionado.\n Puedes cancelar hasta ${timeBeforePenalization} horas ` +
+    'antes, de lo contrario se te cobrará una penalización.';
 
   const textSubmitModal =
-    'Tu cita ha sido generada ' +
-    'exitósamente. Puedes acceder a ' +
-    'todos tus servicios programados ' +
-    'desde la sección de "Proximos ' +
-    'Servicios" en el menú principal. ';
+    'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
+    'todos tus servicios programados desde la sección de' +
+    '"Proximos Servicios" en el menú principal. ';
 
-  const setValueForm = (day: string) => {
-    setForm({...form, day});
-    setStatusDay(true);
-  };
+  const renderEmpty = (
+    <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
+      <DefaultText>{emptyText}</DefaultText>
+    </View>
+  );
 
-  const SetValueTime = (time: string) => {
-    setForm({...form, time});
-    setStatusBtn(false);
-  };
+  const renderHeader = (
+    <>
+      <View style={styles.horizontalPadding}>
+        <TitleHeader style={styles.header}>
+          {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
+        </TitleHeader>
+        <TitleHeader style={styles.normalHeader}>
+          ¿Para quién es la cita?
+        </TitleHeader>
+        <View style={{marginBottom: 10}}>
+          <NavigateButton
+            placeholder="Selecciona tu mascota"
+            destination="PetSelect"
+            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+            title="Mascota"
+            subtitle={petContent}
+          />
+        </View>
+        {screenFrom && screenFrom === 'AestheticDate' && (
+          <View style={styles.horizontalPadding}>
+            <TitleHeader style={styles.normalHeader}>
+              ¿Qué servicio necesita tu mascota?
+            </TitleHeader>
+            <NavigateButton
+              placeholder="Selecciona los servicios"
+              destination="ServiceSelect"
+              data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+              title="Servicio"
+              subtitle={serviceContent}
+            />
+          </View>
+        )}
+        <TitleHeader style={styles.normalHeader}>Día</TitleHeader>
+      </View>
+      <OptionSelect
+        containerStyle={styles.selectContainer}
+        currentValue={form.day}
+        setCurrentValue={(day: string) => setValueForm(day)}
+        enableScroll={true}
+        horizontal={true}
+        data={days}
+        style={styles.select}
+        optionStyle={styles.options}
+        textStyle={styles.textOption}
+        titleStyle={styles.titleOption}
+      />
+      <TitleHeader style={[styles.normalHeader, styles.horizontalPadding]}>
+        Horario
+      </TitleHeader>
+    </>
+  );
+
+  const renderFooter = (
+    <View style={styles.horizontalPadding}>
+      <View style={styles.paymentMethodTitle}>
+        <TitleHeader style={styles.normalHeader}>Método de pago</TitleHeader>
+        <TouchableOpacity
+          onPress={() => {
+            setIsModalVisible(true);
+          }}>
+          <QuestionCircleIcon style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+      <View style={{marginBottom: 10}}>
+        <NavigateButton
+          placeholder="Selecciona el método de pago"
+          destination="AddPaymentMethod"
+          data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+          subtitle={cardContent}
+          title={cardTitle}
+        />
+      </View>
+      <View style={styles.totalContainer}>
+        <DefaultText style={styles.leftSide}>Consulta</DefaultText>
+        <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
+      </View>
+      <View style={styles.totalContainer}>
+        <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+        <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
+      </View>
+      <View style={{marginBottom: 20}}>
+        <CustomButton
+          isDisabled={statusBtn}
+          isLoading={isLoading}
+          onPress={() => {
+            setIsLoading(true);
+            setIsModalSubmitVisible(true);
+          }}>
+          Generar cita
+        </CustomButton>
+      </View>
+    </View>
+  );
 
   return (
-    <DefaultLayout>
+    <DefaultLayout style={styles.container}>
       <CustomModal
         labelAccept="Entendido"
         title="Método de pago"
@@ -131,123 +262,32 @@ export default ({navigation, route}): React.ReactElement => {
         showCancel={false}
         visible={isModalSubmitVisible}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <TitleHeader style={styles.header}>
-          {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
-        </TitleHeader>
-        <TitleHeader style={styles.normalHeader}>
-          ¿Para quién es la cita?
-        </TitleHeader>
-        <View style={{marginBottom: 10}}>
-          <NavigateButton
-            placeholder="Selecciona tu mascota"
-            destination="PetSelect"
-            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
-            title="Mascota"
-            subtitle={petContent}
-          />
-        </View>
-
-        {screenFrom && screenFrom === 'AestheticDate' && (
-          <View>
-            <TitleHeader style={styles.normalHeader}>
-              ¿Qué servicio necesita tu mascota?
-            </TitleHeader>
-            <NavigateButton
-              placeholder="Selecciona los servicios"
-              destination="ServiceSelect"
-              data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
-              title="Servicio"
-              subtitle={serviceContent}
-            />
-          </View>
-        )}
-
-        <TitleHeader style={styles.normalHeader}>Día</TitleHeader>
-        <View style={{marginBottom: 10}}>
-          <OptionSelect
-            currentValue={form.day}
-            setCurrentValue={(day: string) => setValueForm(day)}
-            enableScroll={true}
-            horizontal={true}
-            data={arrayDays}
-            style={styles.select}
-            optionStyle={styles.options}
-            textStyle={styles.textOption}
-            titleStyle={styles.titleOption}
-          />
-        </View>
-
-        <TitleHeader style={styles.normalHeader}>Horario</TitleHeader>
-        <View style={{flex: 1, marginBottom: 30}}>
-          {statusDay ? (
-            <OptionSelect
-              currentValue={form.time}
-              setCurrentValue={(time: string) => SetValueTime(time)}
-              data={arrayTime}
-              numColumns={numColumns}
-              style={styles.select}
-              optionStyle={styles.optionTime}
-              textStyle={styles.textOptionTime}
-            />
-          ) : (
-            <View>
-              <DefaultText>Por favor selecciona una fecha para ver</DefaultText>
-              <DefaultText>los horarios disponibles</DefaultText>
-            </View>
-          )}
-        </View>
-        <View style={{flexDirection: 'row'}}>
-          <TitleHeader style={styles.normalHeader}> Método de pago</TitleHeader>
-          <TouchableOpacity
-            onPress={() => {
-              setIsModalVisible(true);
-            }}>
-            <QuestionCircleIcon style={{}} />
-          </TouchableOpacity>
-        </View>
-        <View style={{marginBottom: 10}}>
-          <NavigateButton
-            placeholder="Slecciona el método de pago"
-            destination="AddPaymentMethod"
-            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
-            subtitle={cardContent}
-            title={cardTitle}
-          />
-        </View>
-        <View style={styles.totalContainer}>
-          <DefaultText style={{justifyContent: 'flex-start'}}>
-            Consulta
-          </DefaultText>
-          <DefaultText style={{justifyContent: 'flex-end'}}>
-            $200.00
-          </DefaultText>
-        </View>
-        <View style={styles.totalContainer}>
-          <TitleHeader style={{justifyContent: 'flex-start'}}>
-            Total
-          </TitleHeader>
-          <TitleHeader style={{justifyContent: 'flex-end'}}>
-            $200.00
-          </TitleHeader>
-        </View>
-        <View style={{marginBottom: 20}}>
-          <CustomButton
-            isDisabled={statusBtn}
-            isLoading={isLoading}
-            onPress={() => {
-              setIsLoading(true);
-              setIsModalSubmitVisible(true);
-            }}>
-            Generar cita
-          </CustomButton>
-        </View>
-      </ScrollView>
+      <OptionSelect
+        currentValue={form.time}
+        data={hours}
+        emptyComponent={renderEmpty}
+        footerComponent={renderFooter}
+        headerComponent={renderHeader}
+        numColumns={NUM_COLUMNS}
+        columnWrapperStyle={styles.columnWrapper}
+        optionStyle={styles.optionTime}
+        setCurrentValue={(time: string) => setValueTime(time)}
+        style={styles.selectHours}
+        textStyle={styles.textOptionTime}
+      />
     </DefaultLayout>
   );
 };
 
+const {width} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 0,
+  },
+  horizontalPadding: {
+    paddingHorizontal: globalVars.outsidePadding,
+  },
   header: {
     fontSize: 20,
     marginBottom: 20,
@@ -256,19 +296,44 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 18,
   },
+  hourList: {
+    flex: 1,
+  },
+  icon: {
+    marginLeft: 10,
+  },
   select: {
     marginBottom: 16,
   },
+  selectHours: {
+    marginBottom: 0,
+  },
+  selectContainer: {
+    paddingLeft: globalVars.outsidePadding,
+    paddingRight: globalVars.outsidePadding / 2,
+    marginBottom: 16,
+  },
   options: {
-    width: null,
-    height: 65,
+    width: 64,
+    height: 70,
+    borderRadius: 16,
+    padding: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  columnWrapper: {
+    paddingHorizontal: globalVars.outsidePadding,
   },
   optionTime: {
-    minWidth: 87,
+    minWidth: width / 4 - OPTION_GAP / 2 - globalVars.outsidePadding / 2,
     height: 40,
     marginRight: 10,
     marginBottom: 15,
-    padding: 15,
+    paddingBottom: 10,
+    paddingTop: 15,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textOption: {
     alignSelf: 'center',
@@ -278,10 +343,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: -5,
   },
+  hourListEmptyContainer: {
+    marginBottom: 24,
+  },
   titleOption: {
     fontSize: 15,
     marginTop: -5,
   },
+  paymentMethodTitle: {flexDirection: 'row', marginTop: 16},
   totalContainer: {
     marginBottom: 10,
     justifyContent: 'space-between',
@@ -292,4 +361,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     marginBottom: 10,
   },
+  leftSide: {justifyContent: 'flex-start'},
+  rightSide: {justifyContent: 'flex-end'},
 });

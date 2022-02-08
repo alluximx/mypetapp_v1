@@ -22,12 +22,23 @@ export interface DropdownPickerProps {
 export interface Option {
   key: string;
   value: string;
+  title?: string;
+  isDisabled?: boolean;
+}
+
+export interface OptionDate extends Option {
+  fullDate?: string;
 }
 
 export interface OptionSelectProps {
+  columnWrapperStyle?: {};
+  containerStyle?: {};
   currentValue: string | number;
   data: any[];
+  emptyComponent?: React.ReactElement;
   enableScroll?: boolean;
+  footerComponent?: React.ReactElement;
+  headerComponent?: React.ReactElement;
   horizontal?: boolean;
   numColumns?: number;
   optionStyle?: {};
@@ -35,8 +46,8 @@ export interface OptionSelectProps {
   style?: {};
   styleHorizontal?: boolean;
   textStyle?: {};
-  titleStyle?: {};
   title?: string;
+  titleStyle?: {};
 }
 
 export interface SearchInputProps {

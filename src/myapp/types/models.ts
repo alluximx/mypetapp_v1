@@ -69,6 +69,8 @@ export interface Appointment {
     timeLimit: number;
     amount: number;
   };
+  full_start_time?: string;
+  full_end_time?: string;
 }
 
 export interface Option {
@@ -135,6 +137,21 @@ export interface VariantOption extends Option {
 
 export interface Vet extends BaseModel {
   location: LatLng;
+}
+
+export interface VetSettings {
+  base_charge: number;
+  is_configured: boolean;
+  start_time: string;
+  end_time: string;
+  time_slots: string;
+  monday: boolean;
+  tuesday: boolean;
+  wednesday: boolean;
+  thursday: boolean;
+  friday: boolean;
+  saturday: boolean;
+  sunday: boolean;
 }
 
 export interface Visit {

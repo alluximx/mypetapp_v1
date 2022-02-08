@@ -23,16 +23,16 @@ import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
 import useSizes from '../../../hooks/pets/useSizes';
 
 export default ({navigation, route}): React.ReactElement => {
-  const data = useMyNameAndPets();
-  const dataSizes = useSizes();
-  const hasPets = data.pets.length !== 0;
   const styles = useStyleSheet(themedStyles);
+  const {screenToReturn, screenFrom} = route.params?.data ?? {};
+  const data = useMyNameAndPets();
+  const dataSizes = useSizes(screenFrom && screenFrom !== 'VetDate');
+  const hasPets = data.pets.length !== 0;
+
   const [sizes, setSizes] = useState([]);
   const [idPet, setIdPet] = useState();
   const [sizePet, setSizePet] = useState();
   const [name, setName] = useState();
-
-  const {screenToReturn, screenFrom} = route.params?.data ?? {};
   const isDisable = screenFrom === 'VetDate' ? !idPet : !idPet || !sizePet;
 
   useEffect(() => {
@@ -79,68 +79,71 @@ export default ({navigation, route}): React.ReactElement => {
     });
   };
 
-  const renderPetButton = (pet) => {
+  const renderPetButton = ({item}) => {
     return (
       <PetCard
-        pet={pet.item}
-        onPress={() => {
-          setSubmitData(pet.item.id, pet.item.name);
-        }}
-        profileButtonStyle={
-          pet.item.id === idPet ? styles.buttonPetSelected : styles.buttonPet
-        }
         dogProfileImageStyle={styles.imagePet}
-        petNameTextStyle={
-          pet.item.id === idPet ? styles.namePetSelected : styles.namePet
-        }
+        onPress={() => {
+          setSubmitData(item.id, item.name);
+        }}
+        pet={item}
+        petNameTextStyle={[
+          styles.namePet,
+          item.id === idPet ? styles.namePetSelected : styles.namePetDisabled,
+        ]}
+        profileButtonStyle={[
+          styles.buttonPet,
+          item.id === idPet
+            ? styles.buttonPetSelected
+            : styles.buttonPetDisabled,
+        ]}
         showAge={false}
       />
     );
   };
 
+  const renderEmptyPetList = (
+    <DefaultText style={styles.emptyText}>
+      Aún no tienes mascotas agregadas.
+    </DefaultText>
+  );
+
+  const renderSizesHeader = (
+    <>
+      <TitleHeader>Selecciona tu mascota</TitleHeader>
+      <TitleHeader style={styles.subtitle}>¿Para quién es la cita?</TitleHeader>
+      <List
+        contentContainerStyle={[
+          styles.petButtonsContentContainer,
+          !hasPets && styles.petButtonContentContainerEmpty,
+        ]}
+        data={data.pets}
+        horizontal={true}
+        ListEmptyComponent={renderEmptyPetList}
+        renderItem={renderPetButton}
+        style={styles.petButtonsContainer}
+      />
+      {screenFrom && screenFrom !== 'VetDate' && (
+        <TitleHeader style={styles.sizesPrompt}>
+          ¿Cuál es el tamaño actual de tu mascota?
+        </TitleHeader>
+      )}
+    </>
+  );
+
   return data.isLoading || dataSizes.isLoading ? (
     <CustomSpinner />
   ) : (
-    <DefaultLayout
-      statusBarStyle={'dark-content'}
-      style={[styles.container, {color: 'black'}]}>
-      <TitleHeader>Selecciona tu mascota</TitleHeader>
-      <ScrollView>
-        <TitleHeader style={{fontSize: 16, marginTop: 32}}>
-          ¿Para quién es la cita?
-        </TitleHeader>
-        <List
-          style={styles.petButtonsContainer}
-          horizontal={true}
-          contentContainerStyle={[
-            styles.petButtonsContentContainer,
-            !hasPets && styles.petButtonContentContainerEmpty,
-          ]}
-          data={data.pets}
-          renderItem={renderPetButton}
-          ListEmptyComponent={() => (
-            <DefaultText style={styles.emptyText}>
-              Aún no tienes mascotas agregadas.
-            </DefaultText>
-          )}
-        />
-        {screenFrom && screenFrom !== 'VetDate' && (
-          <View>
-            <TitleHeader style={{fontSize: 16, marginBottom: 16}}>
-              ¿Cuál es el tamaño actual de tu mascota?
-            </TitleHeader>
-
-            <OptionSelect
-              currentValue={sizePet}
-              setCurrentValue={(newSizePet) => setSizePet(newSizePet)}
-              horizontal={false}
-              data={sizes}
-              style={styles.select}
-              optionStyle={styles.options}
-            />
-          </View>
-        )}
-      </ScrollView>
+    <DefaultLayout statusBarStyle={'dark-content'} style={styles.container}>
+      <OptionSelect
+        currentValue={sizePet}
+        data={screenFrom && screenFrom !== 'VetDate' ? sizes : []}
+        headerComponent={renderSizesHeader}
+        horizontal={false}
+        optionStyle={styles.options}
+        setCurrentValue={(newSizePet) => setSizePet(newSizePet)}
+        style={styles.select}
+      />
     </DefaultLayout>
   );
 };
@@ -150,8 +153,9 @@ const themedStyles = StyleService.create({
     flex: 1,
     backgroundColor: globalColors.backgroundDefault,
   },
-  title: {
-    textAlign: 'center',
+  subtitle: {
+    fontSize: 16,
+    marginTop: 16,
   },
   headerRight: {
     marginRight: 12,
@@ -178,22 +182,26 @@ const themedStyles = StyleService.create({
   buttonPet: {
     height: 123,
     width: 104,
+  },
+  buttonPetDisabled: {
     backgroundColor: globalColors.white,
   },
-  namePet: {
-    color: globalColors.black,
-  },
-  imagePet: {
-    height: 56,
-    width: 56,
-  },
   buttonPetSelected: {
-    height: 123,
-    width: 104,
     backgroundColor: globalColors.greenSecondary,
+  },
+  namePet: {
+    fontSize: 14,
+  },
+  namePetDisabled: {
+    color: globalColors.black,
   },
   namePetSelected: {
     color: globalColors.white,
+  },
+  imagePet: {
+    marginTop: 5,
+    height: 56,
+    width: 56,
   },
   select: {
     marginBottom: 16,
@@ -201,4 +209,5 @@ const themedStyles = StyleService.create({
   options: {
     marginTop: 15,
   },
+  sizesPrompt: {fontSize: 16, marginBottom: 16},
 });
