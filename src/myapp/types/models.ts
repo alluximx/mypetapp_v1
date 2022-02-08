@@ -21,27 +21,24 @@ export interface AdoptionRequest {
 }
 
 export interface Appointment {
-  id: string;
-  date: string;
-  vet: string;
-  pet: {
-    name: string;
-  };
-  petImage: {
-    file: string;
-  };
-  services: BaseModel[];
   appointmentInfo?: {
     editingAttemptsLeft: number;
     maxEditingAttempts: number;
-    showDeletePenalty: boolean;
   };
+  has_penalty: boolean;
+  date: string;
+  end_time?: string;
+  id: string;
+  full_start_time?: string;
+  full_end_time?: string;
+  services: BaseModel[];
   penaltyData?: {
     timeLimit: number;
     amount: number;
   };
-  full_start_time?: string;
-  full_end_time?: string;
+  pet: string;
+  start_time?: string;
+  vet: string;
 }
 
 export interface BaseModel {

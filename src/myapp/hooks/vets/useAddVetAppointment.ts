@@ -11,6 +11,7 @@ const useAddVetAppointment = (vetAdminId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['vet-settings', vetAdminId]);
       queryClient.invalidateQueries(['vet-appointments', vetAdminId]);
+      queryClient.invalidateQueries('my-appointments');
     },
   });
 };

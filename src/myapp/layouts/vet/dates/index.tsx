@@ -56,7 +56,6 @@ export default ({navigation, route}): React.ReactElement => {
     day: '',
     date: '',
     paymentMethod: '',
-    pet_id: '',
     pet: '',
     time: '',
     start_time: '',
@@ -129,7 +128,7 @@ export default ({navigation, route}): React.ReactElement => {
       const {namePet, idPet, idSize} = route.params?.petInfo;
       const complt = idSize ? ' - ' + idSize : '';
       setPetContent(namePet + complt);
-      setForm({...form, pet_id: idPet});
+      setForm({...form, pet: idPet});
     }
   }, [route.params?.petInfo]);
 
@@ -157,7 +156,7 @@ export default ({navigation, route}): React.ReactElement => {
   const isDisabled =
     form.date === '' ||
     form.time === '' ||
-    form.pet_id === '' ||
+    form.pet === '' ||
     form.card_id === '';
 
   const baseCharge = Number(base_charge).toFixed(2);
