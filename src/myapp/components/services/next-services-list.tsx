@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import globalColors from '../../styles/colors';
 // Hooks.
 import useAppointments from '../../hooks/vets/useAppointments';
+import useDeleteAppointment from '../../hooks/vets/useDeleteVetAppointment';
 // My Components.
 import CustomModal from '../modals/custom-modal';
 import CustomSpinner from '../custom-spinner';
@@ -14,7 +15,8 @@ import NextServicesEmpty from './next-services-empty';
 // Types.
 import {Appointment} from '../../types/models';
 import {NextServicesListProps} from '../../types/components/services';
-import useDeleteAppointment from '../../hooks/vets/useDeleteVetAppointment';
+import {servicesTabs} from '../../constants';
+import moment from 'moment';
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
@@ -44,37 +46,60 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   };
 
   const getEditMessage = (appointment: Appointment): string => {
-    const {editingAttemptsLeft, maxEditingAttempts} =
-      appointment?.appointmentInfo || {};
-    const penaltyAmount = appointment?.penaltyData?.amount?.toFixed(2) || 0;
+    const {
+      allowed_changes_without_penalty,
+      minimum_time_for_reschedule,
+      reschedule_penalty,
+    } = appointment?.admin_settings ?? {};
+    const timeLimit = minimum_time_for_reschedule / 60;
+    const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
 
-    switch (editingAttemptsLeft) {
-      case 1:
+    if (appointment?.has_penalty) {
+      return (
+        `Estás modificando una cita con menos de ` +
+        `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
+        `anticipación, para realizar esta acción se te cobrará una ` +
+        `penalización de $${penaltyAmount} pesos.`
+      );
+    }
+
+    switch (appointment?.changes) {
+      case allowed_changes_without_penalty - 1:
         return (
           `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
-          `penalización. Si intentas editar tu cita más de ${maxEditingAttempts} veces, ` +
+          `penalización. Si intentas editar tu cita más de ` +
+          `${allowed_changes_without_penalty} veces, ` +
           `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`
         );
-      case 0:
+      case allowed_changes_without_penalty:
         return (
           `Para modificar la fecha de tu cita es necesario pagar una ` +
           `penalización de $${penaltyAmount} pesos.`
         );
       default:
         return (
-          `Puedes modificar la fecha de tu cita ${editingAttemptsLeft} veces ` +
-          `más sin ninguna penalización. Si intentas editar tu cita más de ${maxEditingAttempts} veces, se te hará un recargo por ` +
-          `la cantidad de $${penaltyAmount} pesos.`
+          `Puedes modificar la fecha de tu cita ` +
+          `${allowed_changes_without_penalty} veces más sin ninguna ` +
+          `penalización. Si intentas editar tu cita más de ` +
+          `${allowed_changes_without_penalty} veces, se te hará un ` +
+          `recargo por la cantidad de $${penaltyAmount} pesos.`
         );
     }
   };
 
   const getDeleteMessage = (appointment: Appointment): string => {
-    const {amount, timeLimit} = appointment?.penaltyData || {};
+    const {
+      cancel_penalty,
+      minimum_time_for_cancel,
+    } = appointment?.admin_settings;
+    const timeLimit = minimum_time_for_cancel / 60;
+    const amount = Number(cancel_penalty)?.toFixed(2);
+
     return appointment?.has_penalty
-      ? `Estás eliminando una cita con menos de ${timeLimit ?? 1} hora de ` +
+      ? `Estás eliminando una cita con menos de ` +
+          `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
           `anticipación, si la cancelas o no asistes se te cobrará una ` +
-          `penalización de $${amount ? amount?.toFixed(2) : 0.0} pesos.`
+          `penalización de $${amount} pesos.`
       : '¿Estás seguro de que quieres eliminar esta cita?';
   };
 
@@ -99,10 +124,31 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
    ***************/
 
   useEffect(() => {
+    setData([]);
+  }, [props.tab]);
+
+  useEffect(() => {
     if (appointments.isSuccess) {
-      setData(appointments.data?.data);
+      // Filter by tab.
+      let filteredAppointments = appointments.data?.data?.filter(
+        (appointment: Appointment) => {
+          const currentDateTime = moment();
+          const appointmentDateTime = moment(appointment.full_end_time);
+          return props.tab === servicesTabs[0].id
+            ? appointmentDateTime.isAfter(currentDateTime)
+            : appointmentDateTime.isSameOrBefore(currentDateTime);
+        },
+      );
+      // Filter accepted ones.
+      filteredAppointments = filteredAppointments.filter(
+        (appointment: Appointment) =>
+          appointment.admin_settings.auto_accept_request ||
+          (!appointment.admin_settings.auto_accept_request &&
+            appointment.is_accepted),
+      );
+      setData(filteredAppointments);
     }
-  }, [appointments]);
+  }, [appointments.data?.data, props.tab]);
 
   useEffect(() => {
     // setData(
@@ -111,11 +157,15 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   }, [props.tab]);
 
   useEffect(() => {
-    setEditMessage(getEditMessage(selectedAppointment));
+    if (selectedAppointment) {
+      setEditMessage(getEditMessage(selectedAppointment));
+    }
   }, [selectedAppointment]);
 
   useEffect(() => {
-    setDeleteMessage(getDeleteMessage(selectedAppointment));
+    if (showDeleteModal) {
+      setDeleteMessage(getDeleteMessage(selectedAppointment));
+    }
   }, [showDeleteModal]);
 
   return appointments.isLoading ? (
@@ -133,9 +183,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       />
       <CustomModal
         labelAccept={
-          selectedAppointment?.appointmentInfo?.editingAttemptsLeft === 0
-            ? 'Pagar y Editar'
-            : 'Editar Cita'
+          selectedAppointment?.has_penalty ? 'Pagar y Editar' : 'Editar Cita'
         }
         title="Editar Cita"
         text={editMessage}

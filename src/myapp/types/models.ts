@@ -21,22 +21,31 @@ export interface AdoptionRequest {
 }
 
 export interface Appointment {
-  appointmentInfo?: {
-    editingAttemptsLeft: number;
-    maxEditingAttempts: number;
+  admin_settings?: {
+    allowed_changes_without_penalty: number;
+    auto_accept_request: boolean;
+    cancel_penalty: string;
+    minimum_time_for_cancel: number;
+    minimum_time_for_reschedule: number;
+    reschedule_penalty: string;
   };
-  has_penalty: boolean;
+  changes?: number;
   date: string;
   end_time?: string;
-  id: string;
-  full_start_time?: string;
   full_end_time?: string;
-  services: BaseModel[];
-  penaltyData?: {
-    timeLimit: number;
-    amount: number;
+  full_start_time?: string;
+  has_penalty: boolean;
+  id: string;
+  is_accepted: boolean;
+  pet?: {
+    id: string;
+    name: string;
   };
-  pet: string;
+  pet_image?: {
+    file: string;
+    id: string;
+  }[];
+  services: BaseModel[];
   start_time?: string;
   vet: string;
 }

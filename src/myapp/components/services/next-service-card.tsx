@@ -6,9 +6,6 @@ import {useNavigation} from '@react-navigation/native';
 import {servicesTabs} from '../../constants';
 // Global Styles
 import globalColors from '../../styles/colors';
-// Hooks
-import useMyPetImage from '../../hooks/pets/useMyPetImage';
-import useGetPet from '../../hooks/user/useGetPet';
 // My Components
 import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
@@ -18,21 +15,6 @@ import {NextServiceCardProps} from '../../types/components/services';
 
 const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
   const navigation = useNavigation();
-  const petQuery = useGetPet(props.service.pet);
-  const petImage = useMyPetImage(props.service.pet);
-  const [petData, setPetData] = React.useState({
-    name: '',
-    image: '',
-  });
-
-  useEffect(() => {
-    if (petImage.isSuccess && petQuery.isSuccess) {
-      setPetData({
-        image: petImage.data?.data[0]?.file,
-        name: petQuery.data?.data?.name,
-      });
-    }
-  }, [petImage.data?.data, petQuery.data?.data]);
 
   const onPressDelete = () => props.onPressDeleteModal();
   const onPressEdit = () => props.onPressEditModal();
@@ -50,7 +32,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
             <DefaultText
               key={`petName-${props.service.id}`}
               style={styles.petName}>
-              {petData.name}
+              {props.service.pet.name}
             </DefaultText>
             {props.service?.services && (
               <DefaultText
@@ -95,7 +77,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
           props.service.date + ' ' + props.service.start_time,
         ).format('DD/MM/YYYY, h:mm A'),
         coverImage:
-          petData.image ??
+          props.service.pet_image[0]?.file ??
           require('../../assets/images/pets/add-pet-image.png'),
       }}
       onClick={props.tab === servicesTabs[0].id ? onPressEdit : onPressRate}
