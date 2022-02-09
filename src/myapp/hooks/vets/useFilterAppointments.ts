@@ -27,8 +27,8 @@ const useFilterAppointments = (appointments: Appointment[], tab: string) => {
   };
 
   useEffect(() => {
-    let nextOnes: Appointment[] = [];
-    let historicOnes: Appointment[] = [];
+    const nextOnes: Appointment[] = [];
+    const historicOnes: Appointment[] = [];
     const currentDateTime = moment().utc();
     // Filter accepted ones.
     const filteredOnes = appointments.filter(
@@ -63,10 +63,6 @@ const useFilterAppointments = (appointments: Appointment[], tab: string) => {
     setFilteredAppointmentsGroup();
     return () => setFilteredAppointments([]);
   }, [tab]);
-
-  useEffect(() => {
-    console.log(filteredAppointments);
-  }, [filteredAppointments]);
 
   return filteredAppointments;
 };
