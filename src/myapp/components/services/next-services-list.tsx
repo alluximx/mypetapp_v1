@@ -7,6 +7,7 @@ import globalColors from '../../styles/colors';
 // Hooks.
 import useAppointments from '../../hooks/vets/useAppointments';
 import useDeleteAppointment from '../../hooks/vets/useDeleteVetAppointment';
+import useFilterAppointments from '../../hooks/vets/useFilterAppointments';
 // My Components.
 import CustomModal from '../modals/custom-modal';
 import CustomSpinner from '../custom-spinner';
@@ -15,29 +16,29 @@ import NextServicesEmpty from './next-services-empty';
 // Types.
 import {Appointment} from '../../types/models';
 import {NextServicesListProps} from '../../types/components/services';
-import {servicesTabs} from '../../constants';
-import moment from 'moment';
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
   const appointments = useAppointments();
   const deleteQuery = useDeleteAppointment();
-
   const [data, setData] = useState<Appointment[]>([]);
+  const filteredAppointments = useFilterAppointments(data, props.tab);
+
+  const [editMessage, setEditMessage] = useState('');
+  const [deleteMessage, setDeleteMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [
     selectedAppointment,
     setSelectedAppointment,
   ] = useState<Appointment | null>(null);
-  const [editMessage, setEditMessage] = useState('');
-  const [deleteMessage, setDeleteMessage] = useState('');
 
   const onDeleteAccept = () => {
     // Delete call to api.
     deleteQuery.mutate(selectedAppointment.id);
     setShowDeleteModal(false);
   };
+
   const onEditAccept = () => {
     navigation.navigate('VetDate', {
       isEdit: true,
@@ -124,31 +125,10 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
    ***************/
 
   useEffect(() => {
-    setData([]);
-  }, [props.tab]);
-
-  useEffect(() => {
     if (appointments.isSuccess) {
-      // Filter by tab.
-      let filteredAppointments = appointments.data?.data?.filter(
-        (appointment: Appointment) => {
-          const currentDateTime = moment();
-          const appointmentDateTime = moment(appointment.full_end_time);
-          return props.tab === servicesTabs[0].id
-            ? appointmentDateTime.isAfter(currentDateTime)
-            : appointmentDateTime.isSameOrBefore(currentDateTime);
-        },
-      );
-      // Filter accepted ones.
-      filteredAppointments = filteredAppointments.filter(
-        (appointment: Appointment) =>
-          appointment.admin_settings.auto_accept_request ||
-          (!appointment.admin_settings.auto_accept_request &&
-            appointment.is_accepted),
-      );
-      setData(filteredAppointments);
+      setData(appointments.data?.data);
     }
-  }, [appointments.data?.data, props.tab]);
+  }, [appointments.data?.data]);
 
   useEffect(() => {
     // setData(
@@ -193,9 +173,9 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         visible={showEditModal}
       />
       <List
-        data={data}
+        data={filteredAppointments}
         ListEmptyComponent={<NextServicesEmpty tab={props.tab} />}
-        scrollEnabled={data.length ? true : false}
+        scrollEnabled={filteredAppointments.length ? true : false}
         renderItem={renderItem}
         style={styles.container}
       />
