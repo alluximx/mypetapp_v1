@@ -55,7 +55,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     const timeLimit = minimum_time_for_reschedule / 60;
     const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
 
-    if (appointment?.has_penalty) {
+    if (appointment?.has_reschedule_penalty) {
       return (
         `Estás modificando una cita con menos de ` +
         `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
@@ -96,10 +96,10 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     const timeLimit = minimum_time_for_cancel / 60;
     const amount = Number(cancel_penalty)?.toFixed(2);
 
-    return appointment?.has_penalty
+    return appointment?.has_cancel_penalty
       ? `Estás eliminando una cita con menos de ` +
           `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
-          `anticipación, si la cancelas o no asistes se te cobrará una ` +
+          `anticipación, si la cancelas se te cobrará una ` +
           `penalización de $${amount} pesos.`
       : '¿Estás seguro de que quieres eliminar esta cita?';
   };
@@ -131,12 +131,6 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   }, [appointments.data?.data]);
 
   useEffect(() => {
-    // setData(
-    //   props.tab === servicesTabs[0].id ? exampleNextData : exampleHistoricData,
-    // );
-  }, [props.tab]);
-
-  useEffect(() => {
     if (selectedAppointment) {
       setEditMessage(getEditMessage(selectedAppointment));
     }
@@ -163,7 +157,11 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       />
       <CustomModal
         labelAccept={
-          selectedAppointment?.has_penalty ? 'Pagar y Editar' : 'Editar Cita'
+          selectedAppointment?.has_reschedule_penalty ||
+          selectedAppointment?.changes ===
+            selectedAppointment?.admin_settings?.allowed_changes_without_penalty
+            ? 'Pagar y Editar'
+            : 'Editar Cita'
         }
         title="Editar Cita"
         text={editMessage}
