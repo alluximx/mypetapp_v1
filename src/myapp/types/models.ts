@@ -29,12 +29,14 @@ export interface Appointment {
     minimum_time_for_reschedule: number;
     reschedule_penalty: string;
   };
+  admin_name?: string;
   changes?: number;
   date: string;
   end_time?: string;
   full_end_time?: string;
   full_start_time?: string;
-  has_penalty: boolean;
+  has_cancel_penalty: boolean;
+  has_reschedule_penalty: boolean;
   id: string;
   is_accepted: boolean;
   pet?: {
