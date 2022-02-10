@@ -72,7 +72,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
                   Calificar
                 </AnchorText>,
               ],
-        content: props.service.vet,
+        content: props.service.admin_name,
         title: moment(
           props.service.date + ' ' + props.service.start_time,
         ).format('DD/MM/YYYY, h:mm A'),
