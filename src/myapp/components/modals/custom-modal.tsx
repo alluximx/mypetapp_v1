@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
     marginHorizontal: 24,
     marginBottom: 34,
-    maxHeight: 500,
-    height: '50%',
+    maxHeight: '90%',
+    minHeight: '50%',
     overflow: 'hidden',
   },
   pawImage: {

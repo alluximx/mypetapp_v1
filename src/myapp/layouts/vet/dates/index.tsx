@@ -36,6 +36,7 @@ export default ({navigation, route}): React.ReactElement => {
   // Modals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
+  const [isPolicyModalVisible, setIsPolicyModalVisible] = useState(false);
   // Render vars
   const [cardContent, setCardContent] = useState('');
   const [cardTitle, setCardTitle] = useState('');
@@ -47,8 +48,18 @@ export default ({navigation, route}): React.ReactElement => {
   });
   const [petContent, setPetContent] = useState('');
   const [serviceContent, setServiceContent] = useState('');
-  const {admin, base_charge, screenFrom, serviceData, time_slots} =
-    route.params ?? {};
+  const {
+    admin,
+    allowed_changes_without_penalty,
+    base_charge,
+    cancel_penalty,
+    minimum_time_for_cancel,
+    minimum_time_for_reschedule,
+    reschedule_penalty,
+    screenFrom,
+    serviceData,
+    time_slots,
+  } = route.params ?? {};
 
   const [form, setForm] = useState({
     admin,
@@ -78,9 +89,14 @@ export default ({navigation, route}): React.ReactElement => {
     });
   };
   const onSubmit = () => {
+    setIsPolicyModalVisible(true);
+  };
+  const onAcceptPolicy = () => {
     setIsLoading(true);
+    setIsPolicyModalVisible(false);
     addAppointmentQuery.mutate(form, {
       onError: (responseError: AxiosError) => {
+        setIsPolicyModalVisible(false);
         const requestError = responseError.response.data;
         setError(requestError);
         setIsLoading(false);
@@ -160,18 +176,44 @@ export default ({navigation, route}): React.ReactElement => {
     form.card_id === '';
 
   const baseCharge = Number(base_charge).toFixed(2);
-  const timeBeforePenalization = route.params?.minimum_time_for_cancel / 60;
+
+  const timeForReschedulePenalty = minimum_time_for_reschedule / 60;
+  const timeForCancelPenalty = minimum_time_for_cancel / 60;
+
+  const maxCancelTimeLabel = `${timeForCancelPenalty} ${
+    timeForCancelPenalty === 1 ? 'hora' : 'horas'
+  }`;
+  const maxRescheduleTimeLabel = `${timeForReschedulePenalty} ${
+    timeForReschedulePenalty === 1 ? 'hora' : 'horas'
+  }`;
+
+  const reschedulePenaltyFormatted = Number(reschedule_penalty)?.toFixed(2);
+  const cancelPenaltyFormatted = Number(cancel_penalty)?.toFixed(2);
+
+  const chancesBeforeReschedulePenalty = `${allowed_changes_without_penalty} ${
+    allowed_changes_without_penalty === 1 ? 'vez' : 'veces'
+  }`;
 
   const textModal =
     'Para generar una cita es necesario seleccionar o agregar un método ' +
     'de pago. La cita se cobrará al pasar la fecha y el horario ' +
-    `seleccionado.\n Puedes cancelar hasta ${timeBeforePenalization} horas ` +
+    `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
     'antes, de lo contrario se te cobrará una penalización.';
 
   const textSubmitModal =
-    'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
+    'Tu cita ha sido generada exitosamente. Puedes acceder a ' +
     'todos tus servicios programados desde la sección de ' +
     '"Proximos Servicios" en el menú principal.';
+
+  const policyModalContent =
+    `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
+    `de forma gratuita hasta ${maxRescheduleTimeLabel} antes. ` +
+    `Si la modificas más de ${chancesBeforeReschedulePenalty} o con menos ` +
+    `de ${maxRescheduleTimeLabel} de anticipación, se te cobrará una penalización ` +
+    `de $${reschedulePenaltyFormatted} cada vez que reagendes tu cita.\n` +
+    `Podrás cancelar tu cita hasta ${maxCancelTimeLabel} antes. ` +
+    `De lo contrario, se te cobrará una penalización de ` +
+    `$${cancelPenaltyFormatted}. `;
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
@@ -296,6 +338,15 @@ export default ({navigation, route}): React.ReactElement => {
         onAccept={onAcceptSubmit}
         showCancel={false}
         visible={isModalSubmitVisible}
+      />
+      <CustomModal
+        labelAccept="Aceptar"
+        onAccept={onAcceptPolicy}
+        onCancel={() => setIsPolicyModalVisible(false)}
+        showCancel
+        text={policyModalContent}
+        title="Política de cancelación y reprogramación"
+        visible={isPolicyModalVisible}
       />
       <OptionSelect
         currentValue={form.time}
