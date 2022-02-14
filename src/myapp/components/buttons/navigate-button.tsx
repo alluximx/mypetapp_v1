@@ -15,7 +15,7 @@ const NavigateButton = (props: NavigateButtonProps): React.ReactElement => {
   const navigateToScreen = () => {
     if (props.data) {
       props.destination &&
-        navigation.navigate(props.destination, {data: props.data});
+        navigation.navigate(props.destination, {...props.data});
     } else {
       props.destination && navigation.navigate(props.destination);
     }

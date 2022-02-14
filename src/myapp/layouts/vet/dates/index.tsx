@@ -1,20 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
-import 'moment/locale/es';
-import moment from 'moment';
 import _ from 'lodash';
+import 'moment/locale/es';
+import {AxiosError} from 'axios';
+import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
+import moment from 'moment';
 
-// Constants
-import {stripeDaysForTransaction} from '../../../constants';
 // Global Styles
 import globalVars from '../../../styles/vars';
+import globalColors from '../../../styles/colors';
+// Hooks
+import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import useAddVetAppointment from '../../../hooks/vets/useAddVetAppointment';
 // My Components
+import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
 import CustomModal from '../../../components/modals/custom-modal';
 import DefaultLayout from '../../../components/layouts/default-layout';
@@ -24,57 +22,96 @@ import OptionSelect, {
   OPTION_GAP,
 } from '../../../components/inputs/option-select';
 import TitleHeader from '../../../components/texts/title-header';
-import {QuestionCircleIcon} from '../../../components/icons';
-// Utils
-import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
 // Types
-import {Option, OptionDate} from '../../../types/components/inputs';
-import {Appointment} from '../../../types/models';
-import useVetAppointments from '../../../hooks/vets/useVetAppointments';
 import {getAvailableDays, getAvailableHours} from './utils';
-import CustomSpinner from '../../../components/custom-spinner';
+import {Option, OptionDate} from '../../../types/components/inputs';
 
 const NUM_COLUMNS = 4;
 
 export default ({navigation, route}): React.ReactElement => {
   const [days, setDays] = useState<OptionDate[]>([]);
   const [hours, setHours] = useState<Option[]>([]);
-  const [statusDay, setStatusDay] = useState(false);
-  const [statusBtn, setStatusBtn] = useState(true);
   // Loading
   const [isLoading, setIsLoading] = useState(false);
   // Modals
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-  const [cardTitle, setCardTitle] = useState('');
+  const [isPolicyModalVisible, setIsPolicyModalVisible] = useState(false);
+  // Render vars
   const [cardContent, setCardContent] = useState('');
+  const [cardTitle, setCardTitle] = useState('');
   const [emptyText, setEmptyText] = useState(
     'Por favor selecciona una fecha para ver los horarios disponibles.',
   );
-
+  const [error, setError] = useState({
+    error: '',
+  });
   const [petContent, setPetContent] = useState('');
   const [serviceContent, setServiceContent] = useState('');
+  const {
+    admin,
+    allowed_changes_without_penalty,
+    base_charge,
+    cancel_penalty,
+    minimum_time_for_cancel,
+    minimum_time_for_reschedule,
+    reschedule_penalty,
+    screenFrom,
+    serviceData,
+    time_slots,
+  } = route.params ?? {};
+
   const [form, setForm] = useState({
+    admin,
     card_id: '',
+    date: '',
     day: '',
+    end_time: '',
+    has_cancel_penalty: false,
+    has_reschedule_penalty: false,
     paymentMethod: '',
-    pet_id: '',
     pet: '',
+    start_time: '',
     time: '',
   });
 
-  const vetAppointments = useVetAppointments(route.params.data.admin);
-  const {base_charge, paymentMethod, petInfo, screenFrom, serviceData} =
-    route.params?.data ?? {};
+  // Hook calls
+  const vetAppointments = useVetAppointments(admin);
+  const addAppointmentQuery = useAddVetAppointment(admin);
 
-  const setValueForm = (day: string) => {
-    setForm({...form, day});
-    setStatusDay(true);
-  };
-
+  // Functions
+  const setValueForm = (day: string) => setForm({...form, day});
   const setValueTime = (time: string) => {
-    setForm({...form, time});
-    setStatusBtn(false);
+    const formattedTime = moment(time, 'h:mm A');
+    setForm({
+      ...form,
+      start_time: formattedTime.format('HH:mm'),
+      end_time: formattedTime.add(time_slots, 'minutes').format('HH:mm'),
+      time,
+    });
+  };
+  const onSubmit = () => {
+    setIsPolicyModalVisible(true);
+  };
+  const onAcceptPolicy = () => {
+    setIsLoading(true);
+    setIsPolicyModalVisible(false);
+    addAppointmentQuery.mutate(form, {
+      onError: (responseError: AxiosError) => {
+        setIsPolicyModalVisible(false);
+        const requestError = responseError.response.data;
+        setError(requestError);
+        setIsLoading(false);
+      },
+      onSuccess: () => {
+        setIsModalSubmitVisible(true);
+      },
+    });
+  };
+  const onAcceptSubmit = () => {
+    setIsLoading(false);
+    setIsModalSubmitVisible(false);
+    navigation.navigate('NextServices');
   };
 
   /***************
@@ -83,7 +120,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     moment.locale('es');
-    const nextDaysList = getAvailableDays(route.params.data);
+    const nextDaysList = getAvailableDays(route.params);
     setDays(nextDaysList);
   }, []);
 
@@ -93,56 +130,92 @@ export default ({navigation, route}): React.ReactElement => {
       const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
       const appointments = vetAppointments?.data?.data ?? [];
       const allHours = getAvailableHours(
-        route.params.data,
+        route.params,
         selectedDate,
         appointments,
       );
       !allHours.length &&
         setEmptyText('No quedan horarios disponibles en este día.');
-      // setAreHoursLoading(false);
-      setForm({...form, time: ''});
+      setForm({...form, date: selectedDate, time: ''});
       setHours(allHours);
     }
-  }, [form.day]);
+  }, [form.day, error?.error]);
 
   useEffect(() => {
-    if (petInfo) {
-      const {namePet, idPet, idSize} = petInfo;
+    if (route.params?.petInfo) {
+      const {namePet, idPet, idSize} = route.params?.petInfo;
       const complt = idSize ? ' - ' + idSize : '';
       setPetContent(namePet + complt);
-      setForm({...form, pet_id: idPet});
+      setForm({...form, pet: idPet});
     }
-    if (paymentMethod) {
-      const {cardLabel, cardBrand, cardId} = paymentMethod;
+  }, [route.params?.petInfo]);
+
+  useEffect(() => {
+    if (route.params?.paymentMethod) {
+      const {cardLabel, cardBrand, cardId} = route.params?.paymentMethod;
       setCardTitle(cardBrand);
       setCardContent(cardLabel);
       setForm({...form, card_id: cardId});
     }
+  }, [route.params?.paymentMethod]);
+
+  useEffect(() => {
     if (serviceData) {
       serviceData.length === 1
         ? setServiceContent(serviceData[0].name)
         : setServiceContent('Varios');
     }
-  }, [petInfo, paymentMethod, serviceData]);
+  }, [serviceData]);
 
   /**********************
    *** Render Methods ***
    **********************/
 
+  const isDisabled =
+    form.date === '' ||
+    form.time === '' ||
+    form.pet === '' ||
+    form.card_id === '';
+
   const baseCharge = Number(base_charge).toFixed(2);
-  const timeBeforePenalization =
-    route.params.data?.minimum_time_for_cancel / 60;
+
+  const timeForReschedulePenalty = minimum_time_for_reschedule / 60;
+  const timeForCancelPenalty = minimum_time_for_cancel / 60;
+
+  const maxCancelTimeLabel = `${timeForCancelPenalty} ${
+    timeForCancelPenalty === 1 ? 'hora' : 'horas'
+  }`;
+  const maxRescheduleTimeLabel = `${timeForReschedulePenalty} ${
+    timeForReschedulePenalty === 1 ? 'hora' : 'horas'
+  }`;
+
+  const reschedulePenaltyFormatted = Number(reschedule_penalty)?.toFixed(2);
+  const cancelPenaltyFormatted = Number(cancel_penalty)?.toFixed(2);
+
+  const chancesBeforeReschedulePenalty = `${allowed_changes_without_penalty} ${
+    allowed_changes_without_penalty === 1 ? 'vez' : 'veces'
+  }`;
 
   const textModal =
     'Para generar una cita es necesario seleccionar o agregar un método ' +
     'de pago. La cita se cobrará al pasar la fecha y el horario ' +
-    `seleccionado.\n Puedes cancelar hasta ${timeBeforePenalization} horas ` +
+    `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
     'antes, de lo contrario se te cobrará una penalización.';
 
   const textSubmitModal =
-    'Tu cita ha sido generada exitósamente. Puedes acceder a ' +
-    'todos tus servicios programados desde la sección de' +
-    '"Proximos Servicios" en el menú principal. ';
+    'Tu cita ha sido generada exitosamente. Puedes acceder a ' +
+    'todos tus servicios programados desde la sección de ' +
+    '"Proximos Servicios" en el menú principal.';
+
+  const policyModalContent =
+    `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
+    `de forma gratuita hasta ${maxRescheduleTimeLabel} antes. ` +
+    `Si la modificas más de ${chancesBeforeReschedulePenalty} o con menos ` +
+    `de ${maxRescheduleTimeLabel} de anticipación, se te cobrará una penalización ` +
+    `de $${reschedulePenaltyFormatted} cada vez que reagendes tu cita.\n` +
+    `Podrás cancelar tu cita hasta ${maxCancelTimeLabel} antes. ` +
+    `De lo contrario, se te cobrará una penalización de ` +
+    `$${cancelPenaltyFormatted}. `;
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
@@ -154,7 +227,7 @@ export default ({navigation, route}): React.ReactElement => {
     <>
       <View style={styles.horizontalPadding}>
         <TitleHeader style={styles.header}>
-          {route.params.isEdit ? 'Editar cita' : 'Generar cita'}
+          {route.params?.isEdit ? 'Editar cita' : 'Generar cita'}
         </TitleHeader>
         <TitleHeader style={styles.normalHeader}>
           ¿Para quién es la cita?
@@ -163,7 +236,10 @@ export default ({navigation, route}): React.ReactElement => {
           <NavigateButton
             placeholder="Selecciona tu mascota"
             destination="PetSelect"
-            data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+            data={{
+              screenToReturn: 'VetDate',
+              screenFrom: screenFrom,
+            }}
             title="Mascota"
             subtitle={petContent}
           />
@@ -176,7 +252,10 @@ export default ({navigation, route}): React.ReactElement => {
             <NavigateButton
               placeholder="Selecciona los servicios"
               destination="ServiceSelect"
-              data={{screenToReturn: 'VetDate', screenFrom: screenFrom}}
+              data={{
+                screenToReturn: 'VetDate',
+                screenFrom: screenFrom,
+              }}
               title="Servicio"
               subtitle={serviceContent}
             />
@@ -230,14 +309,14 @@ export default ({navigation, route}): React.ReactElement => {
         <TitleHeader style={styles.leftSide}>Total</TitleHeader>
         <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
       </View>
+      <DefaultText style={error?.error && styles.error}>
+        {error?.error}
+      </DefaultText>
       <View style={{marginBottom: 20}}>
         <CustomButton
-          isDisabled={statusBtn}
+          isDisabled={isDisabled}
           isLoading={isLoading}
-          onPress={() => {
-            setIsLoading(true);
-            setIsModalSubmitVisible(true);
-          }}>
+          onPress={onSubmit}>
           Generar cita
         </CustomButton>
       </View>
@@ -258,9 +337,18 @@ export default ({navigation, route}): React.ReactElement => {
         labelAccept="Entendido"
         title="Cita generada"
         text={textSubmitModal}
-        onAccept={() => setIsModalSubmitVisible(false)}
+        onAccept={onAcceptSubmit}
         showCancel={false}
         visible={isModalSubmitVisible}
+      />
+      <CustomModal
+        labelAccept="Aceptar"
+        onAccept={onAcceptPolicy}
+        onCancel={() => setIsPolicyModalVisible(false)}
+        showCancel
+        text={policyModalContent}
+        title="Política de cancelación y reprogramación"
+        visible={isPolicyModalVisible}
       />
       <OptionSelect
         currentValue={form.time}
@@ -271,7 +359,7 @@ export default ({navigation, route}): React.ReactElement => {
         numColumns={NUM_COLUMNS}
         columnWrapperStyle={styles.columnWrapper}
         optionStyle={styles.optionTime}
-        setCurrentValue={(time: string) => setValueTime(time)}
+        setCurrentValue={setValueTime}
         style={styles.selectHours}
         textStyle={styles.textOptionTime}
       />
@@ -355,6 +443,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  error: {
+    color: globalColors.red,
+    marginBottom: 16,
   },
   servicesContainer: {
     flex: 1,

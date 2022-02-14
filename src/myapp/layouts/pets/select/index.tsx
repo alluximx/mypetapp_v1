@@ -1,30 +1,23 @@
 import React, {useState, useEffect} from 'react';
-import {
-  StyleService,
-  useStyleSheet,
-  List,
-  Card,
-  Text,
-} from '@ui-kitten/components';
-import {ScrollView, View} from 'react-native';
+import {StyleService, useStyleSheet, List} from '@ui-kitten/components';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // My Components
-import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
 import AnchorText from '../../../components/texts/anchor-text';
-import PetCard from '../../../components/cards/pet-card';
 import CustomSpinner from '../../../components/custom-spinner';
+import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import OptionSelect from '../../../components/inputs/option-select';
+import PetCard from '../../../components/cards/pet-card';
+import TitleHeader from '../../../components/texts/title-header';
 // Hooks
 import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
 import useSizes from '../../../hooks/pets/useSizes';
 
 export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
-  const {screenToReturn, screenFrom} = route.params?.data ?? {};
+  const {screenToReturn, screenFrom} = route.params ?? {};
   const data = useMyNameAndPets();
   const dataSizes = useSizes(screenFrom && screenFrom !== 'VetDate');
   const hasPets = data.pets.length !== 0;
@@ -75,7 +68,8 @@ export default ({navigation, route}): React.ReactElement => {
         : {idPet: idPet, namePet: name, idSize: sizeName.name};
 
     navigation.navigate(screenToReturn, {
-      data: {petInfo: submitData, screenFrom: screenFrom},
+      petInfo: submitData,
+      screenFrom: screenFrom,
     });
   };
 

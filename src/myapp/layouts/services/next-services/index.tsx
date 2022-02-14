@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {List} from '@ui-kitten/components';
 // Constants.
@@ -6,12 +6,10 @@ import {servicesTabs} from '../../../constants';
 // Global Styles.
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
-// Hooks.
-// import useGetCategories from '../../../hooks/categories/useGetCategories';
 // My Components.
 import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
 import NextServicesList from '../../../components/services/next-services-list';
+import TitleHeader from '../../../components/texts/title-header';
 
 export default ({navigation}): React.ReactElement => {
   const [tab, setTab] = useState(servicesTabs[0].id);

@@ -1,5 +1,4 @@
-import {Dispatch, SetStateAction} from 'react';
-import {BaseModel, Appointment} from '../models';
+import {Appointment} from '../models';
 
 export interface NextServicesListProps {
   tab: string;

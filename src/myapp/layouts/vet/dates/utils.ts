@@ -58,8 +58,8 @@ export const getAvailableHours = (
 
       // If start or end is between any appointment time, return true.
       return (
-        currentTimeStart.isBetween(auxStartTime, auxEndTime) ||
-        currentTimeEnd.isBetween(auxStartTime, auxEndTime)
+        currentTimeStart.isBetween(auxStartTime, auxEndTime, 'minutes', '[)') ||
+        currentTimeEnd.isBetween(auxStartTime, auxEndTime, 'minutes', '(]')
       );
     });
 

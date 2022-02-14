@@ -20,6 +20,38 @@ export interface AdoptionRequest {
   status: string;
 }
 
+export interface Appointment {
+  admin_settings?: {
+    allowed_changes_without_penalty: number;
+    auto_accept_request: boolean;
+    cancel_penalty: string;
+    minimum_time_for_cancel: number;
+    minimum_time_for_reschedule: number;
+    reschedule_penalty: string;
+  };
+  admin_name?: string;
+  changes?: number;
+  date: string;
+  end_time?: string;
+  full_end_time?: string;
+  full_start_time?: string;
+  has_cancel_penalty: boolean;
+  has_reschedule_penalty: boolean;
+  id: string;
+  is_accepted: boolean;
+  pet?: {
+    id: string;
+    name: string;
+  };
+  pet_image?: {
+    file: string;
+    id: string;
+  }[];
+  services: BaseModel[];
+  start_time?: string;
+  vet: string;
+}
+
 export interface BaseModel {
   id: string;
   name: string;
@@ -47,30 +79,6 @@ export interface ErrorResponse {
   response: {
     data: any;
   };
-}
-
-export interface Appointment {
-  id: string;
-  date: string;
-  vet: string;
-  pet: {
-    name: string;
-  };
-  petImage: {
-    file: string;
-  };
-  services: BaseModel[];
-  appointmentInfo?: {
-    editingAttemptsLeft: number;
-    maxEditingAttempts: number;
-    showDeletePenalty: boolean;
-  };
-  penaltyData?: {
-    timeLimit: number;
-    amount: number;
-  };
-  full_start_time?: string;
-  full_end_time?: string;
 }
 
 export interface Option {
@@ -140,18 +148,18 @@ export interface Vet extends BaseModel {
 }
 
 export interface VetSettings {
-  base_charge: number;
-  is_configured: boolean;
-  start_time: string;
-  end_time: string;
-  time_slots: string;
-  monday: boolean;
-  tuesday: boolean;
-  wednesday: boolean;
-  thursday: boolean;
-  friday: boolean;
-  saturday: boolean;
-  sunday: boolean;
+  base_charge?: number;
+  is_configured?: boolean;
+  start_time?: string;
+  end_time?: string;
+  time_slots?: string;
+  monday?: boolean;
+  tuesday?: boolean;
+  wednesday?: boolean;
+  thursday?: boolean;
+  friday?: boolean;
+  saturday?: boolean;
+  sunday?: boolean;
 }
 
 export interface Visit {
