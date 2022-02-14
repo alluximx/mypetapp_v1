@@ -104,9 +104,6 @@ export default ({navigation, route}): React.ReactElement => {
       onSuccess: () => {
         setIsModalSubmitVisible(true);
       },
-      onSettled: () => {
-        console.log(form);
-      },
     });
   };
   const onAcceptSubmit = () => {
