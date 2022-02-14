@@ -64,14 +64,14 @@ export default ({navigation, route}): React.ReactElement => {
   const [form, setForm] = useState({
     admin,
     card_id: '',
-    date: '',
+    date: route.params?.date ?? '',
     day: '',
     end_time: '',
     has_cancel_penalty: false,
-    has_reschedule_penalty: false,
+    has_reschedule_penalty: route.params?.has_reschedule_penalty ?? false,
     paymentMethod: '',
-    pet: '',
-    start_time: '',
+    pet: route.params?.pet ?? '',
+    start_time: route.params?.start_time ?? '',
     time: '',
   });
 
@@ -90,9 +90,7 @@ export default ({navigation, route}): React.ReactElement => {
       time,
     });
   };
-  const onSubmit = () => {
-    setIsPolicyModalVisible(true);
-  };
+  const onSubmit = () => setIsPolicyModalVisible(true);
   const onAcceptPolicy = () => {
     setIsLoading(true);
     setIsPolicyModalVisible(false);
@@ -105,6 +103,9 @@ export default ({navigation, route}): React.ReactElement => {
       },
       onSuccess: () => {
         setIsModalSubmitVisible(true);
+      },
+      onSettled: () => {
+        console.log(form);
       },
     });
   };
@@ -133,6 +134,7 @@ export default ({navigation, route}): React.ReactElement => {
         route.params,
         selectedDate,
         appointments,
+        // form.start_time,
       );
       !allHours.length &&
         setEmptyText('No quedan horarios disponibles en este día.');
@@ -142,13 +144,35 @@ export default ({navigation, route}): React.ReactElement => {
   }, [form.day, error?.error]);
 
   useEffect(() => {
-    if (route.params?.petInfo) {
-      const {namePet, idPet, idSize} = route.params?.petInfo;
-      const complt = idSize ? ' - ' + idSize : '';
-      setPetContent(namePet + complt);
-      setForm({...form, pet: idPet});
+    if (route.params?.pet) {
+      const {id, name} = route.params?.pet;
+      setPetContent(name);
+      setForm({...form, pet: id});
     }
-  }, [route.params?.petInfo]);
+  }, [route.params?.pet]);
+
+  useEffect(() => {
+    if (route.params?.date && days.length) {
+      const selectedDay = days.find((day) => day.fullDate === form.date);
+      setForm({...form, day: selectedDay?.key});
+    }
+  }, [days]);
+
+  useEffect(() => {
+    if (route.params?.start_time && hours.length) {
+      const selectedHour = hours.find((hour) => {
+        const formattedCurrentHour = moment(hour.value, 'H:mm A').format(
+          'HH:mm',
+        );
+        const formattedFormHour = moment(form.start_time, 'HH:mm:ss').format(
+          'HH:mm',
+        );
+        return formattedCurrentHour === formattedFormHour;
+      });
+
+      setValueTime(selectedHour?.key);
+    }
+  }, [hours]);
 
   useEffect(() => {
     if (route.params?.paymentMethod) {

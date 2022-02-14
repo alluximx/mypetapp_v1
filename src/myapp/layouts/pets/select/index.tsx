@@ -64,11 +64,11 @@ export default ({navigation, route}): React.ReactElement => {
 
     const submitData =
       screenFrom === 'VetDate'
-        ? {idPet: idPet, namePet: name}
-        : {idPet: idPet, namePet: name, idSize: sizeName.name};
+        ? {id: idPet, name: name}
+        : {id: idPet, name: name, idSize: sizeName.name};
 
     navigation.navigate(screenToReturn, {
-      petInfo: submitData,
+      pet: submitData,
       screenFrom: screenFrom,
     });
   };
