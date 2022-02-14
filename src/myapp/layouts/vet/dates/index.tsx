@@ -64,13 +64,15 @@ export default ({navigation, route}): React.ReactElement => {
   const [form, setForm] = useState({
     admin,
     card_id: '',
-    day: '',
     date: '',
+    day: '',
+    end_time: '',
+    has_cancel_penalty: false,
+    has_reschedule_penalty: false,
     paymentMethod: '',
     pet: '',
-    time: '',
     start_time: '',
-    end_time: '',
+    time: '',
   });
 
   // Hook calls
