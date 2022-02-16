@@ -177,9 +177,9 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (pet) {
-      const {id, name} = pet;
+      const {id: petId, name} = pet;
       setPetContent(name);
-      setForm({...form, pet: id});
+      setForm({...form, pet: petId});
     }
   }, [pet]);
 
