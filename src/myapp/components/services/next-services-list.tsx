@@ -36,25 +36,42 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
   const onDeleteAccept = () => {
     // Delete call to api.
-    deleteQuery.mutate(selectedAppointment.id);
+    deleteQuery.mutate(selectedAppointment?.id);
     setShowDeleteModal(false);
   };
 
   const hasReschedulePenalty = (): boolean =>
+    hasExceedingTimeLimit(
+      selectedAppointment?.date,
+      selectedAppointment?.start_time,
+      selectedAppointment?.admin_settings?.minimum_time_for_reschedule,
+    ) ||
     selectedAppointment?.has_reschedule_penalty ||
-    selectedAppointment?.changes ===
+    selectedAppointment?.changes >=
       selectedAppointment?.admin_settings?.allowed_changes_without_penalty;
+
+  const hasExceedingTimeLimit = (
+    appointmentDate: string,
+    appointmentStartTime: string,
+    minimumRescheduleTime: number,
+  ): boolean => {
+    const appointmentTime = moment(
+      appointmentDate + ' ' + appointmentStartTime,
+    );
+    const diffBetweenTimes = appointmentTime.diff(moment(moment()), 'minutes');
+    return diffBetweenTimes <= minimumRescheduleTime;
+  };
 
   const onEditAccept = () => {
     navigation.navigate('VetDate', {
       isEdit: true,
-      ...selectedAppointment.admin_settings,
-      appointment_end_time: selectedAppointment.end_time,
-      appointment_start_time: selectedAppointment.start_time,
-      card_id: selectedAppointment.card_id,
-      id: selectedAppointment.id,
-      date: selectedAppointment.date,
-      pet: selectedAppointment.pet,
+      ...selectedAppointment?.admin_settings,
+      appointment_end_time: selectedAppointment?.end_time,
+      appointment_start_time: selectedAppointment?.start_time,
+      card_id: selectedAppointment?.card_id,
+      id: selectedAppointment?.id,
+      date: selectedAppointment?.date,
+      pet: selectedAppointment?.pet,
       has_reschedule_penalty: hasReschedulePenalty(),
     });
     setShowEditModal(false);
@@ -70,22 +87,19 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
     const timeLimit = minimum_time_for_reschedule / 60;
     const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
-    const appointmentTime = moment(date + ' ' + start_time);
-    const diffBetweenTimes = appointmentTime.diff(moment(moment()), 'minutes');
-    const isExceedingTimeLimit =
-      diffBetweenTimes <= minimum_time_for_reschedule;
+    const exceededTimeLimit = hasExceedingTimeLimit(
+      date,
+      start_time,
+      minimum_time_for_reschedule,
+    );
 
     let result =
-      `Para modificar la fecha de tu cita es necesario pagar una ` +
+      `Estás modificando una cita con menos de ` +
+      `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
+      `anticipación, para realizar esta acción se te cobrará una ` +
       `penalización de $${penaltyAmount} pesos.`;
 
-    if (isExceedingTimeLimit) {
-      result =
-        `Estás modificando una cita con menos de ` +
-        `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
-        `anticipación, para realizar esta acción se te cobrará una ` +
-        `penalización de $${penaltyAmount} pesos.`;
-    } else {
+    if (!exceededTimeLimit) {
       if (changes === allowed_changes_without_penalty - 1) {
         result =
           `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
@@ -101,6 +115,10 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
           `penalización. Si intentas editar tu cita más de ` +
           `${allowed_changes_without_penalty} veces, se te hará un ` +
           `recargo por la cantidad de $${penaltyAmount} pesos.`;
+      } else {
+        result =
+          `Has superado el límite de modificaciones. Para modificar nuevamente ` +
+          `tu cita es necesario pagar una penalización de $${penaltyAmount} pesos.`;
       }
     }
     return result;
