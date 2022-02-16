@@ -54,37 +54,43 @@ export default ({navigation, route}): React.ReactElement => {
   const {
     admin,
     allowed_changes_without_penalty,
+    appointment_start_time,
     base_charge,
     cancel_penalty,
+    card_id,
+    date,
+    has_reschedule_penalty,
+    id,
+    isEdit,
     minimum_time_for_cancel,
     minimum_time_for_reschedule,
     reschedule_penalty,
+    paymentMethod,
+    pet,
     screenFrom,
     serviceData,
+    start_time,
     time_slots,
   } = route.params ?? {};
 
   // Hook calls
   const vetAppointments = useVetAppointments(admin);
-  const cardData = useGetPaymentMethod(
-    route.params?.card_id,
-    route.params?.isEdit,
-  );
+  const cardData = useGetPaymentMethod(card_id, isEdit);
   const addAppointmentQuery = useAddVetAppointment(admin);
   const updateAppointmentQuery = useUpdateVetAppointment();
 
   const [form, setForm] = useState({
     admin,
-    card_id: route.params?.card_id,
-    date: route.params?.date ?? '',
+    card_id,
+    date: date ?? '',
     day: '',
     end_time: '',
     has_cancel_penalty: false,
-    has_reschedule_penalty: route.params?.has_reschedule_penalty ?? false,
-    id: route.params?.id ?? '',
+    has_reschedule_penalty: has_reschedule_penalty ?? false,
+    id: id ?? '',
     paymentMethod: '',
-    pet: route.params?.pet ?? '',
-    start_time: route.params?.appointment_start_time ?? '',
+    pet: pet ?? '',
+    start_time: appointment_start_time ?? '',
     time: '',
   });
 
@@ -101,7 +107,7 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const onSubmit = () => {
-    if (route.params?.isEdit) {
+    if (isEdit) {
       setIsLoading(true);
       updateAppointmentQuery.mutate(form, {
         onError: (responseError: AxiosError) => {
@@ -160,7 +166,7 @@ export default ({navigation, route}): React.ReactElement => {
         route.params,
         selectedDate,
         appointments,
-        route.params?.appointment_start_time,
+        appointment_start_time,
       );
       !allHours.length &&
         setEmptyText('No quedan horarios disponibles en este día.');
@@ -170,23 +176,23 @@ export default ({navigation, route}): React.ReactElement => {
   }, [form.day, error?.error]);
 
   useEffect(() => {
-    if (route.params?.pet) {
-      const {id, name} = route.params?.pet;
+    if (pet) {
+      const {id, name} = pet;
       setPetContent(name);
       setForm({...form, pet: id});
     }
-  }, [route.params?.pet]);
+  }, [pet]);
 
   useEffect(() => {
-    if (route.params?.date && days.length) {
+    if (date && days.length) {
       const selectedDay = days.find((day) => day.fullDate === form.date);
       setForm({...form, day: selectedDay?.key});
     }
   }, [days]);
 
   useEffect(() => {
-    if (route.params?.start_time && hours.length) {
-      if (form.date === route.params.date) {
+    if (start_time && hours.length) {
+      if (form.date === date) {
         const selectedHour = hours.find((hour) => {
           const formattedCurrentHour = moment(hour.value, 'H:mm A').format(
             'HH:mm',
@@ -203,8 +209,8 @@ export default ({navigation, route}): React.ReactElement => {
   }, [hours]);
 
   useEffect(() => {
-    if (route.params?.paymentMethod) {
-      const {cardLabel, cardBrand, cardId} = route.params?.paymentMethod;
+    if (paymentMethod) {
+      const {cardLabel, cardBrand, cardId} = paymentMethod;
       setCardTitle(cardBrand);
       setCardContent(cardLabel);
       setForm({...form, card_id: cardId});
@@ -213,7 +219,7 @@ export default ({navigation, route}): React.ReactElement => {
       setCardTitle(brand);
       setCardContent('****' + last4);
     }
-  }, [route.params?.paymentMethod, cardData?.isSuccess]);
+  }, [paymentMethod, cardData?.isSuccess]);
 
   useEffect(() => {
     if (serviceData) {
@@ -258,7 +264,7 @@ export default ({navigation, route}): React.ReactElement => {
     `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
     'antes, de lo contrario se te cobrará una penalización.';
 
-  const textSubmitModal = route.params?.isEdit
+  const textSubmitModal = isEdit
     ? 'Tu cita se ha actualizado exitosamente.'
     : 'Tu cita ha sido generada exitosamente. Puedes acceder a ' +
       'todos tus servicios programados desde la sección de ' +
@@ -284,7 +290,7 @@ export default ({navigation, route}): React.ReactElement => {
     <>
       <View style={styles.horizontalPadding}>
         <TitleHeader style={styles.header}>
-          {route.params?.isEdit ? 'Editar cita' : 'Generar cita'}
+          {isEdit ? 'Editar cita' : 'Generar cita'}
         </TitleHeader>
         <TitleHeader style={styles.normalHeader}>
           ¿Para quién es la cita?
@@ -358,13 +364,13 @@ export default ({navigation, route}): React.ReactElement => {
           title={cardTitle}
         />
       </View>
-      {!route.params?.isEdit && (
+      {!isEdit && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Consulta</DefaultText>
           <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
         </View>
       )}
-      {route.params?.has_reschedule_penalty && (
+      {has_reschedule_penalty && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Penalización</DefaultText>
           <DefaultText style={styles.rightSide}>
@@ -372,11 +378,11 @@ export default ({navigation, route}): React.ReactElement => {
           </DefaultText>
         </View>
       )}
-      {(!route.params?.isEdit || route.params?.has_reschedule_penalty) && (
+      {(!isEdit || has_reschedule_penalty) && (
         <View style={styles.totalContainer}>
           <TitleHeader style={styles.leftSide}>Total</TitleHeader>
           <TitleHeader style={styles.rightSide}>
-            ${!route.params?.isEdit ? baseCharge : reschedulePenaltyFormatted}
+            ${!isEdit ? baseCharge : reschedulePenaltyFormatted}
           </TitleHeader>
         </View>
       )}
@@ -388,7 +394,7 @@ export default ({navigation, route}): React.ReactElement => {
           isDisabled={isDisabled}
           isLoading={isLoading}
           onPress={onSubmit}>
-          {route.params?.isEdit ? 'Editar cita' : 'Generar cita'}
+          {isEdit ? 'Editar cita' : 'Generar cita'}
         </CustomButton>
       </View>
     </View>
@@ -408,7 +414,7 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <CustomModal
         labelAccept="Entendido"
-        title={route.params?.isEdit ? 'Cita editada' : 'Cita generada'}
+        title={isEdit ? 'Cita editada' : 'Cita generada'}
         text={textSubmitModal}
         onAccept={onAcceptSubmit}
         showCancel={false}
