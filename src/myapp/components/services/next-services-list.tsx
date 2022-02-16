@@ -43,8 +43,9 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     navigation.navigate('VetDate', {
       isEdit: true,
       ...selectedAppointment.admin_settings,
+      appointment_end_time: selectedAppointment.end_time,
       date: selectedAppointment.date,
-      start_time: selectedAppointment.start_time,
+      appointment_start_time: selectedAppointment.start_time,
       pet: selectedAppointment.pet,
     });
     setShowEditModal(false);
