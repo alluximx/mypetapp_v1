@@ -25,6 +25,9 @@ import TitleHeader from '../../../components/texts/title-header';
 // Types
 import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
+import useUpdateVetAppointment from '../../../hooks/vets/useUpdateVetAppointment';
+import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
+import CustomSpinner from '../../../components/custom-spinner';
 
 const NUM_COLUMNS = 4;
 
@@ -61,23 +64,29 @@ export default ({navigation, route}): React.ReactElement => {
     time_slots,
   } = route.params ?? {};
 
+  // Hook calls
+  const vetAppointments = useVetAppointments(admin);
+  const cardData = useGetPaymentMethod(
+    route.params?.card_id,
+    route.params?.isEdit,
+  );
+  const addAppointmentQuery = useAddVetAppointment(admin);
+  const updateAppointmentQuery = useUpdateVetAppointment();
+
   const [form, setForm] = useState({
     admin,
-    card_id: '',
+    card_id: route.params?.card_id,
     date: route.params?.date ?? '',
     day: '',
     end_time: '',
     has_cancel_penalty: false,
     has_reschedule_penalty: route.params?.has_reschedule_penalty ?? false,
+    id: route.params?.id ?? '',
     paymentMethod: '',
     pet: route.params?.pet ?? '',
-    start_time: route.params?.start_time ?? '',
+    start_time: route.params?.appointment_start_time ?? '',
     time: '',
   });
-
-  // Hook calls
-  const vetAppointments = useVetAppointments(admin);
-  const addAppointmentQuery = useAddVetAppointment(admin);
 
   // Functions
   const setValueForm = (day: string) => setForm({...form, day});
@@ -90,7 +99,26 @@ export default ({navigation, route}): React.ReactElement => {
       time,
     });
   };
-  const onSubmit = () => setIsPolicyModalVisible(true);
+
+  const onSubmit = () => {
+    if (route.params?.isEdit) {
+      setIsLoading(true);
+      updateAppointmentQuery.mutate(form, {
+        onError: (responseError: AxiosError) => {
+          const requestError = responseError.response.data;
+          setError(requestError);
+          setIsLoading(false);
+        },
+        onSuccess: () => {
+          setIsLoading(false);
+          setIsModalSubmitVisible(true);
+        },
+      });
+    } else {
+      setIsPolicyModalVisible(true);
+    }
+  };
+
   const onAcceptPolicy = () => {
     setIsLoading(true);
     setIsPolicyModalVisible(false);
@@ -106,6 +134,7 @@ export default ({navigation, route}): React.ReactElement => {
       },
     });
   };
+
   const onAcceptSubmit = () => {
     setIsLoading(false);
     setIsModalSubmitVisible(false);
@@ -131,7 +160,7 @@ export default ({navigation, route}): React.ReactElement => {
         route.params,
         selectedDate,
         appointments,
-        form.start_time,
+        route.params?.appointment_start_time,
       );
       !allHours.length &&
         setEmptyText('No quedan horarios disponibles en este día.');
@@ -179,8 +208,12 @@ export default ({navigation, route}): React.ReactElement => {
       setCardTitle(cardBrand);
       setCardContent(cardLabel);
       setForm({...form, card_id: cardId});
+    } else if (cardData?.isSuccess) {
+      const {brand, last4} = cardData.data?.data[0] ?? {};
+      setCardTitle(brand);
+      setCardContent('****' + last4);
     }
-  }, [route.params?.paymentMethod]);
+  }, [route.params?.paymentMethod, cardData?.isSuccess]);
 
   useEffect(() => {
     if (serviceData) {
@@ -225,10 +258,11 @@ export default ({navigation, route}): React.ReactElement => {
     `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
     'antes, de lo contrario se te cobrará una penalización.';
 
-  const textSubmitModal =
-    'Tu cita ha sido generada exitosamente. Puedes acceder a ' +
-    'todos tus servicios programados desde la sección de ' +
-    '"Próximos Servicios" en el menú principal.';
+  const textSubmitModal = route.params?.isEdit
+    ? 'Tu cita se ha actualizado exitosamente.'
+    : 'Tu cita ha sido generada exitosamente. Puedes acceder a ' +
+      'todos tus servicios programados desde la sección de ' +
+      '"Próximos Servicios" en el menú principal.';
 
   const policyModalContent =
     `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
@@ -325,17 +359,28 @@ export default ({navigation, route}): React.ReactElement => {
         />
       </View>
       {!route.params?.isEdit && (
-        <>
-          <View style={styles.totalContainer}>
-            <DefaultText style={styles.leftSide}>Consulta</DefaultText>
-            <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
-          </View>
+        <View style={styles.totalContainer}>
+          <DefaultText style={styles.leftSide}>Consulta</DefaultText>
+          <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
+        </View>
+      )}
+      {route.params?.has_reschedule_penalty && (
+        <View style={styles.totalContainer}>
+          <DefaultText style={styles.leftSide}>Penalización</DefaultText>
+          <DefaultText style={styles.rightSide}>
+            ${reschedulePenaltyFormatted}
+          </DefaultText>
+        </View>
+      )}
+      {!route.params?.isEdit ||
+        (route.params?.has_reschedule_penalty && (
           <View style={styles.totalContainer}>
             <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-            <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
+            <TitleHeader style={styles.rightSide}>
+              ${!route.params?.isEdit ? baseCharge : reschedulePenaltyFormatted}
+            </TitleHeader>
           </View>
-        </>
-      )}
+        ))}
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>
@@ -350,7 +395,9 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
-  return (
+  return vetAppointments.isLoading || cardData.isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout style={styles.container}>
       <CustomModal
         labelAccept="Entendido"
@@ -362,7 +409,7 @@ export default ({navigation, route}): React.ReactElement => {
       />
       <CustomModal
         labelAccept="Entendido"
-        title="Cita generada"
+        title={route.params?.isEdit ? 'Cita editada' : 'Cita generada'}
         text={textSubmitModal}
         onAccept={onAcceptSubmit}
         showCancel={false}

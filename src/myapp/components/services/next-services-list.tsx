@@ -39,14 +39,22 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     setShowDeleteModal(false);
   };
 
+  const hasReschedulePenalty = (): boolean =>
+    selectedAppointment?.has_reschedule_penalty ||
+    selectedAppointment?.changes ===
+      selectedAppointment?.admin_settings?.allowed_changes_without_penalty;
+
   const onEditAccept = () => {
     navigation.navigate('VetDate', {
       isEdit: true,
       ...selectedAppointment.admin_settings,
       appointment_end_time: selectedAppointment.end_time,
-      date: selectedAppointment.date,
       appointment_start_time: selectedAppointment.start_time,
+      card_id: selectedAppointment.card_id,
+      id: selectedAppointment.id,
+      date: selectedAppointment.date,
       pet: selectedAppointment.pet,
+      has_reschedule_penalty: hasReschedulePenalty(),
     });
     setShowEditModal(false);
   };
@@ -161,13 +169,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         visible={showDeleteModal}
       />
       <CustomModal
-        labelAccept={
-          selectedAppointment?.has_reschedule_penalty ||
-          selectedAppointment?.changes ===
-            selectedAppointment?.admin_settings?.allowed_changes_without_penalty
-            ? 'Pagar y Editar'
-            : 'Editar Cita'
-        }
+        labelAccept={hasReschedulePenalty() ? 'Pagar y Editar' : 'Editar Cita'}
         title="Editar Cita"
         text={editMessage}
         onAccept={onEditAccept}
