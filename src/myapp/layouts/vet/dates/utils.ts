@@ -12,12 +12,15 @@ import {checkIfDayIsEnabledInVetSettings} from '../../../utils';
  * @param configs settings for the vet admin
  * @param selectedDate current date selected
  * @param appointments array of appointment objects
+ * @param includeTime time to include to the available hours in
+ * HH:mm:ss format
  * @returns options array of available hours
  */
 export const getAvailableHours = (
   configs: VetSettings,
   selectedDate: string,
   appointments: Appointment[],
+  includeTime: string = '',
 ): Option[] => {
   const allHours: Option[] = [];
   const {end_time, start_time, time_slots} = configs;
@@ -46,6 +49,11 @@ export const getAvailableHours = (
 
     // Check if the current time is not blocked by any appointment.
     const isOccupied = appointments.some((appointment) => {
+      // If it's the voluntarily included time then ignore it.
+      if (moment(currentTime).format('HH:mm:ss') === includeTime) {
+        return false;
+      }
+
       // Get current time slot start and end time in utc format.
       const currentTimeStart = moment(currentTime).utc();
       const currentTimeEnd = moment(currentTime)

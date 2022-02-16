@@ -13,14 +13,14 @@ import CustomModal from '../../components/modals/custom-modal';
 import globalVars from '../../styles/vars';
 import globalColors from '../../styles/colors';
 // Hook
-import useGetPaymentMethod from '../../hooks/payment-method/useGetPaymentMethod';
+import useGetPaymentMethods from '../../hooks/payment-method/useGetPaymentMethods';
 import useDeletePaymentMethod from '../../hooks/payment-method/useDeletePaymentMethod';
 
 export default ({navigation, route}): React.ReactElement => {
   const [cards, setCards] = useState([]);
   const [currentId, setCurrentId] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const paymentQuery = useGetPaymentMethod();
+  const paymentQuery = useGetPaymentMethods();
   const deleteQuery = useDeletePaymentMethod();
 
   useLayoutEffect(() => {

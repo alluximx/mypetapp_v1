@@ -2,6 +2,7 @@ import {List} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
@@ -35,13 +36,43 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
   const onDeleteAccept = () => {
     // Delete call to api.
-    deleteQuery.mutate(selectedAppointment.id);
+    deleteQuery.mutate(selectedAppointment?.id);
     setShowDeleteModal(false);
+  };
+
+  const hasReschedulePenalty = (): boolean =>
+    hasExceededTimeLimit(
+      selectedAppointment?.date,
+      selectedAppointment?.start_time,
+      selectedAppointment?.admin_settings?.minimum_time_for_reschedule,
+    ) ||
+    selectedAppointment?.has_reschedule_penalty ||
+    selectedAppointment?.changes >=
+      selectedAppointment?.admin_settings?.allowed_changes_without_penalty;
+
+  const hasExceededTimeLimit = (
+    appointmentDate: string,
+    appointmentStartTime: string,
+    minimumRescheduleTime: number,
+  ): boolean => {
+    const appointmentTime = moment(
+      appointmentDate + ' ' + appointmentStartTime,
+    );
+    const diffBetweenTimes = appointmentTime.diff(moment(moment()), 'minutes');
+    return diffBetweenTimes <= minimumRescheduleTime;
   };
 
   const onEditAccept = () => {
     navigation.navigate('VetDate', {
       isEdit: true,
+      ...selectedAppointment?.admin_settings,
+      appointment_end_time: selectedAppointment?.end_time,
+      appointment_start_time: selectedAppointment?.start_time,
+      card_id: selectedAppointment?.card_id,
+      id: selectedAppointment?.id,
+      date: selectedAppointment?.date,
+      pet: selectedAppointment?.pet,
+      has_reschedule_penalty: hasReschedulePenalty(),
     });
     setShowEditModal(false);
   };
@@ -52,40 +83,45 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       minimum_time_for_reschedule,
       reschedule_penalty,
     } = appointment?.admin_settings ?? {};
+    const {changes, date, start_time} = appointment ?? {};
+
     const timeLimit = minimum_time_for_reschedule / 60;
     const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
+    const exceededTimeLimit = hasExceededTimeLimit(
+      date,
+      start_time,
+      minimum_time_for_reschedule,
+    );
 
-    if (appointment?.has_reschedule_penalty) {
-      return (
-        `Estás modificando una cita con menos de ` +
-        `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
-        `anticipación, para realizar esta acción se te cobrará una ` +
-        `penalización de $${penaltyAmount} pesos.`
-      );
-    }
+    let result =
+      `Estás modificando una cita con menos de ` +
+      `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
+      `anticipación, para realizar esta acción se te cobrará una ` +
+      `penalización de $${penaltyAmount} pesos.`;
 
-    switch (appointment?.changes) {
-      case allowed_changes_without_penalty - 1:
-        return (
+    if (!exceededTimeLimit) {
+      if (changes === allowed_changes_without_penalty - 1) {
+        result =
           `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
           `penalización. Si intentas editar tu cita más de ` +
           `${allowed_changes_without_penalty} veces, ` +
-          `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`
-        );
-      case allowed_changes_without_penalty:
-        return (
-          `Para modificar la fecha de tu cita es necesario pagar una ` +
-          `penalización de $${penaltyAmount} pesos.`
-        );
-      default:
-        return (
+          `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`;
+      } else if (changes < allowed_changes_without_penalty) {
+        result =
           `Puedes modificar la fecha de tu cita ` +
-          `${allowed_changes_without_penalty} veces más sin ninguna ` +
+          `${
+            allowed_changes_without_penalty - changes
+          } veces más sin ninguna ` +
           `penalización. Si intentas editar tu cita más de ` +
           `${allowed_changes_without_penalty} veces, se te hará un ` +
-          `recargo por la cantidad de $${penaltyAmount} pesos.`
-        );
+          `recargo por la cantidad de $${penaltyAmount} pesos.`;
+      } else {
+        result =
+          `Has superado el límite de modificaciones. Para modificar nuevamente ` +
+          `tu cita es necesario pagar una penalización de $${penaltyAmount} pesos.`;
+      }
     }
+    return result;
   };
 
   const getDeleteMessage = (appointment: Appointment): string => {
@@ -156,13 +192,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         visible={showDeleteModal}
       />
       <CustomModal
-        labelAccept={
-          selectedAppointment?.has_reschedule_penalty ||
-          selectedAppointment?.changes ===
-            selectedAppointment?.admin_settings?.allowed_changes_without_penalty
-            ? 'Pagar y Editar'
-            : 'Editar Cita'
-        }
+        labelAccept={hasReschedulePenalty() ? 'Pagar y Editar' : 'Editar Cita'}
         title="Editar Cita"
         text={editMessage}
         onAccept={onEditAccept}

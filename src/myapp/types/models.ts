@@ -30,6 +30,7 @@ export interface Appointment {
     reschedule_penalty: string;
   };
   admin_name?: string;
+  card_id?: string;
   changes?: number;
   date: string;
   end_time?: string;
