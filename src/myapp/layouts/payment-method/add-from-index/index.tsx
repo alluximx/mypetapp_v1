@@ -8,7 +8,7 @@ import DefaultText from '../../../components/texts/default-text';
 import PaymentMethodForm from '../../../components/forms/payment-method-form';
 import TitleHeader from '../../../components/texts/title-header';
 // Hooks
-import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
+import useGetPaymentMethods from '../../../hooks/payment-method/useGetPaymentMethods';
 import useSavePaymentMethod from '../../../hooks/payment-method/useSavePaymentMethod';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 // Global Styles
@@ -31,7 +31,7 @@ export default ({navigation, route}): React.ReactElement => {
   const [hasError, setHasError] = useState(false);
   const [errors, setErrors] = useState(initialErrors);
   const addCardQuery = useSavePaymentMethod();
-  const paymentQuery = useGetPaymentMethod();
+  const paymentQuery = useGetPaymentMethods();
 
   const [form, setForm] = useState({
     name: '',

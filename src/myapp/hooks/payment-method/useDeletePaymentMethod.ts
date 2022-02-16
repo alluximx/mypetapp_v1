@@ -9,7 +9,7 @@ const useDeleteCard = () => {
   const queryClient = useQueryClient();
   return useMutation((id: any) => deleteCard(id), {
     onSuccess: (response, variables) => {
-      queryClient.invalidateQueries('user-card');
+      queryClient.invalidateQueries('user-cards');
     },
   });
 };

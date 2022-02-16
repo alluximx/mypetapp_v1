@@ -29,7 +29,7 @@ const useSavePaymentMethod = () => {
       navigation.navigate(screenToReturn, {
         data: {paymentMethod: auxData, screenFrom: screenFrom},
       });
-      queryClient.invalidateQueries('user-card');
+      queryClient.invalidateQueries('user-cards');
     },
   });
 };
