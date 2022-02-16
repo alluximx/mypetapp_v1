@@ -131,7 +131,7 @@ export default ({navigation, route}): React.ReactElement => {
         route.params,
         selectedDate,
         appointments,
-        // form.start_time,
+        form.start_time,
       );
       !allHours.length &&
         setEmptyText('No quedan horarios disponibles en este día.');
@@ -157,17 +157,19 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (route.params?.start_time && hours.length) {
-      const selectedHour = hours.find((hour) => {
-        const formattedCurrentHour = moment(hour.value, 'H:mm A').format(
-          'HH:mm',
-        );
-        const formattedFormHour = moment(form.start_time, 'HH:mm:ss').format(
-          'HH:mm',
-        );
-        return formattedCurrentHour === formattedFormHour;
-      });
+      if (form.date === route.params.date) {
+        const selectedHour = hours.find((hour) => {
+          const formattedCurrentHour = moment(hour.value, 'H:mm A').format(
+            'HH:mm',
+          );
+          const formattedFormHour = moment(form.start_time, 'HH:mm:ss').format(
+            'HH:mm',
+          );
+          return formattedCurrentHour === formattedFormHour;
+        });
 
-      setValueTime(selectedHour?.key);
+        setValueTime(selectedHour?.key);
+      }
     }
   }, [hours]);
 
@@ -322,14 +324,18 @@ export default ({navigation, route}): React.ReactElement => {
           title={cardTitle}
         />
       </View>
-      <View style={styles.totalContainer}>
-        <DefaultText style={styles.leftSide}>Consulta</DefaultText>
-        <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
-      </View>
-      <View style={styles.totalContainer}>
-        <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-        <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
-      </View>
+      {!route.params?.isEdit && (
+        <>
+          <View style={styles.totalContainer}>
+            <DefaultText style={styles.leftSide}>Consulta</DefaultText>
+            <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
+          </View>
+          <View style={styles.totalContainer}>
+            <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+            <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
+          </View>
+        </>
+      )}
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>
@@ -338,7 +344,7 @@ export default ({navigation, route}): React.ReactElement => {
           isDisabled={isDisabled}
           isLoading={isLoading}
           onPress={onSubmit}>
-          Generar cita
+          {route.params?.isEdit ? 'Editar cita' : 'Generar cita'}
         </CustomButton>
       </View>
     </View>
