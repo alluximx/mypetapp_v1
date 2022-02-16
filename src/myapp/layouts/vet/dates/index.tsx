@@ -372,15 +372,14 @@ export default ({navigation, route}): React.ReactElement => {
           </DefaultText>
         </View>
       )}
-      {!route.params?.isEdit ||
-        (route.params?.has_reschedule_penalty && (
-          <View style={styles.totalContainer}>
-            <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-            <TitleHeader style={styles.rightSide}>
-              ${!route.params?.isEdit ? baseCharge : reschedulePenaltyFormatted}
-            </TitleHeader>
-          </View>
-        ))}
+      {(!route.params?.isEdit || route.params?.has_reschedule_penalty) && (
+        <View style={styles.totalContainer}>
+          <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+          <TitleHeader style={styles.rightSide}>
+            ${!route.params?.isEdit ? baseCharge : reschedulePenaltyFormatted}
+          </TitleHeader>
+        </View>
+      )}
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>
