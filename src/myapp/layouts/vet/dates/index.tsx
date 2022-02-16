@@ -228,7 +228,7 @@ export default ({navigation, route}): React.ReactElement => {
   const textSubmitModal =
     'Tu cita ha sido generada exitosamente. Puedes acceder a ' +
     'todos tus servicios programados desde la sección de ' +
-    '"Proximos Servicios" en el menú principal.';
+    '"Próximos Servicios" en el menú principal.';
 
   const policyModalContent =
     `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
