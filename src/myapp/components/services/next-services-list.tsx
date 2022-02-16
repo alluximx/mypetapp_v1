@@ -2,6 +2,7 @@ import {List} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
@@ -65,40 +66,44 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       minimum_time_for_reschedule,
       reschedule_penalty,
     } = appointment?.admin_settings ?? {};
+    const {changes, date, start_time} = appointment ?? {};
+
     const timeLimit = minimum_time_for_reschedule / 60;
     const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
+    const appointmentTime = moment(date + ' ' + start_time);
+    const diffBetweenTimes = appointmentTime.diff(moment(moment()), 'minutes');
+    const isExceedingTimeLimit =
+      diffBetweenTimes <= minimum_time_for_reschedule;
 
-    if (appointment?.has_reschedule_penalty) {
-      return (
+    let result =
+      `Para modificar la fecha de tu cita es necesario pagar una ` +
+      `penalización de $${penaltyAmount} pesos.`;
+
+    if (isExceedingTimeLimit) {
+      result =
         `Estás modificando una cita con menos de ` +
         `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
         `anticipación, para realizar esta acción se te cobrará una ` +
-        `penalización de $${penaltyAmount} pesos.`
-      );
-    }
-
-    switch (appointment?.changes) {
-      case allowed_changes_without_penalty - 1:
-        return (
+        `penalización de $${penaltyAmount} pesos.`;
+    } else {
+      if (changes === allowed_changes_without_penalty - 1) {
+        result =
           `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
           `penalización. Si intentas editar tu cita más de ` +
           `${allowed_changes_without_penalty} veces, ` +
-          `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`
-        );
-      case allowed_changes_without_penalty:
-        return (
-          `Para modificar la fecha de tu cita es necesario pagar una ` +
-          `penalización de $${penaltyAmount} pesos.`
-        );
-      default:
-        return (
+          `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`;
+      } else if (changes < allowed_changes_without_penalty) {
+        result =
           `Puedes modificar la fecha de tu cita ` +
-          `${allowed_changes_without_penalty} veces más sin ninguna ` +
+          `${
+            allowed_changes_without_penalty - changes
+          } veces más sin ninguna ` +
           `penalización. Si intentas editar tu cita más de ` +
           `${allowed_changes_without_penalty} veces, se te hará un ` +
-          `recargo por la cantidad de $${penaltyAmount} pesos.`
-        );
+          `recargo por la cantidad de $${penaltyAmount} pesos.`;
+      }
     }
+    return result;
   };
 
   const getDeleteMessage = (appointment: Appointment): string => {
