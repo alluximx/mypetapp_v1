@@ -191,20 +191,14 @@ export default ({navigation, route}): React.ReactElement => {
   }, [days]);
 
   useEffect(() => {
-    if (start_time && hours.length) {
-      if (form.date === date) {
-        const selectedHour = hours.find((hour) => {
-          const formattedCurrentHour = moment(hour.value, 'H:mm A').format(
-            'HH:mm',
-          );
-          const formattedFormHour = moment(form.start_time, 'HH:mm:ss').format(
-            'HH:mm',
-          );
-          return formattedCurrentHour === formattedFormHour;
-        });
+    if (start_time && hours.length && form.date === date) {
+      const selectedHour = hours.find((hour) => {
+        const auxCurrentHour = moment(hour.value, 'H:mm A').format('HH:mm');
+        const auxFormHour = moment(form.start_time, 'HH:mm:ss').format('HH:mm');
+        return auxCurrentHour === auxFormHour;
+      });
 
-        setValueTime(selectedHour?.key);
-      }
+      setValueTime(selectedHour?.key);
     }
   }, [hours]);
 
