@@ -1,5 +1,6 @@
-import {List} from '@ui-kitten/components';
 import React, {useEffect, useState} from 'react';
+import _ from 'lodash';
+import {List} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
@@ -20,9 +21,11 @@ import {NextServicesListProps} from '../../types/components/services';
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
+  const [data, setData] = useState<Appointment[]>([]);
+
+  // Hook api calls.
   const appointments = useAppointments();
   const deleteQuery = useDeleteAppointment();
-  const [data, setData] = useState<Appointment[]>([]);
   const filteredAppointments = useFilterAppointments(data, props.tab);
 
   const [editMessage, setEditMessage] = useState('');
@@ -35,9 +38,24 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   ] = useState<Appointment | null>(null);
 
   const onDeleteAccept = () => {
+    const {admin_settings, date, has_cancel_penalty, id, start_time} =
+      selectedAppointment ?? {};
+    const formattedData: Appointment = {
+      id,
+      has_cancel_penalty:
+        hasExceededTimeLimit(
+          date,
+          start_time,
+          admin_settings?.minimum_time_for_cancel,
+        ) || has_cancel_penalty,
+      is_canceled: true,
+    };
     // Delete call to api.
-    deleteQuery.mutate(selectedAppointment?.id);
-    setShowDeleteModal(false);
+    deleteQuery.mutate(formattedData, {
+      onSuccess: () => {
+        setShowDeleteModal(false);
+      },
+    });
   };
 
   const hasReschedulePenalty = (): boolean =>
@@ -53,13 +71,13 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const hasExceededTimeLimit = (
     appointmentDate: string,
     appointmentStartTime: string,
-    minimumRescheduleTime: number,
+    timeLimit: number,
   ): boolean => {
     const appointmentTime = moment(
       appointmentDate + ' ' + appointmentStartTime,
     );
     const diffBetweenTimes = appointmentTime.diff(moment(moment()), 'minutes');
-    return diffBetweenTimes <= minimumRescheduleTime;
+    return diffBetweenTimes <= timeLimit;
   };
 
   const onEditAccept = () => {
@@ -85,7 +103,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     } = appointment?.admin_settings ?? {};
     const {changes, date, start_time} = appointment ?? {};
 
-    const timeLimit = minimum_time_for_reschedule / 60;
+    const timeLimit = _.round(minimum_time_for_reschedule / 60, 1);
     const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
     const exceededTimeLimit = hasExceededTimeLimit(
       date,
@@ -125,14 +143,14 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   };
 
   const getDeleteMessage = (appointment: Appointment): string => {
-    const {
-      cancel_penalty,
-      minimum_time_for_cancel,
-    } = appointment?.admin_settings;
-    const timeLimit = minimum_time_for_cancel / 60;
+    const {cancel_penalty, minimum_time_for_cancel} =
+      appointment?.admin_settings ?? {};
+    const {date, has_cancel_penalty, start_time} = appointment ?? {};
+    const timeLimit = _.round(minimum_time_for_cancel / 60, 1);
     const amount = Number(cancel_penalty)?.toFixed(2);
 
-    return appointment?.has_cancel_penalty
+    return hasExceededTimeLimit(date, start_time, minimum_time_for_cancel) ||
+      has_cancel_penalty
       ? `Estás eliminando una cita con menos de ` +
           `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
           `anticipación, si la cancelas se te cobrará una ` +
@@ -184,20 +202,20 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     <>
       <CustomModal
         labelAccept="Eliminar Cita"
-        title="Eliminar Cita"
-        text={deleteMessage}
         onAccept={onDeleteAccept}
         onCancel={() => setShowDeleteModal(false)}
         showCancel
+        text={deleteMessage}
+        title="Eliminar Cita"
         visible={showDeleteModal}
       />
       <CustomModal
         labelAccept={hasReschedulePenalty() ? 'Pagar y Editar' : 'Editar Cita'}
-        title="Editar Cita"
-        text={editMessage}
         onAccept={onEditAccept}
         onCancel={() => setShowEditModal(false)}
         showCancel
+        text={editMessage}
+        title="Editar Cita"
         visible={showEditModal}
       />
       <List

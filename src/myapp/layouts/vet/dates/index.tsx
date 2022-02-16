@@ -74,10 +74,10 @@ export default ({navigation, route}): React.ReactElement => {
   } = route.params ?? {};
 
   // Hook calls
-  const vetAppointments = useVetAppointments(admin);
-  const cardData = useGetPaymentMethod(card_id, isEdit);
   const addAppointmentQuery = useAddVetAppointment(admin);
+  const cardData = useGetPaymentMethod(card_id, isEdit);
   const updateAppointmentQuery = useUpdateVetAppointment();
+  const vetAppointments = useVetAppointments(admin);
 
   const [form, setForm] = useState({
     admin,
@@ -235,8 +235,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   const baseCharge = Number(base_charge).toFixed(2);
 
-  const timeForReschedulePenalty = minimum_time_for_reschedule / 60;
-  const timeForCancelPenalty = minimum_time_for_cancel / 60;
+  const timeForReschedulePenalty = _.round(minimum_time_for_reschedule / 60, 1);
+  const timeForCancelPenalty = _.round(minimum_time_for_cancel / 60, 1);
 
   const maxCancelTimeLabel = `${timeForCancelPenalty} ${
     timeForCancelPenalty === 1 ? 'hora' : 'horas'

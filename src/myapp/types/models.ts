@@ -32,14 +32,15 @@ export interface Appointment {
   admin_name?: string;
   card_id?: string;
   changes?: number;
-  date: string;
+  date?: string;
   end_time?: string;
   full_end_time?: string;
   full_start_time?: string;
-  has_cancel_penalty: boolean;
-  has_reschedule_penalty: boolean;
-  id: string;
-  is_accepted: boolean;
+  has_cancel_penalty?: boolean;
+  has_reschedule_penalty?: boolean;
+  id?: string;
+  is_accepted?: boolean;
+  is_canceled?: boolean;
   pet?: {
     id: string;
     name: string;
@@ -48,9 +49,9 @@ export interface Appointment {
     file: string;
     id: string;
   }[];
-  services: BaseModel[];
+  services?: BaseModel[];
   start_time?: string;
-  vet: string;
+  vet?: string;
 }
 
 export interface BaseModel {
