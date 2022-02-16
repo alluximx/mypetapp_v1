@@ -41,7 +41,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   };
 
   const hasReschedulePenalty = (): boolean =>
-    hasExceedingTimeLimit(
+    hasExceededTimeLimit(
       selectedAppointment?.date,
       selectedAppointment?.start_time,
       selectedAppointment?.admin_settings?.minimum_time_for_reschedule,
@@ -50,7 +50,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     selectedAppointment?.changes >=
       selectedAppointment?.admin_settings?.allowed_changes_without_penalty;
 
-  const hasExceedingTimeLimit = (
+  const hasExceededTimeLimit = (
     appointmentDate: string,
     appointmentStartTime: string,
     minimumRescheduleTime: number,
@@ -87,7 +87,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
     const timeLimit = minimum_time_for_reschedule / 60;
     const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
-    const exceededTimeLimit = hasExceedingTimeLimit(
+    const exceededTimeLimit = hasExceededTimeLimit(
       date,
       start_time,
       minimum_time_for_reschedule,
