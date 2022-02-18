@@ -18,6 +18,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
 
   const onPressDelete = () => props.onPressDeleteModal();
   const onPressEdit = () => props.onPressEditModal();
+  const onPressPending = () => props.onPressPendingModal();
   const onPressRate = () =>
     navigation.navigate('RateService', {service: props.service});
 
@@ -50,20 +51,34 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
         additionalButtons:
           props.tab === servicesTabs[0].id
             ? [
-                <AnchorText
-                  key={`delete-${props.service.id}`}
-                  onPress={() => onPressDelete()}
-                  style={styles.buttonDelete}
-                  isSubmit>
-                  Eliminar
-                </AnchorText>,
-                <AnchorText
-                  key={`edit-${props.service.id}`}
-                  onPress={onPressEdit}
-                  style={styles.buttonEdit}
-                  isSubmit>
-                  Editar
-                </AnchorText>,
+                !props.service.is_accepted && (
+                  <AnchorText
+                    key={`pending-${props.service.id}`}
+                    onPress={() => {}}
+                    style={styles.buttonEdit}
+                    isDisabled
+                    isSubmit>
+                    Pendiente
+                  </AnchorText>
+                ),
+                props.service.is_accepted && (
+                  <AnchorText
+                    key={`delete-${props.service.id}`}
+                    onPress={() => onPressDelete()}
+                    style={styles.buttonDelete}
+                    isSubmit>
+                    Eliminar
+                  </AnchorText>
+                ),
+                props.service?.is_accepted && (
+                  <AnchorText
+                    key={`edit-${props.service.id}`}
+                    onPress={onPressEdit}
+                    style={styles.buttonEdit}
+                    isSubmit>
+                    Editar
+                  </AnchorText>
+                ),
               ]
             : [
                 <AnchorText
@@ -83,7 +98,13 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
           props.service.pet_image[0]?.file ??
           require('../../assets/images/pets/add-pet-image.png'),
       }}
-      onClick={props.tab === servicesTabs[0].id ? onPressEdit : onPressRate}
+      onClick={
+        props.tab === servicesTabs[0].id
+          ? !props.service.is_accepted
+            ? onPressPending
+            : onPressEdit
+          : onPressRate
+      }
       wrapTitle
       wrapContent
     />

@@ -14,6 +14,7 @@ export interface NextServiceCardProps {
   service: Appointment;
   onPressEditModal?: () => void;
   onPressDeleteModal?: () => void;
+  onPressPendingModal?: () => void;
 }
 
 export interface RateServiceInputProps {
