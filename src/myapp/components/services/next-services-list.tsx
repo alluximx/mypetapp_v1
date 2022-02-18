@@ -31,6 +31,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const [editMessage, setEditMessage] = useState('');
   const [deleteMessage, setDeleteMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showPendingModal, setShowPendingModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [
     selectedAppointment,
@@ -169,6 +170,9 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         setSelectedAppointment(item);
         setShowDeleteModal(true);
       }}
+      onPressPendingModal={() => {
+        setShowPendingModal(true);
+      }}
       service={item}
       tab={props.tab}
     />
@@ -200,6 +204,14 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     <CustomSpinner />
   ) : (
     <>
+      <CustomModal
+        labelAccept="Entendido"
+        onAccept={() => setShowPendingModal(false)}
+        showCancel={false}
+        text="Tu cita está pendiente de ser aceptada por el administrador del servicio. Te enviaremos una notificación cuando esta sea aceptada o rechazada."
+        title="Pendiente de aceptación"
+        visible={showPendingModal}
+      />
       <CustomModal
         labelAccept="Eliminar Cita"
         onAccept={onDeleteAccept}
