@@ -30,16 +30,9 @@ const useFilterAppointments = (appointments: Appointment[], tab: string) => {
     const nextOnes: Appointment[] = [];
     const historicOnes: Appointment[] = [];
     const currentDateTime = moment().utc();
-    // Filter accepted ones.
-    const filteredOnes = appointments.filter(
-      (appointment: Appointment) =>
-        appointment.admin_settings.auto_accept_request ||
-        (!appointment.admin_settings.auto_accept_request &&
-          appointment.is_accepted),
-    );
 
     // Filter by historic or current.
-    filteredOnes.forEach((appointment: Appointment) => {
+    appointments.forEach((appointment: Appointment) => {
       const appointmentDateTime = moment(appointment.full_end_time).utc();
 
       if (appointmentDateTime.isSameOrBefore(currentDateTime)) {
