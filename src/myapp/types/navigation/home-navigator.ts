@@ -1,4 +1,5 @@
 import {RouteProp} from '@react-navigation/native';
+import {Appointment} from '../models';
 
 type HomeNavigatorParamList = {
   Home: {
@@ -76,11 +77,14 @@ type HomeNavigatorParamList = {
   AestheticFilter: {};
   AestheticDetail: {};
 
-  RateService: {};
+  RateService: {
+    service: Appointment;
+  };
   NextServices: {};
   ServiceSelect: {};
 };
 
 export type HomeRouteParams = RouteProp<HomeNavigatorParamList, 'Home'>;
+export type RateRouteParams = RouteProp<HomeNavigatorParamList, 'RateService'>;
 
 export default HomeNavigatorParamList;

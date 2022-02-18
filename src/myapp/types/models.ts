@@ -21,6 +21,7 @@ export interface AdoptionRequest {
 }
 
 export interface Appointment {
+  admin?: string;
   admin_settings?: {
     allowed_changes_without_penalty: number;
     auto_accept_request: boolean;
@@ -49,6 +50,7 @@ export interface Appointment {
     file: string;
     id: string;
   }[];
+  rate?: number;
   services?: BaseModel[];
   start_time?: string;
   vet?: string;

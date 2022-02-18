@@ -18,12 +18,14 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
 
   const onPressDelete = () => props.onPressDeleteModal();
   const onPressEdit = () => props.onPressEditModal();
-  const onPressRate = () => navigation.navigate('RateService');
+  const onPressRate = () =>
+    navigation.navigate('RateService', {service: props.service});
 
   return (
     <GenericCard
       contentTextStyle={styles.subtitleCard}
       coverImageStyle={styles.coverImage}
+      isDisabled={props.service.rate !== 0}
       styleCard={props.styleCard}
       key={props.service.id}
       data={{
@@ -68,8 +70,9 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
                   key={`rate-${props.service.id}`}
                   onPress={onPressRate}
                   style={styles.buttonEdit}
+                  isDisabled={props.service.rate !== 0}
                   isSubmit>
-                  Calificar
+                  {props.service.rate === 0 ? 'Calificar' : 'Calificado'}
                 </AnchorText>,
               ],
         content: props.service.admin_name,
