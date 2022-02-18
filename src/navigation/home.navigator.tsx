@@ -407,6 +407,9 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="RateService"
           component={RateServiceScreen}
           options={{headerLeft: closeButton}}
+          initialParams={{
+            service: {},
+          }}
         />
         <HomeStack.Screen name="NextServices" component={NextServicesScreen} />
         <HomeStack.Screen

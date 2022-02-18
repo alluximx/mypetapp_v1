@@ -1,23 +1,44 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 // Hooks.
-// import useGetCategories from '../../../hooks/categories/useGetCategories';
+import useRateAppointment from '../../../hooks/vets/useRateAppointment';
 // My Components.
-import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
-import RateServiceInput from '../../../components/services/rate-service-input';
-import UserTextArea from '../../../components/inputs/user-text-area';
-import DefaultText from '../../../components/texts/default-text';
 import CustomButton from '../../../components/buttons/custom-button';
 import CustomModal from '../../../components/modals/custom-modal';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import RateServiceInput from '../../../components/services/rate-service-input';
+import TitleHeader from '../../../components/texts/title-header';
+import UserTextArea from '../../../components/inputs/user-text-area';
+// Types
+import {RateRouteParams} from '../../../types/navigation/home-navigator';
 
 export default ({navigation}): React.ReactElement => {
+  const route = useRoute<RateRouteParams>();
   const [data, setData] = useState({
-    rating: 0,
-    comment: '',
+    rate: 0,
+    feedback: '',
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const rateQuery = useRateAppointment();
+
+  const onSubmit = () => {
+    setIsLoading(true);
+    rateQuery.mutate(
+      {
+        id: route.params?.service?.id,
+        ...data,
+      },
+      {
+        onSuccess: () => {
+          setModalVisible(true);
+        },
+      },
+    );
+  };
 
   return (
     <DefaultLayout style={styles.container}>
@@ -38,35 +59,27 @@ export default ({navigation}): React.ReactElement => {
           ¿Cómo calificarías el servicio que recibió tu mascota?
         </TitleHeader>
         <RateServiceInput
-          value={data.rating}
-          setValue={(value: number) => setData({...data, rating: value})}
+          value={data.rate}
+          setValue={(value: number) => setData({...data, rate: value})}
         />
         <TitleHeader style={styles.question}>
           Si tuviste algún problema con el servicio, por favor háznoslo saber.
         </TitleHeader>
         <UserTextArea
-          onChangeText={(value: string) => setData({...data, comment: value})}
+          onChangeText={(value: string) => setData({...data, feedback: value})}
           placeholder="Ingresa tu respuesta"
           maxLength={500}
           inputStyle={styles.textAreaInput}
           style={styles.textArea}
-          value={data.comment}
+          value={data.feedback}
         />
         <DefaultText style={styles.charCount}>
-          {data.comment.length} / 500
+          {data.feedback.length} / 500
         </DefaultText>
         <CustomButton
-          isDisabled={data.rating === 0}
+          isDisabled={data.rate === 0}
           isLoading={isLoading}
-          onPress={() => {
-            setIsLoading(true);
-            // Timeout just for demostration, will remove it
-            // once this is integrated with the api.
-            setTimeout(() => {
-              setIsLoading(false);
-              setModalVisible(true);
-            }, 500);
-          }}
+          onPress={onSubmit}
           style={styles.button}>
           Enviar Calificación
         </CustomButton>
