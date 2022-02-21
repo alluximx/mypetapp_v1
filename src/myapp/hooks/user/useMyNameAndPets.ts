@@ -1,4 +1,5 @@
 import {useContext, useEffect, useState} from 'react';
+import {Alert} from 'react-native';
 import {useQuery} from 'react-query';
 // Context
 import {AuthContext} from '../../context/AuthContext';
@@ -35,6 +36,13 @@ const useMyNameAndPets = () => {
         ...data,
         userName: profileQuery.data?.data.name,
       });
+    }
+    if (profileQuery.isError) {
+      Alert.alert(
+        'Ocurrió un error',
+        'Hubo un problema al recuperar tu perfil, intenta nuevamente.',
+      );
+      authContext.signOut();
     }
   }, [profileQuery.data]);
 
