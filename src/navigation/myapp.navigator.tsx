@@ -85,7 +85,7 @@ export const MyAppNavigator = (): React.ReactElement => {
           dispatch({type: 'SIGN_IN', token: response.data.token});
           return {status: true, data: response.data};
         } catch (error) {
-          let response = {
+          const response = {
             status: false,
             data: {
               non_field_errors:
