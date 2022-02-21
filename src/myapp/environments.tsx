@@ -30,8 +30,8 @@ const _Environments = {
     GUEST_PASS: '!6n2+kX6W4UTTkGB',
   },
   development: {
-    BASE_URL: 'https://api.mypetapp.xyz/',
-    API_URL: 'https://api.mypetapp.xyz/',
+    BASE_URL: 'https://stage.dogitapp.com/',
+    API_URL: 'https://stage.dogitapp.com/',
     IMAGES_HOST: 'https://mpa-stage.s3.amazonaws.com/media/',
     GUEST_USER: 'guest@email.com',
     GUEST_PASS: '!6n2+kX6W4UTTkGB',

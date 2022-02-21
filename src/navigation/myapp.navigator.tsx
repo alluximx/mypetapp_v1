@@ -93,7 +93,7 @@ export const MyAppNavigator = (): React.ReactElement => {
             },
           };
           if (error.response?.data) {
-            response.status = error.response?.data;
+            response.data = {...error.response?.data};
           }
           return response;
         }
