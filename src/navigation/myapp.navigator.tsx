@@ -137,6 +137,10 @@ export const MyAppNavigator = (): React.ReactElement => {
               DetailPet: 'pets/:id',
               EditVaccine: 'pets/:petId/vaccines/:vaccineId',
               EditDeworming: 'pets/:petId/dewormings/:vaccineId',
+              NextServices: 'appointments',
+              RateService: {
+                path: 'appointments/:appointmentId/rate',
+              },
             },
           },
         },

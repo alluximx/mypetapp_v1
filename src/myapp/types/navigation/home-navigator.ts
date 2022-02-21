@@ -78,7 +78,7 @@ type HomeNavigatorParamList = {
   AestheticDetail: {};
 
   RateService: {
-    service: Appointment;
+    appointmentId: string;
   };
   NextServices: {};
   ServiceSelect: {};
