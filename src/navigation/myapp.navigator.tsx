@@ -85,7 +85,17 @@ export const MyAppNavigator = (): React.ReactElement => {
           dispatch({type: 'SIGN_IN', token: response.data.token});
           return {status: true, data: response.data};
         } catch (error) {
-          return {status: false, data: error.response.data};
+          let response = {
+            status: false,
+            data: {
+              non_field_errors:
+                'Ocurrió un problema. Intenta nuevamente más tarde.',
+            },
+          };
+          if (error.response?.data) {
+            response.status = error.response?.data;
+          }
+          return response;
         }
       },
       signUp: async (data) => {

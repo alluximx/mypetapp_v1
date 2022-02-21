@@ -32,8 +32,8 @@ export default ({navigation}): React.ReactElement => {
     navigation.dispatch(insertBeforeLast('Start'));
   }, []);
 
-  const insertBeforeLast = routeName => state => {
-    const exists = state.routes.find(obj => obj.name === 'Start');
+  const insertBeforeLast = (routeName) => (state) => {
+    const exists = state.routes.find((obj) => obj.name === 'Start');
     let routes = [];
     if (!exists) {
       routes = [
@@ -78,9 +78,7 @@ export default ({navigation}): React.ReactElement => {
     if (hasCompletedForm) {
       const response = await authContext.signIn(form);
       // If there are no errors...
-      if (response.status) {
-        // navigation && navigation.navigate('HomeNavigator', {screen: 'Home'});
-      } else {
+      if (!response.status) {
         // Update errors.
         setErrors({...defaultErrors, ...response.data});
       }
@@ -119,10 +117,12 @@ export default ({navigation}): React.ReactElement => {
             />
             {hasErrors &&
               // Map errors...
-              Object.entries(errors).map(([, value]) => {
+              Object.entries(errors).map(([, value], index) => {
                 return (
                   value !== '' && (
-                    <Text style={styles.errorMessage}>{value}</Text>
+                    <Text key={index} style={styles.errorMessage}>
+                      {value}
+                    </Text>
                   )
                 );
               })}
