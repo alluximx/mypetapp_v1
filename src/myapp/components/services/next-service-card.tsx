@@ -20,7 +20,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
   const onPressEdit = () => props.onPressEditModal();
   const onPressPending = () => props.onPressPendingModal();
   const onPressRate = () =>
-    navigation.navigate('RateService', {service: props.service});
+    navigation.navigate('RateService', {appointmentId: props.service.id});
 
   return (
     <GenericCard

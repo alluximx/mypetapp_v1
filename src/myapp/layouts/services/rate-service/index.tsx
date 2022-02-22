@@ -29,7 +29,7 @@ export default ({navigation}): React.ReactElement => {
     setIsLoading(true);
     rateQuery.mutate(
       {
-        id: route.params?.service?.id,
+        id: route.params?.appointmentId,
         ...data,
       },
       {

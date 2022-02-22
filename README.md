@@ -57,8 +57,11 @@ and
 
 ## Deep links for the Push Notifications
 
-| Screen           | Link                                                |
-|------------------|-----------------------------------------------------|
-| Orders Detail    | `dogit://orders/{{order_id}}`                       |
-| Vaccine Detail   | `dogit://pets/{{pet_id}}/vaccines/{{vaccine_id}}`   |
-| Deworming Detail | `dogit://pets/{{pet_id}}/dewormings/{{vaccine_id}}` |
+| Notification                           | Screen            | Link                                                |
+|----------------------------------------|-------------------|-----------------------------------------------------|
+| Orders Status Changes                  | Orders Detail     | `dogit://orders/{{order_id}}`                       |
+| Vaccine Reminder                       | Vaccine Detail    | `dogit://pets/{{pet_id}}/vaccines/{{vaccine_id}}`   |
+| Deworming Reminder                     | Deworming Detail  | `dogit://pets/{{pet_id}}/dewormings/{{vaccine_id}}` |
+| Payments                               | Appointments List | `dogit://appointments`                              |
+| Appointment Status Changes / Reminders | Appointments List | `dogit://appointments`                              |
+| Rate appointment reminder              | Rate appointment  | `dogit://appointments/{{appointment_id}}/rate`      |
