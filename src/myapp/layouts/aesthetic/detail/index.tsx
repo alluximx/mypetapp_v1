@@ -75,20 +75,16 @@ export default ({navigation, route}): React.ReactElement => {
           <DefaultText style={styles.subtitle2}>{availability}</DefaultText>
           <RatingCard rating={rating} distance={distance} />
           {!isLoading && shouldCallSettings && (
-            <>
-              <DefaultText style={styles.consult}>{'Consulta'}</DefaultText>
-              <TitleHeader style={styles.baseCharge}>
-                {'$' + vetSettings.base_charge}
-              </TitleHeader>
+            <View style={styles.dateButton}>
               <NavigateButton
-                destination="VetDate"
-                placeholder="Generar Cita"
                 data={{
                   screenFrom: 'AestheticDate',
                   ...vetSettings,
                 }}
+                destination="VetDate"
+                placeholder="Generar Cita"
               />
-            </>
+            </View>
           )}
         </DefaultLayout>
       </ScrollView>
@@ -138,5 +134,8 @@ const styles = StyleSheet.create({
     width: width,
     height: height * 0.45,
     resizeMode: 'cover',
+  },
+  dateButton: {
+    marginTop: 24,
   },
 });
