@@ -39,8 +39,13 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   ] = useState<Appointment | null>(null);
 
   const onDeleteAccept = () => {
-    const {admin_settings, date, has_cancel_penalty, id, start_time} =
-      selectedAppointment ?? {};
+    const {
+      admin_settings,
+      date,
+      has_cancel_penalty,
+      id,
+      start_time,
+    } = selectedAppointment;
     const formattedData: Appointment = {
       id,
       has_cancel_penalty:
@@ -74,10 +79,14 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     appointmentStartTime: string,
     timeLimit: number,
   ): boolean => {
+    if (!appointmentStartTime) {
+      return false;
+    }
+
     const appointmentTime = moment(
       appointmentDate + ' ' + appointmentStartTime,
     );
-    const diffBetweenTimes = appointmentTime.diff(moment(moment()), 'minutes');
+    const diffBetweenTimes = appointmentTime.diff(moment(), 'minutes');
     return diffBetweenTimes <= timeLimit;
   };
 
