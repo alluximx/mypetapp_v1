@@ -4,15 +4,14 @@ import 'moment/locale/es';
 import {AxiosError} from 'axios';
 import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
 import moment from 'moment';
-
 // Global Styles
 import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
 // Hooks
-import useAddVetAppointment from '../../../hooks/vets/useAddVetAppointment';
+import useAddAppointment from '../../../hooks/vets/useAddAppointment';
 import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
-import useUpdateVetAppointment from '../../../hooks/vets/useUpdateVetAppointment';
-import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import useUpdateAppointment from '../../../hooks/vets/useUpdateAppointment';
+import useAdminAppointments from '../../../hooks/vets/useAdminAppointments';
 // My Components
 import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
@@ -73,11 +72,13 @@ export default ({navigation, route}): React.ReactElement => {
     time_slots,
   } = route.params ?? {};
 
+  const isSalon = screenFrom && screenFrom === 'AestheticDate';
+
   // Hook calls
-  const addAppointmentQuery = useAddVetAppointment(admin);
+  const addAppointmentQuery = useAddAppointment(admin, isSalon);
   const cardData = useGetPaymentMethod(card_id, isEdit);
-  const updateAppointmentQuery = useUpdateVetAppointment();
-  const vetAppointments = useVetAppointments(admin);
+  const updateAppointmentQuery = useUpdateAppointment(isSalon);
+  const adminAppointments = useAdminAppointments(admin, isSalon);
 
   const [form, setForm] = useState({
     admin,
@@ -161,7 +162,7 @@ export default ({navigation, route}): React.ReactElement => {
     if (form.day) {
       setHours([]);
       const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
-      const appointments = vetAppointments?.data?.data ?? [];
+      const appointments = adminAppointments?.data?.data ?? [];
       const allHours = getAvailableHours(
         route.params,
         selectedDate,
@@ -301,8 +302,8 @@ export default ({navigation, route}): React.ReactElement => {
             subtitle={petContent}
           />
         </View>
-        {screenFrom && screenFrom === 'AestheticDate' && (
-          <View style={styles.horizontalPadding}>
+        {isSalon && (
+          <View>
             <TitleHeader style={styles.normalHeader}>
               ¿Qué servicio necesita tu mascota?
             </TitleHeader>
@@ -394,7 +395,7 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
-  return vetAppointments.isLoading || cardData.isLoading ? (
+  return adminAppointments.isLoading || cardData.isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>

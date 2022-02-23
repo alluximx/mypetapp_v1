@@ -84,7 +84,7 @@ export default ({navigation, route}): React.ReactElement => {
                 destination="VetDate"
                 placeholder="Generar Cita"
                 data={{
-                  screenFrom: 'VetDate',
+                  screenFrom: 'AestheticDate',
                   ...vetSettings,
                 }}
               />
