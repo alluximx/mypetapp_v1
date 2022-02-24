@@ -63,6 +63,11 @@ export default ({navigation, route}): React.ReactElement => {
    ***************/
 
   useEffect(() => {
+    console.log('==================================');
+  }, []);
+
+  useEffect(() => {
+    console.log('hola');
     if (petsData.pets?.length) {
       setHasPets(true);
       setPets(petsData.pets);
@@ -70,6 +75,7 @@ export default ({navigation, route}): React.ReactElement => {
   }, [petsData]);
 
   useEffect(() => {
+    console.log('hola2');
     if (dataSizes.data) {
       const dataFormatted = dataSizes.data.data.map((obj: any) => {
         return {key: obj.id, value: obj.name};
