@@ -22,7 +22,10 @@ const NavigateButton = (props: NavigateButtonProps): React.ReactElement => {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={navigateToScreen}>
+    <TouchableOpacity
+      style={[styles.container, props.isDisabled && styles.disabled]}
+      onPress={navigateToScreen}
+      disabled={props.isDisabled ?? false}>
       {props.title && props.subtitle ? (
         <View style={styles.containerPadding}>
           <TitleHeader style={styles.title}>{props.title}</TitleHeader>
@@ -30,12 +33,18 @@ const NavigateButton = (props: NavigateButtonProps): React.ReactElement => {
         </View>
       ) : (
         <View style={styles.containerPlaceholder}>
-          <DefaultText style={styles.placeholder}>
+          <DefaultText
+            style={[
+              styles.placeholder,
+              props.isDisabled && styles.textDisabled,
+            ]}>
             {props.placeholder}
           </DefaultText>
         </View>
       )}
-      <DropRightIcon style={styles.iconStyles} />
+      <DropRightIcon
+        style={[styles.iconStyles, props.isDisabled && styles.iconDisabled]}
+      />
     </TouchableOpacity>
   );
 };
@@ -59,11 +68,20 @@ const styles = StyleSheet.create({
   placeholder: {
     color: globalColors.darkerGray,
   },
+  textDisabled: {
+    color: globalColors.darkGray,
+  },
   iconStyles: {
     height: 40,
     width: 40,
     top: 0,
     right: 8,
+  },
+  iconDisabled: {
+    tintColor: globalColors.darkGray,
+  },
+  disabled: {
+    backgroundColor: globalColors.lightGray,
   },
   containerPadding: {
     paddingVertical: 16,

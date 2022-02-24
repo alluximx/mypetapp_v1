@@ -3,30 +3,29 @@ import {StyleSheet} from 'react-native';
 // ui-kitten
 import {List} from '@ui-kitten/components';
 // My Components
+import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
 import IndividualOptionSelect from '../../../components/inputs/individual-option-select';
+import TitleHeader from '../../../components/texts/title-header';
 // Hooks
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+import useGetSalonServices from '../../../hooks/aesthetics/useGetSalonServices';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [isLoading, setIsLoading] = useState(false);
-  const data = [];
-  const auxData = [
-    {id: '1', title: '$200.00', subtitle: 'Baño'},
-    {id: '2', title: '$200.00', subtitle: 'Corte'},
-    {id: '3', title: '$200.00', subtitle: 'Uñas'},
-    {id: '4', title: '$200.00', subtitle: 'Peinado'},
-  ];
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState([]);
 
-  const {screenToReturn, screenFrom} = route.params?.data ?? {};
+  const {admin, screenToReturn, screenFrom, sizeId} = route.params ?? {};
 
+  const salonsData = useGetSalonServices(admin, sizeId);
   const isDisabled = false;
 
-  const setData = (value) => {
-    const exist = data.includes(value);
-    exist ? removeFromArray(value) : data.push(value);
-  };
+  useEffect(() => {
+    if (salonsData.isSuccess && salonsData.data?.data) {
+      setData(salonsData.data.data);
+      setIsLoading(false);
+    }
+  }, [salonsData.isSuccess]);
 
   const removeFromArray = (value) => {
     const indx = data.indexOf(value);
@@ -35,27 +34,27 @@ export default ({navigation, route}): React.ReactElement => {
     }
   };
 
-  const onSubmit = () => {
-    const dataSubmit = [];
-    data.forEach((selectElement) => {
-      auxData.forEach((element) => {
-        if (selectElement === element.id) {
-          const auxElement = {id: selectElement, name: element.subtitle};
-          dataSubmit.push(auxElement);
-        }
-      });
-    });
+  // const onSubmit = () => {
+  //   const dataSubmit = [];
+  //   data.forEach((selectElement) => {
+  //     auxData.forEach((element) => {
+  //       if (selectElement === element.id) {
+  //         const auxElement = {id: selectElement, name: element.subtitle};
+  //         dataSubmit.push(auxElement);
+  //       }
+  //     });
+  //   });
 
-    navigation.navigate(screenToReturn, {
-      data: {serviceData: dataSubmit, screenFrom: screenFrom},
-    });
-  };
+  //   navigation.navigate(screenToReturn, {
+  //     data: {serviceData: dataSubmit, screenFrom: screenFrom},
+  //   });
+  // };
 
   useSetNavigationHeaders({
     isDisabled,
     isLoading,
     navigation,
-    onRightPress: onSubmit,
+    onRightPress: () => {},
     setIsLoading,
     data: [],
   });
@@ -64,7 +63,7 @@ export default ({navigation, route}): React.ReactElement => {
     return (
       <IndividualOptionSelect
         setCurrentValue={(newValue) => {
-          setData(newValue);
+          // setData(newValue);
         }}
         title={service.item.title}
         subtitle={service.item.subtitle}
@@ -73,12 +72,14 @@ export default ({navigation, route}): React.ReactElement => {
       />
     );
   };
-  return (
+  return isLoading || salonsData.isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout>
       <TitleHeader>Servicios</TitleHeader>
       <List
         style={styles.servicesContainer}
-        data={auxData}
+        data={data}
         renderItem={renderOption}
       />
     </DefaultLayout>

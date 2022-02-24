@@ -91,6 +91,7 @@ export default ({navigation, route}): React.ReactElement => {
     id: id ?? '',
     paymentMethod: '',
     pet: pet ?? '',
+    services: '',
     start_time: appointment_start_time ?? '',
     time: '',
   });
@@ -229,6 +230,7 @@ export default ({navigation, route}): React.ReactElement => {
    **********************/
 
   const isDisabled =
+    (isSalon && form.services === '') ||
     form.date === '' ||
     form.time === '' ||
     form.pet === '' ||
@@ -308,14 +310,17 @@ export default ({navigation, route}): React.ReactElement => {
               ¿Qué servicio necesita tu mascota?
             </TitleHeader>
             <NavigateButton
-              placeholder="Selecciona los servicios"
-              destination="ServiceSelect"
               data={{
+                admin,
                 screenToReturn: 'VetDate',
                 screenFrom: screenFrom,
+                sizeId: pet?.idSize,
               }}
-              title="Servicio"
+              destination="ServiceSelect"
+              isDisabled={form.pet === ''}
+              placeholder="Selecciona los servicios"
               subtitle={serviceContent}
+              title="Servicio"
             />
           </View>
         )}
@@ -359,12 +364,20 @@ export default ({navigation, route}): React.ReactElement => {
           title={cardTitle}
         />
       </View>
-      {!isEdit && (
+      {!isEdit && !isSalon && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Consulta</DefaultText>
           <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
         </View>
       )}
+      {isSalon &&
+        form.services !== '' &&
+        form.services.split('-').map((service) => (
+          <View style={styles.totalContainer}>
+            <DefaultText style={styles.leftSide}>{service}</DefaultText>
+            <DefaultText style={styles.rightSide}>${service}</DefaultText>
+          </View>
+        ))}
       {has_reschedule_penalty && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Penalización</DefaultText>
@@ -373,14 +386,16 @@ export default ({navigation, route}): React.ReactElement => {
           </DefaultText>
         </View>
       )}
-      {(!isEdit || has_reschedule_penalty) && (
-        <View style={styles.totalContainer}>
-          <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-          <TitleHeader style={styles.rightSide}>
-            ${!isEdit ? baseCharge : reschedulePenaltyFormatted}
-          </TitleHeader>
-        </View>
-      )}
+      {!isEdit ||
+        has_reschedule_penalty ||
+        (isSalon && form.services !== '' && (
+          <View style={styles.totalContainer}>
+            <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+            <TitleHeader style={styles.rightSide}>
+              ${!isEdit ? baseCharge : reschedulePenaltyFormatted}
+            </TitleHeader>
+          </View>
+        ))}
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>

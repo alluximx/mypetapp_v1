@@ -14,19 +14,60 @@ import TitleHeader from '../../../components/texts/title-header';
 // Hooks
 import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
 import useSizes from '../../../hooks/pets/useSizes';
+import {BaseModel, Pet} from '../../../types/models';
 
 export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
-  const {screenToReturn, screenFrom} = route.params ?? {};
-  const data = useMyNameAndPets();
-  const dataSizes = useSizes(screenFrom && screenFrom !== 'VetDate');
-  const hasPets = data.pets.length !== 0;
+  const petsData = useMyNameAndPets();
 
+  const {screenToReturn, screenFrom} = route.params ?? {};
+  const dataSizes = useSizes(screenFrom && screenFrom !== 'VetDate');
+
+  const [hasPets, setHasPets] = useState(false);
+  const [pets, setPets] = useState([]);
   const [sizes, setSizes] = useState([]);
-  const [idPet, setIdPet] = useState();
-  const [sizePet, setSizePet] = useState();
-  const [name, setName] = useState();
-  const isDisable = screenFrom === 'VetDate' ? !idPet : !idPet || !sizePet;
+
+  const [pet, setPet] = useState<Pet>();
+  const [petSize, setPetSize] = useState('');
+
+  const isDisabled = screenFrom === 'VetDate' ? !pet : !pet || !petSize;
+
+  navigation.setOptions({
+    headerRight: () => (
+      <AnchorText
+        style={styles.headerRight}
+        isDisabled={isDisabled}
+        onPress={onRightPress}>
+        Guardar
+      </AnchorText>
+    ),
+  });
+
+  const onRightPress = () => {
+    const sizeName = sizes.find((size) => size.id === petSize);
+    const petName = pets.find((pet) => pet?.id === pet);
+
+    const submitData =
+      screenFrom === 'VetDate'
+        ? {petId: pet?.id, petName}
+        : {petId: pet?.id, petName, sizeId: petSize, sizeName};
+
+    navigation.navigate(screenToReturn, {
+      pet: submitData,
+      screenFrom: screenFrom,
+    });
+  };
+
+  /***************
+   *** Effects ***
+   ***************/
+
+  useEffect(() => {
+    if (petsData.pets?.length) {
+      setHasPets(true);
+      setPets(petsData.pets);
+    }
+  }, [petsData]);
 
   useEffect(() => {
     if (dataSizes.data) {
@@ -37,64 +78,26 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [dataSizes.data]);
 
-  navigation.setOptions({
-    headerRight: () => (
-      <AnchorText
-        style={styles.headerRight}
-        isDisabled={isDisable}
-        onPress={() => {
-          onRightPress();
-        }}>
-        Guardar
-      </AnchorText>
-    ),
-  });
+  /**********************
+   *** Render Methods ***
+   **********************/
 
-  const setSubmitData = (petId, petName) => {
-    setIdPet(petId);
-    setName(petName);
-  };
-
-  const onRightPress = () => {
-    const sizeName = sizePet
-      ? dataSizes.data.data.find((obj) => {
-          return obj.id === sizePet && obj.name;
-        })
-      : '';
-
-    const submitData =
-      screenFrom === 'VetDate'
-        ? {id: idPet, name: name}
-        : {id: idPet, name: name, idSize: sizeName.name};
-
-    navigation.navigate(screenToReturn, {
-      pet: submitData,
-      screenFrom: screenFrom,
-    });
-  };
-
-  const renderPetButton = ({item}) => {
-    return (
-      <PetCard
-        dogProfileImageStyle={styles.imagePet}
-        onPress={() => {
-          setSubmitData(item.id, item.name);
-        }}
-        pet={item}
-        petNameTextStyle={[
-          styles.namePet,
-          item.id === idPet ? styles.namePetSelected : styles.namePetDisabled,
-        ]}
-        profileButtonStyle={[
-          styles.buttonPet,
-          item.id === idPet
-            ? styles.buttonPetSelected
-            : styles.buttonPetDisabled,
-        ]}
-        showAge={false}
-      />
-    );
-  };
+  const renderPetButton = ({item}) => (
+    <PetCard
+      dogProfileImageStyle={styles.imagePet}
+      onPress={() => setPet(item.id)}
+      pet={item}
+      petNameTextStyle={[
+        styles.namePet,
+        item.id === pet ? styles.namePetSelected : styles.namePetDisabled,
+      ]}
+      profileButtonStyle={[
+        styles.buttonPet,
+        item.id === pet ? styles.buttonPetSelected : styles.buttonPetDisabled,
+      ]}
+      showAge={false}
+    />
+  );
 
   const renderEmptyPetList = (
     <DefaultText style={styles.emptyText}>
@@ -111,7 +114,7 @@ export default ({navigation, route}): React.ReactElement => {
           styles.petButtonsContentContainer,
           !hasPets && styles.petButtonContentContainerEmpty,
         ]}
-        data={data.pets}
+        data={pets}
         horizontal={true}
         ListEmptyComponent={renderEmptyPetList}
         renderItem={renderPetButton}
@@ -125,17 +128,17 @@ export default ({navigation, route}): React.ReactElement => {
     </>
   );
 
-  return data.isLoading || dataSizes.isLoading ? (
+  return petsData.isLoading || dataSizes.isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout statusBarStyle={'dark-content'} style={styles.container}>
       <OptionSelect
-        currentValue={sizePet}
+        currentValue={petSize}
         data={screenFrom && screenFrom !== 'VetDate' ? sizes : []}
         headerComponent={renderSizesHeader}
         horizontal={false}
         optionStyle={styles.options}
-        setCurrentValue={(newSizePet) => setSizePet(newSizePet)}
+        setCurrentValue={(newPetSize: string) => setPetSize(newPetSize)}
         style={styles.select}
       />
     </DefaultLayout>
@@ -146,6 +149,7 @@ const themedStyles = StyleService.create({
   container: {
     flex: 1,
     backgroundColor: globalColors.backgroundDefault,
+    paddingRight: 4,
   },
   subtitle: {
     fontSize: 16,
@@ -170,12 +174,12 @@ const themedStyles = StyleService.create({
   },
   petButtonsContainer: {
     backgroundColor: 'transparent',
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 21,
   },
   buttonPet: {
     height: 123,
-    width: 104,
+    width: 100,
   },
   buttonPetDisabled: {
     backgroundColor: globalColors.white,
@@ -199,9 +203,10 @@ const themedStyles = StyleService.create({
   },
   select: {
     marginBottom: 16,
+    paddingRight: globalVars.outsidePadding - 4,
   },
   options: {
     marginTop: 15,
   },
-  sizesPrompt: {fontSize: 16, marginBottom: 16},
+  sizesPrompt: {fontSize: 16, marginBottom: 4},
 });
