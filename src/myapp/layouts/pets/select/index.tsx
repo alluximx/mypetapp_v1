@@ -45,7 +45,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const onRightPress = () => {
     const sizeName = sizes.find((size) => size.id === petSize);
-    const petName = pets.find((pet) => pet?.id === pet);
+    const petName = pets.find((currentPet) => currentPet?.id === pet);
 
     const submitData =
       screenFrom === 'VetDate'
