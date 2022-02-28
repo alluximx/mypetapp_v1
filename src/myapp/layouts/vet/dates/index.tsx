@@ -9,11 +9,11 @@ import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
 // Hooks
 import useAddAppointment from '../../../hooks/vets/useAddAppointment';
-import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
+// import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
 import useUpdateAppointment from '../../../hooks/vets/useUpdateAppointment';
 import useAdminAppointments from '../../../hooks/vets/useAdminAppointments';
 // My Components
-import {QuestionCircleIcon} from '../../../components/icons';
+// import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
 import CustomModal from '../../../components/modals/custom-modal';
 import CustomSpinner from '../../../components/custom-spinner';
@@ -36,12 +36,12 @@ export default ({navigation, route}): React.ReactElement => {
   // Loading
   const [isLoading, setIsLoading] = useState(false);
   // Modals
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-  const [isPolicyModalVisible, setIsPolicyModalVisible] = useState(false);
+  // const [isPolicyModalVisible, setIsPolicyModalVisible] = useState(false);
   // Render vars
-  const [cardContent, setCardContent] = useState('');
-  const [cardTitle, setCardTitle] = useState('');
+  // const [cardContent, setCardContent] = useState('');
+  // const [cardTitle, setCardTitle] = useState('');
   const [emptyText, setEmptyText] = useState(
     'Por favor selecciona una fecha para ver los horarios disponibles.',
   );
@@ -52,19 +52,19 @@ export default ({navigation, route}): React.ReactElement => {
   const [serviceContent, setServiceContent] = useState('');
   const {
     admin,
-    allowed_changes_without_penalty,
+    // allowed_changes_without_penalty,
     appointment_start_time,
     base_charge,
-    cancel_penalty,
-    card_id,
+    // cancel_penalty,
+    // card_id,
     date,
-    has_reschedule_penalty,
+    // has_reschedule_penalty,
     id,
     isEdit,
-    minimum_time_for_cancel,
-    minimum_time_for_reschedule,
-    reschedule_penalty,
-    paymentMethod,
+    // minimum_time_for_cancel,
+    // minimum_time_for_reschedule,
+    // reschedule_penalty,
+    // paymentMethod,
     pet,
     screenFrom,
     serviceData,
@@ -76,20 +76,20 @@ export default ({navigation, route}): React.ReactElement => {
 
   // Hook calls
   const addAppointmentQuery = useAddAppointment(admin, isSalon);
-  const cardData = useGetPaymentMethod(card_id, isEdit);
+  // const cardData = useGetPaymentMethod(card_id, isEdit);
   const updateAppointmentQuery = useUpdateAppointment(isSalon);
   const adminAppointments = useAdminAppointments(admin, isSalon);
 
   const [form, setForm] = useState({
     admin,
-    card_id,
+    // card_id,
     date: date ?? '',
     day: '',
     end_time: '',
-    has_cancel_penalty: false,
-    has_reschedule_penalty: has_reschedule_penalty ?? false,
+    // has_cancel_penalty: false,
+    // has_reschedule_penalty: has_reschedule_penalty ?? false,
     id: id ?? '',
-    paymentMethod: '',
+    // paymentMethod: '',
     pet: pet ?? '',
     services: '',
     start_time: appointment_start_time ?? '',
@@ -123,25 +123,35 @@ export default ({navigation, route}): React.ReactElement => {
         },
       });
     } else {
-      setIsPolicyModalVisible(true);
+      setIsLoading(true);
+      addAppointmentQuery.mutate(form, {
+        onError: (responseError: AxiosError) => {
+          const requestError = responseError.response.data;
+          setError(requestError);
+          setIsLoading(false);
+        },
+        onSuccess: () => {
+          setIsModalSubmitVisible(true);
+        },
+      });
     }
   };
 
-  const onAcceptPolicy = () => {
-    setIsLoading(true);
-    setIsPolicyModalVisible(false);
-    addAppointmentQuery.mutate(form, {
-      onError: (responseError: AxiosError) => {
-        setIsPolicyModalVisible(false);
-        const requestError = responseError.response.data;
-        setError(requestError);
-        setIsLoading(false);
-      },
-      onSuccess: () => {
-        setIsModalSubmitVisible(true);
-      },
-    });
-  };
+  // const onAcceptPolicy = () => {
+  //   setIsLoading(true);
+  //   setIsPolicyModalVisible(false);
+  //   addAppointmentQuery.mutate(form, {
+  //     onError: (responseError: AxiosError) => {
+  //       setIsPolicyModalVisible(false);
+  //       const requestError = responseError.response.data;
+  //       setError(requestError);
+  //       setIsLoading(false);
+  //     },
+  //     onSuccess: () => {
+  //       setIsModalSubmitVisible(true);
+  //     },
+  //   });
+  // };
 
   const onAcceptSubmit = () => {
     setIsLoading(false);
@@ -179,8 +189,8 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (pet) {
-      const {id: petId, name} = pet;
-      setPetContent(name);
+      const {petId, petName, sizeName} = pet;
+      setPetContent(isSalon ? petName + ' - ' + sizeName : petName);
       setForm({...form, pet: petId});
     }
   }, [pet]);
@@ -204,18 +214,18 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [hours]);
 
-  useEffect(() => {
-    if (paymentMethod) {
-      const {cardLabel, cardBrand, cardId} = paymentMethod;
-      setCardTitle(cardBrand);
-      setCardContent(cardLabel);
-      setForm({...form, card_id: cardId});
-    } else if (cardData?.isSuccess) {
-      const {brand, last4} = cardData.data?.data[0] ?? {};
-      setCardTitle(brand);
-      setCardContent('****' + last4);
-    }
-  }, [paymentMethod, cardData?.isSuccess]);
+  // useEffect(() => {
+  //   if (paymentMethod) {
+  //     const {cardLabel, cardBrand, cardId} = paymentMethod;
+  //     setCardTitle(cardBrand);
+  //     setCardContent(cardLabel);
+  //     setForm({...form, card_id: cardId});
+  //   } else if (cardData?.isSuccess) {
+  //     const {brand, last4} = cardData.data?.data[0] ?? {};
+  //     setCardTitle(brand);
+  //     setCardContent('****' + last4);
+  //   }
+  // }, [paymentMethod, cardData?.isSuccess]);
 
   useEffect(() => {
     if (serviceData) {
@@ -233,33 +243,33 @@ export default ({navigation, route}): React.ReactElement => {
     (isSalon && form.services === '') ||
     form.date === '' ||
     form.time === '' ||
-    form.pet === '' ||
-    form.card_id === '';
+    form.pet === '';
+  // form.card_id === '';
 
   const baseCharge = Number(base_charge).toFixed(2);
 
-  const timeForReschedulePenalty = _.round(minimum_time_for_reschedule / 60, 1);
-  const timeForCancelPenalty = _.round(minimum_time_for_cancel / 60, 1);
+  // const timeForReschedulePenalty = _.round(minimum_time_for_reschedule / 60, 1);
+  // const timeForCancelPenalty = _.round(minimum_time_for_cancel / 60, 1);
 
-  const maxCancelTimeLabel = `${timeForCancelPenalty} ${
-    timeForCancelPenalty === 1 ? 'hora' : 'horas'
-  }`;
-  const maxRescheduleTimeLabel = `${timeForReschedulePenalty} ${
-    timeForReschedulePenalty === 1 ? 'hora' : 'horas'
-  }`;
+  // const maxCancelTimeLabel = `${timeForCancelPenalty} ${
+  //   timeForCancelPenalty === 1 ? 'hora' : 'horas'
+  // }`;
+  // const maxRescheduleTimeLabel = `${timeForReschedulePenalty} ${
+  //   timeForReschedulePenalty === 1 ? 'hora' : 'horas'
+  // }`;
 
-  const reschedulePenaltyFormatted = Number(reschedule_penalty)?.toFixed(2);
-  const cancelPenaltyFormatted = Number(cancel_penalty)?.toFixed(2);
+  // const reschedulePenaltyFormatted = Number(reschedule_penalty)?.toFixed(2);
+  // const cancelPenaltyFormatted = Number(cancel_penalty)?.toFixed(2);
 
-  const chancesBeforeReschedulePenalty = `${allowed_changes_without_penalty} ${
-    allowed_changes_without_penalty === 1 ? 'vez' : 'veces'
-  }`;
+  // const chancesBeforeReschedulePenalty = `${allowed_changes_without_penalty} ${
+  //   allowed_changes_without_penalty === 1 ? 'vez' : 'veces'
+  // }`;
 
-  const textModal =
-    'Para generar una cita es necesario seleccionar o agregar un método ' +
-    'de pago. La cita se cobrará al pasar la fecha y el horario ' +
-    `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
-    'antes, de lo contrario se te cobrará una penalización.';
+  // const textModal =
+  //   'Para generar una cita es necesario seleccionar o agregar un método ' +
+  //   'de pago. La cita se cobrará al pasar la fecha y el horario ' +
+  //   `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
+  //   'antes, de lo contrario se te cobrará una penalización.';
 
   const textSubmitModal = isEdit
     ? 'Tu cita se ha actualizado exitosamente.'
@@ -267,15 +277,15 @@ export default ({navigation, route}): React.ReactElement => {
       'todos tus servicios programados desde la sección de ' +
       '"Próximos Servicios" en el menú principal.';
 
-  const policyModalContent =
-    `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
-    `de forma gratuita hasta ${maxRescheduleTimeLabel} antes. ` +
-    `Si la modificas más de ${chancesBeforeReschedulePenalty} o con menos ` +
-    `de ${maxRescheduleTimeLabel} de anticipación, se te cobrará una penalización ` +
-    `de $${reschedulePenaltyFormatted} cada vez que reagendes tu cita.\n` +
-    `Podrás cancelar tu cita hasta ${maxCancelTimeLabel} antes. ` +
-    `De lo contrario, se te cobrará una penalización de ` +
-    `$${cancelPenaltyFormatted}. `;
+  // const policyModalContent =
+  //   `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
+  //   `de forma gratuita hasta ${maxRescheduleTimeLabel} antes. ` +
+  //   `Si la modificas más de ${chancesBeforeReschedulePenalty} o con menos ` +
+  //   `de ${maxRescheduleTimeLabel} de anticipación, se te cobrará una penalización ` +
+  //   `de $${reschedulePenaltyFormatted} cada vez que reagendes tu cita.\n` +
+  //   `Podrás cancelar tu cita hasta ${maxCancelTimeLabel} antes. ` +
+  //   `De lo contrario, se te cobrará una penalización de ` +
+  //   `$${cancelPenaltyFormatted}. `;
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
@@ -346,7 +356,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const renderFooter = (
     <View style={styles.horizontalPadding}>
-      <View style={styles.paymentMethodTitle}>
+      {/* <View style={styles.paymentMethodTitle}>
         <TitleHeader style={styles.normalHeader}>Método de pago</TitleHeader>
         <TouchableOpacity
           onPress={() => {
@@ -363,7 +373,7 @@ export default ({navigation, route}): React.ReactElement => {
           subtitle={cardContent}
           title={cardTitle}
         />
-      </View>
+      </View> */}
       {!isEdit && !isSalon && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Consulta</DefaultText>
@@ -378,22 +388,20 @@ export default ({navigation, route}): React.ReactElement => {
             <DefaultText style={styles.rightSide}>${service}</DefaultText>
           </View>
         ))}
-      {has_reschedule_penalty && (
+      {/* {has_reschedule_penalty && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Penalización</DefaultText>
           <DefaultText style={styles.rightSide}>
             ${reschedulePenaltyFormatted}
           </DefaultText>
         </View>
-      )}
+      )} */}
       {!isEdit ||
-        has_reschedule_penalty ||
+        // has_reschedule_penalty ||
         (isSalon && form.services !== '' && (
           <View style={styles.totalContainer}>
             <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-            <TitleHeader style={styles.rightSide}>
-              ${!isEdit ? baseCharge : reschedulePenaltyFormatted}
-            </TitleHeader>
+            <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
           </View>
         ))}
       <DefaultText style={error?.error && styles.error}>
@@ -410,18 +418,19 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
-  return adminAppointments.isLoading || cardData.isLoading ? (
+  return adminAppointments.isLoading ? (
+    // cardData.isLoading
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
-      <CustomModal
+      {/* <CustomModal
         labelAccept="Entendido"
         title="Método de pago"
         text={textModal}
         onAccept={() => setIsModalVisible(false)}
         showCancel={false}
         visible={isModalVisible}
-      />
+      /> */}
       <CustomModal
         labelAccept="Entendido"
         title={isEdit ? 'Cita editada' : 'Cita generada'}
@@ -430,7 +439,7 @@ export default ({navigation, route}): React.ReactElement => {
         showCancel={false}
         visible={isModalSubmitVisible}
       />
-      <CustomModal
+      {/* <CustomModal
         labelAccept="Aceptar"
         onAccept={onAcceptPolicy}
         onCancel={() => setIsPolicyModalVisible(false)}
@@ -438,7 +447,7 @@ export default ({navigation, route}): React.ReactElement => {
         text={policyModalContent}
         title="Política de cancelación y reprogramación"
         visible={isPolicyModalVisible}
-      />
+      /> */}
       <OptionSelect
         currentValue={form.time}
         data={hours}
@@ -527,7 +536,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: -5,
   },
-  paymentMethodTitle: {flexDirection: 'row', marginTop: 16},
+  // paymentMethodTitle: {flexDirection: 'row', marginTop: 16},
   totalContainer: {
     marginBottom: 10,
     justifyContent: 'space-between',
