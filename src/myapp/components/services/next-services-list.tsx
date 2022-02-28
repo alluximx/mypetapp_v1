@@ -3,7 +3,7 @@ import _ from 'lodash';
 import {List} from '@ui-kitten/components';
 import {StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
+import {useQuery} from 'react-query';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
@@ -15,11 +15,11 @@ import CustomModal from '../modals/custom-modal';
 import CustomSpinner from '../custom-spinner';
 import NextServiceCard from './next-service-card';
 import NextServicesEmpty from './next-services-empty';
+// Services
+import api from '../../services/app-services';
 // Types.
 import {Appointment} from '../../types/models';
 import {NextServicesListProps} from '../../types/components/services';
-import {useQuery} from 'react-query';
-import api from '../../services/app-services';
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
