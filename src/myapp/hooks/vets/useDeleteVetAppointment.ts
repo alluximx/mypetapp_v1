@@ -6,8 +6,6 @@ import {Appointment} from '../../types/models';
 const deleteAppointment = (appointment: Appointment) => {
   const isSalon = appointment.services !== undefined;
 
-  console.log(appointment);
-
   return api.post(
     `api/v1/${isSalon ? 'salons' : 'vets'}-appointments/${
       appointment.id
