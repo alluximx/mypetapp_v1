@@ -27,6 +27,8 @@ import TitleHeader from '../../../components/texts/title-header';
 // Types
 import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
+// Utils
+import {formatPrice} from '../../../utils';
 
 const NUM_COLUMNS = 4;
 
@@ -49,6 +51,7 @@ export default ({navigation, route}): React.ReactElement => {
     error: '',
   });
   const [petContent, setPetContent] = useState('');
+  const [total, setTotal] = useState('');
   const [serviceIndexesList, setServiceIndexesList] = useState([]);
   const [serviceContent, setServiceContent] = useState('');
   const {
@@ -112,9 +115,13 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const onSubmit = () => {
+    const formattedData = {
+      ...form,
+      services: form.services.split('\n').filter(Boolean).join(', '),
+    };
     if (isEdit) {
       setIsLoading(true);
-      updateAppointmentQuery.mutate(form, {
+      updateAppointmentQuery.mutate(formattedData, {
         onError: (responseError: AxiosError) => {
           const requestError = responseError.response.data;
           setError(requestError);
@@ -127,7 +134,7 @@ export default ({navigation, route}): React.ReactElement => {
       });
     } else {
       setIsLoading(true);
-      addAppointmentQuery.mutate(form, {
+      addAppointmentQuery.mutate(formattedData, {
         onError: (responseError: AxiosError) => {
           const requestError = responseError.response.data;
           setError(requestError);
@@ -230,6 +237,16 @@ export default ({navigation, route}): React.ReactElement => {
       setValueTime(selectedHour?.key);
     }
   }, [hours]);
+
+  useEffect(() => {
+    const calculatedTotal = form.services
+      .split(/\S*\w+ - \$*/)
+      .join('')
+      .split('\n')
+      .filter(Boolean)
+      .reduce((sum, item: string) => sum + Number(item), 0);
+    setTotal(formatPrice(calculatedTotal));
+  }, [form.services]);
 
   // useEffect(() => {
   //   if (paymentMethod) {
@@ -419,14 +436,16 @@ export default ({navigation, route}): React.ReactElement => {
           </DefaultText>
         </View>
       )} */}
-      {!isEdit ||
+      {!isEdit &&
         // has_reschedule_penalty ||
-        (isSalon && form.services !== '' && (
+        ((isSalon && form.services !== '') || !isSalon) && (
           <View style={styles.totalContainer}>
             <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-            <TitleHeader style={styles.rightSide}>${baseCharge}</TitleHeader>
+            <TitleHeader style={styles.rightSide}>
+              ${!isSalon ? baseCharge : total}
+            </TitleHeader>
           </View>
-        ))}
+        )}
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>
