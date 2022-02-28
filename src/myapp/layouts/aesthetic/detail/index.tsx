@@ -79,6 +79,7 @@ export default ({navigation, route}): React.ReactElement => {
               <NavigateButton
                 data={{
                   screenFrom: 'AestheticDate',
+                  directoryId: id,
                   ...vetSettings,
                 }}
                 destination="VetDate"

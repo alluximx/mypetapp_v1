@@ -58,6 +58,7 @@ export default ({navigation, route}): React.ReactElement => {
     // cancel_penalty,
     // card_id,
     date,
+    directoryId,
     // has_reschedule_penalty,
     id,
     isEdit,
@@ -321,10 +322,10 @@ export default ({navigation, route}): React.ReactElement => {
             </TitleHeader>
             <NavigateButton
               data={{
-                admin,
+                directoryId,
                 screenToReturn: 'VetDate',
                 screenFrom: screenFrom,
-                sizeId: pet?.idSize,
+                sizeId: pet?.sizeId,
               }}
               destination="ServiceSelect"
               isDisabled={form.pet === ''}
