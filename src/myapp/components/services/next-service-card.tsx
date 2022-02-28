@@ -42,7 +42,10 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
                 key={`services-${props.service.id}`}
                 style={styles.serviceName}>
                 {props.service.services
-                  ?.map((service) => service.name)
+                  ?.split('\n')
+                  .join('')
+                  .split(/ - \$\S*/)
+                  .filter(Boolean)
                   .join(', ')}
               </DefaultText>
             )}

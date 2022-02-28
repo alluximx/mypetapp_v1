@@ -26,8 +26,6 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const [data, setData] = useState<Appointment[]>([]);
 
   // Hook api calls.
-  // const appointments = useAppointments();
-
   const salonAppointments = useQuery('my-salon-appointments', () =>
     api.get(`api/v1/salons-appointments/`, true),
   );
@@ -38,11 +36,11 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const deleteQuery = useDeleteAppointment();
   const filteredAppointments = useFilterAppointments(data, props.tab);
 
-  const [editMessage, setEditMessage] = useState('');
+  // const [editMessage, setEditMessage] = useState('');
   const [deleteMessage, setDeleteMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showPendingModal, setShowPendingModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  // const [showEditModal, setShowEditModal] = useState(false);
   const [
     selectedAppointment,
     setSelectedAppointment,
@@ -53,12 +51,12 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       selectedAppointment ?? {};
     const formattedData: Appointment = {
       id,
-      has_cancel_penalty:
-        hasExceededTimeLimit(
-          date,
-          start_time,
-          admin_settings?.minimum_time_for_cancel,
-        ) || has_cancel_penalty,
+      // has_cancel_penalty:
+      //   hasExceededTimeLimit(
+      //     date,
+      //     start_time,
+      //     admin_settings?.minimum_time_for_cancel,
+      //   ) || has_cancel_penalty,
       is_canceled: true,
     };
     // Delete call to api.
@@ -69,108 +67,109 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
     });
   };
 
-  const hasReschedulePenalty = (): boolean =>
-    hasExceededTimeLimit(
-      selectedAppointment?.date,
-      selectedAppointment?.start_time,
-      selectedAppointment?.admin_settings?.minimum_time_for_reschedule,
-    ) ||
-    selectedAppointment?.has_reschedule_penalty ||
-    selectedAppointment?.changes >=
-      selectedAppointment?.admin_settings?.allowed_changes_without_penalty;
+  // const hasReschedulePenalty = (): boolean =>
+  //   hasExceededTimeLimit(
+  //     selectedAppointment?.date,
+  //     selectedAppointment?.start_time,
+  //     selectedAppointment?.admin_settings?.minimum_time_for_reschedule,
+  //   ) ||
+  //   selectedAppointment?.has_reschedule_penalty ||
+  //   selectedAppointment?.changes >=
+  //     selectedAppointment?.admin_settings?.allowed_changes_without_penalty;
 
-  const hasExceededTimeLimit = (
-    appointmentDate: string,
-    appointmentStartTime: string,
-    timeLimit: number,
-  ): boolean => {
-    if (!appointmentStartTime) {
-      return false;
-    }
+  // const hasExceededTimeLimit = (
+  //   appointmentDate: string,
+  //   appointmentStartTime: string,
+  //   timeLimit: number,
+  // ): boolean => {
+  //   if (!appointmentStartTime) {
+  //     return false;
+  //   }
 
-    const appointmentTime = moment(
-      appointmentDate + ' ' + appointmentStartTime,
-    );
-    const diffBetweenTimes = appointmentTime.diff(moment(), 'minutes');
-    return diffBetweenTimes <= timeLimit;
-  };
+  //   const appointmentTime = moment(
+  //     appointmentDate + ' ' + appointmentStartTime,
+  //   );
+  //   const diffBetweenTimes = appointmentTime.diff(moment(), 'minutes');
+  //   return diffBetweenTimes <= timeLimit;
+  // };
 
-  const onEditAccept = () => {
-    navigation.navigate('VetDate', {
-      isEdit: true,
-      ...selectedAppointment?.admin_settings,
-      appointment_end_time: selectedAppointment?.end_time,
-      appointment_start_time: selectedAppointment?.start_time,
-      card_id: selectedAppointment?.card_id,
-      id: selectedAppointment?.id,
-      date: selectedAppointment?.date,
-      pet: selectedAppointment?.pet,
-      has_reschedule_penalty: hasReschedulePenalty(),
-    });
-    setShowEditModal(false);
-  };
+  // const onEditAccept = () => {
+  //   navigation.navigate('VetDate', {
+  //     isEdit: true,
+  //     ...selectedAppointment?.admin_settings,
+  //     appointment_end_time: selectedAppointment?.end_time,
+  //     appointment_start_time: selectedAppointment?.start_time,
+  //     // card_id: selectedAppointment?.card_id,
+  //     id: selectedAppointment?.id,
+  //     date: selectedAppointment?.date,
+  //     pet: selectedAppointment?.pet,
+  //     // has_reschedule_penalty: hasReschedulePenalty(),
+  //   });
+  //   setShowEditModal(false);
+  // };
 
-  const getEditMessage = (appointment: Appointment): string => {
-    const {
-      allowed_changes_without_penalty,
-      minimum_time_for_reschedule,
-      reschedule_penalty,
-    } = appointment?.admin_settings ?? {};
-    const {changes, date, start_time} = appointment ?? {};
+  // const getEditMessage = (appointment: Appointment): string => {
+  //   const {
+  //     allowed_changes_without_penalty,
+  //     minimum_time_for_reschedule,
+  //     reschedule_penalty,
+  //   } = appointment?.admin_settings ?? {};
+  //   const {changes, date, start_time} = appointment ?? {};
 
-    const timeLimit = _.round(minimum_time_for_reschedule / 60, 1);
-    const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
-    const exceededTimeLimit = hasExceededTimeLimit(
-      date,
-      start_time,
-      minimum_time_for_reschedule,
-    );
+  //   const timeLimit = _.round(minimum_time_for_reschedule / 60, 1);
+  //   const penaltyAmount = Number(reschedule_penalty)?.toFixed(2);
+  //   const exceededTimeLimit = hasExceededTimeLimit(
+  //     date,
+  //     start_time,
+  //     minimum_time_for_reschedule,
+  //   );
 
-    let result =
-      `Estás modificando una cita con menos de ` +
-      `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
-      `anticipación, para realizar esta acción se te cobrará una ` +
-      `penalización de $${penaltyAmount} pesos.`;
+  //   let result =
+  //     `Estás modificando una cita con menos de ` +
+  //     `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
+  //     `anticipación, para realizar esta acción se te cobrará una ` +
+  //     `penalización de $${penaltyAmount} pesos.`;
 
-    if (!exceededTimeLimit) {
-      if (changes === allowed_changes_without_penalty - 1) {
-        result =
-          `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
-          `penalización. Si intentas editar tu cita más de ` +
-          `${allowed_changes_without_penalty} veces, ` +
-          `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`;
-      } else if (changes < allowed_changes_without_penalty) {
-        result =
-          `Puedes modificar la fecha de tu cita ` +
-          `${
-            allowed_changes_without_penalty - changes
-          } veces más sin ninguna ` +
-          `penalización. Si intentas editar tu cita más de ` +
-          `${allowed_changes_without_penalty} veces, se te hará un ` +
-          `recargo por la cantidad de $${penaltyAmount} pesos.`;
-      } else {
-        result =
-          `Has superado el límite de modificaciones. Para modificar nuevamente ` +
-          `tu cita es necesario pagar una penalización de $${penaltyAmount} pesos.`;
-      }
-    }
-    return result;
-  };
+  //   if (!exceededTimeLimit) {
+  //     if (changes === allowed_changes_without_penalty - 1) {
+  //       result =
+  //         `Puedes modificar la fecha de tu cita una vez más sin ninguna ` +
+  //         `penalización. Si intentas editar tu cita más de ` +
+  //         `${allowed_changes_without_penalty} veces, ` +
+  //         `se te hará un recargo por la cantidad de $${penaltyAmount} pesos.`;
+  //     } else if (changes < allowed_changes_without_penalty) {
+  //       result =
+  //         `Puedes modificar la fecha de tu cita ` +
+  //         `${
+  //           allowed_changes_without_penalty - changes
+  //         } veces más sin ninguna ` +
+  //         `penalización. Si intentas editar tu cita más de ` +
+  //         `${allowed_changes_without_penalty} veces, se te hará un ` +
+  //         `recargo por la cantidad de $${penaltyAmount} pesos.`;
+  //     } else {
+  //       result =
+  //         `Has superado el límite de modificaciones. Para modificar nuevamente ` +
+  //         `tu cita es necesario pagar una penalización de $${penaltyAmount} pesos.`;
+  //     }
+  //   }
+  //   return result;
+  // };
 
   const getDeleteMessage = (appointment: Appointment): string => {
-    const {cancel_penalty, minimum_time_for_cancel} =
-      appointment?.admin_settings ?? {};
-    const {date, has_cancel_penalty, start_time} = appointment ?? {};
-    const timeLimit = _.round(minimum_time_for_cancel / 60, 1);
-    const amount = Number(cancel_penalty)?.toFixed(2);
+    // const {cancel_penalty, minimum_time_for_cancel} =
+    //   appointment?.admin_settings ?? {};
+    // const {date, has_cancel_penalty, start_time} = appointment ?? {};
+    // const timeLimit = _.round(minimum_time_for_cancel / 60, 1);
+    // const amount = Number(cancel_penalty)?.toFixed(2);
 
-    return hasExceededTimeLimit(date, start_time, minimum_time_for_cancel) ||
-      has_cancel_penalty
-      ? `Estás eliminando una cita con menos de ` +
-          `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
-          `anticipación, si la cancelas se te cobrará una ` +
-          `penalización de $${amount} pesos.`
-      : '¿Estás seguro de que quieres eliminar esta cita?';
+    return '¿Estás seguro de que quieres eliminar esta cita?';
+    // hasExceededTimeLimit(date, start_time, minimum_time_for_cancel) ||
+    //   has_cancel_penalty
+    //   ? `Estás eliminando una cita con menos de ` +
+    //       `${timeLimit} ${timeLimit === 1 ? 'hora' : 'horas'} de ` +
+    //       `anticipación, si la cancelas se te cobrará una ` +
+    //       `penalización de $${amount} pesos.`
+    //   :
   };
 
   const renderItem = ({item}: {item: Appointment}) => (
@@ -178,7 +177,17 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       key={item?.id}
       onPressEditModal={() => {
         setSelectedAppointment(item);
-        setShowEditModal(true);
+        navigation.navigate('VetDate', {
+          isEdit: true,
+          ...selectedAppointment?.admin_settings,
+          appointment_end_time: selectedAppointment?.end_time,
+          appointment_start_time: selectedAppointment?.start_time,
+          // card_id: selectedAppointment?.card_id,
+          id: selectedAppointment?.id,
+          date: selectedAppointment?.date,
+          pet: selectedAppointment?.pet,
+          // has_reschedule_penalty: hasReschedulePenalty(),
+        });
       }}
       onPressDeleteModal={() => {
         setSelectedAppointment(item);
@@ -203,11 +212,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       salonAppointments.isSuccess &&
       salonAppointments.data
     ) {
-      setData([
-        ...vetAppointments.data?.data,
-        // ...salonAppointments.data?.data,
-      ]);
-      console.log(...salonAppointments.data?.data);
+      setData([...vetAppointments.data?.data, ...salonAppointments.data?.data]);
     }
   }, [
     vetAppointments.isSuccess,
@@ -222,21 +227,24 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   //   }
   // }, [selectedAppointment]);
 
-  // useEffect(() => {
-  //   if (showDeleteModal) {
-  //     setDeleteMessage(getDeleteMessage(selectedAppointment));
-  //   }
-  // }, [showDeleteModal]);
+  useEffect(() => {
+    if (showDeleteModal) {
+      setDeleteMessage(getDeleteMessage(selectedAppointment));
+    }
+  }, [showDeleteModal]);
 
   return salonAppointments.isLoading || vetAppointments.isLoading ? (
     <CustomSpinner />
   ) : (
     <>
-      {/* <CustomModal
+      <CustomModal
         labelAccept="Entendido"
         onAccept={() => setShowPendingModal(false)}
         showCancel={false}
-        text="Tu cita está pendiente de ser aceptada por el administrador del servicio. Te enviaremos una notificación cuando esta sea aceptada o rechazada."
+        text={
+          'Tu cita está pendiente de ser aceptada por el administrador del servicio. ' +
+          'Te enviaremos una notificación cuando esta sea aceptada o rechazada.'
+        }
         title="Pendiente de aceptación"
         visible={showPendingModal}
       />
@@ -249,7 +257,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         title="Eliminar Cita"
         visible={showDeleteModal}
       />
-      <CustomModal
+      {/* <CustomModal
         labelAccept={hasReschedulePenalty() ? 'Pagar y Editar' : 'Editar Cita'}
         onAccept={onEditAccept}
         onCancel={() => setShowEditModal(false)}

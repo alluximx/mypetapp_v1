@@ -51,7 +51,7 @@ export interface Appointment {
     id: string;
   }[];
   rate?: number;
-  services?: BaseModel[];
+  services?: string;
   start_time?: string;
   vet?: string;
 }
