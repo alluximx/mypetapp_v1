@@ -63,11 +63,6 @@ export default ({navigation, route}): React.ReactElement => {
    ***************/
 
   useEffect(() => {
-    console.log('==================================');
-  }, []);
-
-  useEffect(() => {
-    console.log('hola');
     if (petsData.pets?.length) {
       setHasPets(true);
       setPets(petsData.pets);
@@ -75,7 +70,6 @@ export default ({navigation, route}): React.ReactElement => {
   }, [petsData]);
 
   useEffect(() => {
-    console.log('hola2');
     if (dataSizes.data) {
       const dataFormatted = dataSizes.data.data.map((obj: any) => {
         return {key: obj.id, value: obj.name};
@@ -113,7 +107,9 @@ export default ({navigation, route}): React.ReactElement => {
 
   const renderSizesHeader = (
     <>
-      <TitleHeader>Selecciona tu mascota</TitleHeader>
+      <TitleHeader style={styles.paddingHorizontal}>
+        Selecciona tu mascota
+      </TitleHeader>
       <TitleHeader style={styles.subtitle}>¿Para quién es la cita?</TitleHeader>
       <List
         contentContainerStyle={[
@@ -127,7 +123,7 @@ export default ({navigation, route}): React.ReactElement => {
         style={styles.petButtonsContainer}
       />
       {screenFrom && screenFrom !== 'VetDate' && (
-        <TitleHeader style={styles.sizesPrompt}>
+        <TitleHeader style={[styles.sizesPrompt, styles.paddingHorizontal]}>
           ¿Cuál es el tamaño actual de tu mascota?
         </TitleHeader>
       )}
@@ -153,13 +149,17 @@ export default ({navigation, route}): React.ReactElement => {
 
 const themedStyles = StyleService.create({
   container: {
-    flex: 1,
     backgroundColor: globalColors.backgroundDefault,
     paddingRight: 4,
+    paddingHorizontal: 0,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: globalVars.outsidePadding,
   },
   subtitle: {
     fontSize: 16,
     marginTop: 16,
+    paddingHorizontal: globalVars.outsidePadding,
   },
   headerRight: {
     marginRight: 12,
@@ -170,6 +170,7 @@ const themedStyles = StyleService.create({
   },
   petButtonsContentContainer: {
     paddingBottom: 8,
+    paddingRight: globalVars.outsidePadding,
   },
   petButtonContentContainerEmpty: {
     flexDirection: 'column-reverse',
@@ -182,10 +183,12 @@ const themedStyles = StyleService.create({
     backgroundColor: 'transparent',
     marginTop: 8,
     marginBottom: 21,
+    paddingLeft: globalVars.outsidePadding,
   },
   buttonPet: {
     height: 123,
     width: 100,
+    marginRight: 16,
   },
   buttonPetDisabled: {
     backgroundColor: globalColors.white,
@@ -208,11 +211,11 @@ const themedStyles = StyleService.create({
     width: 56,
   },
   select: {
-    marginBottom: 16,
-    paddingRight: globalVars.outsidePadding - 4,
+    marginBottom: 0,
   },
   options: {
     marginTop: 15,
+    marginHorizontal: globalVars.outsidePadding,
   },
   sizesPrompt: {fontSize: 16, marginBottom: 4},
 });
