@@ -17,7 +17,9 @@ const useAddAppointment = (adminId: string, isSalon: boolean = false) => {
         `${isSalon ? 'salons' : 'vet'}-appointments`,
         adminId,
       ]);
-      queryClient.invalidateQueries('my-appointments');
+      queryClient.invalidateQueries(
+        `my-${isSalon ? 'salon' : 'vet'}-appointments`,
+      );
     },
   });
 };
