@@ -3,14 +3,19 @@ import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
 import {Appointment} from '../../types/models';
 
-const deleteAppointment = (appointment: Appointment) =>
-  api.post(
-    `api/v1/vets-appointments/${appointment.id}/app_cancel/`,
-    {
-      has_cancel_penalty: appointment.has_cancel_penalty,
-    },
+const deleteAppointment = (appointment: Appointment) => {
+  const isSalon = appointment.services !== undefined;
+
+  console.log(appointment);
+
+  return api.post(
+    `api/v1/${isSalon ? 'salons' : 'vets'}-appointments/${
+      appointment.id
+    }/app_cancel/`,
+    appointment,
     true,
   );
+};
 
 const useDeleteAppointment = () => {
   const queryClient = useQueryClient();
@@ -19,7 +24,8 @@ const useDeleteAppointment = () => {
     (appointment: Appointment) => deleteAppointment(appointment),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('my-appointments');
+        queryClient.invalidateQueries('my-vet-appointments');
+        queryClient.invalidateQueries('my-salon-appointments');
       },
     },
   );

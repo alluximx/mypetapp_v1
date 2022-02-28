@@ -47,8 +47,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   ] = useState<Appointment | null>(null);
 
   const onDeleteAccept = () => {
-    const {admin_settings, date, has_cancel_penalty, id, start_time} =
-      selectedAppointment ?? {};
+    const {id, services} = selectedAppointment ?? {};
     const formattedData: Appointment = {
       id,
       // has_cancel_penalty:
@@ -57,6 +56,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
       //     start_time,
       //     admin_settings?.minimum_time_for_cancel,
       //   ) || has_cancel_penalty,
+      services,
       is_canceled: true,
     };
     // Delete call to api.
