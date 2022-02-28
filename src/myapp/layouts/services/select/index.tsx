@@ -8,8 +8,10 @@ import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationH
 // My Components
 import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
 import IndividualOptionSelect from '../../../components/inputs/individual-option-select';
 import TitleHeader from '../../../components/texts/title-header';
+// Utils
 import {formatPrice} from '../../../utils';
 
 export default ({navigation, route}): React.ReactElement => {
@@ -23,7 +25,7 @@ export default ({navigation, route}): React.ReactElement => {
   );
 
   const salonsData = useGetSalonServices(directoryId, sizeId);
-  const isDisabled = false;
+  const isDisabled = servicesSelected.length === 0 || data.length === 0;
 
   useEffect(() => {
     if (salonsData.isSuccess && salonsData.data?.data) {
@@ -62,6 +64,10 @@ export default ({navigation, route}): React.ReactElement => {
     data: servicesSelected,
   });
 
+  /**********************
+   *** Render Methods ***
+   **********************/
+
   const renderOption = ({item}) => (
     <IndividualOptionSelect
       enabled={servicesSelected.includes(item.id)}
@@ -81,6 +87,12 @@ export default ({navigation, route}): React.ReactElement => {
     />
   );
 
+  const renderEmpty = () => (
+    <DefaultText>
+      Lo sentimos. No hay servicios disponibles para tu mascota en este momento.
+    </DefaultText>
+  );
+
   return isLoading || salonsData.isLoading ? (
     <CustomSpinner />
   ) : (
@@ -89,6 +101,7 @@ export default ({navigation, route}): React.ReactElement => {
       <List
         style={styles.servicesContainer}
         data={data}
+        ListEmptyComponent={renderEmpty}
         renderItem={renderOption}
       />
     </DefaultLayout>
