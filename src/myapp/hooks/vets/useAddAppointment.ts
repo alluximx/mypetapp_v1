@@ -19,10 +19,6 @@ const useAddAppointment = (adminId: string, isSalon: boolean = false) => {
       ]);
       queryClient.invalidateQueries('my-appointments');
     },
-    onError: (err, variables) => {
-      console.log(err.response.data);
-      console.log(variables);
-    },
   });
 };
 
