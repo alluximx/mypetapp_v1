@@ -49,6 +49,7 @@ export default ({navigation, route}): React.ReactElement => {
     error: '',
   });
   const [petContent, setPetContent] = useState('');
+  const [serviceIndexesList, setServiceIndexesList] = useState([]);
   const [serviceContent, setServiceContent] = useState('');
   const {
     admin,
@@ -193,9 +194,23 @@ export default ({navigation, route}): React.ReactElement => {
     if (pet) {
       const {petId, petName, sizeName} = pet;
       setPetContent(isSalon ? petName + ' - ' + sizeName : petName);
-      setForm({...form, pet: petId});
+      setForm({...form, pet: petId, services: ''});
+      setServiceIndexesList([]);
+      setServiceContent('');
     }
   }, [pet]);
+
+  useEffect(() => {
+    if (serviceIndexes) {
+      setServiceIndexesList(serviceIndexes);
+      setForm({...form, services: serviceData});
+      const formattedServices = serviceData
+        .split(/ - \$\S*\n/)
+        .filter(Boolean)
+        .join(', ');
+      setServiceContent(formattedServices);
+    }
+  }, [serviceIndexes]);
 
   useEffect(() => {
     if (date && days.length) {
@@ -228,17 +243,6 @@ export default ({navigation, route}): React.ReactElement => {
   //     setCardContent('****' + last4);
   //   }
   // }, [paymentMethod, cardData?.isSuccess]);
-
-  useEffect(() => {
-    if (serviceData) {
-      setForm({...form, services: serviceData});
-      const formattedServices = serviceData
-        .split(/ - \$\S*\n/)
-        .filter(Boolean)
-        .join(', ');
-      setServiceContent(formattedServices);
-    }
-  }, [serviceData]);
 
   /**********************
    *** Render Methods ***
@@ -313,6 +317,8 @@ export default ({navigation, route}): React.ReactElement => {
             destination="PetSelect"
             data={{
               screenToReturn: 'VetDate',
+              petId: form.pet,
+              sizeId: pet?.sizeId,
               screenFrom: screenFrom,
             }}
             title="Mascota"
@@ -327,7 +333,7 @@ export default ({navigation, route}): React.ReactElement => {
             <NavigateButton
               data={{
                 directoryId,
-                serviceIndexes,
+                serviceIndexes: serviceIndexesList,
                 screenToReturn: 'VetDate',
                 screenFrom: screenFrom,
                 sizeId: pet?.sizeId,

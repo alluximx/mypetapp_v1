@@ -10,6 +10,7 @@ import auth_service from '../../services/auth-service';
 
 const useMyNameAndPets = () => {
   const authContext = useContext(AuthContext);
+  const [userId, setUserId] = useState();
 
   const [data, setData] = useState({
     isLoading: false,
@@ -25,8 +26,6 @@ const useMyNameAndPets = () => {
   }, []);
 
   const profileQuery = useQuery('my-profile', () => auth_service.me());
-  const userId = profileQuery.data?.data.id;
-  authContext.setUserId(userId);
   const petsQuery = useMyPets(userId);
 
   useEffect(() => {
@@ -36,6 +35,8 @@ const useMyNameAndPets = () => {
         ...data,
         userName: profileQuery.data?.data.name,
       });
+      setUserId(profileQuery.data?.data?.id);
+      authContext.setUserId(profileQuery.data?.data?.id);
     }
     if (profileQuery.isError) {
       Alert.alert(

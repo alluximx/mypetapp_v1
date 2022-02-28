@@ -20,7 +20,7 @@ export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
   const petsData = useMyNameAndPets();
 
-  const {screenToReturn, screenFrom} = route.params ?? {};
+  const {petId, screenToReturn, sizeId, screenFrom} = route.params ?? {};
   const dataSizes = useSizes(screenFrom && screenFrom !== 'VetDate');
 
   const [hasPets, setHasPets] = useState(false);
@@ -62,6 +62,15 @@ export default ({navigation, route}): React.ReactElement => {
   /***************
    *** Effects ***
    ***************/
+
+  useEffect(() => {
+    if (sizeId !== '' && petId !== '') {
+      const selectedPet = pets.find((pet) => pet?.id === petId);
+      const selectedSize = sizes.find((size) => size?.key === sizeId);
+      setPet(selectedPet?.id);
+      setPetSize(selectedSize?.key);
+    }
+  }, [sizeId, petId, pets]);
 
   useEffect(() => {
     if (petsData.pets?.length) {
