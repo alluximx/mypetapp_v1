@@ -14,7 +14,7 @@ import TitleHeader from '../../../components/texts/title-header';
 // Hooks
 import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
 import useSizes from '../../../hooks/pets/useSizes';
-import {BaseModel, Pet} from '../../../types/models';
+import {Pet} from '../../../types/models';
 
 export default ({navigation, route}): React.ReactElement => {
   const styles = useStyleSheet(themedStyles);
@@ -44,8 +44,8 @@ export default ({navigation, route}): React.ReactElement => {
   });
 
   const onRightPress = () => {
-    const sizeName = sizes.find((size) => size.id === petSize);
-    const petName = pets.find((currentPet) => currentPet?.id === pet);
+    const sizeName = sizes.find((size) => size.key === petSize)?.value;
+    const petName = pets.find((currentPet) => currentPet?.id === pet)?.name;
 
     const submitData =
       screenFrom === 'VetDate'
@@ -70,7 +70,7 @@ export default ({navigation, route}): React.ReactElement => {
   }, [petsData]);
 
   useEffect(() => {
-    if (dataSizes.data) {
+    if (dataSizes.isSuccess) {
       const dataFormatted = dataSizes.data.data.map((obj: any) => {
         return {key: obj.id, value: obj.name};
       });
