@@ -46,11 +46,12 @@ export default ({navigation, route}): React.ReactElement => {
   const onRightPress = () => {
     const sizeName = sizes.find((size) => size.key === petSize)?.value;
     const petName = pets.find((currentPet) => currentPet?.id === pet)?.name;
+    const petId = pets.find((currentPet) => currentPet?.id === pet)?.id;
 
     const submitData =
       screenFrom === 'VetDate'
-        ? {petId: pet?.id, petName}
-        : {petId: pet?.id, petName, sizeId: petSize, sizeName};
+        ? {petId, petName}
+        : {petId, petName, sizeId: petSize, sizeName};
 
     navigation.navigate(screenToReturn, {
       pet: submitData,
