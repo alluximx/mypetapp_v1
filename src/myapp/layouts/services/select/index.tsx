@@ -10,14 +10,19 @@ import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
 import IndividualOptionSelect from '../../../components/inputs/individual-option-select';
 import TitleHeader from '../../../components/texts/title-header';
+import {formatPrice} from '../../../utils';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
+  const {directoryId, serviceIndexes, screenToReturn, screenFrom, sizeId} =
+    route.params ?? {};
 
-  const {admin, screenToReturn, screenFrom, sizeId} = route.params ?? {};
+  const [servicesSelected, setServicesSelected] = useState(
+    serviceIndexes ?? [],
+  );
 
-  const salonsData = useGetSalonServices(admin, sizeId);
+  const salonsData = useGetSalonServices(directoryId, sizeId);
   const isDisabled = false;
 
   useEffect(() => {
@@ -27,56 +32,60 @@ export default ({navigation, route}): React.ReactElement => {
     }
   }, [salonsData.isSuccess]);
 
-  const removeFromArray = (value) => {
-    const indx = data.indexOf(value);
-    if (indx > -1) {
-      data.splice(indx, 1);
-    }
+  const onRightPress = () => {
+    const servicesList = servicesSelected.reduce(
+      (previousService, currentService) => {
+        const serviceData = data.find((item) => item?.id === currentService);
+        return (
+          previousService +
+          `${serviceData?.product?.name} - $${formatPrice(
+            serviceData?.price,
+          )}\n`
+        );
+      },
+      '',
+    );
+
+    navigation.navigate(screenToReturn, {
+      serviceData: servicesList,
+      serviceIndexes: servicesSelected,
+      screenFrom: screenFrom,
+    });
   };
-
-  // const onSubmit = () => {
-  //   const dataSubmit = [];
-  //   data.forEach((selectElement) => {
-  //     auxData.forEach((element) => {
-  //       if (selectElement === element.id) {
-  //         const auxElement = {id: selectElement, name: element.subtitle};
-  //         dataSubmit.push(auxElement);
-  //       }
-  //     });
-  //   });
-
-  //   navigation.navigate(screenToReturn, {
-  //     data: {serviceData: dataSubmit, screenFrom: screenFrom},
-  //   });
-  // };
 
   useSetNavigationHeaders({
     isDisabled,
     isLoading,
     navigation,
-    onRightPress: () => {},
+    onRightPress,
     setIsLoading,
-    data: [],
+    data: servicesSelected,
   });
 
-  const renderOption = (service) => {
-    return (
-      <IndividualOptionSelect
-        setCurrentValue={(newValue) => {
-          // setData(newValue);
-        }}
-        title={service.item.title}
-        subtitle={service.item.subtitle}
-        style={{marginBottom: 15}}
-        value={service.item.id}
-      />
-    );
-  };
+  const renderOption = ({item}) => (
+    <IndividualOptionSelect
+      enabled={servicesSelected.includes(item.id)}
+      setCurrentValue={(newValue) => {
+        if (servicesSelected.includes(newValue)) {
+          setServicesSelected(
+            servicesSelected.filter((value: string) => value !== newValue),
+          );
+        } else {
+          setServicesSelected([...servicesSelected, newValue]);
+        }
+      }}
+      style={styles.optionStyle}
+      subtitle={item.product.name}
+      title={'$' + formatPrice(item.price)}
+      value={item.id}
+    />
+  );
+
   return isLoading || salonsData.isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout>
-      <TitleHeader>Servicios</TitleHeader>
+      <TitleHeader style={styles.title}>Servicios</TitleHeader>
       <List
         style={styles.servicesContainer}
         data={data}
@@ -90,5 +99,11 @@ const styles = StyleSheet.create({
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
+  },
+  title: {
+    marginBottom: 24,
+  },
+  optionStyle: {
+    marginBottom: 16,
   },
 });

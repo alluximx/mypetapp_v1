@@ -1,4 +1,5 @@
 import {CommonActions, NavigationState} from '@react-navigation/native';
+import _ from 'lodash';
 import {VetSettings} from './types/models';
 
 /**
@@ -69,4 +70,10 @@ export const checkIfDayIsEnabledInVetSettings = (
     default:
       return false;
   }
+};
+
+export const formatPrice = (price: number): string => {
+  return _.round(price, 2)
+    .toFixed(2)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };

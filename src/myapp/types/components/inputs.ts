@@ -82,9 +82,10 @@ export interface UserInputProps {
 }
 
 export interface IndiviudalOptionSelectProps {
-  value: string | number;
-  setCurrentValue: (key: string | number) => void;
+  enabled?: boolean;
+  setCurrentValue: (key: string) => void;
   style?: {};
-  title?: string;
   subtitle?: string;
+  title?: string;
+  value: string;
 }

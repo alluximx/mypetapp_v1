@@ -5,13 +5,13 @@ import {IndiviudalOptionSelectProps} from '../../types/components/inputs';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // My Components
-import TitleHeader from '../texts/title-header';
 import DefaultText from '../texts/default-text';
+import TitleHeader from '../texts/title-header';
 
 const IndividualOptionSelect = (
   props: IndiviudalOptionSelectProps,
 ): React.ReactElement => {
-  const [statusButton, setStatusButton] = useState(false);
+  const [statusButton, setStatusButton] = useState(props.enabled ?? false);
 
   const key = props.value;
 
@@ -20,7 +20,7 @@ const IndividualOptionSelect = (
       activeOpacity={0.8}
       key={key}
       style={[
-        !statusButton && styles.option,
+        styles.container,
         statusButton && styles.optionSelected,
         props.style,
       ]}
@@ -51,22 +51,20 @@ const IndividualOptionSelect = (
 };
 
 const styles = StyleSheet.create({
-  option: {
-    padding: 10,
-    backgroundColor: globalColors.white,
+  container: {
+    padding: 16,
     borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: globalColors.white,
   },
   optionSelected: {
-    padding: 10,
     backgroundColor: globalColors.greenSecondary,
-    borderRadius: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   optionTitle: {
     justifyContent: 'flex-end',
+    marginBottom: 0,
+    fontSize: 16,
   },
   optionSubtitle: {
     justifyContent: 'flex-start',

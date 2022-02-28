@@ -67,6 +67,7 @@ export default ({navigation, route}): React.ReactElement => {
     // reschedule_penalty,
     // paymentMethod,
     pet,
+    serviceIndexes,
     screenFrom,
     serviceData,
     start_time,
@@ -230,9 +231,12 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (serviceData) {
-      serviceData.length === 1
-        ? setServiceContent(serviceData[0].name)
-        : setServiceContent('Varios');
+      setForm({...form, services: serviceData});
+      const formattedServices = serviceData
+        .split(/ - \$\S*\n/)
+        .filter(Boolean)
+        .join(', ');
+      setServiceContent(formattedServices);
     }
   }, [serviceData]);
 
@@ -323,6 +327,7 @@ export default ({navigation, route}): React.ReactElement => {
             <NavigateButton
               data={{
                 directoryId,
+                serviceIndexes,
                 screenToReturn: 'VetDate',
                 screenFrom: screenFrom,
                 sizeId: pet?.sizeId,
@@ -383,12 +388,23 @@ export default ({navigation, route}): React.ReactElement => {
       )}
       {isSalon &&
         form.services !== '' &&
-        form.services.split('-').map((service) => (
-          <View style={styles.totalContainer}>
-            <DefaultText style={styles.leftSide}>{service}</DefaultText>
-            <DefaultText style={styles.rightSide}>${service}</DefaultText>
-          </View>
-        ))}
+        form.services
+          .split('\n')
+          .filter(Boolean)
+          .map((service, index) => {
+            const serviceSplitted = service.split(' - ');
+            service.split(' - ');
+            const serviceName = serviceSplitted[0];
+            const servicePrice = serviceSplitted[1];
+            return (
+              <View key={`service-${index}`} style={styles.totalContainer}>
+                <DefaultText style={styles.leftSide}>{serviceName}</DefaultText>
+                <DefaultText style={styles.rightSide}>
+                  {servicePrice}
+                </DefaultText>
+              </View>
+            );
+          })}
       {/* {has_reschedule_penalty && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Penalización</DefaultText>
