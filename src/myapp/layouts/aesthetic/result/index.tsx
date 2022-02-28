@@ -111,7 +111,6 @@ const themedStyles = StyleService.create({
     backgroundColor: 'transparent',
     marginBottom: 15,
     marginTop: 24,
-    paddingRight: globalVars.outsidePadding / 2,
   },
   title: {
     textAlign: 'center',
