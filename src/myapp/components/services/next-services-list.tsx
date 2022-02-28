@@ -7,7 +7,7 @@ import moment from 'moment';
 // Global Styles.
 import globalColors from '../../styles/colors';
 // Hooks.
-import useAppointments from '../../hooks/vets/useAppointments';
+// import useAppointments from '../../hooks/vets/useAppointments';
 import useDeleteAppointment from '../../hooks/vets/useDeleteVetAppointment';
 import useFilterAppointments from '../../hooks/vets/useFilterAppointments';
 // My Components.
@@ -18,13 +18,23 @@ import NextServicesEmpty from './next-services-empty';
 // Types.
 import {Appointment} from '../../types/models';
 import {NextServicesListProps} from '../../types/components/services';
+import {useQuery} from 'react-query';
+import api from '../../services/app-services';
 
 const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   const navigation = useNavigation();
   const [data, setData] = useState<Appointment[]>([]);
 
   // Hook api calls.
-  const appointments = useAppointments();
+  // const appointments = useAppointments();
+
+  const salonAppointments = useQuery('my-salon-appointments', () =>
+    api.get(`api/v1/salons-appointments/`, true),
+  );
+  const vetAppointments = useQuery('my-vet-appointments', () =>
+    api.get(`api/v1/vets-appointments/`, true),
+  );
+
   const deleteQuery = useDeleteAppointment();
   const filteredAppointments = useFilterAppointments(data, props.tab);
 
@@ -39,13 +49,8 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
   ] = useState<Appointment | null>(null);
 
   const onDeleteAccept = () => {
-    const {
-      admin_settings,
-      date,
-      has_cancel_penalty,
-      id,
-      start_time,
-    } = selectedAppointment;
+    const {admin_settings, date, has_cancel_penalty, id, start_time} =
+      selectedAppointment ?? {};
     const formattedData: Appointment = {
       id,
       has_cancel_penalty:
@@ -170,7 +175,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
 
   const renderItem = ({item}: {item: Appointment}) => (
     <NextServiceCard
-      key={item.id}
+      key={item?.id}
       onPressEditModal={() => {
         setSelectedAppointment(item);
         setShowEditModal(true);
@@ -192,28 +197,42 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
    ***************/
 
   useEffect(() => {
-    if (appointments.isSuccess) {
-      setData(appointments.data?.data);
+    if (
+      vetAppointments.isSuccess &&
+      vetAppointments.data &&
+      salonAppointments.isSuccess &&
+      salonAppointments.data
+    ) {
+      setData([
+        ...vetAppointments.data?.data,
+        // ...salonAppointments.data?.data,
+      ]);
+      console.log(...salonAppointments.data?.data);
     }
-  }, [appointments.data?.data]);
+  }, [
+    vetAppointments.isSuccess,
+    salonAppointments.isSuccess,
+    vetAppointments.data,
+    salonAppointments.data,
+  ]);
 
-  useEffect(() => {
-    if (selectedAppointment) {
-      setEditMessage(getEditMessage(selectedAppointment));
-    }
-  }, [selectedAppointment]);
+  // useEffect(() => {
+  //   if (selectedAppointment) {
+  //     setEditMessage(getEditMessage(selectedAppointment));
+  //   }
+  // }, [selectedAppointment]);
 
-  useEffect(() => {
-    if (showDeleteModal) {
-      setDeleteMessage(getDeleteMessage(selectedAppointment));
-    }
-  }, [showDeleteModal]);
+  // useEffect(() => {
+  //   if (showDeleteModal) {
+  //     setDeleteMessage(getDeleteMessage(selectedAppointment));
+  //   }
+  // }, [showDeleteModal]);
 
-  return appointments.isLoading ? (
+  return salonAppointments.isLoading || vetAppointments.isLoading ? (
     <CustomSpinner />
   ) : (
     <>
-      <CustomModal
+      {/* <CustomModal
         labelAccept="Entendido"
         onAccept={() => setShowPendingModal(false)}
         showCancel={false}
@@ -238,7 +257,7 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         text={editMessage}
         title="Editar Cita"
         visible={showEditModal}
-      />
+      /> */}
       <List
         data={filteredAppointments}
         ListEmptyComponent={<NextServicesEmpty tab={props.tab} />}
