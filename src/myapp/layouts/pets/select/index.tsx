@@ -71,7 +71,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (sizeId !== '' && petId !== '') {
-      const selectedPet = pets.find((pet) => pet?.id === petId);
+      const selectedPet = pets.find((currentPet) => currentPet?.id === petId);
       const selectedSize = sizes.find((size) => size?.key === sizeId);
       setPet(selectedPet?.id);
       setPetSize(selectedSize?.key);
