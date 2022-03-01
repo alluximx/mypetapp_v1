@@ -113,13 +113,9 @@ export default ({navigation, route}): React.ReactElement => {
   };
 
   const onSubmit = () => {
-    const formattedData = {
-      ...form,
-      services: form.services.split('\n').filter(Boolean).join(', '),
-    };
     if (isEdit) {
       setIsLoading(true);
-      updateAppointmentQuery.mutate(formattedData, {
+      updateAppointmentQuery.mutate(form, {
         onError: (responseError: AxiosError) => {
           const requestError = responseError.response.data;
           setError(requestError);
@@ -132,7 +128,7 @@ export default ({navigation, route}): React.ReactElement => {
       });
     } else {
       setIsLoading(true);
-      addAppointmentQuery.mutate(formattedData, {
+      addAppointmentQuery.mutate(form, {
         onError: (responseError: AxiosError) => {
           const requestError = responseError.response.data;
           setError(requestError);
@@ -266,11 +262,7 @@ export default ({navigation, route}): React.ReactElement => {
     if (form.services) {
       const calculatedTotal = form.services
         .split(/\S*\w+ - \$*/)
-        .join('')
-        .split('\n')
-        .filter(Boolean)
         .reduce((sum, item: string) => sum + Number(item), 0);
-      setServiceContent(formatServices(services));
       setTotal(formatPrice(calculatedTotal));
     }
   }, [form.services]);
@@ -437,23 +429,18 @@ export default ({navigation, route}): React.ReactElement => {
       )}
       {isSalon &&
         form.services !== '' &&
-        form.services
-          .split('\n')
-          .filter(Boolean)
-          .map((service, index) => {
-            const serviceSplitted = service.split(' - ');
-            console.log(form.services);
-            const serviceName = serviceSplitted[0];
-            const servicePrice = serviceSplitted[1];
-            return (
-              <View key={`service-${index}`} style={styles.totalContainer}>
-                <DefaultText style={styles.leftSide}>{serviceName}</DefaultText>
-                <DefaultText style={styles.rightSide}>
-                  {servicePrice}
-                </DefaultText>
-              </View>
-            );
-          })}
+        form.services.split(', ').map((service, index) => {
+          const serviceSplitted = service.split(' - ');
+          console.log(form.services);
+          const serviceName = serviceSplitted[0];
+          const servicePrice = serviceSplitted[1];
+          return (
+            <View key={`service-${index}`} style={styles.totalContainer}>
+              <DefaultText style={styles.leftSide}>{serviceName}</DefaultText>
+              <DefaultText style={styles.rightSide}>{servicePrice}</DefaultText>
+            </View>
+          );
+        })}
       {/* {has_reschedule_penalty && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Penalización</DefaultText>
@@ -462,7 +449,7 @@ export default ({navigation, route}): React.ReactElement => {
           </DefaultText>
         </View>
       )} */}
-      {!isEdit &&
+      {
         // has_reschedule_penalty ||
         ((isSalon && form.services !== '') || !isSalon) && (
           <>
@@ -472,11 +459,12 @@ export default ({navigation, route}): React.ReactElement => {
                 ${!isSalon ? baseCharge : total}
               </TitleHeader>
             </View>
-            <DefaultText style={styles.totalMessage}>
-              Este es el monto que deberás pagar en el establecimiento.
+            <DefaultText style={error?.error && styles.totalMessage}>
+              Este es el monto total que deberás pagar en el establecimiento.
             </DefaultText>
           </>
-        )}
+        )
+      }
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>
