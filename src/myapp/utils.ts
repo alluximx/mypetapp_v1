@@ -1,4 +1,5 @@
 import {CommonActions, NavigationState} from '@react-navigation/native';
+import _ from 'lodash';
 import {VetSettings} from './types/models';
 
 /**
@@ -69,4 +70,54 @@ export const checkIfDayIsEnabledInVetSettings = (
     default:
       return false;
   }
+};
+
+export const formatPrice = (price: number): string => {
+  return _.round(price, 2)
+    .toFixed(2)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+/**
+ * Formats the services string to remove the price of the service.
+ *
+ * @param servicesString String with the list of services with
+ * its price sepparated by a comma.
+ * @returns Only the name of the services.
+ */
+export const formatServices = (servicesString: string): string => {
+  return servicesString
+    .split(/ - \$\S*/)
+    .filter(Boolean)
+    .join(', ');
+};
+
+/**
+ * Removes a screen from the stack if already exists and then
+ * navigates to it.
+ *
+ * @param routeName Name of the route.
+ * @param params Parameters of the route.
+ */
+export const removeBeforeNavigation = (
+  navigation,
+  routeName: string,
+  params: any,
+) => {
+  navigation.dispatch((state) => {
+    // Remove the vet date route from the stack if already existed
+    const routes = state.routes.filter((r) => r.name !== 'VetDate');
+
+    return CommonActions.reset({
+      ...state,
+      routes: [
+        ...routes,
+        {
+          name: routeName,
+          params,
+        },
+      ],
+      index: routes.length - 1,
+    });
+  });
 };

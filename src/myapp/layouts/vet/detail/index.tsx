@@ -11,6 +11,8 @@ import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import RatingCard from '../../../components/cards/rating-card';
 import TitleHeader from '../../../components/texts/title-header';
+// Utils
+import {removeBeforeNavigation} from '../../../utils';
 // Types.
 import {VetSettings} from '../../../types/models';
 
@@ -83,10 +85,12 @@ export default ({navigation, route}): React.ReactElement => {
               <NavigateButton
                 destination="VetDate"
                 placeholder="Generar Cita"
-                data={{
-                  screenFrom: 'VetDate',
-                  ...vetSettings,
-                }}
+                onPress={() =>
+                  removeBeforeNavigation(navigation, 'VetDate', {
+                    screenFrom: 'VetDate',
+                    ...vetSettings,
+                  })
+                }
               />
             </>
           )}

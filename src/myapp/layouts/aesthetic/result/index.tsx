@@ -56,6 +56,7 @@ export default ({navigation, route}): React.ReactElement => {
             renderItem={({item}) => (
               <VetCard
                 isVet={false}
+                key={item.id}
                 location={currentLocation}
                 styleCard={styles.styleCard}
                 vet={item}
@@ -110,7 +111,6 @@ const themedStyles = StyleService.create({
     backgroundColor: 'transparent',
     marginBottom: 15,
     marginTop: 24,
-    paddingRight: globalVars.outsidePadding / 2,
   },
   title: {
     textAlign: 'center',

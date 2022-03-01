@@ -2,83 +2,125 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 // ui-kitten
 import {List} from '@ui-kitten/components';
-// My Components
-import DefaultLayout from '../../../components/layouts/default-layout';
-import TitleHeader from '../../../components/texts/title-header';
-import IndividualOptionSelect from '../../../components/inputs/individual-option-select';
 // Hooks
+import useGetSalonServices from '../../../hooks/aesthetics/useGetSalonServices';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+// My Components
+import CustomSpinner from '../../../components/custom-spinner';
+import DefaultLayout from '../../../components/layouts/default-layout';
+import DefaultText from '../../../components/texts/default-text';
+import IndividualOptionSelect from '../../../components/inputs/individual-option-select';
+import TitleHeader from '../../../components/texts/title-header';
+// Utils
+import {formatPrice, formatServices} from '../../../utils';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [isLoading, setIsLoading] = useState(false);
-  const data = [];
-  const auxData = [
-    {id: '1', title: '$200.00', subtitle: 'Baño'},
-    {id: '2', title: '$200.00', subtitle: 'Corte'},
-    {id: '3', title: '$200.00', subtitle: 'Uñas'},
-    {id: '4', title: '$200.00', subtitle: 'Peinado'},
-  ];
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [data, setData] = useState([]);
+  const {admin, services, screenToReturn, screenFrom, sizeId} =
+    route.params ?? {};
 
-  const {screenToReturn, screenFrom} = route.params?.data ?? {};
+  const [servicesSelected, setServicesSelected] = useState([]);
 
-  const isDisabled = false;
+  const salonServicesData = useGetSalonServices(admin, sizeId);
 
-  const setData = (value) => {
-    const exist = data.includes(value);
-    exist ? removeFromArray(value) : data.push(value);
-  };
-
-  const removeFromArray = (value) => {
-    const indx = data.indexOf(value);
-    if (indx > -1) {
-      data.splice(indx, 1);
-    }
-  };
-
-  const onSubmit = () => {
-    const dataSubmit = [];
-    data.forEach((selectElement) => {
-      auxData.forEach((element) => {
-        if (selectElement === element.id) {
-          const auxElement = {id: selectElement, name: element.subtitle};
-          dataSubmit.push(auxElement);
-        }
-      });
-    });
+  const onRightPress = () => {
+    const servicesList = servicesSelected.reduce(
+      (previousService, currentService, index: number) => {
+        const serviceData = data.find((item) => item?.id === currentService);
+        return (
+          previousService +
+          `${serviceData?.product?.name} - $${formatPrice(
+            serviceData?.price,
+          )}` +
+          (index === servicesSelected.length - 1 ? '' : ', ')
+        );
+      },
+      '',
+    );
 
     navigation.navigate(screenToReturn, {
-      data: {serviceData: dataSubmit, screenFrom: screenFrom},
+      serviceData: servicesList,
+      serviceIndexes: servicesSelected,
+      screenFrom: screenFrom,
     });
   };
+
+  useEffect(() => {
+    setIsDisabled(servicesSelected.length === 0 || data.length === 0);
+  }, [data, salonServicesData]);
+
+  useEffect(() => {
+    if (salonServicesData.isSuccess && salonServicesData.data?.data) {
+      setData(salonServicesData.data.data);
+      setIsLoading(false);
+
+      if (services) {
+        const storedServices = salonServicesData.data.data.map(
+          (salonService) => {
+            const servicesList = formatServices(services)
+              .split(', ')
+              .map((service) => service.trim());
+
+            if (servicesList.includes(salonService.product?.name)) {
+              return salonService.id;
+            }
+          },
+        );
+
+        setServicesSelected(storedServices.filter(Boolean));
+      }
+    }
+  }, [salonServicesData.isSuccess]);
 
   useSetNavigationHeaders({
     isDisabled,
     isLoading,
     navigation,
-    onRightPress: onSubmit,
+    onRightPress,
     setIsLoading,
-    data: [],
+    data: servicesSelected,
   });
 
-  const renderOption = (service) => {
-    return (
-      <IndividualOptionSelect
-        setCurrentValue={(newValue) => {
-          setData(newValue);
-        }}
-        title={service.item.title}
-        subtitle={service.item.subtitle}
-        style={{marginBottom: 15}}
-        value={service.item.id}
-      />
-    );
-  };
-  return (
+  /**********************
+   *** Render Methods ***
+   **********************/
+
+  const renderOption = ({item}) => (
+    <IndividualOptionSelect
+      enabled={servicesSelected.includes(item.id)}
+      setCurrentValue={(newValue) => {
+        if (servicesSelected.includes(newValue)) {
+          setServicesSelected(
+            servicesSelected.filter((value: string) => value !== newValue),
+          );
+        } else {
+          setServicesSelected([...servicesSelected, newValue]);
+        }
+      }}
+      style={styles.optionStyle}
+      subtitle={item.product.name}
+      title={'$' + formatPrice(item.price)}
+      value={item.id}
+    />
+  );
+
+  const renderEmpty = () => (
+    <DefaultText>
+      Lo sentimos. No hay servicios disponibles para tu mascota en este momento.
+    </DefaultText>
+  );
+
+  return isLoading || salonServicesData.isLoading ? (
+    <CustomSpinner />
+  ) : (
     <DefaultLayout>
-      <TitleHeader>Servicios</TitleHeader>
+      <TitleHeader style={styles.title}>Servicios</TitleHeader>
       <List
         style={styles.servicesContainer}
-        data={auxData}
+        data={data}
+        ListEmptyComponent={renderEmpty}
         renderItem={renderOption}
       />
     </DefaultLayout>
@@ -89,5 +131,11 @@ const styles = StyleSheet.create({
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
+  },
+  title: {
+    marginBottom: 24,
+  },
+  optionStyle: {
+    marginBottom: 16,
   },
 });

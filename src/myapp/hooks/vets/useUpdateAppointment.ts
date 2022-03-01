@@ -1,19 +1,17 @@
 import {useMutation, useQueryClient} from 'react-query';
 import api from '../../services/app-services';
 
-const postAppointment = (data, isSalon: boolean) =>
-  api.post(
-    `api/v1/${isSalon ? 'salons' : 'vets'}-appointments/${
-      data.id
-    }/rate_appointment/`,
+const putAppointment = (data, isSalon: boolean) =>
+  api.put(
+    `api/v1/${isSalon ? 'salons' : 'vets'}-appointments/${data.id}/`,
     data,
     true,
   );
 
-const useRateAppointment = (isSalon: boolean) => {
+const useUpdateAppointment = (isSalon: boolean = false) => {
   const queryClient = useQueryClient();
 
-  return useMutation((data: any) => postAppointment(data, isSalon), {
+  return useMutation((data: any) => putAppointment(data, isSalon), {
     onSuccess: () => {
       queryClient.invalidateQueries('my-vet-appointments');
       queryClient.invalidateQueries('my-salon-appointments');
@@ -21,4 +19,4 @@ const useRateAppointment = (isSalon: boolean) => {
   });
 };
 
-export default useRateAppointment;
+export default useUpdateAppointment;

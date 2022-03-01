@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import moment from 'moment';
 import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
@@ -20,40 +20,47 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
   const onPressEdit = () => props.onPressEditModal();
   const onPressPending = () => props.onPressPendingModal();
   const onPressRate = () =>
-    navigation.navigate('RateService', {appointmentId: props.service.id});
+    navigation.navigate('RateService', {
+      appointmentId: props.service?.id,
+      services: props.service?.services,
+    });
 
   return (
     <GenericCard
       contentTextStyle={styles.subtitleCard}
       coverImageStyle={styles.coverImage}
-      isDisabled={props.service.rate !== 0}
+      isDisabled={props.service?.rate !== 0}
       styleCard={props.styleCard}
-      key={props.service.id}
+      key={props.service?.id}
       data={{
         additionalContent: [
-          <View key={`petData-${props.service.id}`}>
+          <View key={`petData-${props.service?.id}`}>
             <DefaultText
-              key={`petName-${props.service.id}`}
+              key={`petName-${props.service?.id}`}
               style={styles.petName}>
-              {props.service.pet.name}
+              {props.service?.pet.name}
             </DefaultText>
-            {props.service?.services && (
-              <DefaultText
-                key={`services-${props.service.id}`}
-                style={styles.serviceName}>
-                {props.service.services
-                  ?.map((service) => service.name)
-                  .join(', ')}
-              </DefaultText>
-            )}
+
+            <DefaultText
+              key={`services-${props.service?.id}`}
+              style={styles.serviceName}>
+              {props.service?.services
+                ? props.service?.services
+                    ?.split('\n')
+                    .join('')
+                    .split(/ - \$\S*/)
+                    .filter(Boolean)
+                    .join(', ')
+                : 'Consulta'}
+            </DefaultText>
           </View>,
         ],
         additionalButtons:
           props.tab === servicesTabs[0].id
             ? [
-                !props.service.is_accepted && (
+                !props.service?.is_accepted && (
                   <AnchorText
-                    key={`pending-${props.service.id}`}
+                    key={`pending-${props.service?.id}`}
                     onPress={() => {}}
                     style={styles.buttonEdit}
                     isDisabled
@@ -61,9 +68,9 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
                     Pendiente
                   </AnchorText>
                 ),
-                props.service.is_accepted && (
+                props.service?.is_accepted && (
                   <AnchorText
-                    key={`delete-${props.service.id}`}
+                    key={`delete-${props.service?.id}`}
                     onPress={() => onPressDelete()}
                     style={styles.buttonDelete}
                     isSubmit>
@@ -72,7 +79,7 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
                 ),
                 props.service?.is_accepted && (
                   <AnchorText
-                    key={`edit-${props.service.id}`}
+                    key={`edit-${props.service?.id}`}
                     onPress={onPressEdit}
                     style={styles.buttonEdit}
                     isSubmit>
@@ -82,25 +89,25 @@ const NextServiceCard = (props: NextServiceCardProps): React.ReactElement => {
               ]
             : [
                 <AnchorText
-                  key={`rate-${props.service.id}`}
+                  key={`rate-${props.service?.id}`}
                   onPress={onPressRate}
                   style={styles.buttonEdit}
-                  isDisabled={props.service.rate !== 0}
+                  isDisabled={props.service?.rate !== 0}
                   isSubmit>
-                  {props.service.rate === 0 ? 'Calificar' : 'Calificado'}
+                  {props.service?.rate === 0 ? 'Calificar' : 'Calificado'}
                 </AnchorText>,
               ],
-        content: props.service.admin_name,
+        content: props.service?.admin_name,
         title: moment(
-          props.service.date + ' ' + props.service.start_time,
+          props.service?.date + ' ' + props.service?.start_time,
         ).format('DD/MM/YYYY, h:mm A'),
         coverImage:
-          props.service.pet_image[0]?.file ??
+          props.service?.pet_image[0]?.file ??
           require('../../assets/images/pets/add-pet-image.png'),
       }}
       onClick={
         props.tab === servicesTabs[0].id
-          ? !props.service.is_accepted
+          ? !props.service?.is_accepted
             ? onPressPending
             : onPressEdit
           : onPressRate

@@ -79,6 +79,7 @@ type HomeNavigatorParamList = {
 
   RateService: {
     appointmentId: string;
+    services: string;
   };
   NextServices: {};
   ServiceSelect: {};

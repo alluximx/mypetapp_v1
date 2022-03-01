@@ -2,19 +2,19 @@ import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
 import 'moment/locale/es';
 import {AxiosError} from 'axios';
-import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
+import {StyleSheet, View, Dimensions} from 'react-native';
 import moment from 'moment';
-
 // Global Styles
 import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
 // Hooks
-import useAddVetAppointment from '../../../hooks/vets/useAddVetAppointment';
-import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
-import useUpdateVetAppointment from '../../../hooks/vets/useUpdateVetAppointment';
-import useVetAppointments from '../../../hooks/vets/useVetAppointments';
+import useAddAppointment from '../../../hooks/vets/useAddAppointment';
+import useAdminAppointments from '../../../hooks/vets/useAdminAppointments';
+// import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
+import useUpdateAppointment from '../../../hooks/vets/useUpdateAppointment';
 // My Components
-import {QuestionCircleIcon} from '../../../components/icons';
+// import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
 import CustomModal from '../../../components/modals/custom-modal';
 import CustomSpinner from '../../../components/custom-spinner';
@@ -28,6 +28,8 @@ import TitleHeader from '../../../components/texts/title-header';
 // Types
 import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
+// Utils
+import {formatPrice, formatServices} from '../../../utils';
 
 const NUM_COLUMNS = 4;
 
@@ -37,12 +39,12 @@ export default ({navigation, route}): React.ReactElement => {
   // Loading
   const [isLoading, setIsLoading] = useState(false);
   // Modals
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalSubmitVisible, setIsModalSubmitVisible] = useState(false);
-  const [isPolicyModalVisible, setIsPolicyModalVisible] = useState(false);
+  // const [isPolicyModalVisible, setIsPolicyModalVisible] = useState(false);
   // Render vars
-  const [cardContent, setCardContent] = useState('');
-  const [cardTitle, setCardTitle] = useState('');
+  // const [cardContent, setCardContent] = useState('');
+  // const [cardTitle, setCardTitle] = useState('');
   const [emptyText, setEmptyText] = useState(
     'Por favor selecciona una fecha para ver los horarios disponibles.',
   );
@@ -51,50 +53,48 @@ export default ({navigation, route}): React.ReactElement => {
   });
   const [petContent, setPetContent] = useState('');
   const [serviceContent, setServiceContent] = useState('');
+  const [total, setTotal] = useState('');
+
   const {
     admin,
-    allowed_changes_without_penalty,
+    // allowed_changes_without_penalty,
     appointment_start_time,
     base_charge,
-    cancel_penalty,
-    card_id,
+    // cancel_penalty,
+    // card_id,
     date,
-    has_reschedule_penalty,
+    // has_reschedule_penalty,
     id,
     isEdit,
-    minimum_time_for_cancel,
-    minimum_time_for_reschedule,
-    reschedule_penalty,
-    paymentMethod,
+    // minimum_time_for_cancel,
+    // minimum_time_for_reschedule,
+    // reschedule_penalty,
+    // paymentMethod,
     pet,
+    pet_size,
+    services,
     screenFrom,
     serviceData,
     start_time,
     time_slots,
   } = route.params ?? {};
 
-  // Hook calls
-  const addAppointmentQuery = useAddVetAppointment(admin);
-  const cardData = useGetPaymentMethod(card_id, isEdit);
-  const updateAppointmentQuery = useUpdateVetAppointment();
-  const vetAppointments = useVetAppointments(admin);
+  const isSalon =
+    (screenFrom && screenFrom === 'AestheticDate') || services !== undefined;
 
-  const [form, setForm] = useState({
-    admin,
-    card_id,
-    date: date ?? '',
-    day: '',
-    end_time: '',
-    has_cancel_penalty: false,
-    has_reschedule_penalty: has_reschedule_penalty ?? false,
-    id: id ?? '',
-    paymentMethod: '',
-    pet: pet ?? '',
-    start_time: appointment_start_time ?? '',
-    time: '',
-  });
+  /******************
+   *** Hook calls ***
+   ******************/
 
-  // Functions
+  const addAppointmentQuery = useAddAppointment(admin, isSalon);
+  const adminAppointments = useAdminAppointments(admin, isSalon);
+  // const cardData = useGetPaymentMethod(card_id, isEdit);
+  const updateAppointmentQuery = useUpdateAppointment(isSalon);
+
+  /*****************
+   *** Functions ***
+   *****************/
+
   const setValueForm = (day: string) => setForm({...form, day});
   const setValueTime = (time: string) => {
     const formattedTime = moment(time, 'h:mm A');
@@ -116,36 +116,74 @@ export default ({navigation, route}): React.ReactElement => {
           setIsLoading(false);
         },
         onSuccess: () => {
-          setIsLoading(false);
           setIsModalSubmitVisible(true);
+        },
+        onSettled: () => {
+          setIsLoading(false);
         },
       });
     } else {
-      setIsPolicyModalVisible(true);
+      setIsLoading(true);
+      addAppointmentQuery.mutate(form, {
+        onError: (responseError: AxiosError) => {
+          const requestError = responseError.response.data;
+          setError(requestError);
+          setIsLoading(false);
+        },
+        onSuccess: () => {
+          setIsModalSubmitVisible(true);
+        },
+      });
     }
   };
 
-  const onAcceptPolicy = () => {
-    setIsLoading(true);
-    setIsPolicyModalVisible(false);
-    addAppointmentQuery.mutate(form, {
-      onError: (responseError: AxiosError) => {
-        setIsPolicyModalVisible(false);
-        const requestError = responseError.response.data;
-        setError(requestError);
-        setIsLoading(false);
-      },
-      onSuccess: () => {
-        setIsModalSubmitVisible(true);
-      },
-    });
-  };
+  // const onAcceptPolicy = () => {
+  //   setIsLoading(true);
+  //   setIsPolicyModalVisible(false);
+  //   addAppointmentQuery.mutate(form, {
+  //     onError: (responseError: AxiosError) => {
+  //       setIsPolicyModalVisible(false);
+  //       const requestError = responseError.response.data;
+  //       setError(requestError);
+  //       setIsLoading(false);
+  //     },
+  //     onSuccess: () => {
+  //       setIsModalSubmitVisible(true);
+  //     },
+  //   });
+  // };
 
   const onAcceptSubmit = () => {
     setIsLoading(false);
     setIsModalSubmitVisible(false);
-    navigation.navigate('NextServices');
+    navigation.dispatch(
+      CommonActions.reset({
+        routes: [{name: 'Home'}, {name: 'NextServices'}],
+      }),
+    );
   };
+
+  /************
+   *** Form ***
+   ************/
+
+  const [form, setForm] = useState({
+    admin,
+    amount: 0,
+    // card_id,
+    date: date ?? '',
+    day: '',
+    end_time: '',
+    // has_cancel_penalty: false,
+    // has_reschedule_penalty: has_reschedule_penalty ?? false,
+    id: id ?? '',
+    // paymentMethod: '',
+    pet: pet?.petId ?? '',
+    services: services ?? '',
+    start_time: appointment_start_time ?? '',
+    time: '',
+    pet_size: pet_size?.id ?? '',
+  });
 
   /***************
    *** Effects ***
@@ -161,7 +199,7 @@ export default ({navigation, route}): React.ReactElement => {
     if (form.day) {
       setHours([]);
       const selectedDate = days.find((day) => day.key === form.day)?.fullDate;
-      const appointments = vetAppointments?.data?.data ?? [];
+      const appointments = adminAppointments?.data?.data ?? [];
       const allHours = getAvailableHours(
         route.params,
         selectedDate,
@@ -177,11 +215,30 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (pet) {
-      const {id: petId, name} = pet;
-      setPetContent(name);
-      setForm({...form, pet: petId});
+      const {petId, petName, sizeName, sizeId} = pet;
+      setPetContent(isSalon ? petName + ' - ' + sizeName : petName);
+      setForm({
+        ...form,
+        pet: petId,
+        pet_size: sizeId,
+      });
+      if (petId !== form.pet) {
+        setForm((currentForm) => ({
+          ...currentForm,
+          services: '',
+        }));
+        setServiceContent('');
+      }
     }
   }, [pet]);
+
+  useEffect(() => {
+    if (serviceData) {
+      setForm({...form, services: serviceData});
+      const formattedServices = formatServices(serviceData);
+      setServiceContent(formattedServices);
+    }
+  }, [serviceData]);
 
   useEffect(() => {
     if (date && days.length) {
@@ -203,60 +260,65 @@ export default ({navigation, route}): React.ReactElement => {
   }, [hours]);
 
   useEffect(() => {
-    if (paymentMethod) {
-      const {cardLabel, cardBrand, cardId} = paymentMethod;
-      setCardTitle(cardBrand);
-      setCardContent(cardLabel);
-      setForm({...form, card_id: cardId});
-    } else if (cardData?.isSuccess) {
-      const {brand, last4} = cardData.data?.data[0] ?? {};
-      setCardTitle(brand);
-      setCardContent('****' + last4);
+    if (form.services) {
+      setServiceContent(formatServices(form.services));
+      const calculatedTotal = form.services
+        .split(/\S*\w+ - \$*/)
+        .join('')
+        .split(', ')
+        .reduce((sum, item: string) => sum + Number(item), 0);
+      setTotal(formatPrice(calculatedTotal));
     }
-  }, [paymentMethod, cardData?.isSuccess]);
+  }, [form.services]);
 
-  useEffect(() => {
-    if (serviceData) {
-      serviceData.length === 1
-        ? setServiceContent(serviceData[0].name)
-        : setServiceContent('Varios');
-    }
-  }, [serviceData]);
+  // useEffect(() => {
+  //   if (paymentMethod) {
+  //     const {cardLabel, cardBrand, cardId} = paymentMethod;
+  //     setCardTitle(cardBrand);
+  //     setCardContent(cardLabel);
+  //     setForm({...form, card_id: cardId});
+  //   } else if (cardData?.isSuccess) {
+  //     const {brand, last4} = cardData.data?.data[0] ?? {};
+  //     setCardTitle(brand);
+  //     setCardContent('****' + last4);
+  //   }
+  // }, [paymentMethod, cardData?.isSuccess]);
 
   /**********************
    *** Render Methods ***
    **********************/
 
   const isDisabled =
+    (isSalon && form.services === '') ||
     form.date === '' ||
     form.time === '' ||
-    form.pet === '' ||
-    form.card_id === '';
+    form.pet === '';
+  // form.card_id === '';
 
   const baseCharge = Number(base_charge).toFixed(2);
 
-  const timeForReschedulePenalty = _.round(minimum_time_for_reschedule / 60, 1);
-  const timeForCancelPenalty = _.round(minimum_time_for_cancel / 60, 1);
+  // const timeForReschedulePenalty = _.round(minimum_time_for_reschedule / 60, 1);
+  // const timeForCancelPenalty = _.round(minimum_time_for_cancel / 60, 1);
 
-  const maxCancelTimeLabel = `${timeForCancelPenalty} ${
-    timeForCancelPenalty === 1 ? 'hora' : 'horas'
-  }`;
-  const maxRescheduleTimeLabel = `${timeForReschedulePenalty} ${
-    timeForReschedulePenalty === 1 ? 'hora' : 'horas'
-  }`;
+  // const maxCancelTimeLabel = `${timeForCancelPenalty} ${
+  //   timeForCancelPenalty === 1 ? 'hora' : 'horas'
+  // }`;
+  // const maxRescheduleTimeLabel = `${timeForReschedulePenalty} ${
+  //   timeForReschedulePenalty === 1 ? 'hora' : 'horas'
+  // }`;
 
-  const reschedulePenaltyFormatted = Number(reschedule_penalty)?.toFixed(2);
-  const cancelPenaltyFormatted = Number(cancel_penalty)?.toFixed(2);
+  // const reschedulePenaltyFormatted = Number(reschedule_penalty)?.toFixed(2);
+  // const cancelPenaltyFormatted = Number(cancel_penalty)?.toFixed(2);
 
-  const chancesBeforeReschedulePenalty = `${allowed_changes_without_penalty} ${
-    allowed_changes_without_penalty === 1 ? 'vez' : 'veces'
-  }`;
+  // const chancesBeforeReschedulePenalty = `${allowed_changes_without_penalty} ${
+  //   allowed_changes_without_penalty === 1 ? 'vez' : 'veces'
+  // }`;
 
-  const textModal =
-    'Para generar una cita es necesario seleccionar o agregar un método ' +
-    'de pago. La cita se cobrará al pasar la fecha y el horario ' +
-    `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
-    'antes, de lo contrario se te cobrará una penalización.';
+  // const textModal =
+  //   'Para generar una cita es necesario seleccionar o agregar un método ' +
+  //   'de pago. La cita se cobrará al pasar la fecha y el horario ' +
+  //   `seleccionado.\nPuedes cancelar hasta ${maxCancelTimeLabel} ` +
+  //   'antes, de lo contrario se te cobrará una penalización.';
 
   const textSubmitModal = isEdit
     ? 'Tu cita se ha actualizado exitosamente.'
@@ -264,15 +326,15 @@ export default ({navigation, route}): React.ReactElement => {
       'todos tus servicios programados desde la sección de ' +
       '"Próximos Servicios" en el menú principal.';
 
-  const policyModalContent =
-    `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
-    `de forma gratuita hasta ${maxRescheduleTimeLabel} antes. ` +
-    `Si la modificas más de ${chancesBeforeReschedulePenalty} o con menos ` +
-    `de ${maxRescheduleTimeLabel} de anticipación, se te cobrará una penalización ` +
-    `de $${reschedulePenaltyFormatted} cada vez que reagendes tu cita.\n` +
-    `Podrás cancelar tu cita hasta ${maxCancelTimeLabel} antes. ` +
-    `De lo contrario, se te cobrará una penalización de ` +
-    `$${cancelPenaltyFormatted}. `;
+  // const policyModalContent =
+  //   `Podrás reprogramar tu cita ${chancesBeforeReschedulePenalty} ` +
+  //   `de forma gratuita hasta ${maxRescheduleTimeLabel} antes. ` +
+  //   `Si la modificas más de ${chancesBeforeReschedulePenalty} o con menos ` +
+  //   `de ${maxRescheduleTimeLabel} de anticipación, se te cobrará una penalización ` +
+  //   `de $${reschedulePenaltyFormatted} cada vez que reagendes tu cita.\n` +
+  //   `Podrás cancelar tu cita hasta ${maxCancelTimeLabel} antes. ` +
+  //   `De lo contrario, se te cobrará una penalización de ` +
+  //   `$${cancelPenaltyFormatted}. `;
 
   const renderEmpty = (
     <View style={[styles.hourListEmptyContainer, styles.horizontalPadding]}>
@@ -295,26 +357,33 @@ export default ({navigation, route}): React.ReactElement => {
             destination="PetSelect"
             data={{
               screenToReturn: 'VetDate',
-              screenFrom: screenFrom,
+              petId: form.pet,
+              sizeId: pet?.sizeId,
+              screenFrom: isSalon ? 'AestheticDate' : screenFrom,
+              isSalon: isSalon,
             }}
             title="Mascota"
             subtitle={petContent}
           />
         </View>
-        {screenFrom && screenFrom === 'AestheticDate' && (
-          <View style={styles.horizontalPadding}>
+        {isSalon && (
+          <View>
             <TitleHeader style={styles.normalHeader}>
               ¿Qué servicio necesita tu mascota?
             </TitleHeader>
             <NavigateButton
-              placeholder="Selecciona los servicios"
-              destination="ServiceSelect"
               data={{
+                admin,
                 screenToReturn: 'VetDate',
-                screenFrom: screenFrom,
+                screenFrom: isSalon ? 'AestheticDate' : screenFrom,
+                sizeId: pet?.sizeId,
+                services: form?.services,
               }}
-              title="Servicio"
+              destination="ServiceSelect"
+              isDisabled={form.pet === ''}
+              placeholder="Selecciona los servicios"
               subtitle={serviceContent}
+              title="Servicio"
             />
           </View>
         )}
@@ -340,7 +409,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const renderFooter = (
     <View style={styles.horizontalPadding}>
-      <View style={styles.paymentMethodTitle}>
+      {/* <View style={styles.paymentMethodTitle}>
         <TitleHeader style={styles.normalHeader}>Método de pago</TitleHeader>
         <TouchableOpacity
           onPress={() => {
@@ -357,29 +426,50 @@ export default ({navigation, route}): React.ReactElement => {
           subtitle={cardContent}
           title={cardTitle}
         />
-      </View>
-      {!isEdit && (
+      </View> */}
+      {!isEdit && !isSalon && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Consulta</DefaultText>
           <DefaultText style={styles.rightSide}>${baseCharge}</DefaultText>
         </View>
       )}
-      {has_reschedule_penalty && (
+      {isSalon &&
+        form.services !== '' &&
+        form.services.split(', ').map((service, index) => {
+          const serviceSplitted = service.split(' - ');
+          const serviceName = serviceSplitted[0];
+          const servicePrice = serviceSplitted[1];
+          return (
+            <View key={`service-${index}`} style={styles.totalContainer}>
+              <DefaultText style={styles.leftSide}>{serviceName}</DefaultText>
+              <DefaultText style={styles.rightSide}>{servicePrice}</DefaultText>
+            </View>
+          );
+        })}
+      {/* {has_reschedule_penalty && (
         <View style={styles.totalContainer}>
           <DefaultText style={styles.leftSide}>Penalización</DefaultText>
           <DefaultText style={styles.rightSide}>
             ${reschedulePenaltyFormatted}
           </DefaultText>
         </View>
-      )}
-      {(!isEdit || has_reschedule_penalty) && (
-        <View style={styles.totalContainer}>
-          <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-          <TitleHeader style={styles.rightSide}>
-            ${!isEdit ? baseCharge : reschedulePenaltyFormatted}
-          </TitleHeader>
-        </View>
-      )}
+      )} */}
+      {
+        // has_reschedule_penalty ||
+        ((isSalon && form.services !== '') || !isSalon) && (
+          <>
+            <View style={styles.totalContainer}>
+              <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+              <TitleHeader style={styles.rightSide}>
+                ${!isSalon ? baseCharge : total}
+              </TitleHeader>
+            </View>
+            <DefaultText style={error?.error && styles.totalMessage}>
+              Este es el monto total que deberás pagar en el establecimiento.
+            </DefaultText>
+          </>
+        )
+      }
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
       </DefaultText>
@@ -394,18 +484,19 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
-  return vetAppointments.isLoading || cardData.isLoading ? (
+  return adminAppointments.isLoading ? (
+    // cardData.isLoading
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
-      <CustomModal
+      {/* <CustomModal
         labelAccept="Entendido"
         title="Método de pago"
         text={textModal}
         onAccept={() => setIsModalVisible(false)}
         showCancel={false}
         visible={isModalVisible}
-      />
+      /> */}
       <CustomModal
         labelAccept="Entendido"
         title={isEdit ? 'Cita editada' : 'Cita generada'}
@@ -414,7 +505,7 @@ export default ({navigation, route}): React.ReactElement => {
         showCancel={false}
         visible={isModalSubmitVisible}
       />
-      <CustomModal
+      {/* <CustomModal
         labelAccept="Aceptar"
         onAccept={onAcceptPolicy}
         onCancel={() => setIsPolicyModalVisible(false)}
@@ -422,7 +513,7 @@ export default ({navigation, route}): React.ReactElement => {
         text={policyModalContent}
         title="Política de cancelación y reprogramación"
         visible={isPolicyModalVisible}
-      />
+      /> */}
       <OptionSelect
         currentValue={form.time}
         data={hours}
@@ -511,7 +602,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginTop: -5,
   },
-  paymentMethodTitle: {flexDirection: 'row', marginTop: 16},
+  // paymentMethodTitle: {flexDirection: 'row', marginTop: 16},
   totalContainer: {
     marginBottom: 10,
     justifyContent: 'space-between',
@@ -528,4 +619,7 @@ const styles = StyleSheet.create({
   },
   leftSide: {justifyContent: 'flex-start'},
   rightSide: {justifyContent: 'flex-end'},
+  totalMessage: {
+    marginBottom: 16,
+  },
 });

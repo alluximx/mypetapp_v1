@@ -38,7 +38,7 @@ export interface OptionSelectProps {
   emptyComponent?: React.ReactElement;
   enableScroll?: boolean;
   footerComponent?: React.ReactElement;
-  headerComponent?: React.ReactElement;
+  headerComponent?: React.ReactElement | (() => React.ReactElement);
   horizontal?: boolean;
   numColumns?: number;
   optionStyle?: {};
@@ -82,9 +82,10 @@ export interface UserInputProps {
 }
 
 export interface IndiviudalOptionSelectProps {
-  value: string | number;
-  setCurrentValue: (key: string | number) => void;
+  enabled?: boolean;
+  setCurrentValue: (key: string) => void;
   style?: {};
-  title?: string;
   subtitle?: string;
+  title?: string;
+  value: string;
 }
