@@ -23,7 +23,7 @@ export default ({navigation}): React.ReactElement => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const rateQuery = useRateAppointment();
+  const rateQuery = useRateAppointment(route.params.services !== '');
 
   const onSubmit = () => {
     setIsLoading(true);
