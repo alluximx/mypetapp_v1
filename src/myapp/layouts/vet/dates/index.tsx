@@ -9,9 +9,10 @@ import globalVars from '../../../styles/vars';
 import globalColors from '../../../styles/colors';
 // Hooks
 import useAddAppointment from '../../../hooks/vets/useAddAppointment';
-// import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
-import useUpdateAppointment from '../../../hooks/vets/useUpdateAppointment';
 import useAdminAppointments from '../../../hooks/vets/useAdminAppointments';
+// import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
+import useGetPet from '../../../hooks/user/useGetPet';
+import useUpdateAppointment from '../../../hooks/vets/useUpdateAppointment';
 // My Components
 // import {QuestionCircleIcon} from '../../../components/icons';
 import CustomButton from '../../../components/buttons/custom-button';
@@ -29,6 +30,7 @@ import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
 // Utils
 import {formatPrice} from '../../../utils';
+import {BaseModel} from '../../../types/models';
 
 const NUM_COLUMNS = 4;
 
@@ -51,9 +53,11 @@ export default ({navigation, route}): React.ReactElement => {
     error: '',
   });
   const [petContent, setPetContent] = useState('');
-  const [total, setTotal] = useState('');
   const [serviceIndexesList, setServiceIndexesList] = useState([]);
   const [serviceContent, setServiceContent] = useState('');
+  const [size, setSize] = useState<BaseModel>();
+  const [total, setTotal] = useState('');
+
   const {
     admin,
     // allowed_changes_without_penalty,
@@ -71,6 +75,7 @@ export default ({navigation, route}): React.ReactElement => {
     // reschedule_penalty,
     // paymentMethod,
     pet,
+    services,
     serviceIndexes,
     screenFrom,
     serviceData,
@@ -78,13 +83,18 @@ export default ({navigation, route}): React.ReactElement => {
     time_slots,
   } = route.params ?? {};
 
-  const isSalon = screenFrom && screenFrom === 'AestheticDate';
+  const isSalon =
+    (screenFrom && screenFrom === 'AestheticDate') || services !== undefined;
 
-  // Hook calls
+  /******************
+   *** Hook calls ***
+   ******************/
+
   const addAppointmentQuery = useAddAppointment(admin, isSalon);
-  // const cardData = useGetPaymentMethod(card_id, isEdit);
-  const updateAppointmentQuery = useUpdateAppointment(isSalon);
   const adminAppointments = useAdminAppointments(admin, isSalon);
+  // const cardData = useGetPaymentMethod(card_id, isEdit);
+  const petData = useGetPet(pet.petId, pet.petId === undefined);
+  const updateAppointmentQuery = useUpdateAppointment(isSalon);
 
   const [form, setForm] = useState({
     admin,
@@ -102,7 +112,10 @@ export default ({navigation, route}): React.ReactElement => {
     time: '',
   });
 
-  // Functions
+  /*****************
+   *** Functions ***
+   *****************/
+
   const setValueForm = (day: string) => setForm({...form, day});
   const setValueTime = (time: string) => {
     const formattedTime = moment(time, 'h:mm A');
@@ -206,6 +219,16 @@ export default ({navigation, route}): React.ReactElement => {
       setServiceContent('');
     }
   }, [pet]);
+
+  useEffect(() => {
+    if (petData.isSuccess) {
+      const {size: currentSize} = petData?.data?.data ?? {};
+      setSize(currentSize);
+      setPetContent(
+        isSalon ? pet.petName + ' - ' + currentSize?.name : pet.petName,
+      );
+    }
+  }, [petData]);
 
   useEffect(() => {
     if (serviceIndexes) {
@@ -335,8 +358,8 @@ export default ({navigation, route}): React.ReactElement => {
             data={{
               screenToReturn: 'VetDate',
               petId: form.pet,
-              sizeId: pet?.sizeId,
-              screenFrom: screenFrom,
+              sizeId: size?.id ?? pet?.sizeId,
+              screenFrom: isSalon ? 'AestheticDate' : screenFrom,
             }}
             title="Mascota"
             subtitle={petContent}
@@ -352,8 +375,8 @@ export default ({navigation, route}): React.ReactElement => {
                 directoryId,
                 serviceIndexes: serviceIndexesList,
                 screenToReturn: 'VetDate',
-                screenFrom: screenFrom,
-                sizeId: pet?.sizeId,
+                screenFrom: isSalon ? 'AestheticDate' : screenFrom,
+                sizeId: size?.id ?? pet?.sizeId,
               }}
               destination="ServiceSelect"
               isDisabled={form.pet === ''}
@@ -460,7 +483,7 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
-  return adminAppointments.isLoading ? (
+  return adminAppointments.isLoading || petData.isLoading ? (
     // cardData.isLoading
     <CustomSpinner />
   ) : (

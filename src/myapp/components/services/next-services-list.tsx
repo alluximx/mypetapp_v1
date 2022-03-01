@@ -179,13 +179,18 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
         setSelectedAppointment(item);
         navigation.navigate('VetDate', {
           isEdit: true,
-          ...selectedAppointment?.admin_settings,
-          appointment_end_time: selectedAppointment?.end_time,
-          appointment_start_time: selectedAppointment?.start_time,
-          // card_id: selectedAppointment?.card_id,
-          id: selectedAppointment?.id,
-          date: selectedAppointment?.date,
-          pet: selectedAppointment?.pet,
+          ...item?.admin_settings,
+          appointment_end_time: item?.end_time,
+          appointment_start_time: item?.start_time,
+          // card_id: item?.card_id,
+          id: item?.id,
+          date: item?.date,
+          directory_id: item?.admin_settings,
+          pet: {
+            petId: item?.pet?.id,
+            petName: item?.pet?.name,
+          },
+          services: item?.services,
           // has_reschedule_penalty: hasReschedulePenalty(),
         });
       }}
