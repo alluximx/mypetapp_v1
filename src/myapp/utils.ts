@@ -77,3 +77,17 @@ export const formatPrice = (price: number): string => {
     .toFixed(2)
     .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
+
+/**
+ * Formats the services string to remove the price of the service.
+ *
+ * @param servicesString String with the list of services with
+ * its price sepparated by a comma.
+ * @returns Only the name of the services.
+ */
+export const formatServices = (servicesString: string): string => {
+  return servicesString
+    .split(/ - \$\S*/)
+    .filter(Boolean)
+    .join(', ');
+};

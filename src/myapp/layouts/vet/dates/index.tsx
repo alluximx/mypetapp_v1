@@ -28,7 +28,7 @@ import TitleHeader from '../../../components/texts/title-header';
 import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
 // Utils
-import {formatPrice} from '../../../utils';
+import {formatPrice, formatServices} from '../../../utils';
 
 const NUM_COLUMNS = 4;
 
@@ -94,13 +94,6 @@ export default ({navigation, route}): React.ReactElement => {
    *** Functions ***
    *****************/
 
-  const formatServices = (servicesString: string): string => {
-    return servicesString
-      .split(/ - \$\S*/)
-      .filter(Boolean)
-      .join(', ');
-  };
-
   const setValueForm = (day: string) => setForm({...form, day});
   const setValueTime = (time: string) => {
     const formattedTime = moment(time, 'h:mm A');
@@ -122,8 +115,10 @@ export default ({navigation, route}): React.ReactElement => {
           setIsLoading(false);
         },
         onSuccess: () => {
-          setIsLoading(false);
           setIsModalSubmitVisible(true);
+        },
+        onSettled: () => {
+          setIsLoading(false);
         },
       });
     } else {
@@ -169,6 +164,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const [form, setForm] = useState({
     admin,
+    amount: 0,
     // card_id,
     date: date ?? '',
     day: '',
@@ -222,10 +218,10 @@ export default ({navigation, route}): React.ReactElement => {
         pet_size: sizeId,
       });
       if (petId !== form.pet) {
-        setForm({
-          ...form,
+        setForm((currentForm) => ({
+          ...currentForm,
           services: '',
-        });
+        }));
         setServiceContent('');
       }
     }
@@ -260,8 +256,11 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (form.services) {
+      setServiceContent(formatServices(form.services));
       const calculatedTotal = form.services
         .split(/\S*\w+ - \$*/)
+        .join('')
+        .split(', ')
         .reduce((sum, item: string) => sum + Number(item), 0);
       setTotal(formatPrice(calculatedTotal));
     }
@@ -372,6 +371,7 @@ export default ({navigation, route}): React.ReactElement => {
                 screenToReturn: 'VetDate',
                 screenFrom: isSalon ? 'AestheticDate' : screenFrom,
                 sizeId: pet?.sizeId,
+                services: form?.services,
               }}
               destination="ServiceSelect"
               isDisabled={form.pet === ''}
@@ -431,7 +431,6 @@ export default ({navigation, route}): React.ReactElement => {
         form.services !== '' &&
         form.services.split(', ').map((service, index) => {
           const serviceSplitted = service.split(' - ');
-          console.log(form.services);
           const serviceName = serviceSplitted[0];
           const servicePrice = serviceSplitted[1];
           return (

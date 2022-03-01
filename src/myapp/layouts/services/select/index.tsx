@@ -12,27 +12,44 @@ import DefaultText from '../../../components/texts/default-text';
 import IndividualOptionSelect from '../../../components/inputs/individual-option-select';
 import TitleHeader from '../../../components/texts/title-header';
 // Utils
-import {formatPrice} from '../../../utils';
+import {formatPrice, formatServices} from '../../../utils';
 
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [data, setData] = useState([]);
-  const {admin, serviceIndexes, screenToReturn, screenFrom, sizeId} =
+  const {admin, services, screenToReturn, screenFrom, sizeId} =
     route.params ?? {};
 
-  const [servicesSelected, setServicesSelected] = useState(
-    serviceIndexes ?? [],
-  );
+  const [servicesSelected, setServicesSelected] = useState([]);
 
-  const salonsData = useGetSalonServices(admin, sizeId);
-  const isDisabled = servicesSelected.length === 0 || data.length === 0;
+  const salonServicesData = useGetSalonServices(admin, sizeId);
 
   useEffect(() => {
-    if (salonsData.isSuccess && salonsData.data?.data) {
-      setData(salonsData.data.data);
+    setIsDisabled(servicesSelected.length === 0 || data.length === 0);
+  }, [data, salonServicesData]);
+
+  useEffect(() => {
+    if (salonServicesData.isSuccess && salonServicesData.data?.data) {
+      setData(salonServicesData.data.data);
       setIsLoading(false);
+
+      if (services) {
+        const storedServices = salonServicesData.data.data.map(
+          (salonService) => {
+            const servicesList = formatServices(services)
+              .split(', ')
+              .map((service) => service.trim());
+
+            if (servicesList.includes(salonService.product?.name)) {
+              return salonService.id;
+            }
+          },
+        );
+        setServicesSelected(storedServices);
+      }
     }
-  }, [salonsData.isSuccess]);
+  }, [salonServicesData.isSuccess]);
 
   const onRightPress = () => {
     const servicesList = servicesSelected.reduce(
@@ -94,7 +111,7 @@ export default ({navigation, route}): React.ReactElement => {
     </DefaultText>
   );
 
-  return isLoading || salonsData.isLoading ? (
+  return isLoading || salonServicesData.isLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout>

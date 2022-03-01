@@ -13,7 +13,8 @@ const useUpdateAppointment = (isSalon: boolean = false) => {
 
   return useMutation((data: any) => putAppointment(data, isSalon), {
     onSuccess: () => {
-      queryClient.invalidateQueries('my-appointments');
+      queryClient.invalidateQueries('my-vet-appointments');
+      queryClient.invalidateQueries('my-salon-appointments');
     },
   });
 };
