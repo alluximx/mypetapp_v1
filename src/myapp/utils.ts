@@ -93,7 +93,7 @@ export const formatServices = (servicesString: string): string => {
 };
 
 /**
- * Removes an existings screen from the stack if exists and then
+ * Removes a screen from the stack if already exists and then
  * navigates to it.
  *
  * @param routeName Name of the route.
