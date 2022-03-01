@@ -25,32 +25,6 @@ export default ({navigation, route}): React.ReactElement => {
 
   const salonServicesData = useGetSalonServices(admin, sizeId);
 
-  useEffect(() => {
-    setIsDisabled(servicesSelected.length === 0 || data.length === 0);
-  }, [data, salonServicesData]);
-
-  useEffect(() => {
-    if (salonServicesData.isSuccess && salonServicesData.data?.data) {
-      setData(salonServicesData.data.data);
-      setIsLoading(false);
-
-      if (services) {
-        const storedServices = salonServicesData.data.data.map(
-          (salonService) => {
-            const servicesList = formatServices(services)
-              .split(', ')
-              .map((service) => service.trim());
-
-            if (servicesList.includes(salonService.product?.name)) {
-              return salonService.id;
-            }
-          },
-        );
-        setServicesSelected(storedServices);
-      }
-    }
-  }, [salonServicesData.isSuccess]);
-
   const onRightPress = () => {
     const servicesList = servicesSelected.reduce(
       (previousService, currentService, index: number) => {
@@ -72,6 +46,33 @@ export default ({navigation, route}): React.ReactElement => {
       screenFrom: screenFrom,
     });
   };
+
+  useEffect(() => {
+    setIsDisabled(servicesSelected.length === 0 || data.length === 0);
+  }, [data, salonServicesData]);
+
+  useEffect(() => {
+    if (salonServicesData.isSuccess && salonServicesData.data?.data) {
+      setData(salonServicesData.data.data);
+      setIsLoading(false);
+
+      if (services) {
+        const storedServices = salonServicesData.data.data.map(
+          (salonService) => {
+            const servicesList = formatServices(services)
+              .split(', ')
+              .map((service) => service.trim());
+
+            if (servicesList.includes(salonService.product?.name)) {
+              return salonService.id;
+            }
+          },
+        );
+
+        setServicesSelected(storedServices.filter(Boolean));
+      }
+    }
+  }, [salonServicesData.isSuccess]);
 
   useSetNavigationHeaders({
     isDisabled,
