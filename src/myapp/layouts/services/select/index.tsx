@@ -17,14 +17,14 @@ import {formatPrice} from '../../../utils';
 export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState([]);
-  const {directoryId, serviceIndexes, screenToReturn, screenFrom, sizeId} =
+  const {admin, serviceIndexes, screenToReturn, screenFrom, sizeId} =
     route.params ?? {};
 
   const [servicesSelected, setServicesSelected] = useState(
     serviceIndexes ?? [],
   );
 
-  const salonsData = useGetSalonServices(directoryId, sizeId);
+  const salonsData = useGetSalonServices(admin, sizeId);
   const isDisabled = servicesSelected.length === 0 || data.length === 0;
 
   useEffect(() => {
@@ -36,13 +36,14 @@ export default ({navigation, route}): React.ReactElement => {
 
   const onRightPress = () => {
     const servicesList = servicesSelected.reduce(
-      (previousService, currentService) => {
+      (previousService, currentService, index: number) => {
         const serviceData = data.find((item) => item?.id === currentService);
         return (
           previousService +
           `${serviceData?.product?.name} - $${formatPrice(
             serviceData?.price,
-          )}\n`
+          )}` +
+          (index === servicesSelected.length - 1 ? '' : ', ')
         );
       },
       '',

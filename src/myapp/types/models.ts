@@ -50,6 +50,10 @@ export interface Appointment {
     file: string;
     id: string;
   }[];
+  pet_size?: {
+    id: string;
+    name: string;
+  };
   rate?: number;
   services?: string;
   start_time?: string;

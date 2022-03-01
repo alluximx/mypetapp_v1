@@ -189,6 +189,8 @@ const NextServicesList = (props: NextServicesListProps): React.ReactElement => {
           pet: {
             petId: item?.pet?.id,
             petName: item?.pet?.name,
+            sizeId: item?.pet_size?.id,
+            sizeName: item?.pet_size?.name,
           },
           services: item?.services,
           // has_reschedule_penalty: hasReschedulePenalty(),

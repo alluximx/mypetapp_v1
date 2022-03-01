@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
 import 'moment/locale/es';
 import {AxiosError} from 'axios';
-import {StyleSheet, View, TouchableOpacity, Dimensions} from 'react-native';
+import {StyleSheet, View, Dimensions} from 'react-native';
 import moment from 'moment';
 // Global Styles
 import globalVars from '../../../styles/vars';
@@ -11,7 +11,6 @@ import globalColors from '../../../styles/colors';
 import useAddAppointment from '../../../hooks/vets/useAddAppointment';
 import useAdminAppointments from '../../../hooks/vets/useAdminAppointments';
 // import useGetPaymentMethod from '../../../hooks/payment-method/useGetPaymentMethod';
-import useGetPet from '../../../hooks/user/useGetPet';
 import useUpdateAppointment from '../../../hooks/vets/useUpdateAppointment';
 // My Components
 // import {QuestionCircleIcon} from '../../../components/icons';
@@ -30,7 +29,6 @@ import {getAvailableDays, getAvailableHours} from './utils';
 import {Option, OptionDate} from '../../../types/components/inputs';
 // Utils
 import {formatPrice} from '../../../utils';
-import {BaseModel} from '../../../types/models';
 
 const NUM_COLUMNS = 4;
 
@@ -53,9 +51,7 @@ export default ({navigation, route}): React.ReactElement => {
     error: '',
   });
   const [petContent, setPetContent] = useState('');
-  const [serviceIndexesList, setServiceIndexesList] = useState([]);
   const [serviceContent, setServiceContent] = useState('');
-  const [size, setSize] = useState<BaseModel>();
   const [total, setTotal] = useState('');
 
   const {
@@ -66,7 +62,6 @@ export default ({navigation, route}): React.ReactElement => {
     // cancel_penalty,
     // card_id,
     date,
-    directoryId,
     // has_reschedule_penalty,
     id,
     isEdit,
@@ -75,8 +70,8 @@ export default ({navigation, route}): React.ReactElement => {
     // reschedule_penalty,
     // paymentMethod,
     pet,
+    pet_size,
     services,
-    serviceIndexes,
     screenFrom,
     serviceData,
     start_time,
@@ -93,28 +88,18 @@ export default ({navigation, route}): React.ReactElement => {
   const addAppointmentQuery = useAddAppointment(admin, isSalon);
   const adminAppointments = useAdminAppointments(admin, isSalon);
   // const cardData = useGetPaymentMethod(card_id, isEdit);
-  const petData = useGetPet(pet.petId, pet.petId === undefined);
   const updateAppointmentQuery = useUpdateAppointment(isSalon);
-
-  const [form, setForm] = useState({
-    admin,
-    // card_id,
-    date: date ?? '',
-    day: '',
-    end_time: '',
-    // has_cancel_penalty: false,
-    // has_reschedule_penalty: has_reschedule_penalty ?? false,
-    id: id ?? '',
-    // paymentMethod: '',
-    pet: pet ?? '',
-    services: '',
-    start_time: appointment_start_time ?? '',
-    time: '',
-  });
 
   /*****************
    *** Functions ***
    *****************/
+
+  const formatServices = (servicesString: string): string => {
+    return servicesString
+      .split(/ - \$\S*/)
+      .filter(Boolean)
+      .join(', ');
+  };
 
   const setValueForm = (day: string) => setForm({...form, day});
   const setValueTime = (time: string) => {
@@ -182,6 +167,27 @@ export default ({navigation, route}): React.ReactElement => {
     navigation.navigate('NextServices');
   };
 
+  /************
+   *** Form ***
+   ************/
+
+  const [form, setForm] = useState({
+    admin,
+    // card_id,
+    date: date ?? '',
+    day: '',
+    end_time: '',
+    // has_cancel_penalty: false,
+    // has_reschedule_penalty: has_reschedule_penalty ?? false,
+    id: id ?? '',
+    // paymentMethod: '',
+    pet: pet?.petId ?? '',
+    services: services ?? '',
+    start_time: appointment_start_time ?? '',
+    time: '',
+    pet_size: pet_size?.id ?? '',
+  });
+
   /***************
    *** Effects ***
    ***************/
@@ -212,35 +218,30 @@ export default ({navigation, route}): React.ReactElement => {
 
   useEffect(() => {
     if (pet) {
-      const {petId, petName, sizeName} = pet;
+      const {petId, petName, sizeName, sizeId} = pet;
       setPetContent(isSalon ? petName + ' - ' + sizeName : petName);
-      setForm({...form, pet: petId, services: ''});
-      setServiceIndexesList([]);
-      setServiceContent('');
+      setForm({
+        ...form,
+        pet: petId,
+        pet_size: sizeId,
+      });
+      if (petId !== form.pet) {
+        setForm({
+          ...form,
+          services: '',
+        });
+        setServiceContent('');
+      }
     }
   }, [pet]);
 
   useEffect(() => {
-    if (petData.isSuccess) {
-      const {size: currentSize} = petData?.data?.data ?? {};
-      setSize(currentSize);
-      setPetContent(
-        isSalon ? pet.petName + ' - ' + currentSize?.name : pet.petName,
-      );
-    }
-  }, [petData]);
-
-  useEffect(() => {
-    if (serviceIndexes) {
-      setServiceIndexesList(serviceIndexes);
+    if (serviceData) {
       setForm({...form, services: serviceData});
-      const formattedServices = serviceData
-        .split(/ - \$\S*\n/)
-        .filter(Boolean)
-        .join(', ');
+      const formattedServices = formatServices(serviceData);
       setServiceContent(formattedServices);
     }
-  }, [serviceIndexes]);
+  }, [serviceData]);
 
   useEffect(() => {
     if (date && days.length) {
@@ -262,13 +263,16 @@ export default ({navigation, route}): React.ReactElement => {
   }, [hours]);
 
   useEffect(() => {
-    const calculatedTotal = form.services
-      .split(/\S*\w+ - \$*/)
-      .join('')
-      .split('\n')
-      .filter(Boolean)
-      .reduce((sum, item: string) => sum + Number(item), 0);
-    setTotal(formatPrice(calculatedTotal));
+    if (form.services) {
+      const calculatedTotal = form.services
+        .split(/\S*\w+ - \$*/)
+        .join('')
+        .split('\n')
+        .filter(Boolean)
+        .reduce((sum, item: string) => sum + Number(item), 0);
+      setServiceContent(formatServices(services));
+      setTotal(formatPrice(calculatedTotal));
+    }
   }, [form.services]);
 
   // useEffect(() => {
@@ -358,7 +362,7 @@ export default ({navigation, route}): React.ReactElement => {
             data={{
               screenToReturn: 'VetDate',
               petId: form.pet,
-              sizeId: size?.id ?? pet?.sizeId,
+              sizeId: pet?.sizeId,
               screenFrom: isSalon ? 'AestheticDate' : screenFrom,
             }}
             title="Mascota"
@@ -372,11 +376,10 @@ export default ({navigation, route}): React.ReactElement => {
             </TitleHeader>
             <NavigateButton
               data={{
-                directoryId,
-                serviceIndexes: serviceIndexesList,
+                admin,
                 screenToReturn: 'VetDate',
                 screenFrom: isSalon ? 'AestheticDate' : screenFrom,
-                sizeId: size?.id ?? pet?.sizeId,
+                sizeId: pet?.sizeId,
               }}
               destination="ServiceSelect"
               isDisabled={form.pet === ''}
@@ -439,7 +442,7 @@ export default ({navigation, route}): React.ReactElement => {
           .filter(Boolean)
           .map((service, index) => {
             const serviceSplitted = service.split(' - ');
-            service.split(' - ');
+            console.log(form.services);
             const serviceName = serviceSplitted[0];
             const servicePrice = serviceSplitted[1];
             return (
@@ -462,12 +465,17 @@ export default ({navigation, route}): React.ReactElement => {
       {!isEdit &&
         // has_reschedule_penalty ||
         ((isSalon && form.services !== '') || !isSalon) && (
-          <View style={styles.totalContainer}>
-            <TitleHeader style={styles.leftSide}>Total</TitleHeader>
-            <TitleHeader style={styles.rightSide}>
-              ${!isSalon ? baseCharge : total}
-            </TitleHeader>
-          </View>
+          <>
+            <View style={styles.totalContainer}>
+              <TitleHeader style={styles.leftSide}>Total</TitleHeader>
+              <TitleHeader style={styles.rightSide}>
+                ${!isSalon ? baseCharge : total}
+              </TitleHeader>
+            </View>
+            <DefaultText style={styles.totalMessage}>
+              Este es el monto que deberás pagar en el establecimiento.
+            </DefaultText>
+          </>
         )}
       <DefaultText style={error?.error && styles.error}>
         {error?.error}
@@ -483,7 +491,7 @@ export default ({navigation, route}): React.ReactElement => {
     </View>
   );
 
-  return adminAppointments.isLoading || petData.isLoading ? (
+  return adminAppointments.isLoading ? (
     // cardData.isLoading
     <CustomSpinner />
   ) : (
@@ -618,4 +626,7 @@ const styles = StyleSheet.create({
   },
   leftSide: {justifyContent: 'flex-start'},
   rightSide: {justifyContent: 'flex-end'},
+  totalMessage: {
+    marginBottom: 16,
+  },
 });
