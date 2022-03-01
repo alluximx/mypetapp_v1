@@ -13,11 +13,15 @@ import {NavigateButtonProps} from '../../types/components/buttons';
 const NavigateButton = (props: NavigateButtonProps): React.ReactElement => {
   const navigation = useNavigation();
   const navigateToScreen = () => {
-    if (props.data) {
-      props.destination &&
-        navigation.navigate(props.destination, {...props.data});
+    if (props.onPress) {
+      props.onPress();
     } else {
-      props.destination && navigation.navigate(props.destination);
+      if (props.data) {
+        props.destination &&
+          navigation.navigate(props.destination, {...props.data});
+      } else {
+        props.destination && navigation.navigate(props.destination);
+      }
     }
   };
 

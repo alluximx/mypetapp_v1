@@ -20,6 +20,7 @@ export interface NavigateButtonProps {
   data?: {};
   destination: string;
   isDisabled?: boolean;
+  onPress?: () => void;
   placeholder?: string;
   subtitle?: string;
   title?: string;
