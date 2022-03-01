@@ -91,3 +91,33 @@ export const formatServices = (servicesString: string): string => {
     .filter(Boolean)
     .join(', ');
 };
+
+/**
+ * Removes an existings screen from the stack if exists and then
+ * navigates to it.
+ *
+ * @param routeName Name of the route.
+ * @param params Parameters of the route.
+ */
+export const removeBeforeNavigation = (
+  navigation,
+  routeName: string,
+  params: any,
+) => {
+  navigation.dispatch((state) => {
+    // Remove the vet date route from the stack if already existed
+    const routes = state.routes.filter((r) => r.name !== 'VetDate');
+
+    return CommonActions.reset({
+      ...state,
+      routes: [
+        ...routes,
+        {
+          name: routeName,
+          params,
+        },
+      ],
+      index: routes.length - 1,
+    });
+  });
+};

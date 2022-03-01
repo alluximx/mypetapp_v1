@@ -13,6 +13,8 @@ import DefaultText from '../../../components/texts/default-text';
 import NavigateButton from '../../../components/buttons/navigate-button';
 import RatingCard from '../../../components/cards/rating-card';
 import TitleHeader from '../../../components/texts/title-header';
+// Utils
+import {removeBeforeNavigation} from '../../../utils';
 
 export default ({navigation, route}): React.ReactElement => {
   const data = route.params.data;
@@ -77,12 +79,14 @@ export default ({navigation, route}): React.ReactElement => {
           {!isLoading && shouldCallSettings && (
             <View style={styles.dateButton}>
               <NavigateButton
-                data={{
-                  screenFrom: 'AestheticDate',
-                  directoryId: id,
-                  ...vetSettings,
-                }}
                 destination="VetDate"
+                onPress={() =>
+                  removeBeforeNavigation(navigation, 'VetDate', {
+                    screenFrom: 'AestheticDate',
+                    directoryId: id,
+                    ...vetSettings,
+                  })
+                }
                 placeholder="Generar Cita"
               />
             </View>

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import _ from 'lodash';
 import 'moment/locale/es';
 import {AxiosError} from 'axios';
+import {CommonActions} from '@react-navigation/native';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import moment from 'moment';
 // Global Styles
@@ -155,7 +156,11 @@ export default ({navigation, route}): React.ReactElement => {
   const onAcceptSubmit = () => {
     setIsLoading(false);
     setIsModalSubmitVisible(false);
-    navigation.navigate('NextServices');
+    navigation.dispatch(
+      CommonActions.reset({
+        routes: [{name: 'Home'}, {name: 'NextServices'}],
+      }),
+    );
   };
 
   /************

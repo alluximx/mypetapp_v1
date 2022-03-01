@@ -26,7 +26,7 @@ export default ({navigation, route}): React.ReactElement => {
 
   const {isSalon, petId, screenToReturn, sizeId, screenFrom} =
     route.params ?? {};
-  const dataSizes = useSizes(!isSalon);
+  const dataSizes = useSizes(isSalon);
 
   const [hasPets, setHasPets] = useState(false);
   const [pets, setPets] = useState([]);
