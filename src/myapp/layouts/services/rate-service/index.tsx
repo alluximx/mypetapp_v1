@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {Alert, ScrollView, StyleSheet} from 'react-native';
 import {useRoute} from '@react-navigation/native';
 // Hooks.
 import useRateAppointment from '../../../hooks/vets/useRateAppointment';
@@ -23,7 +23,7 @@ export default ({navigation}): React.ReactElement => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const rateQuery = useRateAppointment(route.params.services !== '');
+  const rateQuery = useRateAppointment(route.params.services !== undefined);
 
   const onSubmit = () => {
     setIsLoading(true);
@@ -33,9 +33,13 @@ export default ({navigation}): React.ReactElement => {
         ...data,
       },
       {
-        onSuccess: () => {
-          setModalVisible(true);
-        },
+        onSuccess: () => setModalVisible(true),
+        onError: () =>
+          Alert.alert(
+            'Error',
+            'Hubo un problema al guardar la calificación. Intenta nuevamente más tarde',
+          ),
+        onSettled: () => setIsLoading(false),
       },
     );
   };

@@ -355,6 +355,7 @@ export default ({navigation, route}): React.ReactElement => {
               petId: form.pet,
               sizeId: pet?.sizeId,
               screenFrom: isSalon ? 'AestheticDate' : screenFrom,
+              isSalon: isSalon,
             }}
             title="Mascota"
             subtitle={petContent}
