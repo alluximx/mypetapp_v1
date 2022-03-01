@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {StyleService, useStyleSheet, List} from '@ui-kitten/components';
+// Context
+import {AuthContext} from '../../../context/AuthContext';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
@@ -12,25 +14,27 @@ import OptionSelect from '../../../components/inputs/option-select';
 import PetCard from '../../../components/cards/pet-card';
 import TitleHeader from '../../../components/texts/title-header';
 // Hooks
-import useMyNameAndPets from '../../../hooks/user/useMyNameAndPets';
+import useMyPets from '../../../hooks/user/useMyPets';
 import useSizes from '../../../hooks/pets/useSizes';
+// Types
 import {Pet} from '../../../types/models';
 
 export default ({navigation, route}): React.ReactElement => {
+  const authContext = useContext(AuthContext);
   const styles = useStyleSheet(themedStyles);
-  const petsData = useMyNameAndPets();
+  const petsData = useMyPets(authContext.userId);
 
-  const {petId, screenToReturn, sizeId, screenFrom} = route.params ?? {};
-  const dataSizes = useSizes(screenFrom && screenFrom !== 'VetDate');
+  const {isSalon, petId, screenToReturn, sizeId, screenFrom} =
+    route.params ?? {};
+  const dataSizes = useSizes(!isSalon);
 
   const [hasPets, setHasPets] = useState(false);
   const [pets, setPets] = useState([]);
   const [sizes, setSizes] = useState([]);
 
   const [pet, setPet] = useState<Pet>();
+  const [isDisabled, setIsDisabled] = useState(false);
   const [petSize, setPetSize] = useState('');
-
-  const isDisabled = screenFrom === 'VetDate' ? !pet : !pet || !petSize;
 
   navigation.setOptions({
     headerRight: () => (
@@ -79,9 +83,9 @@ export default ({navigation, route}): React.ReactElement => {
   }, [sizeId, petId, pets]);
 
   useEffect(() => {
-    if (petsData.pets?.length) {
+    if (petsData.isSuccess) {
       setHasPets(true);
-      setPets(petsData.pets);
+      setPets(petsData.data?.data);
     }
   }, [petsData]);
 
@@ -93,6 +97,10 @@ export default ({navigation, route}): React.ReactElement => {
       setSizes(dataFormatted);
     }
   }, [dataSizes.data]);
+
+  useEffect(() => {
+    setIsDisabled(!isSalon ? !pet : !pet || !petSize);
+  }, [screenFrom, pet, petSize]);
 
   /**********************
    *** Render Methods ***
@@ -115,13 +123,13 @@ export default ({navigation, route}): React.ReactElement => {
     />
   );
 
-  const renderEmptyPetList = (
+  const renderEmptyPetList = () => (
     <DefaultText style={styles.emptyText}>
       Aún no tienes mascotas agregadas.
     </DefaultText>
   );
 
-  const renderSizesHeader = (
+  const renderSizesHeader = () => (
     <>
       <TitleHeader style={styles.paddingHorizontal}>
         Selecciona tu mascota

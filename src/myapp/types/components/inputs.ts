@@ -38,7 +38,7 @@ export interface OptionSelectProps {
   emptyComponent?: React.ReactElement;
   enableScroll?: boolean;
   footerComponent?: React.ReactElement;
-  headerComponent?: React.ReactElement;
+  headerComponent?: React.ReactElement | (() => React.ReactElement);
   horizontal?: boolean;
   numColumns?: number;
   optionStyle?: {};
