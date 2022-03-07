@@ -26,10 +26,11 @@ class FCMService {
       });
 
   checkPermission = async () => {
-    const enabled = await messaging().hasPermission();
-    if (enabled) {
+    const authStatus = await messaging().hasPermission();
+    if (authStatus === messaging.AuthorizationStatus.AUTHORIZED) {
       this.getToken();
     } else {
+      console.log('Requesting permission');
       this.requestPermission();
     }
   };
