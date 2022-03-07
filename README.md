@@ -38,7 +38,6 @@ and
 
 `cd node_modules/react-native/third-party/glog-0.3.5/ && ../../scripts/ios-configure-glog.sh && cd ../../../../`
 
-
 # Required fix < React native 0.63.2
 
 `https://stackoverflow.com/questions/64016070/react-native-image-is-not-loaded-in-ios-14-upgrade `
@@ -57,11 +56,11 @@ and
 
 ## Deep links for the Push Notifications
 
-| Notification                           | Screen            | Link                                                |
-|----------------------------------------|-------------------|-----------------------------------------------------|
-| Orders Status Changes                  | Orders Detail     | `dogit://orders/{{order_id}}`                       |
-| Vaccine Reminder                       | Vaccine Detail    | `dogit://pets/{{pet_id}}/vaccines/{{vaccine_id}}`   |
-| Deworming Reminder                     | Deworming Detail  | `dogit://pets/{{pet_id}}/dewormings/{{vaccine_id}}` |
-| Payments                               | Appointments List | `dogit://appointments`                              |
-| Appointment Status Changes / Reminders | Appointments List | `dogit://appointments`                              |
-| Rate appointment reminder              | Rate appointment  | `dogit://appointments/{{appointment_id}}/rate`      |
+| Notification                           | Screen            | Link                                                       |
+| -------------------------------------- | ----------------- | ---------------------------------------------------------- |
+| Orders Status Changes                  | Orders Detail     | `dogit://orders/{{order_id}}`                              |
+| Vaccine Reminder                       | Vaccine Detail    | `dogit://pets/{{pet_id}}/vaccines/{{vaccine_id}}`          |
+| Deworming Reminder                     | Deworming Detail  | `dogit://pets/{{pet_id}}/dewormings/{{vaccine_id}}`        |
+| Payments                               | Appointments List | `dogit://appointments`                                     |
+| Appointment Status Changes / Reminders | Appointments List | `dogit://appointments`                                     |
+| Rate appointment reminder              | Rate appointment  | `dogit://appointments/{{appointment_id}}/rate/{{isSalon}}` |

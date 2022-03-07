@@ -98,7 +98,7 @@ export default ({navigation, route}): React.ReactElement => {
     data: {...form, etiquetteImage},
   });
 
-  useEnforceScreenOnBack('VaccinesIndex', {pet: {id: form.user_pet}});
+  useEnforceScreenOnBack('VaccinesIndex', {pet: {id: route.params.petId}});
 
   /******************************
    *** Post data load effects ***

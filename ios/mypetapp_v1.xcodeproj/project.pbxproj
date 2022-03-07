@@ -932,6 +932,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mypetapp_v1/mypetapp_v1.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NBT435V5M8;
 				ENABLE_BITCODE = NO;
@@ -947,12 +949,51 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
-				OTHER_LDFLAGS = (
+				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"-ObjC",
-					"-lc++",
+					"${PODS_CONFIGURATION_BUILD_DIR}/BVLinearGradient",
+					"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion",
+					"${PODS_CONFIGURATION_BUILD_DIR}/FBReactNativeSpec",
+					"${PODS_CONFIGURATION_BUILD_DIR}/Folly",
+					"${PODS_CONFIGURATION_BUILD_DIR}/Google-Maps-iOS-Utils",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNCMaskedView",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNCPicker",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNGestureHandler",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNReanimated",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNScreens",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon",
+					"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController",
+					"${PODS_CONFIGURATION_BUILD_DIR}/Yoga",
+					"${PODS_CONFIGURATION_BUILD_DIR}/glog",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-appearance",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-geolocation",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-google-maps",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-image-picker",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context",
+					"${PODS_CONFIGURATION_BUILD_DIR}/rn-fetch-blob",
 				);
+				MARKETING_VERSION = 1.11;
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.ibapol.dogit;
 				PRODUCT_NAME = mypetapp_v1;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -968,6 +1009,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mypetapp_v1/mypetapp_v1.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NBT435V5M8;
 				EXCLUDED_ARCHS = "";
@@ -978,13 +1020,52 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.6;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
+				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"-ObjC",
-					"-lc++",
+					"${PODS_CONFIGURATION_BUILD_DIR}/BVLinearGradient",
+					"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion",
+					"${PODS_CONFIGURATION_BUILD_DIR}/FBReactNativeSpec",
+					"${PODS_CONFIGURATION_BUILD_DIR}/Folly",
+					"${PODS_CONFIGURATION_BUILD_DIR}/Google-Maps-iOS-Utils",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNCMaskedView",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNCPicker",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNGestureHandler",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNImageCropPicker",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNReanimated",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG",
+					"${PODS_CONFIGURATION_BUILD_DIR}/RNScreens",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon",
+					"${PODS_CONFIGURATION_BUILD_DIR}/TOCropViewController",
+					"${PODS_CONFIGURATION_BUILD_DIR}/Yoga",
+					"${PODS_CONFIGURATION_BUILD_DIR}/glog",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-appearance",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-geolocation",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-google-maps",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-image-picker",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-maps",
+					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context",
+					"${PODS_CONFIGURATION_BUILD_DIR}/rn-fetch-blob",
 				);
+				MARKETING_VERSION = 1.11;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.ibapol.dogit;
 				PRODUCT_NAME = mypetapp_v1;
 				SWIFT_VERSION = 5.0;
@@ -1146,7 +1227,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1213,7 +1294,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				EXCLUDED_ARCHS = "";
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
