@@ -136,11 +136,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.mypetapp_v1"
+        applicationId "com.d_it"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName '1.9.0'
+        versionCode 1
+        versionName '1.0.0'
     }
     splits {
         abi {

@@ -132,7 +132,7 @@ export default ({navigation}): React.ReactElement => {
           ) : (
             <>
               <DefaultText style={styles.subtitle}>
-                Ingresa el correo registrado en Dogit y te enviaremos
+                Ingresa el correo registrado en D it y te enviaremos
                 instrucciones para recuperar tu contraseña.
               </DefaultText>
               <UserInput

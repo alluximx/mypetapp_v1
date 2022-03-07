@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:779405092066:android:2b205f9d6c2683fc95eabb",
         "android_client_info": {
-          "package_name": "com.mypetapp_v1"
+          "package_name": "com.d_it"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "779405092066-cs8j8vkjvrovk0ljjcb6favudvot9i38.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mypetapp_v1",
+            "package_name": "com.d_it",
             "certificate_hash": "dd21f557c2e9c224fd760a7f687be781867666ad"
           }
         },
