@@ -934,7 +934,7 @@
 				CODE_SIGN_ENTITLEMENTS = mypetapp_v1/mypetapp_v1.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NBT435V5M8;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -992,7 +992,7 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context",
 					"${PODS_CONFIGURATION_BUILD_DIR}/rn-fetch-blob",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.11;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.ibapol.dogit;
 				PRODUCT_NAME = mypetapp_v1;
@@ -1010,7 +1010,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mypetapp_v1/mypetapp_v1.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = NBT435V5M8;
 				EXCLUDED_ARCHS = "";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1063,7 +1063,7 @@
 					"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context",
 					"${PODS_CONFIGURATION_BUILD_DIR}/rn-fetch-blob",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.11;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = org.ibapol.dogit;

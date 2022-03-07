@@ -81,7 +81,7 @@ export default ({navigation, route}): React.ReactElement => {
     data: form,
   });
 
-  useEnforceScreenOnBack('DewormingHistory', {pet: {id: form.user_pet}});
+  useEnforceScreenOnBack('DewormingHistory', {pet: {id: route.params.petId}});
 
   useEffect(() => {
     if (!vaccineLoading) {

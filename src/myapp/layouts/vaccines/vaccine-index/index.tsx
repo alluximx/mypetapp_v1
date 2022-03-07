@@ -129,7 +129,7 @@ export default ({navigation, route}): React.ReactElement => {
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, route.params]);
 
   return vaccinesQuery.isLoading ? (
     <CustomSpinner />
