@@ -30,7 +30,6 @@ class FCMService {
     if (authStatus === messaging.AuthorizationStatus.AUTHORIZED) {
       this.getToken();
     } else {
-      console.log('Requesting permission');
       this.requestPermission();
     }
   };
