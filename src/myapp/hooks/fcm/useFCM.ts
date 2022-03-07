@@ -5,6 +5,7 @@ import messaging, {
 import notifee, {EventType} from '@notifee/react-native';
 // Services
 import fcmService from '../../services/fcm-service';
+import {Platform} from 'react-native';
 
 const useFCM = (
   onMessage: (
@@ -17,6 +18,9 @@ const useFCM = (
   React.useEffect(() => {
     // Register firebase on init.
     (async () => await fcmService.getToken())();
+    if (Platform.OS === 'ios') {
+      (async () => await fcmService.checkPermission())();
+    }
     // Define message handler when receiving notifications.
     const unsubscribe = messaging().onMessage(onMessage);
     // Triggered when opening notification from Foreground state.
