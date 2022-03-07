@@ -15,7 +15,6 @@ const useEnforceScreenOnBack = (screenName: string, params = {}) => {
     // Check if the previous screen is the same as the desired previous screen.
     const isLastScreen =
       navigationRoutes[navigationRoutes.length - 2]?.name === screenName;
-    console.log(isLastScreen);
 
     if (isFocused && !isLastScreen) {
       navigation.dispatch(insertBeforeLast(screenName, params));
