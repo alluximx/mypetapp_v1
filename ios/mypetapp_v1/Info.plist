@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Dog it</string>
+	<string>D it</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconFiles</key>
@@ -55,17 +55,17 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>DogIt requiere acceso a la cámara para tomar una foto de tu mascota.</string>
+	<string>D-It requiere acceso a la cámara para tomar una foto de tu mascota.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>DogIt require acceso a tu ubicación para localizar servicios cercanos.</string>
+	<string>D-It require acceso a tu ubicación para localizar servicios cercanos.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>DogIt require acceso a tu ubicación para localizar servicios cercanos.</string>
+	<string>D-It require acceso a tu ubicación para localizar servicios cercanos.</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>DogIt requiere acceso al almacenamiento para subir las fotografías de tu mascota.</string>
+	<string>D-It requiere acceso al almacenamiento para subir las fotografías de tu mascota.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>DogIt requiere acceso al almacenamiento para subir las fotografías de tu mascota.</string>
+	<string>D-It requiere acceso al almacenamiento para subir las fotografías de tu mascota.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Bold.ttf</string>
