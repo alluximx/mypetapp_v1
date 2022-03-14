@@ -23,6 +23,7 @@ const ReminderArea = (props): React.ReactElement => {
       onPress={() => {
         props.navigation.navigate(editDestination, {
           vaccineId: props.data.id_record,
+          petId: props.data.petId,
         });
       }}>
       <View style={styles.ViewContainer}>
