@@ -127,6 +127,7 @@ export default ({navigation, route}): React.ReactElement => {
       date: service.item.reminder,
       name: service.item.vaccine_registered.vaccine_name,
       is_vaccine: service.item.is_vaccine,
+      petId: pet.id,
     };
     return <ReminderArea navigation={navigation} data={auxData} />;
   };

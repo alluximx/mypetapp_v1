@@ -138,6 +138,7 @@ export interface VaccineHistory {
   reminder: string | Date;
   user_pet: string;
   vaccine_date: string | Date;
+  vaccine_image_id?: string;
   vaccine_registered: string;
 }
 

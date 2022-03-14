@@ -21,8 +21,8 @@ const useVaccineReminder = (
       );
 
       const dateToRemind = moment(form.next_vaccine_date)
-        .subtract(reminderOption.delay.amount, reminderOption.delay.unit)
-        .format('YYYY-MM-DD 09:00:00');
+        .subtract(reminderOption?.delay?.amount, reminderOption?.delay?.unit)
+        .format('YYYY-MM-DD');
 
       setForm({...form, reminder: dateToRemind});
     }

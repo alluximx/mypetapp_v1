@@ -1,12 +1,10 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
-import moment from 'moment';
-// Constants.
-import {reminderOptions} from '../../../constants';
 // Hooks.
 import useSaveVaccine from '../../../hooks/vaccines/useSaveVaccine';
 import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
+import useVaccineReminder from '../../../hooks/inputs/useVaccineReminder';
 // My Components.
 import CustomSpinner from '../../../components/custom-spinner';
 import DatepickerInput from '../../../components/inputs/date-picker';
@@ -34,8 +32,6 @@ export default ({navigation, route}): React.ReactElement => {
     is_vaccine: true,
   });
 
-  const [isReminderActive, setIsReminderActive] = useState(false);
-  const [reminderKey, setReminderKey] = useState(1);
   const [etiquetteImage, setEtiquetteImage] = useState(null);
   const [isUnique, setIsUnique] = useState(true);
 
@@ -57,21 +53,12 @@ export default ({navigation, route}): React.ReactElement => {
     form.next_vaccine_date === '' ||
     isLoading;
 
-  const onSelectReminder = (key: number) => {
-    setReminderKey(key);
-
-    if (form.next_vaccine_date !== '') {
-      const reminderOption = reminderOptions.find(
-        (option) => option.key === key,
-      );
-
-      const dateToRemind = moment(form.next_vaccine_date)
-        .subtract(reminderOption.delay.amount, reminderOption.delay.unit)
-        .format('YYYY-MM-DD 09:00:00');
-
-      setForm({...form, reminder: dateToRemind});
-    }
-  };
+  const [
+    isReminderActive,
+    setIsReminderActive,
+    reminderKey,
+    onSelectReminder,
+  ] = useVaccineReminder(form, setForm);
 
   const onSavePress = () => saveVaccineQuery.mutate({...form, etiquetteImage});
 

@@ -1,8 +1,6 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import moment from 'moment';
-// Constants.
-import {reminderOptions} from '../../../constants';
 // Global Colors.
 import globalColors from '../../../styles/colors';
 // Hooks.
@@ -13,6 +11,7 @@ import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
 import useSetNavigationHeaders from '../../../hooks/navigation/useSetNavigationHeaders';
 import useUpdateVaccine from '../../../hooks/vaccines/useUpdateVaccine';
 import useVaccineDetail from '../../../hooks/vaccines/useVaccineDetail';
+import useVaccineReminder from '../../../hooks/inputs/useVaccineReminder';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
 import CustomModal from '../../../components/modals/custom-modal';
@@ -28,7 +27,6 @@ export default ({navigation, route}): React.ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUnique, setIsUnique] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [reminderKey, setReminderKey] = useState(1);
   const [etiquetteImage, setEtiquetteImage] = useState(null);
   const [formHasChanged, setFormHasChanged] = useState(false);
   const [imageHasChanged, setImageHasChanged] = useState(false);
@@ -37,9 +35,6 @@ export default ({navigation, route}): React.ReactElement => {
   const imageQuery = useGetVaccineImage(route.params.vaccineId);
   const deleteQuery = useDeleteVaccine();
   const vaccineData = useVaccineDetail(route.params.vaccineId);
-  const [isReminderActive, setIsReminderActive] = useState(
-    vaccineData.data?.data.reminder ? true : false,
-  );
 
   const [form, setForm] = useState({
     user_pet: vaccineData.data?.data.user_pet ?? '',
@@ -73,21 +68,13 @@ export default ({navigation, route}): React.ReactElement => {
       petId: form.user_pet,
     });
 
-  const onSelectReminder = (key: number) => {
-    setReminderKey(key);
-
-    if (form.next_vaccine_date !== '') {
-      const reminderOption = reminderOptions.find(
-        (option) => option.key === key,
-      );
-
-      const dateToRemind = moment(form.next_vaccine_date)
-        .subtract(reminderOption.delay.amount, reminderOption.delay.unit)
-        .format('YYYY-MM-DD 09:00:00');
-
-      setForm({...form, reminder: dateToRemind});
-    }
-  };
+  const [
+    isReminderActive,
+    setIsReminderActive,
+    reminderKey,
+    onSelectReminder,
+    setReminderKey,
+  ] = useVaccineReminder(form, setForm);
 
   useSetNavigationHeaders({
     isDisabled,

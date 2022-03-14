@@ -31,6 +31,7 @@ const VaccineCard = (props): React.ReactElement => {
     } else {
       days === 1 ? (complement = 'día') : (complement = 'días');
     }
+
     return day + ` ` + complement + ` antes`;
   };
 

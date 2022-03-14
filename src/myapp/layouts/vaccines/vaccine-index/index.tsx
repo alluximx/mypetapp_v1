@@ -92,7 +92,7 @@ export default ({navigation, route}): React.ReactElement => {
     const next_vaccine_date = moment(service.item.next_vaccine_date).toDate();
     const notification = moment(service.item.reminder).toDate();
     const substrac = next_vaccine_date.getTime() - notification.getTime();
-    const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24) + 1);
+    const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24));
     const auxData = {
       id: service.item.id_record,
       petId: route.params.pet.id,
