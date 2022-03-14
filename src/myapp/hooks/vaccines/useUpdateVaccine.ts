@@ -13,7 +13,7 @@ const putVaccine = (data, vaccineId) => {
     vaccine_date: moment.utc(data.vaccine_date).format('YYYY-MM-DD'),
     next_vaccine_date: moment.utc(data.next_vaccine_date).format('YYYY-MM-DD'),
     reminder: data.reminder
-      ? moment.utc(data.reminder).format('YYYY-MM-DD 09:00:00')
+      ? moment.utc(data.reminder).format('YYYY-MM-DD')
       : null,
   };
 
