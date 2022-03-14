@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react-native';
 
 Sentry.init({
   dsn:
-    'https://6a879586bd10429e9460792b135da179@o527363.ingest.sentry.io/6247263',
+    'https://2544b1c2d47e4e538e6c9317e4265228@o527363.ingest.sentry.io/6251090',
 });
 
 export default Sentry.wrap(App);
