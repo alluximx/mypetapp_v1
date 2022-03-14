@@ -139,8 +139,8 @@ android {
         applicationId "com.mypetapp_v1"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
-        versionName '1.9.0'
+        versionCode 20
+        versionName '1.9.4'
     }
     splits {
         abi {
