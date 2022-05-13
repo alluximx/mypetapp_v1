@@ -12,7 +12,7 @@ const PreviewableDocsList = (props: any) => {
 
   const renderImageItem = (data: {index: number; item: any}) => {
     const doc = data.item;
-    let result = doc.uri.replace('http://', 'https://');
+    const result = doc.uri.replace('http://', 'https://');
     doc.uri = result;
     return doc.extension !== 'pdf' ? (
       <View style={styles.itemContainer} key={data.index + data.item.uri}>
