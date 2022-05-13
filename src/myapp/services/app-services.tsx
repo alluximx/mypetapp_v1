@@ -1,5 +1,6 @@
 import axios from 'axios';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import {Alert} from 'react-native';
 import enviroments from '../environments';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -89,6 +90,7 @@ class AppServices {
   };
 
   download = async (url: string) => {
+    const android = ReactNativeBlobUtil.android;
     const {dirs} = ReactNativeBlobUtil.fs;
     return ReactNativeBlobUtil.config({
       addAndroidDownloads: {
@@ -97,10 +99,19 @@ class AppServices {
         notification: true,
         mediaScannable: true,
         mime: 'application/pdf',
-        description: 'Descargando documento.',
+        description: 'Descargando...',
         path: dirs.DownloadDir + '/document.pdf',
       },
-    }).fetch('GET', url);
+    })
+      .fetch('GET', url, {})
+      .then((res) => {
+        android.actionViewIntent(res.path(), 'application/pdf');
+      })
+      .catch((errorMessage: any) => {
+        Alert.alert(
+          'Ocurrió un error al descargar el archivo, por favor intenta de nuevo.',
+        );
+      });
   };
 }
 

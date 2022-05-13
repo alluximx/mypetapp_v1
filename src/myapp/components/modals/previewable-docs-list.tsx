@@ -6,13 +6,14 @@ import PreviewableImage from './previewable-image';
 import globalColors from '../../styles/colors';
 import DefaultText from '../texts/default-text';
 import useSaveFileRecipe from '../../hooks/visits/useSaveFileRecipe';
-import ReactNativeBlobUtil from 'react-native-blob-util';
 
 const PreviewableDocsList = (props: any) => {
   const savePetImageQuery = useSaveFileRecipe();
 
   const renderImageItem = (data: {index: number; item: any}) => {
     const doc = data.item;
+    let result = doc.uri.replace('http://', 'https://');
+    doc.uri = result;
     return doc.extension !== 'pdf' ? (
       <View style={styles.itemContainer} key={data.index + data.item.uri}>
         <View style={styles.imageContainer}>
@@ -35,14 +36,7 @@ const PreviewableDocsList = (props: any) => {
         <View style={styles.imageContainer}>
           <TouchableOpacity
             onPress={() => {
-              const android = ReactNativeBlobUtil.android;
-              savePetImageQuery.mutate(data.item.uri, {
-                onSuccess: (res) => {
-                  if (res.path) {
-                    android.actionViewIntent(res.path(), 'application/pdf');
-                  }
-                },
-              });
+              savePetImageQuery.mutate(data.item.uri);
             }}>
             <Image
               source={require('../../assets/images/download-pdf.png')}
