@@ -1,6 +1,6 @@
 import axios from 'axios';
 import ReactNativeBlobUtil from 'react-native-blob-util';
-import {Alert} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import enviroments from '../environments';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -92,20 +92,42 @@ class AppServices {
   download = async (url: string) => {
     const android = ReactNativeBlobUtil.android;
     const {dirs} = ReactNativeBlobUtil.fs;
-    return ReactNativeBlobUtil.config({
-      addAndroidDownloads: {
-        useDownloadManager: true,
+    const dirToSave =
+      Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: true,
         title: 'document.pdf',
-        notification: true,
-        mediaScannable: true,
-        mime: 'application/pdf',
-        description: 'Descargando...',
-        path: dirs.DownloadDir + '/document.pdf',
+        path: dirToSave + '/document.pdf',
+        appendExt: 'pdf',
       },
-    })
+      android: {
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          title: 'document.pdf',
+          notification: true,
+          mediaScannable: true,
+          mime: 'application/pdf',
+          description: 'Descargando...',
+          path: dirToSave + '/document.pdf',
+        },
+      },
+    });
+
+    return ReactNativeBlobUtil.config(configOptions)
       .fetch('GET', url, {})
       .then((res) => {
-        android.actionViewIntent(res.path(), 'application/pdf');
+        if (Platform.OS === 'android') {
+          android.actionViewIntent(res.path(), 'application/pdf');
+        } else {
+          ReactNativeBlobUtil.fs.writeFile(
+            dirToSave + '/document.pdf',
+            res.data,
+            'base64',
+          );
+          ReactNativeBlobUtil.ios.previewDocument(dirToSave + '/document.pdf');
+        }
       })
       .catch((errorMessage: any) => {
         Alert.alert(
