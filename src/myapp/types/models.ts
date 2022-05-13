@@ -179,6 +179,15 @@ export interface Visit {
   visit_date: string;
 }
 
+export interface VisitsIntegrated {
+  details: string;
+  id: string;
+  title: string;
+  user_pet: string;
+  client_pet: string;
+  visit_date: string;
+}
+
 export interface VisitImage {
   created: string;
   file: string;

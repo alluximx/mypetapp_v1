@@ -87,6 +87,21 @@ class AppServices {
       );
     }
   };
+
+  download = async (url: string) => {
+    const {dirs} = ReactNativeBlobUtil.fs;
+    return ReactNativeBlobUtil.config({
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        title: 'document.pdf',
+        notification: true,
+        mediaScannable: true,
+        mime: 'application/pdf',
+        description: 'Descargando documento.',
+        path: dirs.DownloadDir + '/document.pdf',
+      },
+    }).fetch('GET', url);
+  };
 }
 
 const api_url = enviroments.API_URL;

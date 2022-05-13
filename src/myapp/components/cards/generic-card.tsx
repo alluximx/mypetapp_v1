@@ -9,6 +9,7 @@ import AnchorText from '../texts/anchor-text';
 import DefaultText from '../texts/default-text';
 import PreviewableImage from '../modals/previewable-image';
 import PreviewableImageList from '../modals/previewable-image-list';
+import PreviewableDocsList from '../modals/previewable-docs-list';
 import TitleHeader from '../texts/title-header';
 // Types.
 import {DatasGeneric} from '../../types/components/cards';
@@ -28,6 +29,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
     coverImage,
     date,
     images,
+    recipes,
     title,
   } = props.data;
   const formattedDate = moment.utc(date).format('DD/MM/YYYY');
@@ -38,6 +40,19 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
     ? images.map((image) => {
         return {
           uri: image.file,
+        };
+      })
+    : [];
+
+  const recipesList = recipes
+    ? recipes.map((recipe) => {
+        const arrayDeCadenas = recipe.document_recipe_name.split('.');
+        const extension = arrayDeCadenas[1];
+        return {
+          uri: recipe.recipe_document,
+          description: recipe.description,
+          type: recipe.type,
+          extension: extension,
         };
       })
     : [];
@@ -86,6 +101,9 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
             <View style={styles.additionalContentRow}>{additionalContent}</View>
           </TouchableOpacity>
           {imageList.length > 0 && <PreviewableImageList sources={imageList} />}
+          {recipesList.length > 0 && (
+            <PreviewableDocsList sources={recipesList} />
+          )}
           {buttonText && (
             <AnchorText
               onPress={buttonClick ? buttonClick : props.onClick}
