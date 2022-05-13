@@ -7,8 +7,10 @@ import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Hooks.
 import useVisitsInformation from '../../../hooks/visits/useVisitsInformation';
+import useVetVisitsInformation from '../../../hooks/visits/useVetVisitsInformation';
 // Models.
 import {Visit} from 'src/myapp/types/models';
+import {VisitsIntegrated} from 'src/myapp/types/models';
 // My components.
 import AddButton from '../../../components/buttons/add-button';
 import CustomSpinner from '../../../components/custom-spinner';
@@ -16,20 +18,27 @@ import DefaultLayout from '../../../components/layouts/default-layout';
 import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
 import VisitCardImg from '../../../components/Visit/visit-Image';
+import VisitCardRecipe from '../../../components/Visit/visit-recipe-vet';
 
 export default ({navigation, route}): React.ReactElement => {
   const {id} = route.params.pet;
-  const {data: visitsData, isLoading, isFetched} = useVisitsInformation(id);
+
+  const {
+    data: vetVisitsData,
+    isLoading: isVetVisitsLoading,
+    isFetched: isVetVisitsFetched,
+  } = useVetVisitsInformation(id);
   const [visits, setVisits] = React.useState([]);
 
   useEffect(() => {
-    if (visitsData) {
-      const sortedData = visitsData.data.sort((a: Visit, b: Visit) =>
-        a.visit_date < b.visit_date ? 1 : -1,
+    if (vetVisitsData) {
+      const sortedData = vetVisitsData.data.sort(
+        (a: VisitsIntegrated, b: VisitsIntegrated) =>
+          a.visit_date < b.visit_date ? 1 : -1,
       );
       setVisits(sortedData);
     }
-  }, [visitsData, isFetched]);
+  }, [vetVisitsData, isVetVisitsFetched]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,16 +69,24 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
-  const renderItem = ({item}) => (
-    <VisitCardImg
-      data={item}
-      key={item.id}
-      navigation={navigation}
-      route={route}
-    />
-  );
+  const renderItem = ({item}) =>
+    !item.added_by_admin ? (
+      <VisitCardImg
+        data={item}
+        key={item.id}
+        navigation={navigation}
+        route={route}
+      />
+    ) : (
+      <VisitCardRecipe
+        data={item}
+        key={item.id}
+        navigation={navigation}
+        route={route}
+      />
+    );
 
-  return isLoading ? (
+  return isVetVisitsLoading ? (
     <CustomSpinner />
   ) : visits.length > 0 ? (
     <DefaultLayout style={[styles.container, {color: 'black'}]}>

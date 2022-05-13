@@ -19,6 +19,7 @@ export interface DatasGeneric {
     coverImage?: string;
     date?: Date | null;
     images?: {file: string}[];
+    recipes?: any[];
     title: string;
   };
   isDisabled?: boolean;

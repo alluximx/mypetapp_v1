@@ -1,5 +1,6 @@
 import axios from 'axios';
 import ReactNativeBlobUtil from 'react-native-blob-util';
+import {Alert, Platform} from 'react-native';
 import enviroments from '../environments';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -86,6 +87,47 @@ class AppServices {
         data,
       );
     }
+  };
+
+  download = async (url: string) => {
+    const android = ReactNativeBlobUtil.android;
+    const {dirs} = ReactNativeBlobUtil.fs;
+    const dirToSave =
+      Platform.OS === 'ios' ? dirs.DocumentDir : dirs.DownloadDir;
+
+    const configOptions = Platform.select({
+      ios: {
+        fileCache: true,
+        path: dirToSave + '/document.pdf',
+        notification: true,
+      },
+      android: {
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          title: 'document.pdf',
+          notification: true,
+          mediaScannable: true,
+          mime: 'application/pdf',
+          description: 'Descargando...',
+          path: dirToSave + '/document.pdf',
+        },
+      },
+    });
+
+    return ReactNativeBlobUtil.config(configOptions)
+      .fetch('GET', url, {})
+      .then((res) => {
+        if (Platform.OS === 'android') {
+          android.actionViewIntent(res.path(), 'application/pdf');
+        } else {
+          ReactNativeBlobUtil.ios.openDocument(res.data);
+        }
+      })
+      .catch((errorMessage: any) => {
+        Alert.alert(
+          'Ocurrió un error al descargar el archivo, por favor intenta de nuevo.',
+        );
+      });
   };
 }
 
