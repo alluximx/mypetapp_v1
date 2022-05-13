@@ -98,9 +98,8 @@ class AppServices {
     const configOptions = Platform.select({
       ios: {
         fileCache: true,
-        title: 'document.pdf',
         path: dirToSave + '/document.pdf',
-        appendExt: 'pdf',
+        notification: true,
       },
       android: {
         addAndroidDownloads: {
@@ -121,12 +120,7 @@ class AppServices {
         if (Platform.OS === 'android') {
           android.actionViewIntent(res.path(), 'application/pdf');
         } else {
-          ReactNativeBlobUtil.fs.writeFile(
-            dirToSave + '/document.pdf',
-            res.data,
-            'base64',
-          );
-          ReactNativeBlobUtil.ios.previewDocument(dirToSave + '/document.pdf');
+          ReactNativeBlobUtil.ios.openDocument(res.data);
         }
       })
       .catch((errorMessage: any) => {
