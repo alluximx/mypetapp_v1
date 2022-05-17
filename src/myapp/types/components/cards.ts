@@ -26,6 +26,7 @@ export interface DatasGeneric {
   onClick: (data?: any) => void;
   styleCard?: any;
   titleStyle?: any;
+  headerStyle?: any;
   wrapContent?: boolean;
   wrapTitle?: boolean;
 }
