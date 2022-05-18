@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import moment from 'moment';
+import {StyleSheet} from 'react-native';
 // Hooks.
 import useVisitRecipe from '../../hooks/visits/useVisitRecipes';
 // My Components.
@@ -40,9 +41,20 @@ const VisitCardRecipe = ({
 
   return (
     !isLoading && (
-      <GenericCard key={newData.data?.id} data={newData} onClick={null} />
+      <GenericCard
+        key={newData.data?.id}
+        data={newData}
+        onClick={null}
+        headerStyle={styles.headerStyle}
+      />
     )
   );
 };
+
+const styles = StyleSheet.create({
+  headerStyle: {
+    alignSelf: 'baseline',
+  },
+});
 
 export default VisitCardRecipe;

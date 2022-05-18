@@ -60,7 +60,7 @@ const GenericCard = (props: DatasGeneric): React.ReactElement => {
   return (
     <Card style={[styles.cardStyle, props.styleCard]} disabled={true}>
       {additionalHeader && (
-        <DefaultText style={styles.productChangedText}>
+        <DefaultText style={[styles.productChangedText, props.headerStyle]}>
           {additionalHeader}
         </DefaultText>
       )}
