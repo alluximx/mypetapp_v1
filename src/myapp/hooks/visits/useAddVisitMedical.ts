@@ -42,6 +42,10 @@ const useAddMedicalVisit = () => {
       saveImage('additional2', variables, 'false', response.data.id);
       saveImage('additional3', variables, 'false', response.data.id);
       queryClient.invalidateQueries(['visits-information', variables.user_pet]);
+      queryClient.invalidateQueries([
+        'vets-clients-visits',
+        variables.user_pet,
+      ]);
       navigation.goBack();
     },
   });

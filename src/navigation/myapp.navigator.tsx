@@ -139,6 +139,7 @@ export const MyAppNavigator = (): React.ReactElement => {
               EditDeworming: 'pets/:petId/dewormings/:vaccineId',
               NextServices: 'appointments',
               RateService: 'appointments/:appointmentId/rate/:isSalon',
+              MyAdoptionRequests: 'requests',
             },
           },
         },
