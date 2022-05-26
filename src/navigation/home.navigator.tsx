@@ -39,6 +39,7 @@ import {CartScreen} from '../myapp/scenes/cart/cart.component';
 import {AddDewormingScreen} from '../myapp/scenes/deworming/add.component';
 import {DewormingHistoryScreen} from '../myapp/scenes/deworming/deworming-history.component';
 import {EditDewormingScreen} from '../myapp/scenes/deworming/edit.component';
+import {DewormingFilterScreen} from '../myapp//scenes/deworming/deworming-filter.component';
 // Home
 import {HomeScreen} from '../myapp/scenes/home/home.component';
 // Orders
@@ -63,6 +64,7 @@ import {MyProfileScreen} from '../myapp/scenes/profile/profileInf.component';
 import {AddVaccineScreen} from '../myapp/scenes/vaccines/add.component';
 import {EditVaccineScreen} from '../myapp/scenes/vaccines/edit.component';
 import {VaccineIndexScreen} from '../myapp/scenes/vaccines/vaccine-index.component';
+import {VaccineFilterScreen} from '../myapp/scenes/vaccines/vaccine-filter.component';
 // Visits
 import {InfVisitinScreen} from '../myapp/scenes/visits/Inf.component';
 import {newVisitScreen} from '../myapp/scenes/visits/new-visit.component';
@@ -227,6 +229,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           name="EditDeworming"
           component={EditDewormingScreen}
         />
+        <HomeStack.Screen
+          name="DewormingFilter"
+          component={DewormingFilterScreen}
+        />
         {/* HOME */}
         <HomeStack.Screen
           name="Home"
@@ -343,6 +349,10 @@ const Screens = ({navigation, route, style, setRouteName}) => {
           options={{
             headerLeft: closeButton,
           }}
+        />
+        <HomeStack.Screen
+          name="VaccineFilter"
+          component={VaccineFilterScreen}
         />
         {/* Vets */}
         <HomeStack.Screen name="VetResult" component={VetResultScreen} />

@@ -1,116 +1,31 @@
-import React, {useLayoutEffect, useEffect, useState} from 'react';
-import {Image, Platform, StyleSheet} from 'react-native';
-import moment from 'moment';
+import React, {useLayoutEffect, useState} from 'react';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
 // My Components.
 import AddButton from '../../../components/buttons/add-button';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import VaccineCard from '../../../components/cards/vaccine-index-card';
 import CustomSpinner from '../../../components/custom-spinner';
-import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
+import AnchorText from '../../../components/texts/anchor-text';
 // Global Styles
 import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // UI Kitten
 import {List} from '@ui-kitten/components';
 // Hook.
-import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
 import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
+import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
+import VaccineList from '../../../components/Vaccine/vaccine-list';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [vaccines, setVaccines] = useState([]);
-  const vaccinesQuery = useGetVaccineIndex(route.params.pet.id, 'true');
+  const vaccinesTypeQuery = useGetVaccines(true);
+  const [type, setType] = useState<string>('');
+  const [rangeDate, setRangeDate] = useState<string>('');
 
   useEnforceScreenOnBack('DetailPet', {petId: route.params.pet.id});
 
-  useEffect(() => {
-    if (vaccinesQuery.data) {
-      function sortByDate(a, b) {
-        const Item1 = a.vaccine_date;
-        const Item2 = b.vaccine_date;
-        if (Item1 < Item2) {
-          return 1;
-        }
-        if (Item1 > Item2) {
-          return -1;
-        }
-        return 0;
-      }
-
-      vaccinesQuery.data.data.sort(sortByDate);
-
-      const groupVaccines = vaccinesQuery.data.data.reduce((acc, obj) => {
-        if (obj.is_vaccine) {
-          const id = obj.vaccine_registered.id;
-          const formatedVaccine = {id: obj.id, date: obj.vaccine_date};
-          if (!acc[id]) {
-            acc[id] = {
-              id_vaccine: id,
-              id_record: obj.id,
-              name: obj.vaccine_registered.vaccine_name,
-              reminder: obj.reminder,
-              is_unique: obj.vaccine_registered.is_unique,
-              next_vaccine_date: obj.next_vaccine_date,
-              vaccine_date: obj.vaccine_date,
-              vaccines: [formatedVaccine],
-            };
-          } else {
-            acc[id].vaccines.push(formatedVaccine);
-          }
-        }
-
-        return acc;
-      }, {});
-
-      const formatedArray: any = [];
-      const claves = Object.keys(groupVaccines);
-
-      claves.forEach((element) => {
-        formatedArray.push(groupVaccines[element]);
-      });
-
-      setVaccines(formatedArray);
-    }
-  }, [vaccinesQuery.data]);
-
-  function customSort(a, b) {
-    const Item1 = a.name;
-    const Item2 = b.name;
-    if (Item1 > Item2) {
-      return 1;
-    }
-    if (Item1 < Item2) {
-      return -1;
-    }
-    return 0;
-  }
-
-  vaccines.sort(customSort);
-
-  const renderVaccine = (service) => {
-    const is_unique = service.item.is_unique;
-    const next_vaccine_date = moment(service.item.next_vaccine_date).toDate();
-    const notification = moment(service.item.reminder).toDate();
-    const substrac = next_vaccine_date.getTime() - notification.getTime();
-    const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24));
-    const auxData = {
-      id: service.item.id_record,
-      petId: route.params.pet.id,
-      name: service.item.name,
-      validity: is_unique ? 'Única' : service.item.vaccine_date,
-      notification:
-        !is_unique && service.item.reminder ? notificationDays : null,
-      status:
-        is_unique || next_vaccine_date > moment().toDate()
-          ? 'Activa'
-          : 'Vencida',
-      vaccineDates: service.item.vaccines,
-    };
-
-    return (
-      <VaccineCard navigation={navigation} vaccine={true} data={auxData} />
-    );
-  };
+  const vaccinesData = vaccinesTypeQuery.isLoading
+    ? []
+    : vaccinesTypeQuery.data?.data;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -131,56 +46,112 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation, route.params]);
 
-  return vaccinesQuery.isLoading ? (
+  const toggleType = (id) => {
+    if (type === id) {
+      setType('');
+    } else {
+      setType(id);
+    }
+  };
+
+  return vaccinesTypeQuery.isLoading ? (
     <CustomSpinner />
-  ) : vaccines.length > 0 ? (
-    <DefaultLayout>
-      <TitleHeader style={styles.listTitle}>Vacunas</TitleHeader>
-      <List
-        style={styles.servicesContainer}
-        data={vaccines}
-        renderItem={renderVaccine}
-      />
-    </DefaultLayout>
   ) : (
-    <DefaultLayout style={styles.container}>
-      <Image
-        style={styles.dogImage}
-        source={require('../assets/pet-vaccine.png')}
+    <DefaultLayout>
+      <View style={styles.filterSection}>
+        <TitleHeader style={styles.listTitle}>Vacunas</TitleHeader>
+        <AnchorText
+          onPress={() =>
+            navigation.navigate('VaccineFilter', {
+              petId: route.params.pet.id,
+              typeId: type,
+              rangeDate,
+              setRangeDate: setRangeDate,
+            })
+          }
+          style={styles.filterButton}>
+          Filtrar
+        </AnchorText>
+      </View>
+      <View>
+        <List
+          data={vaccinesData ? vaccinesData : []}
+          horizontal={true}
+          renderItem={({item, index}) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => toggleType(item.id)}
+              style={[
+                styles.filterOption,
+                type === item.id && styles.filterOptionEnabled,
+                index === 0 && styles.filterOptionLeftSpacing,
+                index === vaccinesData.length - 1 &&
+                  styles.filterOptionRightSpacing,
+              ]}>
+              <TitleHeader
+                style={[
+                  styles.filterOptionText,
+                  type === item.id && styles.filterOptionTextEnabled,
+                ]}>
+                {item.vaccine_name}
+              </TitleHeader>
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterOptionsContainer}
+        />
+      </View>
+      <VaccineList
+        petId={route.params.pet.id}
+        typeId={type}
+        rangeDate={rangeDate}
       />
-      <TitleHeader style={styles.center}>Vacunas</TitleHeader>
-      <DefaultText style={[styles.center, styles.subtitle]}>
-        Aún no has agregado vacunas para tu {'\n'}mascota.
-      </DefaultText>
     </DefaultLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 0,
-  },
-  dogImage: {
-    alignSelf: 'center',
-    resizeMode: 'contain',
-    height: 390,
-    maxHeight: 390,
-    marginVertical: 5,
-    padding: 10,
-  },
   listTitle: {
     marginBottom: 8,
+    flex: 5,
+    alignContent: 'center',
+    alignItems: 'center',
   },
-  center: {
-    textAlign: 'center',
+  filterSection: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
   },
-  subtitle: {
-    fontFamily: globalVars.fontBold,
-    fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
+  filterButton: {
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'center',
   },
-  servicesContainer: {
-    backgroundColor: 'transparent',
-    marginBottom: 10,
+  filterOptionsContainer: {
+    marginTop: 16,
+    backgroundColor: globalColors.backgroundDefault,
+  },
+  filterOption: {
+    paddingVertical: 6,
+    paddingBottom: 2,
+    paddingHorizontal: 16,
+    backgroundColor: globalColors.backgroundDefault,
+    borderRadius: 10,
+  },
+  filterOptionEnabled: {
+    backgroundColor: globalColors.greenSecondary,
+  },
+  filterOptionText: {
+    color: globalColors.lightGray,
+    fontSize: 16,
+  },
+  filterOptionTextEnabled: {
+    color: globalColors.white,
+  },
+  filterOptionLeftSpacing: {
+    marginLeft: 0,
+  },
+  filterOptionRightSpacing: {
+    marginRight: 0,
   },
 });

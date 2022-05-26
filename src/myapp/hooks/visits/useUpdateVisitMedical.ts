@@ -70,6 +70,10 @@ const useUpdateMedicalVisit = (visitId) => {
         queryClient.invalidateQueries(['visits-image', variables.id]);
       }
       queryClient.invalidateQueries(['visits-information', variables.user_pet]);
+      queryClient.invalidateQueries([
+        'vets-clients-visits',
+        variables.user_pet,
+      ]);
       navigation.goBack();
     },
   });

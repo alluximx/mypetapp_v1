@@ -73,11 +73,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginRight: 5,
   },
-  imageContainer: {
-    flex: 1,
-    alignContent: 'center',
-    alignItems: 'center',
-  },
   servicesContainer: {
     backgroundColor: 'transparent',
     paddingBottom: 8,
@@ -85,12 +80,17 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     flexDirection: 'row',
-    flex: 1.5,
+    flex: 1,
     paddingTop: 10,
   },
   descriptionContainer: {
-    flex: 3.2,
+    flex: 3.5,
     paddingLeft: 5,
+  },
+  imageContainer: {
+    flex: 1.2,
+    alignContent: 'center',
+    alignItems: 'center',
   },
 });
 

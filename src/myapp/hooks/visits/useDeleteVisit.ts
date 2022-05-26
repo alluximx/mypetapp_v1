@@ -12,6 +12,7 @@ const useDeleteMedicalVisit = (petId: string) => {
   return useMutation((visitId: string) => deleteVisit(visitId), {
     onSuccess: () => {
       queryClient.invalidateQueries(['visits-information', petId]);
+      queryClient.invalidateQueries(['vets-clients-visits', petId]);
       navigation.goBack();
     },
   });
