@@ -20,7 +20,6 @@ import TitleHeader from '../../../components/texts/title-header';
 // Types.
 import {Brand, Product,Pet} from '../../../types/models';
 
-
 export default ({navigation, route}): React.ReactElement => {
   const [prices, setPrices] = useState(route.params.prices);
   const [brand, setBrand] = useState(route.params.brand);
