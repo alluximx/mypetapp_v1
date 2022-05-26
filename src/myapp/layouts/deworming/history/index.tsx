@@ -1,110 +1,30 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Image, Dimensions, Platform} from 'react-native';
-import moment from 'moment';
+import React, {useLayoutEffect, useState} from 'react';
+import {Dimensions, View, TouchableOpacity} from 'react-native';
 // Global Styles
 import globalColors from '../../../styles/colors';
-import globalVars from '../../../styles/vars';
 // Hook.
 import useEnforceScreenOnBack from '../../../hooks/navigation/useEnforceScreenOnBack';
-import useGetVaccineIndex from '../../../hooks/vaccines/useGetVaccineIndex';
+import useGetVaccines from '../../../hooks/vaccines/useGetVaccines';
 // My Components.
 import AddButton from '../../../components/buttons/add-button';
 import CustomSpinner from '../../../components/custom-spinner';
 import DefaultLayout from '../../../components/layouts/default-layout';
-import DefaultText from '../../../components/texts/default-text';
 import TitleHeader from '../../../components/texts/title-header';
-import VaccineCard from '../../../components/cards/vaccine-index-card';
+import DewormingList from '../../../components/deworming/deworming-list';
+import AnchorText from '../../../components/texts/anchor-text';
 // UI kitten
-import {Layout, StyleService, List} from '@ui-kitten/components';
+import {StyleService, List} from '@ui-kitten/components';
 
 export default ({navigation, route}): React.ReactElement => {
-  const [dewormings, setDewormings] = useState([]);
-  const dewormingQuery = useGetVaccineIndex(route.params.pet.id, false);
+  const vaccinesTypeQuery = useGetVaccines(false);
+  const [type, setType] = useState<string>('');
+  const [rangeDate, setRangeDate] = useState<string>('');
 
   useEnforceScreenOnBack('DetailPet', {petId: route.params.pet.id});
 
-  useEffect(() => {
-    if (dewormingQuery.data) {
-      function sortByDate(a, b) {
-        const Item1 = a.vaccine_date;
-        const Item2 = b.vaccine_date;
-        if (Item1 < Item2) {
-          return 1;
-        }
-        if (Item1 > Item2) {
-          return -1;
-        }
-        return 0;
-      }
-      dewormingQuery.data.data.sort(sortByDate);
-      const groupVaccines = dewormingQuery.data.data.reduce((acc, obj) => {
-        if (!obj.is_vaccine) {
-          const id = obj.vaccine_registered.id;
-          const formatedDeworming = {id: obj.id, date: obj.vaccine_date};
-          if (!acc[id]) {
-            acc[id] = {
-              id_deworming: id,
-              id_record: obj.id,
-              name: obj.vaccine_registered.vaccine_name,
-              reminder: obj.reminder,
-              is_unique: obj.vaccine_registered.is_unique,
-              next_deworming_date: obj.next_vaccine_date,
-              deworming_date: obj.vaccine_date,
-              dewormings: [formatedDeworming],
-            };
-          } else {
-            acc[id].dewormings.push(formatedDeworming);
-          }
-        }
-        return acc;
-      }, {});
-
-      const formatedArray: any = [];
-      const claves = Object.keys(groupVaccines);
-
-      claves.forEach((element) => {
-        formatedArray.push(groupVaccines[element]);
-      });
-
-      setDewormings(formatedArray);
-    }
-  }, [dewormingQuery.data]);
-
-  function customSort(a, b) {
-    const Item1 = a.name;
-    const Item2 = b.name;
-    if (Item1 > Item2) {
-      return 1;
-    }
-    if (Item1 < Item2) {
-      return -1;
-    }
-    return 0;
-  }
-
-  dewormings.sort(customSort);
-
-  const renderServiceItem = (service) => {
-    const is_unique = service.item.is_unique;
-    const next_vaccine_date = moment(service.item.next_deworming_date).toDate();
-    const notification = moment(service.item.reminder).toDate();
-    const substrac = next_vaccine_date.getTime() - notification.getTime();
-    const notificationDays = Math.round(substrac / (1000 * 60 * 60 * 24));
-    const auxData = {
-      name: service.item.name,
-      validity: is_unique ? 'Unica' : service.item.deworming_date,
-      notification:
-        !is_unique && service.item.reminder ? notificationDays : null,
-      status:
-        is_unique || next_vaccine_date > moment().toDate()
-          ? 'Activa'
-          : 'Vencida',
-      vaccineDates: service.item.dewormings,
-    };
-    return (
-      <VaccineCard navigation={navigation} vaccine={false} data={auxData} />
-    );
-  };
+  const vaccinesData = vaccinesTypeQuery.isLoading
+    ? []
+    : vaccinesTypeQuery.data?.data;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -125,50 +45,66 @@ export default ({navigation, route}): React.ReactElement => {
     });
   }, [navigation]);
 
-  return dewormingQuery.isLoading ? (
+  const toggleType = (id) => {
+    if (type === id) {
+      setType('');
+    } else {
+      setType(id);
+    }
+  };
+
+  return vaccinesTypeQuery.isLoading ? (
     <CustomSpinner />
-  ) : dewormings.length > 0 ? (
-    <DefaultLayout>
-      <TitleHeader children="Desparasitaciones" />
-      <List
-        style={styles.servicesContainer}
-        data={dewormings}
-        renderItem={renderServiceItem}
-      />
-    </DefaultLayout>
   ) : (
-    <DefaultLayout style={[styles.container, {color: 'black'}]}>
-      <Layout
-        style={[
-          styles.formContainer,
-          {backgroundColor: globalColors.backgroundDefault},
-        ]}>
-        <Image
-          style={styles.dogImage}
-          source={require('../../../assets/images/pets/deworminPetImage.png')}
+    <DefaultLayout>
+      <View style={styles.filterSection}>
+        <TitleHeader style={styles.listTitle}>Desparasitaciones</TitleHeader>
+        <AnchorText
+          onPress={() =>
+            navigation.navigate('DewormingFilter', {
+              petId: route.params.pet.id,
+              typeId: type,
+              rangeDate,
+              setRangeDate: setRangeDate,
+            })
+          }
+          style={styles.filterButton}>
+          Filtrar
+        </AnchorText>
+      </View>
+      <View>
+        <List
+          data={vaccinesData ? vaccinesData : []}
+          horizontal={true}
+          renderItem={({item, index}) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => toggleType(item.id)}
+              style={[
+                styles.filterOption,
+                type === item.id && styles.filterOptionEnabled,
+                index === 0 && styles.filterOptionLeftSpacing,
+                index === vaccinesData.length - 1 &&
+                  styles.filterOptionRightSpacing,
+              ]}>
+              <TitleHeader
+                style={[
+                  styles.filterOptionText,
+                  type === item.id && styles.filterOptionTextEnabled,
+                ]}>
+                {item.vaccine_name}
+              </TitleHeader>
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterOptionsContainer}
         />
-        <TitleHeader children="Desparasitaciones" style={styles.center} />
-        <DefaultText
-          children="Aún no has agregado desparasitaciones"
-          style={[
-            styles.center,
-            {
-              fontFamily: globalVars.fontBold,
-              fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
-            },
-          ]}
-        />
-        <DefaultText
-          children="para tu mascota."
-          style={[
-            styles.center,
-            {
-              fontFamily: globalVars.fontBold,
-              fontWeight: Platform.OS === 'ios' ? 'bold' : 'normal',
-            },
-          ]}
-        />
-      </Layout>
+      </View>
+      <DewormingList
+        petId={route.params.pet.id}
+        typeId={type}
+        rangeDate={rangeDate}
+      />
     </DefaultLayout>
   );
 };
@@ -198,5 +134,48 @@ const styles = StyleService.create({
   servicesContainer: {
     backgroundColor: 'transparent',
     marginBottom: 10,
+  },
+  listTitle: {
+    marginBottom: 8,
+    flex: 5,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  filterSection: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  filterButton: {
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  filterOptionsContainer: {
+    marginTop: 16,
+    backgroundColor: globalColors.backgroundDefault,
+  },
+  filterOption: {
+    paddingVertical: 6,
+    paddingBottom: 2,
+    paddingHorizontal: 16,
+    backgroundColor: globalColors.backgroundDefault,
+    borderRadius: 10,
+  },
+  filterOptionEnabled: {
+    backgroundColor: globalColors.greenSecondary,
+  },
+  filterOptionText: {
+    color: globalColors.lightGray,
+    fontSize: 16,
+  },
+  filterOptionTextEnabled: {
+    color: globalColors.white,
+  },
+  filterOptionLeftSpacing: {
+    marginLeft: 0,
+  },
+  filterOptionRightSpacing: {
+    marginRight: 0,
   },
 });

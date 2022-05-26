@@ -20,10 +20,22 @@ type HomeNavigatorParamList = {
   EditDeworming: {
     vaccineId: string;
   };
+  DewormingFilter: {
+    petId: string;
+    rangeDate: string;
+    type: string;
+    setRangeDate: (brandId: string) => void;
+  };
 
   AddVaccine: {};
   EditVaccine: {};
   VaccinesIndex: {};
+  VaccineFilter: {
+    petId: string;
+    rangeDate: string;
+    type: string;
+    setRangeDate: (brandId: string) => void;
+  };
 
   ClinicalHistory: {};
 
