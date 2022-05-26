@@ -8,6 +8,7 @@ import globalColors from '../../../styles/colors';
 import globalVars from '../../../styles/vars';
 // Hooks.
 import useGetBrands from '../../../hooks/brands/useGetBrands';
+import useGetSizes from '../../../hooks/sizes/useGetSizes';
 import useProductsList from '../../../hooks/products/useProductsList';
 // My Components.
 import AnchorText from '../../../components/texts/anchor-text';
@@ -17,11 +18,14 @@ import DefaultText from '../../../components/texts/default-text';
 import DropdownPicker from '../../../components/inputs/dropdown-picker';
 import TitleHeader from '../../../components/texts/title-header';
 // Types.
-import {Brand, Product} from '../../../types/models';
+import {Brand, Product,Pet} from '../../../types/models';
+
 
 export default ({navigation, route}): React.ReactElement => {
   const [prices, setPrices] = useState(route.params.prices);
   const [brand, setBrand] = useState(route.params.brand);
+  const [size,setSize]=useState(route.params.size);
+  const {data: sizesData, isLoading: sizesLoading} = useGetSizes();
   const {data: brandsData, isLoading: brandsLoading} = useGetBrands();
   const {data: productsData, isLoading: productsLoading} = useProductsList(
     route.params.category,
@@ -104,6 +108,11 @@ export default ({navigation, route}): React.ReactElement => {
         return {value: brandItem.id, label: brandItem.name};
       })
     : [];
+    const dataSizes = sizesData
+    ? sizesData?.data.map((sizeItem: Pet) => {
+        return {value: sizeItem.id, label: sizeItem.name};
+      })
+    : [];
 
   const windowWidth = Dimensions.get('window').width;
 
@@ -122,6 +131,16 @@ export default ({navigation, route}): React.ReactElement => {
         setCurrentValue={(brandId: string) => {
           route.params.setBrand(brandId);
           setBrand(brandId);
+        }}
+        style={styles.brandSelector}
+      />
+      <DropdownPicker
+        currentValue={size}
+        data={dataSizes}
+        placeholder="Tamaño"
+        setCurrentValue={(sizeId: string) => {
+          route.params.setSize(sizeId);
+          setSize(sizeId);
         }}
         style={styles.brandSelector}
       />
