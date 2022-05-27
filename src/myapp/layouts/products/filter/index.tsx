@@ -1,6 +1,13 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Dimensions, Image, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import {List} from '@ui-kitten/components';
 // Constants.
 import {productPrices} from '../../../constants';
 // Global Styles.
@@ -23,13 +30,15 @@ import {Brand, Product, Pet} from '../../../types/models';
 export default ({navigation, route}): React.ReactElement => {
   const [prices, setPrices] = useState(route.params.prices);
   const [brand, setBrand] = useState(route.params.brand);
-  const [size, setSize] = useState(route.params.size);
+  /* const [size, setSize] = useState(route.params.size); */
+  const [sizes, setSizes] = useState<Array<string>>(route.params.sizes);
   const {data: sizesData, isLoading: sizesLoading} = useGetSizes();
   const {data: brandsData, isLoading: brandsLoading} = useGetBrands();
   const {data: productsData, isLoading: productsLoading} = useProductsList(
     route.params.category,
     route.params.name,
     brand,
+    sizes,
   );
 
   const [currentMinAndMax, setCurrentMinAndMax] = useState([
@@ -83,6 +92,8 @@ export default ({navigation, route}): React.ReactElement => {
     route.params.setBrand('');
     setCurrentMinAndMax(minAndMaxOfAll);
     setPrices(minAndMaxOfAll);
+    setSizes([]);
+    route.params.setSizes([]);
     setTimeout(() => {
       navigation.goBack();
     }, 500);
@@ -107,14 +118,24 @@ export default ({navigation, route}): React.ReactElement => {
         return {value: brandItem.id, label: brandItem.name};
       })
     : [];
-    const dataSizes = sizesData
+  const dataSizes = sizesData
     ? sizesData?.data.map((sizeItem: Pet) => {
-        return {value: sizeItem.id, label: sizeItem.name};
+        return {id: sizeItem.id, name: sizeItem.name};
       })
     : [];
   const windowWidth = Dimensions.get('window').width;
 
-  return brandsLoading || productsLoading ? (
+  const toggleSize = (id) => {
+    if (sizes.includes(id)) {
+      setSizes(sizes.filter((idItem) => idItem !== id));
+      route.params.setSizes(sizes.filter((idItem) => idItem !== id));
+    } else {
+      setSizes((prevArray) => [...prevArray, id]);
+      route.params.setSizes((prevArray) => [...prevArray, id]);
+    }
+  };
+
+  return brandsLoading || productsLoading || sizesLoading ? (
     <CustomSpinner />
   ) : (
     <DefaultLayout style={styles.container}>
@@ -132,16 +153,37 @@ export default ({navigation, route}): React.ReactElement => {
         }}
         style={styles.brandSelector}
       />
-      <DropdownPicker
-        currentValue={size}
-        data={dataSizes}
-        placeholder="Tamaño"
-        setCurrentValue={(sizeId: string) => {
-          route.params.setSize(sizeId);
-          setSize(sizeId);
-        }}
-        style={styles.brandSelector}
-      />
+      <View>
+        <TitleHeader>Tamaño</TitleHeader>
+        <List
+          data={dataSizes}
+          horizontal={true}
+          renderItem={({item, index}) => (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                toggleSize(item.id);
+              }}
+              style={[
+                styles.filterOption,
+                sizes.includes(item.id) && styles.filterOptionEnabled,
+                index === 0 && styles.filterOptionLeftSpacing,
+                index === dataSizes.length - 1 &&
+                  styles.filterOptionRightSpacing,
+              ]}>
+              <TitleHeader
+                style={[
+                  styles.filterOptionText,
+                  sizes.includes(item.id) && styles.filterOptionTextEnabled,
+                ]}>
+                {item.name}
+              </TitleHeader>
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+          style={styles.filterOptionsContainer}
+        />
+      </View>
       <TitleHeader>Rango de Precio</TitleHeader>
       <View style={styles.pricesBoundsContainer}>
         <DefaultText>
@@ -186,7 +228,7 @@ const styles = StyleSheet.create({
   container: {},
   results: {marginBottom: 24},
   headerRight: {alignSelf: 'center'},
-  brandSelector: {marginBottom: 32},
+  brandSelector: {marginBottom: 16},
   pricesBoundsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -217,5 +259,38 @@ const styles = StyleSheet.create({
   clearFilters: {
     textAlign: 'center',
     marginTop: 24,
+  },
+  filterOptionsContainer: {
+    marginTop: 16,
+    backgroundColor: globalColors.backgroundDefault,
+    marginBottom: 16,
+  },
+  filterOption: {
+    paddingVertical: 6,
+    paddingBottom: 2,
+    paddingHorizontal: 16,
+    backgroundColor: globalColors.backgroundDefault,
+    borderRadius: 10,
+    marginRight: 10,
+  },
+  filterOptionEnabled: {
+    backgroundColor: globalColors.greenSecondary,
+  },
+  filterOptionText: {
+    color: globalColors.lightGray,
+    fontSize: 16,
+  },
+  filterOptionTextEnabled: {
+    color: globalColors.white,
+  },
+  filterOptionLeftSpacing: {
+    marginLeft: 0,
+  },
+  filterOptionRightSpacing: {
+    marginRight: 0,
+  },
+  resultSection: {
+    flexGrow: 1,
+    flexBasis: 300,
   },
 });

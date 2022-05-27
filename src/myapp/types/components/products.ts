@@ -27,5 +27,6 @@ export interface ProductListProps {
   brandId?: string;
   name?: string;
   prices?: number[];
+  sizes?: string[];
   setBrand?: (brandId: string) => void;
 }
