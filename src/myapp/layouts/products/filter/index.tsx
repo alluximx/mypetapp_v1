@@ -30,7 +30,6 @@ import {Brand, Product, Pet} from '../../../types/models';
 export default ({navigation, route}): React.ReactElement => {
   const [prices, setPrices] = useState(route.params.prices);
   const [brand, setBrand] = useState(route.params.brand);
-  /* const [size, setSize] = useState(route.params.size); */
   const [sizes, setSizes] = useState<Array<string>>(route.params.sizes);
   const {data: sizesData, isLoading: sizesLoading} = useGetSizes();
   const {data: brandsData, isLoading: brandsLoading} = useGetBrands();
