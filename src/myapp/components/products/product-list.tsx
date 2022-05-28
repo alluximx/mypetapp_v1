@@ -20,6 +20,7 @@ const ProductList = (props: ProductListProps): React.ReactElement => {
     props.categoryId ?? '',
     props.name ?? '',
     props.brandId ?? '',
+    props.sizes ?? [],
   );
 
   const filteredData =

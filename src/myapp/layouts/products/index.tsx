@@ -22,6 +22,7 @@ export default ({navigation}): React.ReactElement => {
   const [category, setCategory] = useState<string>('');
   const [brand, setBrand] = useState<string>('');
   const [name, setName] = useState<string>('');
+  const [sizes, setSizes] = useState<Array<string>>([]);
   const [prices, setPrices] = useState([
     productPrices.MIN_PRICE,
     productPrices.MAX_PRICE,
@@ -59,6 +60,8 @@ export default ({navigation}): React.ReactElement => {
                 brand,
                 setBrand,
                 prices,
+                sizes,
+                setSizes,
                 setPrices,
               })
             }
@@ -101,6 +104,7 @@ export default ({navigation}): React.ReactElement => {
           name={name}
           brandId={brand}
           prices={prices}
+          sizes={sizes}
           setBrand={setBrand}
         />
       </View>
