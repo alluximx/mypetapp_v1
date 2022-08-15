@@ -66,11 +66,11 @@ export default ({navigation, route}): React.ReactElement => {
     const number = service.item.number;
     const zipCode = service.item.zipcode;
     const city = service.item.city;
+    const colony = service.item.colony;
     const state = service.item.state.name;
     const title = service.item.user_address.name;
 
-    const content =
-      street + ' #' + number + '\n' + zipCode + ', ' + city + ' ' + state;
+    const content = `${street} #${number}, ${colony}\n${zipCode}, ${city} ${state}`;
 
     const data = {
       buttonAlign: 'right',

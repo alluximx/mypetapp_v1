@@ -263,10 +263,10 @@ export default ({navigation, route}): React.ReactElement => {
     if (form.services) {
       setServiceContent(formatServices(form.services));
       const calculatedTotal = form.services
-        .split(/\S*\w+ - \$*/)
-        .join('')
         .split(', ')
+        .map((service) => service.split('$')[1])
         .reduce((sum, item: string) => sum + Number(item), 0);
+
       setTotal(formatPrice(calculatedTotal));
     }
   }, [form.services]);
