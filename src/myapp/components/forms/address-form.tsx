@@ -103,6 +103,7 @@ const AddressForm = (props: AddressFormProps) => {
         error={formErrors.municipality}
         status={props.form.state ? false : true}
         id={props.form.state}
+        idTown={props.form.municipality}
         change={(valor, name) => {
           if (props.setNameMunicipality) {
             valor === ''

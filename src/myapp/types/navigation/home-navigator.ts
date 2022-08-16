@@ -68,10 +68,15 @@ type HomeNavigatorParamList = {
   MyProfile: {};
   AddressInfo: {};
   PaymentMethod: {};
+
   AddAddress: {
     data: any;
   };
+  EditAddress: {
+    data: any;
+  };
   AddAddressFromIndex: {};
+
   AddPaymentMethod: {
     data: any;
   };

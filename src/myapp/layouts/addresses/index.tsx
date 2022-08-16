@@ -73,6 +73,7 @@ export default ({navigation, route}): React.ReactElement => {
     const content = `${street} #${number}, ${colony}\n${zipCode}, ${city} ${state}`;
 
     const data = {
+      addressData: service.item,
       buttonAlign: 'right',
       buttonClick: () => {
         previusModal(id);
@@ -89,9 +90,8 @@ export default ({navigation, route}): React.ReactElement => {
     return (
       <GenericCard
         data={data}
-        isDisabled={true}
         styleCard={{marginHorizontal: 0}}
-        onClick={() => {}}
+        onClick={() => navigation.navigate('EditAddress', {data})}
         wrapContent
         wrapTitle
       />

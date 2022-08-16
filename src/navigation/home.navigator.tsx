@@ -23,6 +23,7 @@ import HomeNavigatorParamList from '../myapp/types/navigation/home-navigator';
 import {AddAddressScreen} from '../myapp/scenes/addresses/add.component';
 import {AddAddressFromIndexScreen} from '../myapp/scenes/addresses/add-from-index.component';
 import {AddressInfScreen} from '../myapp/scenes/addresses/addresses.component';
+import {EditAddressScreen} from '../myapp/scenes/addresses/edit.component';
 // Adoption
 import {AdoptionScreen} from '../myapp/scenes/adoption/adoption.component';
 import {adoptionDetailScreen} from '../myapp/scenes/adoption/details.component';
@@ -158,6 +159,11 @@ const Screens = ({navigation, route, style, setRouteName}) => {
         <HomeStack.Screen
           name="AddAddress"
           component={AddAddressScreen}
+          initialParams={{data: {}}}
+        />
+        <HomeStack.Screen
+          name="EditAddress"
+          component={EditAddressScreen}
           initialParams={{data: {}}}
         />
         <HomeStack.Screen
