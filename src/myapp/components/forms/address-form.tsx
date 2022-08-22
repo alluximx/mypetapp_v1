@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, View} from 'react-native';
 // Global styles
 import globalColors from '../../styles/colors';
 // Hooks
@@ -44,7 +44,10 @@ const AddressForm = (props: AddressFormProps) => {
   }, [props.error]);
 
   return (
-    <View>
+    <KeyboardAvoidingView
+      behavior="position"
+      keyboardVerticalOffset={80}
+      style={{flex: 1}}>
       <UserInput
         placeholder="Calle"
         value={props.form.street}
@@ -134,22 +137,8 @@ const AddressForm = (props: AddressFormProps) => {
           props.setForm({...props.form, zipcode: value});
         }}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  subtitle: {
-    marginTop: 10,
-    marginBottom: 15,
-    fontSize: 16,
-  },
-  message: {
-    marginTop: 0,
-    marginBottom: 18,
-    fontSize: 14,
-    color: globalColors.red,
-  },
-});
 
 export default AddressForm;
