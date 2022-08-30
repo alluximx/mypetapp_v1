@@ -490,8 +490,14 @@ PODS:
   - RNScreens (3.10.2):
     - React-Core
     - React-RCTImage
+  - RNSentry (3.3.1):
+    - React-Core
+    - Sentry (= 7.10.0)
   - RNSVG (12.1.1):
     - React
+  - Sentry (7.10.0):
+    - Sentry/Core (= 7.10.0)
+  - Sentry/Core (7.10.0)
   - TOCropViewController (2.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -568,6 +574,7 @@ DEPENDENCIES:
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -597,6 +604,7 @@ SPEC REPOS:
     - nanopb
     - OpenSSL-Universal
     - PromisesObjC
+    - Sentry
     - TOCropViewController
     - YogaKit
 
@@ -691,6 +699,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSentry:
+    :path: "../node_modules/@sentry/react-native"
   RNSVG:
     :path: "../node_modules/react-native-svg"
   Yoga:
@@ -766,11 +776,13 @@ SPEC CHECKSUMS:
   RNNotifee: 985579266661b4f678dd7d6994cee74a022aedec
   RNReanimated: 1326679461fa5d2399d54c18ca1432ba3e816b9e
   RNScreens: d6da2b9e29cf523832c2542f47bf1287318b1868
+  RNSentry: 4c1ee170fe29590aba894faeaccfcd84befef902
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  Sentry: 6ff0eac197e699126c024993eba40a7462e92941
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: 5cbf25add73edb290e1067017690f7ebf56c5468
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 8cba76488f56d0195979bcdd2b19d811b85fbc96
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
